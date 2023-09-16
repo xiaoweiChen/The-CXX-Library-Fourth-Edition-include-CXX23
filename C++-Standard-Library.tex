@@ -1,0 +1,607 @@
+
+\documentclass[11pt,a4paper,UTF8]{book}
+
+\usepackage{minted}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{authblk}
+
+\usepackage{fontspec}                  %引入字体设置宏包
+\setmainfont{Times New Roman}             %设置英文正文字体
+% Courier New
+% Book Antique
+\setsansfont{Arial}                    %英文无衬线字体
+\setmonofont{Courier New}              %英文等宽字体
+
+\usepackage{ctex} %导入中文包
+%\usepackage{ulem}
+\usepackage{tocvsec2}
+\usepackage{verbatim}
+
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{booktabs} 
+\usepackage{multirow}
+\usepackage{bbding}
+\usepackage{float}
+\usepackage{xspace}
+\usepackage[none]{hyphenat}
+
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{pifont}
+
+\usepackage{hyperref}  %制作pdf的目录
+\usepackage{subfiles} %使用多文件方式进行
+
+\usepackage{geometry} %设置页边距的包
+\geometry{left=2.5cm,right=2cm,top=2.54cm,bottom=2.54cm} %设置书籍的页边距
+
+\usepackage{url}
+\hypersetup{hidelinks, %去红框
+  colorlinks=true,
+  allcolors=black,
+  pdfstartview=Fit,
+  breaklinks=true
+}
+
+% 调整itemlist中的行间距
+\usepackage{enumitem}
+\setenumerate[1]{itemsep=0pt,partopsep=0pt,parsep=\parskip,topsep=5pt}
+\setitemize[1]{itemsep=0pt,partopsep=0pt,parsep=\parskip,topsep=5pt}
+\setdescription{itemsep=0pt,partopsep=0pt,parsep=\parskip,topsep=5pt}
+
+% 超链接样式设置
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  filecolor=blue,
+  urlcolor=blue,
+  citecolor=cyan,
+}
+
+\usepackage{indentfirst}
+
+\usepackage{listings}
+\usepackage[usenames,dvipsnames,svgnames, x11names]{xcolor}
+
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{breakable} % 引入 breakable 库
+\tcbuselibrary{skins} % 引入 skins 库
+
+%定义CMake
+\lstdefinelanguage{CMake}
+{morekeywords={
+    cmake\_minimum\_required,
+    project,
+    add\_executable,
+    add\_library,
+    target\_link\_libraries,
+    cmake\_parse\_arguments,
+    cmake\_language,
+    set, unset,
+    option,
+    string,
+    list,
+    math,
+    message,
+    if, elseif, else, endif,
+    mark\_as\_advanced,
+    foreach, endforeach,
+    while, endwhile,
+    add\_subdirectory, include, return, include\_gurad,
+    function, endfunction,
+    macro, endmacro,
+    find\_package,
+    cmake\_push\_check\_state,
+    cmake\_pop\_check\_state,
+    cmake\_reset\_check\_state,
+    add\_test,
+    set\_tests\_properties, 
+    check\_c\_source\_runs,
+    check\_cxx\_source\_runs,
+    check\_fortran\_source\_runs,
+    check\_source\_runs,
+    check\_compiler\_flag,
+    check\_c\_compiler\_flag,
+    check\_cxx\_compiler\_flag,
+    check\_fortran\_compiler\_flag,
+    check\_symbol\_exists,
+    check\_cxx\_symbol\_exists,
+    check\_linker\_flag,
+    cmake\_policy,
+    set\_property,
+    get\_property,
+    define\_property,
+    get\_cmake\_property,
+    set\_cmake\_property,
+    set\_target\_properties,
+    get\_target\_property,
+    set\_directory\_properties,
+    get\_directory\_property,
+    set\_source\_files\_properties,
+    get\_source\_file\_property,
+    set\_tests\_properties,
+    get\_tests\_property,
+    get\_test\_property,
+    cmake\_print\_properties,
+    cmake\_print\_variables,
+    variable\_watch,
+    include\_guard,
+    target\_link\_options,
+    target\_compile\_definitions,
+    target\_compile\_options,
+    include\_directories,
+    add\_definitions,
+    remove\_definitions,
+    add\_compile\_definitions,
+    add\_compile\_options,
+    link\_libraries,
+    link\_directories,
+    add\_link\_options,
+    target\_include\_directories,
+    target\_compile\_features,
+    add\_custom\_command,
+    add\_custom\_target,
+    execute\_process,
+    cmake\_path,
+    get\_filename\_component,
+    file,
+    configure\_file,
+    generate\_export\_header,
+    export,
+    find\_file,
+    find\_library,
+    find\_package,
+    find\_program,
+    pkg\_check\_modules,
+    pkg\_search\_module,
+    pkg\_get\_variable,
+    add\_test,
+    enable\_testing,
+    set\_tests\_properties,
+    site\_name,
+    ctest\_empty\_binary\_directory,
+    ctest\_start,
+    ctest\_configure,
+    ctest\_submit,
+    ctest\_build,
+    ctest\_memcheck,
+    ctest\_upload,
+    ctest\_test,
+    gtest\_add\_tests,
+    gtest\_discover\_tests,
+    install,
+    write\_basic\_package\_version\_file,
+    configure\_package\_config\_file,
+    cpack\_add\_component,
+    cpack\_add\_install\_type,
+    cpack\_add\_component\_group,
+    ExternalProject\_Add,
+    ExternalProject\_Add\_StepDependencies,
+    ExternalProject\_Get\_Property,
+    ExternalProject\_Add\_Step,
+    FetchContent\_Declare,
+    FetchContent\_GetProperties,
+    FetchContent\_Populate,
+    source\_group,
+    target\_precompile\_headers,
+    qt5\_wrap\_cpp,
+    qt5\_wrap\_ui,
+    qt5\_add\_resources,
+    qt5\_add\_big\_resources,
+    qt5\_add\_binary\_resources,
+    qt5\_add\_translation,
+    qt5\_create\_translation,
+    compile\_definitions,
+    add\_llvm\_component\_library,
+    add\_llvm\_tool,
+    llvm\_multisource,
+    llvm\_test\_data,
+    doxygen\_add\_docs,
+    cmake\_dependent\_option,
+    target\_sources,
+    conan\_cmake\_autodetect,
+    conan\_cmake\_configure,
+    conan\_cmake\_install,
+    doxygen\_add\_docs,
+    check\_source\_compiles,
+    check\_language,
+    enable\_language,
+    add\_dependencies,
+    find\_path,
+    find\_package\_handle\_standard\_args,
+  }, %定义关键字
+  sensitive=false, %是否大小写敏感
+  morecomment=[l]{\#},
+  morestring=[b]",
+  morestring=[d]',
+}
+
+\lstdefinestyle{styleCMake}{
+  language=CMake,
+  backgroundcolor=\color{blue!3!white}, 
+  basicstyle=\tt, 
+  breakatwhitespace = false,
+  breaklines = true,
+  captionpos = b,
+  commentstyle = \color{mygray}\bfseries, 
+  extendedchars =false,             
+  frame=shadowbox, 
+  tabsize=2,
+  framerule=0.5pt,
+  keepspaces=true,
+  keywordstyle=\color{blue}\bfseries, % keyword style
+  otherkeywords={string}, 
+  rulecolor=\color{black},
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  stepnumber=1,
+  stringstyle=\color{purple},        % string literal style
+}
+
+\lstdefinestyle{stylePython}{
+  language        =   Python, % 语言选Python
+  backgroundcolor=\color{blue!3!white}, 
+  basicstyle      =   \zihao{-5}\ttfamily,
+  numberstyle     =   \zihao{-5}\ttfamily,
+  keywordstyle    =   \color{blue},
+  keywordstyle    =   [2] \color{teal},
+  stringstyle     =   \color{magenta},
+  commentstyle    =   \color{red}\ttfamily,
+  frame = shadowbox, 
+  breaklines      =   true,   % 自动换行，建议不要写太长的行
+  columns         =   fixed,  % 如果不加这一句，字间距就不固定，很丑，必须加
+  basewidth       =   0.5em,
+  %basicstyle          =   \sffamily,          % 基本代码风格
+  %keywordstyle        =   \bfseries,          % 关键字风格
+  %commentstyle        =   \rmfamily\itshape,  % 注释的风格，斜体
+  %stringstyle         =   \ttfamily,  % 字符串风格
+  flexiblecolumns,                % 别问为什么，加上这个
+  %numbers             =   left,   % 行号的位置在左边
+  showspaces          =   false,  % 是否显示空格，显示了有点乱，所以不现实了
+  numberstyle         =   \zihao{-5}\ttfamily,    % 行号的样式，小五号，tt等宽字体
+  showstringspaces    =   false,
+  captionpos          =   t,      % 这段代码的名字所呈现的位置，t指的是top上面
+  frame               =   lrtb,   % 显示边框
+  tabsize=2,  
+}
+
+\tcbset{
+  breakable,
+  commandshell/.style={
+    listing only,
+    colback=black!75!white,
+    colupper=white,
+    lowerbox=ignored,
+    listing options={
+      language={bash},
+      breaklines=true,
+      basicstyle=\ttfamily,
+      columns = fixed,
+      flexiblecolumns
+    }
+}}
+
+\usepackage{tikz}
+
+% URL 正确换行
+% https://liam.page/2017/05/17/help-the-url-command-from-hyperref-to-break-at-line-wrapping-point/
+\makeatletter
+\def\UrlAlphabet{%
+  \do\a\do\b\do\c\do\d\do\e\do\f\do\g\do\h\do\i\do\j%
+  \do\k\do\l\do\m\do\n\do\o\do\p\do\q\do\r\do\s\do\t%
+  \do\u\do\v\do\w\do\x\do\y\do\z\do\A\do\B\do\C\do\D%
+  \do\E\do\F\do\G\do\H\do\I\do\J\do\K\do\L\do\M\do\N%
+  \do\O\do\P\do\Q\do\R\do\S\do\T\do\U\do\V\do\W\do\X%
+  \do\Y\do\Z}
+\def\UrlDigits{\do\1\do\2\do\3\do\4\do\5\do\6\do\7\do\8\do\9\do\0}
+\g@addto@macro{\UrlBreaks}{\UrlOrds}
+\g@addto@macro{\UrlBreaks}{\UrlAlphabet}
+\g@addto@macro{\UrlBreaks}{\UrlDigits}
+\makeatother
+
+% enable subsubsubsection
+% from https://tex.stackexchange.com/练习题/274212/correct-hierarchy-levels-of-pdf-bookmarks-for-custom-section-subsubsubsection
+\usepackage[depth=3]{bookmark}
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{4}
+\hypersetup{bookmarksdepth=4}
+
+\makeatletter
+
+\newcommand{\toclevel@subsubsubsection}{4}
+\newcounter{subsubsubsection}[subsubsection]
+
+\renewcommand{\thesubsubsubsection}{\thesubsubsection.\arabic{subsubsubsection}}
+
+\newcommand{\subsubsubsection}{\@startsection{subsubsubsection}{4}{\z@}%
+  {-3.25ex\@plus -1ex \@minus -.2ex}%
+  {1.5ex \@plus .2ex}%
+  {\normalfont\normalsize\bf\bfseries}}
+
+\newcommand*{\l@subsubsubsection}{\@dottedtocline{4}{11em}{5em}}  
+
+\newcommand{\subsubsubsectionmark}[1]{}
+\makeatother
+
+\ExplSyntaxOn
+
+% Setup enumerate, itemize and description
+\setenumerate  { nosep }
+\setitemize    { nosep }
+\setdescription{ nosep }
+
+% Setup minted
+\setminted { obeytabs, tabsize=2, breaklines=true, fontsize=\footnotesize, frame=single }
+
+% Def \filename
+\NewDocumentCommand { \filename } { m } 
+{ \noindent \textit { #1 } \vspace*{ -1ex } \nopagebreak[4] }
+
+% Def \mySamllsection
+\NewDocumentCommand { \mySamllsection } { m } 
+{ \noindent \hspace*{\fill} \\ \textbf { #1 } \vspace*{ -1ex } \nopagebreak[4] \\ }
+
+% Def \inlcpp
+\NewDocumentCommand { \inlcpp }   { m } 
+{ \mintinline { cpp } { #1 } }
+
+% Def cpp environment
+\NewDocumentEnvironment { cpp } { }
+{ \VerbatimEnvironment
+  \begin { minted } [ linenos=true ] { cpp } } 
+{ \end   { minted } }
+
+% Def shell environment
+\NewDocumentEnvironment { shell } { }
+{ \VerbatimEnvironment
+  \begin { minted } { text } } 
+{ \end   { minted } }
+
+\NewDocumentEnvironment { notice } { }
+{ \begin { tcolorbox } [ colback = green!5!white, colframe=green!75!black ] } 
+{ \end   { tcolorbox } }
+
+\NewDocumentCommand { \mySubsubsection } { mm }
+{ 
+\subsubsection*{\zihao{3} {#1} \hspace{0.2cm}{#2}}
+\addcontentsline{toc}{subsubsection}{{#1}\hspace{0.2cm}{#2}}
+}
+
+\NewDocumentCommand { \mySubsection } { mmm }
+{
+\subsection*{\zihao{3}{#1}\hspace{0.2cm}{#2}}
+\addcontentsline{toc}{subsection}{{#1}\hspace{0.2cm}{#2}}
+\subfile{{#3}}
+}
+
+\NewDocumentCommand { \mySection } { mmm }
+{
+\section*{\zihao{2}{#1}\hspace{0.5cm}{#2}}
+\addcontentsline{toc}{section}{{#1}\hspace{0.5cm}{#2}}
+\subfile{{#3}}
+}
+
+% Latex如何在文本模式批量处理下划线
+% https://zhuanlan.zhihu.com/p/615108006 
+
+\ExplSyntaxOff
+
+\begin{document}
+  \begin{sloppypar} %latex中一行文字出现溢出问题的解决方法
+    %\maketitle
+    
+    \begin{center}
+      \thispagestyle{empty}
+      %\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{cover.jpg}
+      \begin{tikzpicture}[remember picture, overlay, inner sep=0pt]
+        \node at (current page.center) 
+        {\includegraphics[width=\paperwidth, keepaspectratio=false]{cover.jpg}};
+      \end{tikzpicture}
+      \newpage
+      \thispagestyle{empty}
+      \huge
+      \textbf{The C++ Standard Library} 
+      \\[9pt]
+      What every professional C++ programmer should know about the C++ standard library.
+      \normalsize 
+      作者: Rainer Grimm
+      \\[8pt]
+      \normalsize
+      译者：\href{https://github.com/xiaoweiChen/The-CXX-Library-Fourth-EDdition-include-CXX23}{陈晓伟}
+      \\[8pt]
+      \normalsize 
+      版本：\href{http://leanpub.com/cpplibrary}{2023-03-11}
+    \end{center}
+    
+    \newpage
+    
+    \pagestyle{empty}   
+    \tableofcontents
+    \newpage
+    
+    \setsecnumdepth{section}
+    
+    \mySection{}{Purpose of this Book}{content/chapter0/0.tex}
+    \mySubsection{}{Index}{content/chapter0/1.tex}    
+    \mySubsection{}{Acknowledgments}{content/chapter0/2.tex}    
+    \mySubsection{}{Further Information}{content/chapter0/3.tex}    
+    \mySubsection{}{Cippi}{content/chapter0/4.tex}    
+    \mySubsection{}{About Me}{content/chapter0/5.tex}   
+    \newpage
+    
+    \mySection{第1章}{The Standard Library}{content/chapter1/0.tex} 
+    \mySubsection{1.1.}{The History}{content/chapter1/1.tex}
+    \mySubsection{1.2.}{Overview}{content/chapter1/2.tex}
+    \mySubsection{1.3.}{Use of Libraries}{content/chapter1/3.tex}
+    \newpage
+    
+    \mySection{第2章}{Utilities}{content/chapter2/0.tex}
+    \mySubsection{2.1.}{Useful Functions}{content/chapter2/1.tex}
+    \mySubsection{2.2.}{Adaptors for Functions}{content/chapter2/2.tex}
+    \mySubsection{2.3.}{Pairs}{content/chapter2/3.tex}
+    \mySubsection{2.4.}{Tuples}{content/chapter2/4.tex}
+    \mySubsection{2.5.}{Adaptors for Functions}{content/chapter2/5.tex}
+    \mySubsection{2.6.}{Reference Wrappers}{content/chapter2/6.tex}
+    \mySubsection{2.7.}{Smart Pointers}{content/chapter2/7.tex}
+    \mySubsection{2.8.}{Type Traits}{content/chapter2/8.tex}
+    \mySubsection{2.9.}{Time Library}{content/chapter2/9.tex}
+    \mySubsection{2.10.}{std::any, std::optional, and std::variant}{content/chapter2/10.tex}
+    \mySubsection{2.11.}{std::expected}{content/chapter2/11.tex}
+    \newpage
+    
+    \mySection{第3章}{Interface of All Containers}{content/chapter3/0.tex}
+    \mySubsection{3.1.}{Create and delete}{content/chapter3/1.tex}
+    \mySubsection{3.2.}{Size}{content/chapter3/2.tex}
+    \mySubsection{3.3.}{Access}{content/chapter3/3.tex}
+    \mySubsection{3.4.}{Assign and Swap}{content/chapter3/4.tex}
+    \mySubsection{3.5.}{Compare}{content/chapter3/5.tex}
+    \mySubsection{3.6.}{Erasure}{content/chapter3/6.tex}
+    \newpage
+    
+    \mySection{第4章}{Sequence Containers}{content/chapter4/0.tex}
+    \mySubsection{4.1.}{Arrays}{content/chapter4/1.tex}
+    \mySubsection{4.2.}{Vectors}{content/chapter4/2.tex}
+    \mySubsection{4.3.}{Deques}{content/chapter4/3.tex}
+    \mySubsection{4.4.}{Lists}{content/chapter4/4.tex}
+    \mySubsection{4.5.}{Forward Lists}{content/chapter4/5.tex}
+    \newpage
+    
+    \mySection{第5章}{Associative Containers}{content/chapter5/0.tex}
+    \mySubsection{5.1.}{Overview}{content/chapter5/1.tex}
+    \mySubsection{5.2.}{Ordered Associative Containers}{content/chapter5/2.tex}
+    \mySubsection{5.3.}{Unordered Associative Containers}{content/chapter5/3.tex}
+    \newpage
+    
+    \mySection{第6章}{Container Adaptors}{content/chapter6/0.tex}
+    \mySubsection{6.1.}{Linear Containers}{content/chapter6/1.tex}
+    \mySubsection{6.2.}{Associative Containers}{content/chapter6/2.tex}
+    \newpage
+    
+    \mySection{第7章}{Views}{content/chapter7/0.tex}
+    \mySubsection{7.1.}{Contiguous Access}{content/chapter7/1.tex}
+    \mySubsection{7.2.}{Multidimensional Access}{content/chapter7/2.tex}
+    \newpage
+    
+    \mySection{第8章}{Iterators}{content/chapter8/0.tex}
+    \mySubsection{8.1.}{Categories}{content/chapter8/1.tex}
+    \mySubsection{8.2.}{Iterator Creation}{content/chapter8/2.tex}
+    \mySubsection{8.3.}{Useful Functions}{content/chapter8/3.tex}
+    \mySubsection{8.4.}{Adaptors}{content/chapter8/4.tex}
+    \newpage
+    
+    \mySection{第9章}{Callable Units}{content/chapter9/0.tex}
+    \mySubsection{9.1.}{Functions}{content/chapter9/1.tex}
+    \mySubsection{9.2.}{Function Objects}{content/chapter9/2.tex}
+    \mySubsection{9.3.}{Lambda Functions}{content/chapter9/3.tex}
+    \newpage
+    
+    \mySection{第10章}{Algorithms}{content/chapter10/0.tex}
+    \mySubsection{10.1.}{Conventions}{content/chapter10/1.tex}
+    \mySubsection{10.2.}{Iterators are the Glue}{content/chapter10/2.tex}
+    \mySubsection{10.3.}{Sequential, Parallel, or Parallel Execution with Vectorisation}{content/chapter10/3.tex}
+    \mySubsection{10.4.}{for\_each}{content/chapter10/4.tex}
+    \mySubsection{10.5.}{Non-Modifying Algorithms}{content/chapter10/5.tex}
+    \mySubsection{10.6.}{Modifying Algorithms}{content/chapter10/6.tex}
+    \mySubsection{10.7.}{Partition}{content/chapter10/7.tex}
+    \mySubsection{10.8.}{Sorts}{content/chapter10/8.tex}
+    \mySubsection{10.9.}{Binary Search}{content/chapter10/9.tex}
+    \mySubsection{10.10.}{Merge Operations}{content/chapter10/10.tex}
+    \mySubsection{10.11.}{Heaps}{content/chapter10/11.tex}
+    \mySubsection{10.12.}{Min and Max}{content/chapter10/12.tex}
+    \mySubsection{10.13.}{Permutations}{content/chapter10/13.tex}
+    \mySubsection{10.14.}{Numeric}{content/chapter10/14.tex}
+    \mySubsection{10.15.}{Unitialized Memory}{content/chapter10/15.tex}
+    \newpage
+    
+    \mySection{第11章}{Ranges}{content/chapter11/0.tex}
+    \mySubsection{11.1.}{Range}{content/chapter11/1.tex}
+    \mySubsection{11.2.}{View}{content/chapter11/2.tex}
+    \mySubsection{11.3.}{Range Adaptors}{content/chapter11/3.tex}
+    \mySubsection{11.4.}{Direct on the Containers}{content/chapter11/4.tex}
+    \mySubsection{11.5.}{Function Composition}{content/chapter11/5.tex}
+    \mySubsection{11.6.}{Lazy Evaluation}{content/chapter11/6.tex}
+    \mySubsection{11.7.}{std Algorithms versus std::ranges Algorithms}{content/chapter11/7.tex}
+    \newpage
+    
+    \mySection{第12章}{Numeric}{content/chapter12/0.tex}
+    \mySubsection{12.1.}{Random Numbers}{content/chapter12/1.tex}
+    \mySubsection{12.2.}{Numeric Functions Inherited from C}{content/chapter12/2.tex}
+    \mySubsection{12.3.}{Mathematical Constants}{content/chapter12/3.tex}
+    \newpage
+    
+    \mySection{第13章}{Strings}{content/chapter13/0.tex}
+    \mySubsection{13.1.}{Create and Delete}{content/chapter13/1.tex}
+    \mySubsection{13.2.}{Conversion Between C++ and C Strings}{content/chapter13/2.tex}
+    \mySubsection{13.3.}{Size versus Capacity}{content/chapter13/3.tex}
+    \mySubsection{13.4.}{Comparison}{content/chapter13/4.tex}
+    \mySubsection{13.5.}{String Concatenation}{content/chapter13/5.tex}
+    \mySubsection{13.6.}{Element Access}{content/chapter13/6.tex}
+    \mySubsection{13.7.}{Input and Output}{content/chapter13/7.tex}
+    \mySubsection{13.8.}{Search}{content/chapter13/8.tex}
+    \mySubsection{13.9.}{Check for a substring}{content/chapter13/9.tex}
+    \mySubsection{13.10.}{Modifying Operations}{content/chapter13/10.tex}
+    \mySubsection{13.11.}{Numeric Conversions}{content/chapter13/11.tex}
+    \newpage
+    
+    \mySection{第14章}{String Views}{content/chapter14/0.tex}
+    \mySubsection{14.1.}{Create and Initialise}{content/chapter14/1.tex}
+    \mySubsection{14.2.}{Non-modifying operations}{content/chapter14/2.tex}
+    \mySubsection{14.3.}{Modifying operations}{content/chapter14/3.tex}
+    \newpage
+    
+    \mySection{第15章}{Regular Expressions}{content/chapter15/0.tex}
+    \mySubsection{15.1.}{Character Types}{content/chapter15/1.tex}
+    \mySubsection{15.2.}{Regular Expression Objects}{content/chapter15/2.tex}
+    \mySubsection{15.3.}{The Search Result match\_results}{content/chapter15/3.tex}
+    \mySubsection{15.4.}{Match}{content/chapter15/4.tex}
+    \mySubsection{15.5.}{Search}{content/chapter15/5.tex}
+    \mySubsection{15.6.}{Replace}{content/chapter15/6.tex}
+    \mySubsection{15.7.}{Format}{content/chapter15/7.tex}
+    \mySubsection{15.8.}{Repeated Search}{content/chapter15/8.tex}
+    \newpage
+    
+    \mySection{第16章}{Input and Output Streams}{content/chapter16/0.tex}
+    \mySubsection{16.1.}{Hierarchy}{content/chapter16/1.tex}
+    \mySubsection{16.2.}{Input and Output Functions}{content/chapter16/2.tex}
+    \mySubsection{16.3.}{Streams}{content/chapter16/3.tex}
+    \mySubsection{16.4.}{User-defined Data Types}{content/chapter16/4.tex}
+    \newpage
+    
+    \mySection{第17章}{Formatting Library}{content/chapter17/0.tex}
+    \mySubsection{17.1.}{Formatting Functions}{content/chapter17/1.tex}
+    \mySubsection{17.2.}{Syntax}{content/chapter17/2.tex}
+    \mySubsection{17.3.}{Format specification}{content/chapter17/3.tex}
+    \mySubsection{17.4.}{User-defined formatter}{content/chapter17/4.tex}
+    \newpage
+    
+    \mySection{第18章}{Filesystem}{content/chapter18/0.tex}
+    \mySubsection{18.1.}{Classes}{content/chapter18/1.tex}
+    \mySubsection{18.2.}{Non-member functions}{content/chapter18/2.tex}
+    \mySubsection{18.3.}{File types}{content/chapter18/3.tex}
+    \newpage
+    
+    \mySection{第19章}{Multithreading}{content/chapter19/0.tex}
+    \mySubsection{19.1.}{Memory Model}{content/chapter19/1.tex}
+    \mySubsection{19.2.}{Atomic Data Types}{content/chapter19/2.tex}
+    \mySubsection{19.3.}{Threads}{content/chapter19/3.tex}
+    \mySubsection{19.4.}{Stop Token}{content/chapter19/4.tex}
+    \mySubsection{19.5.}{Shared Variables}{content/chapter19/5.tex}
+    \mySubsection{19.6.}{Thread Local Data}{content/chapter19/6.tex}
+    \mySubsection{19.7.}{Condition Variables}{content/chapter19/7.tex}
+    \mySubsection{19.8.}{Semaphores}{content/chapter19/8.tex}
+    \mySubsection{19.9.}{Coordination Types}{content/chapter19/9.tex}
+    \mySubsection{19.10.}{Tasks}{content/chapter19/10.tex}
+    \newpage
+    
+    \mySection{第20章}{Coroutines}{content/chapter20/0.tex}
+    \mySubsection{20.1.}{Awaitables}{content/chapter20/1.tex}
+    \mySubsection{20.2.}{An Infinite Data Stream with co\_yield}{content/chapter20/2.tex}
+    \newpage
+    
+  \end{sloppypar}
+\end{document}
+
