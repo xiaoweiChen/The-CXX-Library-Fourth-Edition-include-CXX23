@@ -20,7 +20,7 @@
 
 \usepackage{tabularx}
 \usepackage{longtable}
-\usepackage{booktabs} 
+\usepackage{booktabs}
 \usepackage{multirow}
 \usepackage{bbding}
 \usepackage{float}
@@ -98,7 +98,7 @@
     cmake\_pop\_check\_state,
     cmake\_reset\_check\_state,
     add\_test,
-    set\_tests\_properties, 
+    set\_tests\_properties,
     check\_c\_source\_runs,
     check\_cxx\_source\_runs,
     check\_fortran\_source\_runs,
@@ -221,19 +221,19 @@
 
 \lstdefinestyle{styleCMake}{
   language=CMake,
-  backgroundcolor=\color{blue!3!white}, 
-  basicstyle=\tt, 
+  backgroundcolor=\color{blue!3!white},
+  basicstyle=\tt,
   breakatwhitespace = false,
   breaklines = true,
   captionpos = b,
-  commentstyle = \color{mygray}\bfseries, 
-  extendedchars =false,             
-  frame=shadowbox, 
+  commentstyle = \color{mygray}\bfseries,
+  extendedchars =false,
+  frame=shadowbox,
   tabsize=2,
   framerule=0.5pt,
   keepspaces=true,
   keywordstyle=\color{blue}\bfseries, % keyword style
-  otherkeywords={string}, 
+  otherkeywords={string},
   rulecolor=\color{black},
   showspaces=false,
   showstringspaces=false,
@@ -244,14 +244,14 @@
 
 \lstdefinestyle{stylePython}{
   language        =   Python, % 语言选Python
-  backgroundcolor=\color{blue!3!white}, 
+  backgroundcolor=\color{blue!3!white},
   basicstyle      =   \zihao{-5}\ttfamily,
   numberstyle     =   \zihao{-5}\ttfamily,
   keywordstyle    =   \color{blue},
   keywordstyle    =   [2] \color{teal},
   stringstyle     =   \color{magenta},
   commentstyle    =   \color{red}\ttfamily,
-  frame = shadowbox, 
+  frame = shadowbox,
   breaklines      =   true,   % 自动换行，建议不要写太长的行
   columns         =   fixed,  % 如果不加这一句，字间距就不固定，很丑，必须加
   basewidth       =   0.5em,
@@ -266,7 +266,7 @@
   showstringspaces    =   false,
   captionpos          =   t,      % 这段代码的名字所呈现的位置，t指的是top上面
   frame               =   lrtb,   % 显示边框
-  tabsize=2,  
+  tabsize=2,
 }
 
 \tcbset{
@@ -322,7 +322,7 @@
   {1.5ex \@plus .2ex}%
   {\normalfont\normalsize\bf\bfseries}}
 
-\newcommand*{\l@subsubsubsection}{\@dottedtocline{4}{11em}{5em}}  
+\newcommand*{\l@subsubsubsection}{\@dottedtocline{4}{11em}{5em}}
 
 \newcommand{\subsubsubsectionmark}[1]{}
 \makeatother
@@ -338,35 +338,54 @@
 \setminted { obeytabs, tabsize=2, breaklines=true, fontsize=\footnotesize, frame=single }
 
 % Def \filename
-\NewDocumentCommand { \filename } { m } 
+\NewDocumentCommand { \filename } { m }
 { \noindent \textit { #1 } \vspace*{ -1ex } \nopagebreak[4] }
 
 % Def \mySamllsection
-\NewDocumentCommand { \mySamllsection } { m } 
+\NewDocumentCommand { \mySamllsection } { m }
 { \noindent \hspace*{\fill} \\ \textbf { #1 } \vspace*{ -1ex } \nopagebreak[4] \\ }
 
+\NewDocumentCommand { \myGraphic } { mmm }
+{
+  \begin{center}
+    \includegraphics[width={#1}\textwidth]{#2}\\
+    {#3}
+  \end{center}
+}
+
 % Def \inlcpp
-\NewDocumentCommand { \inlcpp }   { m } 
+\NewDocumentCommand { \inlcpp }   { m }
 { \mintinline { cpp } { #1 } }
 
 % Def cpp environment
 \NewDocumentEnvironment { cpp } { }
 { \VerbatimEnvironment
-  \begin { minted } [ linenos=true ] { cpp } } 
+  \begin { minted } [ linenos=true ] { cpp } }
 { \end   { minted } }
 
 % Def shell environment
 \NewDocumentEnvironment { shell } { }
 { \VerbatimEnvironment
-  \begin { minted } { text } } 
+  \begin { minted } { text } }
 { \end   { minted } }
 
-\NewDocumentEnvironment { notice } { }
-{ \begin { tcolorbox } [ colback = green!5!white, colframe=green!75!black ] } 
+\NewDocumentEnvironment { myNotic } { m }
+{ \hspace*{\fill} \\
+  \begin { tcolorbox } [ breakable,colback = blue!5!white, colframe=blue!55!black ,title={#1}] }
+{ \end   { tcolorbox } }
+
+\NewDocumentEnvironment { myTip } { m }
+{ \hspace*{\fill} \\
+  \begin { tcolorbox } [ breakable,colback = green!5!white, colframe=green!45!black ,title={#1}] }
+{ \end   { tcolorbox } }
+
+\NewDocumentEnvironment { myWarning } { m }
+{ \hspace*{\fill} \\
+  \begin { tcolorbox } [ breakable,colback=red!5!white,colframe=red!55!black,title={#1}] }
 { \end   { tcolorbox } }
 
 \NewDocumentCommand { \mySubsubsection } { mm }
-{ 
+{
 \subsubsection*{\zihao{3} {#1} \hspace{0.2cm}{#2}}
 \addcontentsline{toc}{subsubsection}{{#1}\hspace{0.2cm}{#2}}
 }
@@ -386,59 +405,59 @@
 }
 
 % Latex如何在文本模式批量处理下划线
-% https://zhuanlan.zhihu.com/p/615108006 
+% https://zhuanlan.zhihu.com/p/615108006
 
 \ExplSyntaxOff
 
 \begin{document}
   \begin{sloppypar} %latex中一行文字出现溢出问题的解决方法
     %\maketitle
-    
+
     \begin{center}
       \thispagestyle{empty}
       %\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{cover.jpg}
       \begin{tikzpicture}[remember picture, overlay, inner sep=0pt]
-        \node at (current page.center) 
+        \node at (current page.center)
         {\includegraphics[width=\paperwidth, keepaspectratio=false]{cover.jpg}};
       \end{tikzpicture}
       \newpage
       \thispagestyle{empty}
       \huge
-      \textbf{The C++ Standard Library} 
+      \textbf{The C++ Standard Library}
       \\[9pt]
-      What every professional C++ programmer should know about the C++ standard library.
-      \normalsize 
+      What every professional C++ programmer should know about the C++ standard library.\\[9pt]
+      \normalsize
       作者: Rainer Grimm
       \\[8pt]
       \normalsize
       译者：\href{https://github.com/xiaoweiChen/The-CXX-Library-Fourth-EDdition-include-CXX23}{陈晓伟}
       \\[8pt]
-      \normalsize 
+      \normalsize
       版本：\href{http://leanpub.com/cpplibrary}{2023-03-11}
     \end{center}
-    
+
     \newpage
-    
-    \pagestyle{empty}   
+
+    \pagestyle{empty}
     \tableofcontents
     \newpage
-    
+
     \setsecnumdepth{section}
-    
+
     \mySection{}{Purpose of this Book}{content/chapter0/0.tex}
-    \mySubsection{}{Index}{content/chapter0/1.tex}    
-    \mySubsection{}{Acknowledgments}{content/chapter0/2.tex}    
-    \mySubsection{}{Further Information}{content/chapter0/3.tex}    
-    \mySubsection{}{Cippi}{content/chapter0/4.tex}    
-    \mySubsection{}{About Me}{content/chapter0/5.tex}   
+    \mySubsection{}{Index}{content/chapter0/1.tex}
+    \mySubsection{}{Acknowledgments}{content/chapter0/2.tex}
+    \mySubsection{}{Further Information}{content/chapter0/3.tex}
+    \mySubsection{}{Cippi}{content/chapter0/4.tex}
+    \mySubsection{}{About Me}{content/chapter0/5.tex}
     \newpage
-    
-    \mySection{第1章}{The Standard Library}{content/chapter1/0.tex} 
+
+    \mySection{第1章}{The Standard Library}{content/chapter1/0.tex}
     \mySubsection{1.1.}{The History}{content/chapter1/1.tex}
     \mySubsection{1.2.}{Overview}{content/chapter1/2.tex}
     \mySubsection{1.3.}{Use of Libraries}{content/chapter1/3.tex}
     \newpage
-    
+
     \mySection{第2章}{Utilities}{content/chapter2/0.tex}
     \mySubsection{2.1.}{Useful Functions}{content/chapter2/1.tex}
     \mySubsection{2.2.}{Adaptors for Functions}{content/chapter2/2.tex}
@@ -452,7 +471,7 @@
     \mySubsection{2.10.}{std::any, std::optional, and std::variant}{content/chapter2/10.tex}
     \mySubsection{2.11.}{std::expected}{content/chapter2/11.tex}
     \newpage
-    
+
     \mySection{第3章}{Interface of All Containers}{content/chapter3/0.tex}
     \mySubsection{3.1.}{Create and delete}{content/chapter3/1.tex}
     \mySubsection{3.2.}{Size}{content/chapter3/2.tex}
@@ -461,7 +480,7 @@
     \mySubsection{3.5.}{Compare}{content/chapter3/5.tex}
     \mySubsection{3.6.}{Erasure}{content/chapter3/6.tex}
     \newpage
-    
+
     \mySection{第4章}{Sequence Containers}{content/chapter4/0.tex}
     \mySubsection{4.1.}{Arrays}{content/chapter4/1.tex}
     \mySubsection{4.2.}{Vectors}{content/chapter4/2.tex}
@@ -469,36 +488,36 @@
     \mySubsection{4.4.}{Lists}{content/chapter4/4.tex}
     \mySubsection{4.5.}{Forward Lists}{content/chapter4/5.tex}
     \newpage
-    
+
     \mySection{第5章}{Associative Containers}{content/chapter5/0.tex}
     \mySubsection{5.1.}{Overview}{content/chapter5/1.tex}
     \mySubsection{5.2.}{Ordered Associative Containers}{content/chapter5/2.tex}
     \mySubsection{5.3.}{Unordered Associative Containers}{content/chapter5/3.tex}
     \newpage
-    
+
     \mySection{第6章}{Container Adaptors}{content/chapter6/0.tex}
     \mySubsection{6.1.}{Linear Containers}{content/chapter6/1.tex}
     \mySubsection{6.2.}{Associative Containers}{content/chapter6/2.tex}
     \newpage
-    
+
     \mySection{第7章}{Views}{content/chapter7/0.tex}
     \mySubsection{7.1.}{Contiguous Access}{content/chapter7/1.tex}
     \mySubsection{7.2.}{Multidimensional Access}{content/chapter7/2.tex}
     \newpage
-    
+
     \mySection{第8章}{Iterators}{content/chapter8/0.tex}
     \mySubsection{8.1.}{Categories}{content/chapter8/1.tex}
     \mySubsection{8.2.}{Iterator Creation}{content/chapter8/2.tex}
     \mySubsection{8.3.}{Useful Functions}{content/chapter8/3.tex}
     \mySubsection{8.4.}{Adaptors}{content/chapter8/4.tex}
     \newpage
-    
+
     \mySection{第9章}{Callable Units}{content/chapter9/0.tex}
     \mySubsection{9.1.}{Functions}{content/chapter9/1.tex}
     \mySubsection{9.2.}{Function Objects}{content/chapter9/2.tex}
     \mySubsection{9.3.}{Lambda Functions}{content/chapter9/3.tex}
     \newpage
-    
+
     \mySection{第10章}{Algorithms}{content/chapter10/0.tex}
     \mySubsection{10.1.}{Conventions}{content/chapter10/1.tex}
     \mySubsection{10.2.}{Iterators are the Glue}{content/chapter10/2.tex}
@@ -516,7 +535,7 @@
     \mySubsection{10.14.}{Numeric}{content/chapter10/14.tex}
     \mySubsection{10.15.}{Unitialized Memory}{content/chapter10/15.tex}
     \newpage
-    
+
     \mySection{第11章}{Ranges}{content/chapter11/0.tex}
     \mySubsection{11.1.}{Range}{content/chapter11/1.tex}
     \mySubsection{11.2.}{View}{content/chapter11/2.tex}
@@ -526,13 +545,13 @@
     \mySubsection{11.6.}{Lazy Evaluation}{content/chapter11/6.tex}
     \mySubsection{11.7.}{std Algorithms versus std::ranges Algorithms}{content/chapter11/7.tex}
     \newpage
-    
+
     \mySection{第12章}{Numeric}{content/chapter12/0.tex}
     \mySubsection{12.1.}{Random Numbers}{content/chapter12/1.tex}
     \mySubsection{12.2.}{Numeric Functions Inherited from C}{content/chapter12/2.tex}
     \mySubsection{12.3.}{Mathematical Constants}{content/chapter12/3.tex}
     \newpage
-    
+
     \mySection{第13章}{Strings}{content/chapter13/0.tex}
     \mySubsection{13.1.}{Create and Delete}{content/chapter13/1.tex}
     \mySubsection{13.2.}{Conversion Between C++ and C Strings}{content/chapter13/2.tex}
@@ -546,13 +565,13 @@
     \mySubsection{13.10.}{Modifying Operations}{content/chapter13/10.tex}
     \mySubsection{13.11.}{Numeric Conversions}{content/chapter13/11.tex}
     \newpage
-    
+
     \mySection{第14章}{String Views}{content/chapter14/0.tex}
     \mySubsection{14.1.}{Create and Initialise}{content/chapter14/1.tex}
     \mySubsection{14.2.}{Non-modifying operations}{content/chapter14/2.tex}
     \mySubsection{14.3.}{Modifying operations}{content/chapter14/3.tex}
     \newpage
-    
+
     \mySection{第15章}{Regular Expressions}{content/chapter15/0.tex}
     \mySubsection{15.1.}{Character Types}{content/chapter15/1.tex}
     \mySubsection{15.2.}{Regular Expression Objects}{content/chapter15/2.tex}
@@ -563,27 +582,27 @@
     \mySubsection{15.7.}{Format}{content/chapter15/7.tex}
     \mySubsection{15.8.}{Repeated Search}{content/chapter15/8.tex}
     \newpage
-    
+
     \mySection{第16章}{Input and Output Streams}{content/chapter16/0.tex}
     \mySubsection{16.1.}{Hierarchy}{content/chapter16/1.tex}
     \mySubsection{16.2.}{Input and Output Functions}{content/chapter16/2.tex}
     \mySubsection{16.3.}{Streams}{content/chapter16/3.tex}
     \mySubsection{16.4.}{User-defined Data Types}{content/chapter16/4.tex}
     \newpage
-    
+
     \mySection{第17章}{Formatting Library}{content/chapter17/0.tex}
     \mySubsection{17.1.}{Formatting Functions}{content/chapter17/1.tex}
     \mySubsection{17.2.}{Syntax}{content/chapter17/2.tex}
     \mySubsection{17.3.}{Format specification}{content/chapter17/3.tex}
     \mySubsection{17.4.}{User-defined formatter}{content/chapter17/4.tex}
     \newpage
-    
+
     \mySection{第18章}{Filesystem}{content/chapter18/0.tex}
     \mySubsection{18.1.}{Classes}{content/chapter18/1.tex}
     \mySubsection{18.2.}{Non-member functions}{content/chapter18/2.tex}
     \mySubsection{18.3.}{File types}{content/chapter18/3.tex}
     \newpage
-    
+
     \mySection{第19章}{Multithreading}{content/chapter19/0.tex}
     \mySubsection{19.1.}{Memory Model}{content/chapter19/1.tex}
     \mySubsection{19.2.}{Atomic Data Types}{content/chapter19/2.tex}
@@ -596,12 +615,12 @@
     \mySubsection{19.9.}{Coordination Types}{content/chapter19/9.tex}
     \mySubsection{19.10.}{Tasks}{content/chapter19/10.tex}
     \newpage
-    
+
     \mySection{第20章}{Coroutines}{content/chapter20/0.tex}
     \mySubsection{20.1.}{Awaitables}{content/chapter20/1.tex}
     \mySubsection{20.2.}{An Infinite Data Stream with co\_yield}{content/chapter20/2.tex}
     \newpage
-    
+
   \end{sloppypar}
 \end{document}
 

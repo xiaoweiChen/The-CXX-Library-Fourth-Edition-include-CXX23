@@ -1,1 +1,8 @@
 *.pdf
+/_minted-C++-Standard-Library/
+/C++-Standard-Library.aux
+/C++-Standard-Library.fdb_latexmk
+/C++-Standard-Library.fls
+/C++-Standard-Library.log
+/C++-Standard-Library.synctex.gz
+/C++-Standard-Library.toc
