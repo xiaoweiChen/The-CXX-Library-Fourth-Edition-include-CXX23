@@ -1,0 +1,121 @@
+You can apply the many variations of the min, max, and minmax functions to values and initializer lists. These functions need the header <algorithm>. On the contrary, the functions std::move, std::forward, std::to\_underlying, and std::swap are defined in the header <utility>. You can apply them to arbitrary values.
+
+\mySamllsection{std::min, std::max, and std::minmax}
+
+The functions \href{http://en.cppreference.com/w/cpp/algorithm/min}{std::min}, \href{http://en.cppreference.com/w/cpp/algorithm/max}{std::max}, and \href{http://en.cppreference.com/w/cpp/algorithm/minmax}{std::minmax}, defined in the header <algorithm>, act on values and initializer lists and give you the requested value back as a result. In the case of std::minmax, you get a std::pair. The first element of the pair is the minimum; the second is the maximum of the values. The less operator (<) is used by default, but you can apply your comparison operator. This function needs two arguments and returns a boolean. Functions that either return true or false are called predicates.
+
+\filename{The functions std::min, std::max, and std::minmax}
+
+\begin{cpp}
+// minMax.cpp
+...
+#include <algorithm>
+...
+using std::cout;
+...
+cout << std::min(2011, 2014); // 2011
+cout << std::min({3, 1, 2011, 2014, -5}); // -5
+cout << std::min(-10, -5, [](int a, int b)
+                { return std::abs(a) < std::abs(b); }); // -5
+
+auto pairInt= std::minmax(2011, 2014);
+auto pairSeq= std::minmax({3, 1, 2011, 2014, -5});
+auto pairAbs= std::minmax({3, 1, 2011, 2014, -5}, [](int a, int b)
+                      { return std::abs(a) < std::abs(b); });
+
+cout << pairInt.first << "," << pairInt.second; // 2011,2014
+cout << pairSeq.first << "," << pairSeq.second; // -5,2014
+cout << pairAbs.first << "," << pairAbs.second; // 1,2014
+\end{cpp}
+
+The table provides an overview of the functions std::min, std::max and std::minmax
+
+\begin{center}
+The variations of std::min, std::max, and std::minmax
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Function}           & \textbf{Description}                                                                \\ \hline
+\endfirsthead
+%
+\endhead
+%
+min(a, b)                   & Returns the smaller value of a and b                                                \\ \hline
+min(a, b, comp)             & Returns the smaller value of a and b according to the predicate comp.               \\ \hline
+min(initialiser list)       & Returns the smallest value of the initializer list.                                 \\ \hline
+min(initialiser list, comp) & Returns the smallest value of the initializer list according to the predicate comp. \\ \hline
+max(a, b)                   & Returns the greater value of a and b.                                               \\ \hline
+max(a, b, comp)             & Returns the greater value of a and b according to the predicate comp.               \\ \hline
+max(initialiser list)       & Returns the greatest value of the initializer list.                                 \\ \hline
+max(initialiser list, comp) & Returns the grestest value of the initializer list according to the predicate comp. \\ \hline
+minmax(a, b)                & Returns the smaller and greater value of a and b.                                   \\ \hline
+minmax(a, b, comp)          & Returns the smaller and greater value of a and b according to the predicate comp.   \\ \hline
+minmax(initialiser list)    & Returns the samllest and the greatest value of the initializer list.                \\ \hline
+minmax(initialiser list, comp) & Returns the samllest and the greatest value of the initializer list according to the predicate comp. \\ \hline
+\end{longtable}
+
+\mySamllsection{std::midpoint, and std::lerp}
+
+he function std::midpoint(a, b) calculates the midpoint between a and b. a and b can be integers, floating-point numbers, or pointers. If a and b are pointers, they must point to the same array object.
+The function std::midpoint requires the header <numeric>.
+
+The function std::lerp(a, b, t) calculates the linear interpolation of two numbers. It requires the header <cmath>. The return value is a + t(b - a).
+
+
+\filename{std::midpoint, and std::lerp}
+
+\begin{cpp}
+// midpointLerp.cpp
+
+#include <cmath>
+#include <numeric>
+
+...
+
+std::cout << "std::midpoint(10, 20): " << std::midpoint(10, 20) << '\n';
+
+for (auto v: {0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0}) {
+	std::cout << "std::lerp(10, 20, " << v << "): " << std::lerp(10, 20, v) << "\n";
+}
+\end{cpp}
+
+
+\myGraphic{0.4}{content/chapter2/images/2.jpg}{}
+
+\mySamllsection{std::cmp\_equal, std::cmp\_not\_equal, std::cmp\_less, std::cmp\_greater, std::cmp\_less\_equal, and std::cmp\_greater\_equal}
+
+
+The in the header <utility> definfined functions std::cmp\_equal, std::cmp\_not\_equal, std::cmp\_less, std::cmp\_greater, std::cmp\_less\_equal, and std::cmp\_greater\_equal provide safe comparison of integers. Safe comparison means that the comparison of a negative signed integer compares less than an unsigned integer, and that the comparison of values other than a signed or unsigned integer gives a compile-time error.
+
+
+\begin{myWarning}{Integer conversion with builtin integers}
+The following code snippet exemplifies the issue of signed/unsigned comparison.
+
+\begin{cpp}
+-1 < 0u; // true
+std::cmp_greater( -1, 0u); // false
+\end{cpp}
+
+-1 as a signed integer is promoted to an unsigned type which causes a surprising result.
+
+\end{myWarning}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

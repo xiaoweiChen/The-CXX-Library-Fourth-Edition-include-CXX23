@@ -1,0 +1,151 @@
+You must perform three steps to use a library in a program. At first, you have to include the header files with the \#include statement, so the compiler knows the library’s names. Alternatively, you can import with C++23 the standard library using import std;. Because the C++ standard library names are in the namespace std, you can use them in the second step fully qualified, or you have to import them in the global namespace. The third and final step is to specify the libraries for the linker to get an executable. This third step is often optional. The following lines explain the three steps.
+
+\mySamllsection{Include Header Files}
+
+The preprocessor includes the file, following the \#include statement. That is, most of the time, a header file. The header files are placed in angle brackets:
+
+\begin{cpp}
+#include <iostream>
+#include <vector>
+\end{cpp}
+
+\hspace*{\fill} \\ %插入空行
+\begin{tcolorbox}[breakable,enhanced jigsaw,colback=red!5!white,colframe=red!75!black,title={Specify all necessary header files}]
+
+The compiler is free to add additional headers to the header files. So your program may have all the necessary headers, although you didn’t specify them. It’s not recommended to rely on this feature. All needed headers should always be explicitly specified. Otherwise, a compiler upgrade or code porting may provoke a compilation error.
+
+\end{tcolorbox}
+
+\mySamllsection{Import the Standard Library}
+
+In C++23, you can import the entire standard library using the import statement:
+
+\begin{cpp}
+import std;
+\end{cpp}
+
+The import std; statement imports everything in the namespace std from C++ headers and C wrapper headers such as std::printf from <cstdio>. Also ::operator new, or ::operator delete from the <new> header is imported.
+
+If you also want to import the global namespace counterparts such as ::printf from the C wrapper header <stdio.h>, use the import std.compat.
+
+\begin{myWarning}{Prefer importing modules to including headers}
+
+Modules have many advantages over header files. These advantages hold for the modularized standard library but also user-defined modules.
+
+Modules are imported only once, and this process is literally for free. It makes no difference in which order you import modules, and duplicate names with modules are very unlikely. Modules enable you to express the logical structure of your code because you can explicitly specify names that should be exported or not. Additionally, you can bundle a few modules into a more extensive module and provide them to your customer as a logical package.
+
+\end{myWarning}
+
+\begin{myWarning}{Parallel use of header files and modules}
+
+I use both syntactic forms: headers files and modules in the following code snippets. You should only use one of them exclusively.
+
+\end{myWarning}
+
+\mySamllsection{Usage of Namespaces}
+
+If you use qualified names, you should use them precisely as defined. For each namespace, you must put the scope resolution operator ::. More libraries of the C++ standard library use nested namespaces.
+
+\begin{cpp}
+#include <iostream> // either
+#include <chrono> // either
+...
+#import std; // or
+...
+std::cout << "Hello world:" << '\n';
+auto timeNow= std::chrono::system_clock::now();
+\end{cpp}
+
+\mySamllsection{Unqualified Use of Names}
+
+You can use names in C++ with the using declaration and the using directive.
+
+\mySamllsection{Using Declaration}
+
+A using declaration adds a name to the visibility scope in which you applied the using declaration:
+
+\begin{cpp}
+#include <iostream> // either
+#include <chrono> // either
+...
+#import std; // or
+...
+using std::cout;
+using std::endl;
+using std::chrono::system_clock;
+...
+cout << "Hello world:" << endl; // unqualified name
+auto timeNow= now(); // unqualified name
+\end{cpp}
+
+The application of a using declaration has the following consequences:
+
+\begin{itemize}
+\item
+An ambiguous lookup and a compiler error occur if the same name was declared in the same visibility scope.
+
+\item
+If the same name was declared in a surrounding visibility scope, it will be hidden by the using declaration.
+\end{itemize}
+
+\mySamllsection{Using Directive}
+
+The using directive permits it to use all namespace names without qualification.
+
+\begin{cpp}
+#include <iostream> // either
+#include <chrono> // either
+...
+#import std; // or
+...
+using namespace std;
+...
+cout << "Hello world:" << endl; // unqualified name
+auto timeNow= chrono::system_clock::now(); // partially qualified name
+\end{cpp}
+
+A using directive adds no name to the current visibility scope; it only makes the name accessible. That implies:
+
+\begin{itemize}
+\item
+An ambiguous lookup and a compiler error occur if the same name was declared in the same visibility scope.
+
+\item
+A name in the local namespace hides a name declared in a surrounding namespace.
+
+\item
+An ambiguous lookup and, therefore, a compiler error occurs if the same name gets visible from different namespaces or if a name in the namespace hides a name in the global scope.
+\end{itemize}
+
+\begin{myWarning}{Use using directives with great care in source files}
+
+using directives should be used with great care in source files because by the directive using namespace std all names from std becomes visible. That includes names which accidentally hide names in the local or surrounding namespace.
+
+Don’t use using directives in header files. If you include a header with using namespace std directive, all names from std become visible.
+
+\end{myWarning}
+
+\mySamllsection{Namespace Alias}
+
+A namespace alias defines a synonym for a namespace. It’s often convenient to use an alias for a long namespace name or an nested namespaces
+
+\begin{cpp}
+#include <chrono> // either
+...
+#import std; // or
+...
+namespace sysClock= std::chrono::system_clock;
+auto nowFirst= sysClock::now();
+auto nowSecond= std::chrono::system_clock::now();
+\end{cpp}
+
+Because of the namespace alias, you can address the now function qualified, and with the alias. A namespace alias must not hide a name.
+
+
+\mySamllsection{Build an Executable}
+
+It is only seldom necessary to link explicitly against a library. That sentence is platform-dependent. For example, with the current g++ or clang++ compiler, you should link against the pthread library to get the multithreading functionality.
+
+\begin{shell}
+g++ -std=c++14 thread.cpp -o thread -pthread
+\end{shell}

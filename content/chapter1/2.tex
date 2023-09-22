@@ -1,0 +1,109 @@
+As C++ has many libraries, finding the convenient one for each use case is often difficult.
+
+\mySamllsection{Utilities}
+
+Utilities are libraries with a general focus and, therefore, can be applied in many contexts.
+
+Examples of utilities are functions to calculate the minimum or the maximum of values, the midpoint of two values, or to swap or move values. Thanks to save comparison of integers, integral promotion does not kick in.
+
+Other utilities are std::function, std::bind, or std:bind\_front. With std::bind or std::bind\_front, you can easily create new functions from existing ones. To bind them to a variable and invoke them later, you have std::function.
+
+With std::pair and the generalization std::tuple you can create heterogeneous pairs and tuples of arbitrary length.
+
+The reference wrappers std::ref and std::cref are pretty handy. One can use them to create a reference wrapper for a variable, which for std::cref is constant.
+
+Of course, the highlights of the utilities are the smart pointers. They allow explicit automatic memory management in C++. You can model the concept of explicit ownership with std::unique\_ptr and model shared ownership with std::shared\_ptr. std::shared\_ptr uses reference counting for taking care of its resource. The third one, std::weak\_ptr, helps to break the cyclic dependencies among std::shared\_ptrs. Cyclic references are the classic problem of reference counting.
+
+The type traits library can check, compare and manipulate type information at compile time.
+
+The time library is an import addition to the new multithreading capabilities of C++. But it is also quite handy to make performance measurements and includes support for calender and time zone.
+
+With std::any, std::optional, and std::variant, we get with C++17 three special datatypes that can have any, an optional value, or a variant of values.
+
+\mySamllsection{The Standard Template Library}
+
+\myGraphic{1.0}{content/chapter1/images/2.jpg}{The three components of the STL}
+
+The Standard Template Library (STL) consists of three components from a bird’s-eye view. Those are containers, algorithms that run on the containers, and iterators that connect both of them.
+The containers have only minimal requirements for their elements. This abstraction of generic programming enables you to combine algorithms and containers uniquely.
+
+The C++ Standard Library has a rich collection of containers. We have sequence and associative containers. Associative containers can be classified as ordered or unordered associative containers.
+
+Each of the sequence containers has a unique domain. Still, in 95 \% of the use cases, std::vector is the right choice. std::vector can dynamically adjust its size, automatically manages its memory, and provides you with outstanding performance. In contrast, std::array is the only sequence container that cannot adjust its size at runtime. It is optimized for minimal memory and performance overhead.
+
+While std::vector is good at putting new elements at its end, you should use std::deque to put an element also at the beginning. With std::list being a doubly-linked list and std::forward\_list as a singly linked list, we have two additional containers optimized for operations at arbitrary positions in the container, with high performance.
+
+Associative containers are containers of key-value pairs. They provide their values by their respective key. A typical use case for an associative container is a phone book, where you use the key family name to retrieve the value phone number. C++ has eight different associative containers. On one side are the associative containers with ordered keys: std::set, std::map, std::multiset and std::multimap. On the other side, there are the unordered associative containers: std::unordered\_set, std::unordered\_ map, std::unordered\_multiset, and std::unordered\_multimap.
+
+First, look at the ordered associative containers. The difference between std::set, and std::map is that the former has no associated value. The difference between std::map and std::multimap is that the latter can have more than one identical key. These naming conventions also hold for the unordered associative containers, which have much in common with the ordered ones. The critical difference is the performance. While the ordered associative containers have a logarithmic access time, the unordered associative containers allow constant access time. Therefore the access time of the unordered associative containers is independent of their size. The same rule applies to std::unordered\_map as to std::vector. In 95 \% of all use cases, std::unordered\_map should be your first choice if you don’t need sorted keys.
+
+Container adapters provide a simplified interface to the sequence containers. C++ has std::stack, std::queue, and std::priority\_queue.
+
+C-array, std::array, std::vector, or std::string support views. std::span is a view of a contiguous sequence of elements. A view is never an owner.
+
+Iterators are the glue between the containers and the algorithms. The container creates them. As generalized pointers, you can use them to iterate forward and backward or jump to an arbitrary position in the container. The type of iterator you get depends on the container. If you use an iterator adapter, you can directly access a stream.
+
+The STL gives you more than 100 algorithms. Specifying the execution policy, you can run most of the algorithms sequential, parallel, or parallel and vectorized. Algorithms operate on elements or a range of elements. Two iterators define a range. The first one defines the beginning, the second one, called end iterator, defines the end of the range. It’s important to know that the end iterator points to one element past the end of the range.
+
+The algorithms can be used in a wide range of applications. You can find elements, count them, find ranges, and compare or transform them. There are algorithms to generate, replace or remove elements from a container. Of course, you can sort, permute or partition a container or determine the minimum or maximum element of it. Many algorithms can be further customized by callables like functions, function objects, or lambda-functions. The callables provide special criteria for the search or the transformation of elements. They highly increase the power of the algorithm.
+
+The algorithms of the ranges library are lazy, can work directly on the container, and can easily be composed. They extend C++ with functional ideas. Furthermore, most of the classical STL algorithms have ranges pendants, which support projections and provide additional safety guarantees.
+
+\mySamllsection{Numeric}
+
+There are two libraries for numerics in C++: the random numbers library and the mathematical functions, which C++ inherited from C.
+
+The random numbers library consists of two parts. There is the random number generator; the generated random numbers distribution is on the other side. The random number generator generates a stream of numbers between a minimum and a maximum value, which the random number distribution maps onto the concrete distribution.
+
+Because of C, C++ has a lot of mathematical standard functions. For example, there are logarithmic, exponential, and trigonometric functions.
+
+C++ supports basic and advanced mathematical constants such as e, π, or ϕ.
+
+\mySamllsection{Text Processing}
+
+With strings and regular expressions, C++ has two powerful libraries to process text.
+
+std::string possesses a rich collection of member functions to analyze and modify its text. Because it has a lot in common with a std::vector of characters, you can apply the STL algorithms to std::string. std::string is the successor of the C string but a lot easier and safer to use. C++ strings manage their memory.
+
+In contrast to a std::string, a std::string\_view is cheap to copy. Astd::string\_view is a non-owning reference to a std::string.
+
+Regular expression is a language for describing text patterns. You can use regular expressions to determine whether a text pattern is present once or more times in a text. But that’s not all. Regular expressions enable the replacement of a matched pattern with text.
+
+\mySamllsection{Input and Output}
+
+I/O streams library is a library, present from the start of C++, that allows communication with the outside world.
+
+Communication means, in this concrete case, that the extraction operator (>{}>) enables it to read formatted or unformatted data from the input stream, and the insertion operator (<{}<) allows it to write the data on the output stream. Data can be formatted using manipulators.
+
+The stream classes have an elaborate class hierarchy. Two stream classes are significant: First, string streams allow you to interact with strings and streams. Second, file streams will enable you to read and write files easily. The state of streams is kept in flags, which you can read and manipulate.
+
+By overloading the input operator and output operator, your class can interact with the outside world like a fundamental data type.
+
+The formatting library provides a safe and extensible alternative to the printf family and extends the I/O streams library.
+
+In contrast to the I/O streams library, the filesystem library was added to the C++-Standard with C++17. The library is based on three concepts file, file name, and path. Files can be directories, hard links, symbolic links, or regular files. Paths can be absolute or relative.
+
+The filesystem library supports a powerful interface for reading and manipulating the filesystem.
+
+\mySamllsection{Multithreading}
+
+C++ gets with the 2011 published C++ standard a multithreading library. This library has basic building blocks like atomic variables, threads, locks, and condition variables. That’s the base on which future C++ standards can build higher abstractions. But C++11 already knows tasks, which provide a higher abstraction than the cited basic building blocks.
+
+At a low level, C++11 provides for the first time a memory model and atomic variables. Both components are the foundation for well-defined behavior in multithreading programming.
+
+A new thread in C++ will immediately start its work. It can run in the foreground or background and gets its data by copy or reference. Thanks to the stop token, you can interrupt the improved thread std::jthread.
+
+The access of shared variables between threads has to be coordinated. This coordination can be done in different ways with mutexes or locks. But often, it’s sufficient to protect the initialization of the data as it will be immutable during its lifetime.
+
+Declaring a variable as thread-local ensures that a thread gets its copy, so there is no conflict.
+
+Condition variables are a classic solution to implement sender-receiver workflows. The key idea is that the sender notifies the receiver when it’s done with its work so that the receiver can start.
+
+Semaphores are a synchronization mechanism that controls concurrent access to a shared resource.
+A semaphore has a counter that is bigger than zero. Acquiring the semaphore decreases the counter, and releasing the semaphore increases the counter. A thread can only acquire the resource when the counter is greater than zero.
+
+Similar to semaphores, std::latch and std::barrier are coordination types that enable some threads to block until a counter becomes zero. In contrast to a std::barrier, you can reuse a std::latch for a new iteration and adjust its counter for this new iteration.
+
+Tasks have much in common with threads. But while a programmer explicitly creates a thread, a task will be implicitly created by the C++ runtime. Tasks are like data channels. The data can be a value, an exception, or simply a notification. The promise puts data into the data channel; the future picks the value up.
+
+Coroutines are functions that can suspend and resume their execution while keeping their state. Coroutines are the usual way to write \href{https://en.wikipedia.org/wiki/Event-driven_programming}{event-driven applications}. The event-driven application can be simulations, games, servers, user interfaces, or even algorithms. Coroutines enable \href{https://de.wikipedia.org/wiki/Multitasking}{cooperative multitasking}. The key to cooperative multitasking is that each task takes as much time as it needs.
