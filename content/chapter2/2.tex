@@ -1,0 +1,133 @@
+
+The three functions std::bind, std::bind\_front, std::bind\_back, and std::functions fit very well together. While std::bind, std::bind\_front, or std::bind\_back enables you to create new function objects on the fly, std::function takes these temporary function objects and binds them to a variable.
+
+\begin{myTip}{std::bind, std::bind\_front, std::bind\_back, and std::function are mostly superfluous}
+	
+std::bind and std::function, which were part of \href{https://en.wikipedia.org/wiki/C%2B%2B_Technical_Report_1}{TR1}, std::bind\_front, and std::bind\_back are mostly not necessary in C++. First, you can use lambdas instead of std::bind, std::bind\_front, std::bind\_back, and second, you can most often use the automatic type deduction with auto instead of std::function.
+	
+\end{myTip}
+
+\mySamllsection{std::bind}
+
+The function std::bind is more powerful than std::bind\_front or std::bind\_back because std::bind allows the arguments to be bound to an arbitrary position. While std::bind, std::bind\_front, and std::bind\_back enables you to create new function objects on the fly, std::function takes these temporary function objects and binds them to a variable. These functions are powerful tools from functional programming and require the header <functional>.
+
+\filename{Creating and binding function objects}
+
+\begin{cpp}
+// bindAndFunction.cpp
+...
+#include <functional>
+...
+// for placehoder _1 and _2
+using namespace std::placeholders;
+
+using std::bind;
+using std::bind_front;
+using std::bind_back;
+using std::function
+...
+double divMe(double a, double b){ return a/b; };
+
+function<double(double, double)> myDiv1 = bind(divMe, _1, _2); // 200
+function<double(double)> myDiv2 = bind(divMe, 2000, _1); // 200
+function<double(double>> myDiv3 = bind_front(divMe, 2000); // 200
+function<double(double)> myDiv4 = bind_back(divMe, 10); // 200
+\end{cpp}
+
+Because of \href{http://en.cppreference.com/w/cpp/utility/functional/bind}{std::bind}, you can create function objects in a variety of ways:
+
+\begin{itemize}
+\item 
+bind the arguments to an arbitrary position,
+
+\item 
+change the order of the arguments,
+
+\item 
+introduce placeholders for arguments,
+
+\item 
+partially evaluate functions,
+
+\item 
+invoke the newly created function objects, use them in the STL algorithm, or store them in std::function.
+\end{itemize}
+
+\mySamllsection{std::bind\_front (C++20)}
+
+\href{https://en.cppreference.com/w/cpp/utility/functional/bind_front}{std::bind\_front} creates a callable wrapper from a callable. A call std::bind\_front(func, arg ...) binds all arguments arg to the front of func and returns a callable wrapper.
+
+
+\mySamllsection{std::bind\_back (C++23)}
+
+\href{https://en.cppreference.com/w/cpp/utility/functional/bind_front}{std::bind\_back} creates a callable wrapper from a callable. A call std::bind\_back(func, arg ...) binds all arguments arg to the back of func and returns a callable wrapper.
+
+\mySamllsection{std::function}
+
+\href{http://en.cppreference.com/w/cpp/utility/functional/function}{std::function} can store arbitrary callables in variables. It’s a polymorphic function wrapper. A callable may be a lambda function, a function object, or a function. std::function is always necessary and can’t be replaced by auto, if you have to specify the type of the callable explicitly.
+
+\filename{A dispatch table with std::function}
+
+\begin{cpp}
+// dispatchTable.cpp
+...
+#include <functional>
+...
+using std::make_pair;
+using std::map;
+
+map<const char, std::function<double(double, double)>> tab;
+tab.insert(make_pair('+', [](double a, double b){ return a + b; }));
+tab.insert(make_pair('-', [](double a, double b){ return a - b; }));
+tab.insert(make_pair('*', [](double a, double b){ return a * b; }));
+tab.insert(make_pair('/', [](double a, double b){ return a / b; }));
+
+std::cout << tab['+'](3.5, 4.5); // 8
+std::cout << tab['-'](3.5, 4.5); // -1
+std::cout << tab['*'](3.5, 4.5); // 15.75
+std::cout << tab['/'](3.5, 4.5); // 0.777778
+\end{cpp}
+
+The type parameter of std::function defines the type of callables std::function will accept.
+
+\begin{center}
+Return type and type of the arguments
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|l|}
+\hline
+Function type          & Return type & Type of the arguments \\ \hline
+\endfirsthead
+%
+\endhead
+%
+double(double, double) & double      & double                \\ \hline
+int()                  & int         &                       \\ \hline
+double(int, double)    & double      & int, double           \\ \hline
+void()                 &             &                       \\ \hline
+\end{longtable}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

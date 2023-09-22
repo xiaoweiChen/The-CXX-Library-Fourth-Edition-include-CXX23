@@ -4,7 +4,7 @@ You can apply the many variations of the min, max, and minmax functions to value
 
 The functions \href{http://en.cppreference.com/w/cpp/algorithm/min}{std::min}, \href{http://en.cppreference.com/w/cpp/algorithm/max}{std::max}, and \href{http://en.cppreference.com/w/cpp/algorithm/minmax}{std::minmax}, defined in the header <algorithm>, act on values and initializer lists and give you the requested value back as a result. In the case of std::minmax, you get a std::pair. The first element of the pair is the minimum; the second is the maximum of the values. The less operator (<) is used by default, but you can apply your comparison operator. This function needs two arguments and returns a boolean. Functions that either return true or false are called predicates.
 
-\filename{The functions std::min, std::max, and std::minmax}
+\mySamllsection{The functions std::min, std::max, and std::minmax}
 
 \begin{cpp}
 // minMax.cpp
@@ -66,7 +66,7 @@ The function std::midpoint requires the header <numeric>.
 The function std::lerp(a, b, t) calculates the linear interpolation of two numbers. It requires the header <cmath>. The return value is a + t(b - a).
 
 
-\filename{std::midpoint, and std::lerp}
+\mySamllsection{std::midpoint, and std::lerp}
 
 \begin{cpp}
 // midpointLerp.cpp
@@ -103,6 +103,117 @@ std::cmp_greater( -1, 0u); // false
 -1 as a signed integer is promoted to an unsigned type which causes a surprising result.
 
 \end{myWarning}
+
+\mySamllsection{std::move}
+
+The function \href{http://en.cppreference.com/w/cpp/utility/move}{std::move}, defined in the header <utility>, authorizes the compiler to move the resource. In the so-called move semantics, the source object’s values are moved to the new object. Afterward, the source is in a well-defined but indeterminate state. Most of the time, that is the default state of the source. By using std::move, the compiler converts the source arg to an rvalue reference: static\_cast<std::remove\_reference<decltype(arg)>::type\&\&> (arg). If the compiler can not apply the move semantics, it falls back to the copy semantics:
+
+\begin{cpp}
+#include <utility>
+...
+std::vector<int> myBigVec(10000000, 2011);
+std::vector<int> myVec;
+
+myVec = myBigVec; // copy semantics
+myVec = std::move(myBigVec); // move semantics
+\end{cpp}
+
+
+\begin{myTip}{To move is cheaper than to copy}
+	
+The move semantics has two advantages. Firstly, it is often a good idea to use cheap moving instead of expensive copying. So there is no extra allocation and deallocation of memory necessary. Secondly, there are objects which can not be copied. E.g., a thread or a lock.
+
+\end{myTip}
+
+\mySamllsection{std::forward}
+
+The function \href{http://en.cppreference.com/w/cpp/utility/forward}{std::forward}, defined in the header <utility>, empowers you to write function templates, which can identically forward their arguments. Typical use cases for std::forward are factory functions or constructors. Factory functions create an object and should, therefore, pass their arguments unmodified. Constructors often use their arguments to initialize their base class with identical arguments. So std::forward is the perfect tool for authors of generic libraries:
+
+\filename{Perfect forwarding}
+
+\begin{cpp}
+// forward.cpp
+...
+#include <utility>
+...
+using std::initialiser_list;
+
+struct MyData{
+	MyData(int, double, char){};
+};
+
+template <typename T, typename... Args>
+T createT(Args&&... args){
+	return T(std::forward<Args>(args)... );
+}
+
+...
+
+int a= createT<int>();
+int b= createT<int>(1);
+
+std::string s= createT<std::string>("Only for testing.");
+MyData myData2= createT<MyData>(1, 3.19, 'a');
+
+typedef std::vector<int> IntVec;
+IntVec intVec= createT<IntVec>(initialiser_list<int>({1, 2, 3}));
+\end{cpp}
+
+The function template createT has to take their arguments as a \href{https://isocpp.org/blog/2012/11/universal-references-in-c11-scott-meyers}{universal reference}: Args\&\&… args. A universal reference, or forwarding reference, is an rvalue reference in a type deduction context.
+
+\begin{myTip}{std::forward enables completely generic functions in combination with variadic templates}
+	
+If you use std::forward together with variadic templates, you can define fully generic function templates. Your function template can accept an arbitrary number of arguments and forward them unchanged.
+	
+\end{myTip}
+
+\mySamllsection{std::to\_underlying}
+
+The function std::to\_underlying in C++23 converts an enumeration enum to is underlying type Enum. This function is a convenience function for the expression static\_cast<std::underlying\_type<Enum>::type>(enum), using the type traits function std::underlying\_type.
+
+
+\mySamllsection{std::swap}
+
+With the function \href{http://en.cppreference.com/w/cpp/algorithm/swap}{std::swap} defined in the header <utility>, you can easily swap two objects. The generic implementation in the C++ standard library internally uses the function std::move.
+
+\filename{Move-semantic with std::swap}
+
+\begin{cpp}
+// swap.cpp
+...
+#include <utility>
+...
+template <typename T>
+inline void swap(T& a, T& b) noexcept {
+	T tmp(std::move(a));
+	a = std::move(b);
+	b = std::move(tmp);
+}
+\end{cpp}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
