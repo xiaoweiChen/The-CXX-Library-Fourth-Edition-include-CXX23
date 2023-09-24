@@ -1,0 +1,123 @@
+std::expected<T, E> provides a way to store either of two values. An instance of std::expected always holds a value: either the expected value of type T, or the unexpected value of type E. This vocabulary type requires the header <expected>. Thanks to std::expected, you can implement functions that either return a value or an error. The stored value is allocated directly within the storage occupied by the expected object. No dynamic memory allocation takes place.
+
+std::expected has a similar interface such as std::optional. In contrast to std::optional, std::exptected can return an error message.
+
+The various constructors let you define an expected object exp with an expected value. exp.emplace will construct the contained value in-place. You can explicitly ask a std::expected container if it has a value, or you can check it in a logical expression. exp.value returns the expected value, and exp.value\_or returns the expected value, or a default value. If exp has an unexpected value, the call exp.value will throw a std::bad\_expected\_access exception.
+
+std::unexpected represents the unexpected value stored in std::expected.
+
+\filename{std::expected}
+
+\begin{cpp}
+// expected.cpp
+
+#include <iostream>
+#include <expected>
+#include <vector>
+#include <string>
+
+std::expected<int, std::string> getInt(std::string arg) {
+	try {
+		return std::stoi(arg);
+	}
+	catch (...) {
+		return std::unexpected{std::string(arg + ": Error")};
+	}
+}
+
+int main() {
+
+	std::vector<std::string> strings = {"66", "foo", "-5"};
+	
+	for (auto s: strings) {
+		auto res = getInt(s);
+		if (res) {
+			std::cout << res.value() << ' '; // 66 -5
+		}
+		else {
+			std::cout << res.error() << ' '; // foo: Error
+		}
+	}
+	
+	std::cout << '\n';
+	
+	for (auto s: strings) {
+		auto res = getInt(s);
+		std::cout << res.value_or(2023) << ' '; // 66 2023 -5
+	}
+
+}
+\end{cpp}
+
+The function getInt converts each string to an integer and returns a std::expected<int, std::string>. int represents the expected, and std::string the unexpected value. The two range-based for-loops (lines 22 and 34) iterate through the std::vector<std::string>. In the first range-based for-loop (line 22), either the expected (line 25) or the unexpected value (line 28) is displayed. In the second rangebased for-loop (line 34), either the expected or the default value 2023 (line 36) is displayed.
+
+std::exptected supports monadic operations for convenient function composition: exp.and\_then, exp.transform, exp.or\_else, and exp.transform\_error. exp.and\_then returns the result of the given function call if it exists, or an empty std::expected. exp.transform returns a std::exptected containing is tranformed value, or an empty std::exptected. Additionally, exp.or\_else returns the std::exptected if it contains a value or the result of the given function otherwise.
+
+The following program is based on the previous program optionalMonadic.cpp. Essentially, the type std::optional is replaced with std::exptected.
+
+\filename{Monadic operations on std::expected}
+
+\begin{cpp}
+// expectedMonadic.cpp
+...
+#include <expected>
+
+std::expected<int, std::string> getInt(std::string arg) {
+	try {
+		return std::stoi(arg);
+	}
+	catch (...) {
+		return std::unexpected{std::string(arg + ": Errror")};
+	}
+}
+
+std::vector<std::string> strings = {"66", "foo", "-5"};
+
+for (auto s: strings) {
+	auto res = getInt(s)
+				.transform( [](int n) { return n + 100; })
+				.transform( [](int n) { return std::to_string(n); });
+	std::cout << *res << ' '; // 166 foo: Error 95
+}
+\end{cpp}
+
+The range-based for-loop (line 23) iterates through the std::vector<std::string>. First, the function getInt converts each string to an integer (line 24), adds 100 to it (line 25), converts it back to a string (line 26), and finally displays the string (line 27). If the initial conversion to int fails, the string arg + ": Error" is returned (line 14) and displayed.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

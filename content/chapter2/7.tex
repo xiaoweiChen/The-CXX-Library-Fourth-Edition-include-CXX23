@@ -1,0 +1,353 @@
+The \href{http://en.cppreference.com/w/cpp/header/type_traits}{type traits library} enables you to check, compare, and modify types at compile time. Consequentially, there is no overhead on the runtime of your program. There are two reasons for using the type traits library: Optimization and Correctness. Optimization because the type traits library’s introspection capabilities make it possible to choose the faster code automatically. Correctness because you can specify requirements for your code to be checked at compile time.
+
+\begin{myTip}{The type traits library and static\_assert are a powerful pair}
+	
+The type traits library and the function static\_assert are a powerful pair. On one side, the type traits library’s functions provide the type information at compile time; on the other, the static\_assert function checks the given information at compile time. These checks cause no run ttime overhead.
+
+\begin{cpp}
+#include <type_traits>
+...
+template <typename T>T fac(T a){
+	static_assert(std::is_integral<T>::value, "T not integral");
+	...
+}
+fac(10);
+fac(10.1); // with T= double; T not integral
+\end{cpp}
+
+The GCC compiler quits the function invocation fac(10.1). The message at compile is that T is of type double and, therefore, no integral type.
+	
+\end{myTip}
+
+\mySamllsection{Check Type Information}
+
+With the type traits library, you can check primary and composite type categories. The attribute value gives you the result.
+
+\mySamllsection{Primary Type Categories}
+
+There are 14 different type categories. They are complete and don’t overlap. So each type is only a member of one type category. If you check a type category for your type, the request is independent of the const or volatile qualifiers.
+
+\begin{cpp}
+template <class T> struct is_void;
+template <class T> struct is_integral;
+template <class T> struct is_floating_point;
+template <class T> struct is_array;
+template <class T> struct is_pointer;
+template <class T> struct is_null_pointer;
+template <class T> struct is_member_object_pointer;
+template <class T> struct is_member_function_pointer;
+template <class T> struct is_enum;
+template <class T> struct is_union;
+template <class T> struct is_class;
+template <class T> struct is_function;
+template <class T> struct is_lvalue_reference;
+template <class T> struct is_rvalue_reference;
+\end{cpp}
+
+The following code samples show all primary type categories.
+
+\filename{All primary type categories}
+
+\begin{cpp}
+// typeCategories.cpp
+...
+#include <type_traits>
+using std::cout;
+
+cout << std::is_void<void>::value; // true
+cout << std::is_integral<short>::value; // true
+cout << std::is_floating_point<double>::value; // true
+cout << std::is_array<int [] >::value; // true
+cout << std::is_pointer<int*>::value; // true
+cout << std::is_reference<int&>::value; // true
+
+struct A{
+	int a;
+	int f(int){ return 2011; }
+};
+cout << std::is_member_object_pointer<int A::*>::value; // true
+cout << std::is_member_function_pointer<int (A::*)(int)>::value; // true
+
+enum E{
+	e= 1,
+};
+cout << std::is_enum<E>::value; // true
+
+union U{
+	int u;
+};
+
+cout << std::is_union<U>::value; // true
+
+cout << std::is_class<std::string>::value; // true
+cout << std::is_function<int * (double)>::value; // true
+cout << std::is_lvalue_reference<int&>::value; // true
+cout << std::is_rvalue_reference<int&&>::value; // true
+\end{cpp}
+
+\mySamllsection{Composite Type Categories}
+
+There are seven composite type categories based on the 14 primary type categories.
+
+\begin{center}
+Composite type categories
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{ll}
+\textbf{Composite type categories} & \textbf{Primary type category}                 \\
+\endfirsthead
+%
+\endhead
+%
+is\_arithmetic                     & is\_floating\_point or is\_integral            \\
+is\_fundamental                    & is\_arithmetic or is\_void                     \\
+is\_object          & is\_arithmetic or is\_enum or is\_pointer or is\_member\_pointer                      \\
+is\_reference                      & is\_lvalue\_reference or is\_rvalue\_reference \\
+is\_compound                       & complement of is\_fundamental                  \\
+is\_member\_pointer & is\_member\_object\_pointer or is\_member\_function\_pointer                          \\
+is\_scalar          & is\_arithmetic or is\_enum or is\_pointer or is\_member\_pointer or is\_null\_pointer
+\end{longtable}
+
+\mySamllsection{Type Properties}
+
+In addition to the primary and composite type categories, there are many type properties.
+
+\begin{cpp}
+template <class T> struct is_const;
+template <class T> struct is_volatile;
+template <class T> struct is_trivial;
+template <class T> struct is_trivially_copyable;
+template <class T> struct is_standard_layout;
+template <class T> struct has_unique_object_represenation;
+template <class T> struct is_empty;
+template <class T> struct is_polymorphic;
+template <class T> struct is_abstract;
+template <class T> struct is_final;
+template <class T> struct is_aggregate;
+template <class T> struct is_implicit_lifetime;
+
+template <class T> struct is_signed;
+template <class T> struct is_unsigned;
+
+template <class T> struct is_bounded_array;
+template <class T> struct is_unbounded_array;
+template <class T> struct is_scoped_enum;
+
+template <class T, class... Args> struct is_constructible;
+template <class T> struct is_default_constructible;
+template <class T> struct is_copy_constructible;
+template <class T> struct is_move_constructible;
+
+template <class T, class U> struct is_assignable;
+template <class T> struct is_copy_assignable;
+template <class T> struct is_move_assignable;
+template <class T> struct is_destructible;
+template <class T, class... Args> struct is_trivially_constructible;
+template <class T> struct is_trivially_default_constructible;
+template <class T> struct is_trivially_copy_constructible;
+template <class T> struct is_trivially_move_constructible;
+template <class T, class U> struct is_trivially_assignable;
+template <class T> struct is_trivially_copy_assignable;
+template <class T> struct is_trivially_move_assignable;
+
+template <class T> struct is_trivially_destructible;
+
+template <class T, class... Args> struct is_nothrow_constructible;
+template <class T> struct is_nothrow_default_constructible;
+template <class T> struct is_nothrow_copy_constructible;
+template <class T> struct is_nothrow_move_constructible;
+
+template <class T, class U> struct is_nothrow_assignable;
+
+template <class T> struct is_nothrow_copy_assignable;
+template <class T> struct is_nothrow_move_assignable;
+
+template <class T> struct is_nothrow_destructible;
+template <class T> struct has_virtual_destructor;
+
+template <class T> struct is_swappable_with;
+template <class T> struct is_swappable;
+template <class T> struct is_nothrow_swappable_with;
+template <class T> struct is_nothrow_swappable;
+\end{cpp}
+
+\mySamllsection{Type Relationships}
+
+The library supports various kinds of type relationships
+
+\begin{center}
+Type relationships
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Function} &
+\textbf{Description} \\ \hline
+\endfirsthead
+%
+\endhead
+%
+\begin{tabular}[c]{@{}l@{}}template \textless{}class Base, class Derived\textgreater\\ struct is\_base\_of\end{tabular} &
+Checks if Derived is derived form Base. \\ \hline
+\begin{tabular}[c]{@{}l@{}}template \textless{}class From, class To\textgreater\\ struct is\_convertible\\ struct is\_nothrow\_convertible\end{tabular} &
+Checks if From can be converted to To. \\ \hline
+\begin{tabular}[c]{@{}l@{}}template \textless{}class T, class U\textgreater\\ struct is\_same\end{tabular} &
+Checks if the types T and U are the same \\ \hline
+\begin{tabular}[c]{@{}l@{}}template \textless{}class T, class U\textgreater\\ struct is\_layout\_compatible\end{tabular} &
+Checks if the types T and U are \href{https://en.cppreference.com/w/cpp/language/data_members#Standard_layout}{layout compatible}. \\ \hline
+\begin{tabular}[c]{@{}l@{}}template \textless{}class Base, class Derived\textgreater\\ struct is\_pointer\_interconvertible\_base\_of\end{tabular} &
+Checks if a type is pointer-interconvertible base of another type. \\ \hline
+\begin{tabular}[c]{@{}l@{}}template \textless{}class Fn, class ...ArgTypes\textgreater\\ struct is\_invocable\\ struct is\_invocable\_r\\ struct is\_nothrow\_invocable\\ struct is\_nothrow\_invocable\_r\end{tabular} &
+Checks if a type can be invoked with the given types. \\ \hline
+\end{longtable}
+
+\mySamllsection{Type Modifications}
+
+The type traits library enables you to change types during compile time. You can modify the constness of a type:
+
+\filename{Type modifications}
+
+\begin{cpp}
+// typeTraitsModifications.cpp
+...
+#include <type_traits>
+...
+using namespace std;
+
+cout << is_const<int>::value; // false
+cout << is_const<const int>::value; // true
+cout << is_const<add_const<int>::type>::value; // true
+
+typedef add_const<int>::type myConstInt;
+cout << is_const<myConstInt>::value; //true
+
+typedef const int myConstInt2;
+cout << is_same<myConstInt, myConstInt2>::value; // true
+
+cout << is_same<int, remove_const<add_const<int>::type>::type>::value; // true
+cout << is_same<const int, add_const<add_const<int>::type>::type>::value; // true
+\end{cpp}
+
+The function std::add\_const adds the constness to a type, while std::remove\_const removes it.
+
+There are a lot more functions available in the type traits library. You can modify the const-volatile properties of a type.
+
+\begin{cpp}
+template <class T> struct remove_const;
+template <class T> struct remove_volatile;
+template <class T> struct remove_cv;
+
+template <class T> struct add_const;
+template <class T> struct add_volatile;
+template <class T> struct add_cv;
+\end{cpp}
+
+You can change at compile time the sign,
+
+\begin{cpp}
+template <class T> struct make_signed;
+template <class T> struct make_unsigned;
+\end{cpp}
+
+or the reference or pointer properties of a type.
+
+\begin{cpp}
+template <class T> struct remove_reference;
+template <class T> struct remove_cvref;
+template <class T> struct add_lvalue_reference;
+template <class T> struct add_rvalue_reference;
+
+template <class T> struct remove_pointer;
+template <class T> struct add_pointer;
+\end{cpp}
+
+The following following functions are precious for the writing of generic libraries.
+
+\begin{cpp}
+template <class B> struct enable_if;
+template <class B, class T, class F> struct conditional;
+template <class... T> common_type;
+template <class... T> common_reference;
+template <class... T> basic_common_reference;
+template <class... T> void_t;
+template <class... T> type_identity;
+\end{cpp}
+
+You can conditionally hide with std::enable\_if a function overload or template specialization from overload resolution. std::conditional provides you with the ternary operator at compile time, and std::common\_type gives you the common type of all types. std::common\_type, std::common\_reference, std::basic\_common\_reference, std::void\_t, and std::type\_identity are a \href{http://en.cppreference.com/w/cpp/language/parameter_pack}{variadic template}. Therefore the number of type parameters can be arbitrary.
+
+\mySamllsection{Operations on Traits}
+
+The functions std::conjunction, std::disjunction, and std::negation enable the logical combinations of the type traits functions. They are variadic templates.
+
+\begin{myTip}{C++ has a shorthand for ::type and has a shorthand for ::value}
+	
+If you want to get a const int from an int you have to ask for the type: std::add\_const<int>::type. With the C++14 standard use simply std::add\_const\_t<int> instead of the verbose form: std::add\_const<int>::type. This rule works for all type traits functions.
+
+Accordingly, with C++17 you can use the shorthand std::is\_integral\_v<T> for the predicate std::is\_integral<T>::value.
+	
+\end{myTip}
+
+\mySamllsection{Member Relationships}
+
+The function std::is\_pointer\_interconvertible\_with\_class checks if objects of a type are pointerinterconvertible with the specified subobject of that type, and the function std::is\_corresponding\_member checks if two specified members correspond to each other in the common initial subsequence of two specified types.
+
+\mySamllsection{Const evaluated Context}
+
+The call std::is\_constant\_evaluated allows you to detect if a function call occurs at compile time.
+
+\filename{Detect if a function call occurs at compile time}
+
+\begin{cpp}
+// constantEvaluated.cpp
+#include <type_traits>
+...
+
+constexpr double power(double b, int x) {
+	if (std::is_constant_evaluated() && !(b == 0.0 && x < 0)) {
+		if (x == 0)
+		return 1.0;
+		double r = 1.0, p = x > 0 ? b : 1.0 / b;
+		auto u = unsigned(x > 0 ? x : -x);
+		while (u != 0) {
+			if (u & 1) r *= p;
+			u /= 2;
+			p *= p;
+		}
+		return r;
+	}
+	else {
+		return std::pow(b, double(x));
+	}
+}
+
+constexpr double kilo1 = power(10.0, 3); // execution at compile time
+
+int n = 3;
+double kilo2 = power(10.0, n); // execution at runtime
+std::cout << "kilo2: " << kilo2 << '\n';
+\end{cpp}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

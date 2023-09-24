@@ -1,0 +1,396 @@
+The \href{http://en.cppreference.com/w/cpp/header/chrono}{time library} consists of the three main components, time point, time duration, and clock. Additionally, the library provides the time of day functionality, calendar support, time zone support, and support for in- and output.
+
+\noindent
+Time point 
+
+Time point is defined by a starting point, the so-called epoch, and additional time duration.
+
+\noindent
+Time duration 
+
+Time duration is the difference between two time-points. The number of ticks gives it.
+
+\noindent
+Clock 
+A clock consists of a starting point (epoch) and a tick so that the current time point can be calculated.
+
+\noindent
+Time of day
+
+The duration since midnight split into hours:minutes:seconds.
+
+\noindent
+Calendar 
+
+Calendar stands for various calendar days such as year, a month, a weekday, or the n-th day of a week.
+
+\noindent
+Time zone 
+
+Represents time specific to a geographic area.
+
+\begin{myNotic}{The time library is a key component for multithreading}
+	
+The time library is a key component of the new multithreading capabilities of C++. You can put the current thread by std::this\_thread::sleep\_for(std::chrono::milliseconds(15) for 15 milliseconds to sleep, or you try to acquire a lock for 2 minutes: lock.try\_lock\_until(now + std::chrono::minutes(2)).
+	
+\end{myNotic}
+
+
+\mySamllsection{Time Point}
+
+A duration consists of a period of time, defined as some number of ticks of some time unit. A time point consists of a clock and a time duration. This time duration can be positive or negative.
+
+\begin{cpp}
+template <class Clock, class Duration= typename Clock::duration> class time_point;
+\end{cpp}
+
+The epoch is not defined for the clocks std::chrono::steady\_clock, std::chrono::high\_resolution\_clock and std::chrono::system. But on the popular platform, the epoch of std::chrono::system is usually defined as 1.1.1970. You can calculate the time since 1.1.1970 in the resolutions nanoseconds, seconds and minutes.
+
+\filename{Time since epoch}
+
+\begin{cpp}
+// epoch.cpp
+...
+#include <chrono>
+...
+auto timeNow= std::chrono::system_clock::now();
+auto duration= timeNow.time_since_epoch();
+std::cout << duration.count() << "ns" // 1413019260846652ns
+
+typedef std::chrono::duration<double> MySecondTick;
+MySecondTick mySecond(duration);
+std::cout << mySecond.count() << "s"; // 1413019260.846652s
+
+const int minute= 60;
+typedef std::chrono::duration<double, <minute>> MyMinuteTick;
+MyMinuteTick myMinute(duration);
+std::cout << myMinute.count() << "m"; // 23550324.920572m
+\end{cpp}
+
+Thanks to the function std::chrono::clock\_cast, you can cast time points between various clocks.
+
+\begin{myTip}{Easy performance tests with the time library}
+	
+\filename{Performance measurement}
+
+\begin{cpp}
+// performanceMeasurement.cpp
+...
+#include <chrono>
+...
+std::vector<int> myBigVec(10000000, 2011);
+std::vector<int> myEmptyVec1;
+
+auto begin= std::chrono::high_resolution_clock::now();
+myEmptyVec1 = myBigVec;
+auto end= std::chrono::high_resolution_clock::now() - begin;
+
+auto timeInSeconds = std::chrono::duration<double>(end).count();
+std::cout << timeInSeconds << '\n'; // 0.0150688800
+\end{cpp}
+	
+\end{myTip}
+
+
+\mySamllsection{Time Duration}
+
+Time duration is the difference between the two time-points. Time duration is measured in the number of ticks.
+
+\begin{cpp}
+template <class Rep, class Period = ratio<1>> class duration;
+\end{cpp}
+
+If Rep is a floating-point number, the time duration supports fractions of ticks. The most important time durations are predefined in the chrono library:
+
+
+\begin{cpp}
+typedef duration<signed int, nano> nanoseconds;
+typedef duration<signed int, micro> microseconds;
+typedef duration<signed int, milli> milliseconds;
+typedef duration<signed int> seconds;
+typedef duration<signed int, ratio< 60>> minutes;
+typedef duration<signed int, ratio<3600>> hours;
+\end{cpp}
+
+How long can a time duration be? The C++ standard guarantees that the predefined time durations can store +/- 292 years. You can easily define your time duration like a German school hour: typedef std::chrono::duration<double, std::ratio<2700>> MyLessonTick. Time durations in natural numbers must be explicitly converted to time durations in floating pointer numbers. The value will be truncated:
+
+\filename{Durations}
+
+\begin{cpp}
+// duration.cpp
+...
+#include <chrono>
+#include <ratio>
+
+using std::chrono;
+
+typedef duration<long long, std::ratio<1>> MySecondTick;
+MySecondTick aSecond(1);
+
+milliseconds milli(aSecond);
+std::cout << milli.count() << " milli"; // 1000 milli
+
+seconds seconds(aSecond);
+std::cout << seconds.count() << " sec"; // 1 sec
+
+minutes minutes(duration_cast<minutes>(aSecond));
+std::cout << minutes.count() << " min"; // 0 min
+
+typedef duration<double, std::ratio<2700>> MyLessonTick;
+MyLessonTick myLesson(aSecond);
+std::cout << myLesson.count() << " less"; // 0.00037037 less
+\end{cpp}
+
+\begin{myNotic}{std::ratio}
+	
+std::ratio supports arithmetic at compile time with rational numbers. A rational number has two template arguments: the nominator and the denominator. C++11 predefines lots of rational numbers.
+	
+\begin{cpp}
+typedef ratio<1, 1000000000000000000> atto;
+typedef ratio<1, 1000000000000000> femto;
+typedef ratio<1, 1000000000000> pico;
+typedef ratio<1, 1000000000> nano;
+typedef ratio<1, 1000000> micro;
+typedef ratio<1, 1000> milli;
+typedef ratio<1, 100> centi;
+typedef ratio<1, 10> deci;
+typedef ratio< 10, 1> deca;
+typedef ratio< 100, 1> hecto;
+typedef ratio< 1000, 1> kilo;
+typedef ratio< 1000000, 1> mega;
+typedef ratio< 1000000000, 1> giga;
+typedef ratio< 1000000000000, 1> tera;
+typedef ratio< 1000000000000000, 1> peta;
+typedef ratio< 1000000000000000000, 1> exa;
+\end{cpp}
+	
+\end{myNotic}
+
+C++14 has built-in literals for the most used time durations.
+
+\begin{center}
+Built-in literals for time durations
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{lll}
+\textbf{Type}             & \textbf{Suffix} & \textbf{Example} \\
+\endfirsthead
+%
+\endhead
+%
+std::chrono::hours        & h               & 5h               \\
+std::chrono::minutes      & min             & 5min             \\
+std::chrono::seconds      & s               & 5s               \\
+std::chrono::milliseconds & ms              & 5ms              \\
+std::chrono::microseconds & us              & 5us              \\
+std::chrono::nanoseconds  & ns              & 5ns             
+\end{longtable}
+
+\mySamllsection{Clock}
+
+The clock consists of a starting point and a tick. You can get the current time with the member function now.
+
+\noindent
+std::chrono::system\_clock 
+
+System time, which you can synchronize with the external clock.
+
+\noindent
+std::chrono::steady\_clock 
+
+Clock, which can not be adjusted.
+
+\noindent
+std::chrono::high\_resolution\_clock 
+
+System time with the greatest accuracy.
+
+std::chrono::system\_clock refers typically to the 1.1.1970. You can not adjust std::steady\_clock forward or backward opposite to two other clocks. The member functions to\_time\_t and from\_time\_t can be used to convert between std::chrono::system\_clock and std::time\_t objects.
+
+\mySamllsection{Time of Day}
+
+std::chrono::time\_of\_day splits the duration since midnight into hours:minutes:seconds. The functions std::chrono::is\_am and std::chrono::is\_pm checks if the time is before midday (ante meridiem) or after midday (post meridiem).
+
+A std::chrono::time\_of\_day object tOfDay supports various member functions.
+
+\begin{center}
+Member functions of std::chrono::time\_of\_day
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Member function} & \textbf{Description}                                    \\ \hline
+\endfirsthead
+%
+\endhead
+%
+tOfDay.hours()           & Returns the hour component since midnight.              \\ \hline
+tOfDay.minutes()         & Returns the minute component since midnight.            \\ \hline
+tOfDay.seconds()         & Returns the second component since midnight.            \\ \hline
+tOfDay.subseconds()      & Returns the fractional second component since midnight. \\ \hline
+tOfDay.to\_duration()    & Returns the time duration since midnight.               \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::chrono::make12(hr)\\ std::chrono::make24(hr)\end{tabular} & Returns the 12-hour(24-hour) equivalent of a 24-hour(12-hour) format time. \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::chrono::is\_am(hr)\\ std::chrono::is\_pm(hr)\end{tabular} & Detects wether the 24-hour format time is a.m. or p.m. .                   \\ \hline
+\end{longtable}
+
+\mySamllsection{Calendar}
+
+Calendar stands for various calendar dates such as year, a month, a weekday, or the n-th day of a week.
+
+\filename{The current time}
+
+\begin{cpp}
+// currentTime.cpp
+...
+#include <chrono>
+using std::chrono;
+...
+auto now = system_clock::now();
+std::cout << "The current time is " << now << " UTC\n";
+
+auto currentYear = year_month_day(floor<days>(now)).year();
+std::cout << "The current year is " << currentYear << '\n';
+
+auto h = floor<hours>(now) - sys_days(January/1/currentYear);
+std::cout << "It has been " << h << " since New Years!\n";
+
+std::cout << '\n';
+
+auto birthOfChrist = year_month_weekday(sys_days(January/01/0000));
+std::cout << "Weekday: " << birthOfChrist.weekday() << '\n';
+\end{cpp}
+
+The output of the program shows information referring to the current time.
+
+\myGraphic{0.9}{content/chapter2/images/4.jpg}{Cyclic references}
+
+The following table gives an overview of the calendar types.
+
+\begin{center}
+Various calendar types
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Class}   & \textbf{Decription}                                     \\ \hline
+\endfirsthead
+%
+\endhead
+%
+last\_spec       & Indicates the last day or weekday in a month.           \\ \hline
+day              & Represents a day of a month.                            \\ \hline
+month            & Represents a month of a year.                           \\ \hline
+year             & Represents a year in the Gregorian calendar.            \\ \hline
+weekday          & Represents a day of the week in the Gregorian calendar. \\ \hline
+weekday\_indexed & Represents the n-th weekday of a month                  \\ \hline
+weekday\_last    & Represents the last weekday of a month                  \\ \hline
+month\_day       & Represents a specific day of a specific month.          \\ \hline
+month\_day\_last & Represents the last day of a specific month.            \\ \hline
+month\_weekday   & Represents the n-th weekday of a specific month.        \\ \hline
+month\_weekday\_last       & Represents the last weekday of a specific month.          \\ \hline
+year\_month      & Represents a specific month of a specific year.         \\ \hline
+year\_month\_day & Represents a spefific year, month, and day.             \\ \hline
+year\_month\_day\_last     & Represents the last day of a specific year and month      \\ \hline
+year\_month\_weekday       & Represents the last day of a specific year and month      \\ \hline
+year\_month\_weekday\_last & Represents the last weekday of a specific year and month. \\ \hline
+\end{longtable}
+
+
+\mySamllsection{Time Zone}
+
+Time zones represent time specific to a geographic area. The following program snippet displays the local time in various time zones.
+
+\filename{Local time is displayed in various time zones}
+
+\begin{cpp}
+// timezone.cpp
+...
+#include <chrono>
+using std::chrono;
+..
+auto time = floor<milliseconds>(system_clock::now());
+auto localTime = zoned_time<milliseconds>(current_zone(), time);
+auto berlinTime = zoned_time<milliseconds>("Europe/Berlin", time);
+auto newYorkTime = std::chorno::zoned_time<milliseconds>("America/New_York", time);
+auto tokyoTime = zoned_time<milliseconds>("Asia/Tokyo", time);
+
+std::cout << time << '\n';
+std::cout << localTime << '\n';
+std::cout << berlinTime << '\n';
+std::cout << newYorkTime << '\n';
+std::cout << tokyoTime << '\n';
+\end{cpp}
+
+The time zone functionality supports the access of the \href{https://www.iana.org/time-zones}{IANA time zone database}, enables the operation with various time zones, and provides information about leap seconds.
+
+The following table gives an overview of the time zone functionality. For more detailed information, refer to \href{https://en.cppreference.com/w/cpp/chrono}{cpprefere.com}.
+
+\begin{center}
+Time zone information
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Type} & \textbf{Description}                     \\ \hline
+\endfirsthead
+%
+\endhead
+%
+tzdb          & Describes the IANA time zone database.   \\ \hline
+locate\_zone  & Locates a time\_zone bases on its name.  \\ \hline
+current\_zone & Returns the current time\_zone.          \\ \hline
+time\_zone    & Represents a time zone.                  \\ \hline
+sys\_info    & Returns information about a time zone at a specific time point.       \\ \hline
+local\_info  & Represents information about the local time to UNIX time conventions. \\ \hline
+zoned\_time   & Represents a time zone and a time point. \\ \hline
+leap\_second & Contains information about a leap second insertion.                   \\ \hline
+\end{longtable}
+
+\mySamllsection{Chrono I/O}
+
+The function std::chrono::parse parses a chrono object from a stream.
+
+\filename{Parsing a time point and a time zone}
+
+\begin{cpp}
+std::istringstream inputStream{"1999-10-31 01:30:00 -08:00 US/Pacific"};
+
+std::chrono::local_seconds timePoint;
+std::string timeZone;
+inputStream >> std::chrono::parse("%F %T %Ez %Z", timePoint, timeZone);
+\end{cpp}
+
+The parsing functionality provides various format specifiers to deal with the time of day and calendar dates such as year, month, week, and day. \href{https://en.cppreference.com/w/cpp/chrono/parse}{cppreference.com} provides detailed information to the format specifiers.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

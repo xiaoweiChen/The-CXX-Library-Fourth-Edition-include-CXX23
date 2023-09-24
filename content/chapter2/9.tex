@@ -1,0 +1,226 @@
+The new C++17 data types std::any, std::optional, and std::variant are all based on the \href{http://www.boost.org/}{Boost libraries}
+
+\mySamllsection{std::any}
+
+\href{http://en.cppreference.com/w/cpp/utility/any}{std::any} is a type-safe container for single values of any copy-constructible type. This vocabulary type requires the header <any>. There are a few ways to create a std::any container any. You can use the various constructors or the factory function std::make\_any. any.emplace lets you directly construct one value into any. any.reset enables you to destroy the contained object. If you want to know whether the container any has a value, use the member function any.has\_value. You can even get the typeid of the container object via any.type. Thanks to the generic function std::any\_cast, you have access to the contained object. If you specify the wrong type, you will get a std::bad\_any\_cast exception. Here is a code snippet showing the basic usage of std::any.
+
+\filename{std::any}
+
+\begin{cpp}
+// any.cpp
+...
+#include <any>
+
+struct MyClass{};
+
+...
+
+std::vector<std::any> anyVec{true, 2017, std::string("test"), 3.14, MyClass()};
+std::cout << std::any_cast<bool>(anyVec[0]); // true
+int myInt= std::any_cast<int>(anyVec[1]);
+std::cout << myInt << '\n'; // 2017
+
+std::cout << anyVec[0].type().name(); // b
+std::cout << anyVec[1].type().name(); // i
+\end{cpp}
+
+The program snippet defines a std::vector<std::any>. To get one of its elements, you must use std::any\_cast. As mentioned, if you use the wrong type, you will get a std::bad\_any\_cast exception.
+
+\begin{myNotic}{The string representation of the typeid}
+	
+The string representation of the typeid operator is implementation defined. If anyVec[1] is of type int the expression anyVec[1].type().name() will return i with the \href{https://gcc.gnu.org/}{GCC C++ compiler} and int with the \href{https://en.wikipedia.org/wiki/Microsoft_Visual_C%2B%2B}{Microsoft Visual C++ compiler}.
+
+\end{myNotic}
+
+std::any can have objects of arbitrary types; std::optional may or may not have a value.
+
+\mySamllsection{std::optional}
+
+\href{http://en.cppreference.com/w/cpp/utility/optional}{std::optional} is quite comfortable for calculations such as database queries that may have a result. This vocabulary type requires the header <optional>.
+
+\begin{myTip}{Don’t use no-results}
+	
+Before C++17, it was common practice to use a unique value such as a null pointer, an empty string, or a unique integer to denote a result’s absence. For the type system, you must use a regular value, such as an empty string, to define an irregular value. These unique values or no results are error-prone because you must misuse the type system to check the return value.
+	
+\end{myTip}
+
+The various constructors and the convenience function std::make\_optional let you define an optional object opt with or without a value. opt.emplace will construct the contained value in-place and opt.reset will destroy the container value. You can explicitly ask a std::optional container if it has a value, or you can check it in a logical expression. opt.value returns the value, and opt.value\_or returns the value or a default value. If opt has no contained value, the call opt.value will throw a std::bad\_optional\_access exception.
+
+Here is a short example using std::optional.
+
+\filename{std::optional}
+
+\begin{cpp}
+// optional.cpp
+...
+#include <optional>
+
+std::optional<int> getFirst(const std::vector<int>& vec){
+	if (!vec.empty()) return std::optional<int>(vec[0]);
+	else return std::optional<int>();
+}
+
+...
+
+std::vector<int> myVec{1, 2, 3};
+std::vector<int> myEmptyVec;
+
+auto myInt= getFirst(myVec);
+
+if (myInt){
+	std::cout << *myInt << '\n'; // 1
+	std::cout << myInt.value() << '\n'; // 1
+	std::cout << myInt.value_or(2017) << '\n'; // 1
+}
+
+auto myEmptyInt= getFirst(myEmptyVec);
+
+if (!myEmptyInt){
+	std::cout << myEmptyInt.value_or(2017) << '\n'; // 2017
+}
+\end{cpp}
+
+I use std::optional in the function getFirst. getFirst returns the first element if it exists. You will get a std::optional<int> object if not. The main function has two vectors. Both invoke getFirst and return a std::optional object. In the case of myInt, the object has a value; in the case of myEmptyInt, the object has no value. The program displays the value of myInt and myEmptyInt. myInt.value\_or(2017) returns the value, but myEmptyInt.value\_or(2017) returns the default value.
+
+In C++23, std::optional is extended with monadic operations opt.and\_then, opt.transform, and opt.or\_else. opt.and\_then returns the result of the given function call if it exists, or an empty std::optional. opt.transform returns a std::optional containing is tranformed value, or an empty std::optional. Additionally, opt.or\_else returns the std::optional if it contains a value or the result of the given function otherwise.
+
+These monadic operations enable the composition of operations on std::optional:
+
+\filename{Monadic operations on std::optional}
+
+\begin{cpp}
+// optionalMonadic.cpp
+
+#include <iostream>
+#include <optional>
+#include <vector>
+#include <string>
+
+std::optional<int> getInt(std::string arg) {
+	try {
+		return {std::stoi(arg)};
+	}
+	catch (...) {
+		return { };
+	}
+}
+
+
+int main() {
+
+	std::vector<std::optional<std::string>> strings = {"66", "foo", "-5"};
+	
+	for (auto s: strings) {
+		auto res = s.and_then(getInt)
+					.transform( [](int n) { return n + 100;})
+					.transform( [](int n) { return std::to_string(n); })
+					.or_else([] { return std::optional{std::string("Error") }; });
+		std::cout << *res << ' '; // 166 Error 95
+	}
+
+}
+\end{cpp}
+
+The range-based for-loop (line 22) iterates through the std::vector<std::optional<std::string>{}>. First, the function getInt converts each element to an integer (line 23), adds 100 to it (line 24), converts it back to a string (line 25), and finally displays the string (line 27). If the initial conversion to int fails, the string Error is returned (line 26) and displayed.
+
+\mySamllsection{std::variant}
+
+\href{http://en.cppreference.com/w/cpp/utility/variant}{std::variant} is a type-safe union. This vocabulary type requires the header <variant>. An instance of std::variant has a value from one of its types. The type must not be a reference, array, or void. A std::variant can have a type more than once. A default-initialized std::variant is initialized with its first type; therefore, its first type must have a default constructor. By using var.index you get the zero-based index of the alternative held by the std::variant var. var.valueless\_by\_exception returns false if the variant holds a value. You can create a new value in-place by using var.emplace. A few global functions are used to access a std:variant. The function template var.holds\_alternative lets you check if the std::variant holds a specified alternative. You can use std::get with an index and a type as an argument. By using an index, you will get the value. If you invoke std::get with a type, you only will get the value if it is unique. If you use an invalid index or a non-unique type, you will get a std::bad\_variant\_access exception. In contrast to std::get, which eventually returns an exception, std::get\_if returns a null pointer in the case of an error.
+
+The following code snippet shows you the usage of a std::variant.
+
+\filename{std::variant}
+
+\begin{cpp}
+// variant.cpp
+...
+#include <variant>
+
+...
+
+std::variant<int, float> v, w;
+v = 12; // v contains int
+int i = std::get<int>(v);
+w = std::get<int>(v);
+w = std::get<0>(v); // same effect as the previous line
+w = v; // same effect as the previous line
+
+// std::get<double>(v); // error: no double in [int, float]
+// std::get<3>(v); // error: valid index values are 0 and 1
+
+try{
+	std::get<float>(w); // w contains int, not float: will throw
+}
+catch (std::bad_variant_access&) {}
+
+std::variant<std::string> v2("abc"); // converting constructor must be unambiguous
+v2 = "def"; // converting assignment must be unambiguous
+\end{cpp}
+
+v and w are two variants. Both can have an int and a float value. Their default value is 0. v becomes 12, and the following call std::get<int>(v) returns the value. The next three lines show three possibilities to assign the variant v to w, but you must keep a few rules in mind. You can ask for the value of a variant by type std::get<double>(v) or by index: std::get<3>(v). The type must be unique and the index valid. The variant w holds an int value; therefore, I get a std::bad\_variant\_access exception if I ask for a float type. If the constructor call or assignment call is unambiguous, a conversion can take place. This makes it possible to construct a std::variant<std::string> from a C-string or assign a new C-string to the variant.
+
+std::variant has an interesting non-member function std::visit that allows you the execute a callable on a list of variants. A callable is something that you can invoke. Typically this can be a function, a function object, or lambda expression. For simplicity reasons, I use a lambda function in this example.
+
+\filename{std::visit}
+
+\begin{cpp}
+// visit.cpp
+...
+#include <variant>
+
+...
+
+std::vector<std::variant<char, long, float, int, double, long long>>
+			vecVariant = {5, '2', 5.4, 100ll, 2011l, 3.5f, 2017};
+			
+for (auto& v: vecVariant){
+	std::visit([](auto&& arg){std::cout << arg << " ";}, v);
+	// 5 2 5.4 100 2011 3.5 2017
+}
+
+// display each type
+for (auto& v: vecVariant){
+	std::visit([](auto&& arg){std::cout << typeid(arg).name() << " ";}, v);
+	// int char double __int64 long float int
+}
+
+// get the sum
+std::common_type<char, long, float, int, double, long long>::type res{};
+
+std::cout << typeid(res).name() << '\n'; // double
+
+for (auto& v: vecVariant){
+	std::visit([&res](auto&& arg){res+= arg;}, v);
+}
+std::cout << "res: " << res << '\n'; // 4191.9
+
+// double each value
+for (auto& v: vecVariant){
+	std::visit([&res](auto&& arg){arg *= 2;}, v);
+	std::visit([](auto&& arg){std::cout << arg << " ";}, v);
+	// 10 d 10.8 200 4022 7 4034
+}
+\end{cpp}
+
+Each variant in this example can hold a char, long, float, int, double, or long long. The first visitor [](auto\&\& arg)\{std::cout <{}< arg <{}< " ";\} will output the various variants. The second visitor std::cout <{}< typeid(arg).name() <{}< " ";\} will display its types.
+
+Now I want to sum up the elements of the variants. First, I need the correct result type at compile time. std::common\_type from the type traits library will provide it. std::common\_type gives the type to which all types char, long, float, int, double, and long long can implicitly be converted. The final \{\} in res\{\} causes it to be initialized to 0.0. res is of type double. The visitor [\&res](auto\&\& arg)\{arg *= 2;\} calculates the sum, and the following line displays it.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
