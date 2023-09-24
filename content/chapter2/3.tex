@@ -1,0 +1,62 @@
+You can build pairs of arbitrary types with \href{http://en.cppreference.com/w/cpp/utility/pair}{std::pair}. The class template std::pair needs the header <utility>. std::pair has a default, copy and move constructor. Pair objects can be swapped: std::swap(pair1, pair2).
+
+Pairs are often used in the C++ library. For example, the function std::minmax returns its result as a pair, the associative container std::map, std::unordered\_map, std::multimap and std::unordered\_multimap manage their key/value association in pairs.
+
+To get the elements of a pair p, you can access them directly or through an index. So, with p.first or std::get<0>(p), you get the first with p.second or std::get<1>(p), you get the second element of the pair.
+
+Pairs support the comparison operators ==, !=, <, >, <= and >=. When comparing two pairs for identity, members pair1.first and pair2.first are compared first, and then pair1.second and pair2.second. The same strategy holds for the other comparison operators.
+
+\mySamllsection{std::make\_pair}
+
+C++ has the practical help function \href{http://en.cppreference.com/w/cpp/utility/pair/make_pair}{std::make\_pair} to generate pairs without specifying their types. std::make\_pair automatically deduces their types.
+
+\filename{The helper function std::make\_pair}
+
+\begin{cpp}
+// pair.cpp
+...
+#include <utility>
+...
+using namespace std;
+...
+pair<const char*, double> charDoub("str", 3.14);
+pair<const char*, double> charDoub2= make_pair("str", 3.14);
+auto charDoub3= make_pair("str", 3.14);
+
+cout << charDoub.first << ", " << charDoub.second; // str, 3.14
+charDoub.first="Str";
+get<1>(charDoub)= 4.14;
+cout << charDoub.first << ", " << charDoub.second; // Str, 4.14
+\end{cpp}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

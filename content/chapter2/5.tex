@@ -1,0 +1,98 @@
+A reference wrapper is a \href{http://en.cppreference.com/w/cpp/concept/CopyConstructible}{copy-constructible} and \href{http://en.cppreference.com/w/cpp/concept/CopyAssignable}{copy-assignable} wrapper for an object of type\&, which is defined in the header <functional>. You have an object that behaves like a reference but can be copied. In opposite to classic references, \href{http://en.cppreference.com/w/cpp/utility/functional/reference_wrapper}{std::reference\_wrapper} objects support two additional use cases:
+
+\begin{itemize}
+\item 
+You can use them in containers of the Standard Template Library. std::vector<std::reference\_wrapper<int>{}> myIntRefVector
+
+\item 
+You can copy instances of classes which have std::reference\_wrapper objects. That is, in general, not possible with references.
+\end{itemize}
+
+The get member function allows access to the reference: myInt.get(). You can use a reference wrapper to encapsulate and invoke a callable.
+
+\filename{Reference wrappers}
+
+\begin{cpp}
+// referenceWrapperCallable.cpp
+...
+#include <functional>
+...
+void foo(){
+	std::cout << "Invoked" << '\n';
+}
+
+typedef void callableUnit();
+std::reference_wrapper<callableUnit> refWrap(foo);
+
+refWrap(); // Invoked
+\end{cpp}
+
+\mySamllsection{std::ref and std::cref}
+
+With the helper functions \href{http://en.cppreference.com/w/cpp/utility/functional/ref}{std::ref} and \href{http://en.cppreference.com/w/cpp/utility/functional/ref}{std::cref}, you can easily create reference wrappers for variables. std::ref will create a non-constant reference wrapper, std::cref a constant one:
+
+\filename{The helper functions std::ref and std::cref}
+
+\begin{cpp}
+// referenceWrapperRefCref.cpp
+...
+#include <functional>
+...
+void invokeMe(const std::string& s){
+	std::cout << s << ": const " << '\n';
+}
+
+template <typename T>
+void doubleMe(T t){
+	t*= 2;
+}
+
+std::string s{"string"};
+
+invokeMe(std::cref(s)); // string
+
+int i= 1;
+std::cout << i << '\n'; // 1
+
+doubleMe(i);
+std::cout << i << '\n'; // 1S
+
+doubleMe(std::ref(i));
+std::cout << i << '\n'; // 2
+\end{cpp}
+
+It is possible to invoke the function invokeMe taking a constant reference to a std::string with a nonconstant std::string s wrapped in a std::cref(s). When I wrap the variable i in the helper function std::ref, the function template doubleMe is invoked with a reference. Consequentially, the variable i is doubled.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

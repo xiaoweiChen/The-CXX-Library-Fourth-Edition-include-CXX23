@@ -1,0 +1,393 @@
+Smart pointers are essential to C++ because they empower you to implement explicit memory management in C++. Besides the deprecated std::auto\_ptr, C++ offers three smart pointers. They are defined in the header <memory>.
+
+First, the std::unique\_ptr models the concept of exclusive ownership. Second, the std::shared\_ptr models the concept of shared ownership. Finally, the std::weak\_ptr. std::weak\_ptr isn’t smart because it has a limited interface. Its job is to break cycles of std::shared\_ptr. It models the concept of temporary ownership.
+
+The smart pointers manage their resource according to the RAII idiom. Therefore, the resource is automatically freed if the smart pointer goes out of scope.
+
+\begin{myNotic}{Resource Acquisition Is Initialization}
+
+Resource Acquisition Is Initialization, short RAII, stands for a popular technique in C++, in which the resource acquisition and release are bound to the lifetime of an object. For the smart pointer, the memory is allocated in the constructor and deallocated in the destructor. In C++, the destructor is automatically called when the object goes out of scope.
+
+\end{myNotic}
+
+\begin{center}
+Overview smart pointers
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|l|}
+\hline
+\textbf{Name} &
+\textbf{Standard} &
+\textbf{Description} \\ \hline
+\endfirsthead
+%
+\endhead
+%
+\begin{tabular}[c]{@{}l@{}}std::auto\_ptr\\ (deprecated)\end{tabular} &
+C++98 &
+Owns exclusively the resource. Moves the resource then copying. \\ \hline
+std::unique\_ptr &
+C++11 &
+Owns exclusively the resource. Cannot be copied. \\ \hline
+std::shared\_ptr &
+C++11 &
+\begin{tabular}[c]{@{}l@{}}Has a reference counter for the shared variable.\\ Manages the reference counter automatically.\\ Deletes the resource if the reference counter is 0.\end{tabular} \\ \hline
+std::weak\_ptr &
+C++11 &
+\begin{tabular}[c]{@{}l@{}}Helps to break cycles of std::shared\_ptr.\\ Doesn't modify the reference counter.\end{tabular} \\ \hline
+\end{longtable}
+
+
+\mySamllsection{std::unique\_ptr}
+
+\href{http://en.cppreference.com/w/cpp/memory/unique_ptr}{std::unique\_ptr} exclusively takes care of its resource. It automatically releases the resource if it goes out of scope. If no copy semantics are used, you can use a std::unique\_ptr in containers and algorithms of the Standard Template Library. std::unique\_ptr is as cheap and fast as a raw pointer if you use no special deleter.
+
+\begin{myWarning}{Don’t use std::auto\_ptr}
+
+Classical C++03 has a smart pointer std::auto\_ptr, which exclusively takes care of the lifetime of a resource. But std::auto\_ptr has a conceptual issue. If you implicitly or explicitly copy a std::auto\_ptr, the resource is probably moved. So instead of copy semantics, you have hidden move semantics, and therefore, you often have undefined behavior. So std::auto\_ptr is deprecated in C++11, and you should use instead std::unique\_ptr. You can neither implicitly nor explicitly copy a std::unique\_ptr. You can only move it:
+
+\begin{cpp}
+#include <memory>
+...
+std::auto_ptr<int> ap1(new int(2011));
+std::auto_ptr<int> ap2 = ap1; // OK
+
+std::unique_ptr<int> up1(new int(2011));
+std::unique_ptr<int> up2 = up1; // ERROR
+std::unique_ptr<int> up3 = std::move(up1); // OK
+\end{cpp}
+
+\end{myWarning}
+
+These are the member functions of std::unique\_ptr.
+
+\begin{center}
+Member Functions of std::unique\_ptr
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+Name         & Description                                       \\ \hline
+\endfirsthead
+%
+\endhead
+%
+get          & Returns a pointer to the resource                 \\ \hline
+get\_deleter & Returns the delete function.                      \\ \hline
+release      & Returns a pointer to the resource and release it. \\ \hline
+reset        & Resets the resource.                              \\ \hline
+swap         & Swap the resource.                                \\ \hline
+\end{longtable}
+
+In the following code snippet, you can see the application of these member functions:
+
+\filename{The std::unique\_ptr}
+
+\begin{cpp}
+// uniquePtr.cpp
+...
+#include <utility>
+...
+using namepace std;
+
+struct MyInt{
+	MyInt(int i):i_(i){}
+	~MyInt(){
+		cout << "Good bye from " << i_ << endl;
+	}
+	int i_;
+};
+
+unique_ptr<MyInt> uniquePtr1{new MyInt(1998)};
+cout << uniquePtr1.get() << endl; // 0x15b5010
+
+unique_ptr<MyInt> uniquePtr2{move(uniquePtr1)};
+cout << uniquePtr1.get() << endl; // 0
+cout << uniquePtr2.get() << endl; // 0x15b5010
+{
+	unique_ptr<MyInt> localPtr{new MyInt(2003)};
+} // Good bye from 2003
+uniquePtr2.reset(new MyInt(2011)); // Good bye from 1998
+MyInt* myInt= uniquePtr2.release();
+delete myInt; // Good by from 2011
+
+unique_ptr<MyInt> uniquePtr3{new MyInt(2017)};
+unique_ptr<MyInt> uniquePtr4{new MyInt(2022)};
+cout << uniquePtr3.get() << endl; // 0x15b5030
+cout << uniquePtr4.get() << endl; // 0x15b5010
+
+swap(uniquePtr3, uniquePtr4);
+cout << uniquePtr3.get() << endl; // 0x15b5010
+cout << uniquePtr4.get() << endl; // 0x15b5030
+\end{cpp}
+
+std::unique\_ptr has a specialization for arrays:
+
+\filename{std::unique\_ptr array}
+
+\begin{cpp}
+// uniquePtrArray.cpp
+...
+#include <memory>
+...
+using namespace std;
+
+class MyStruct{
+	public:
+	MyStruct():val(count){
+		cout << (void*)this << " Hello: " << val << endl;
+		MyStruct::count++;
+	} ~
+	MyStruct(){
+		cout << (void*)this << " Good Bye: " << val << endl;
+		MyStruct::count--;
+	}
+	private:
+	int val;
+	static int count;
+};
+
+int MyStruct::count= 0;
+...
+{
+	// generates a myUniqueArray with three `MyStructs`
+	unique_ptr<MyStruct[]> myUniqueArray{new MyStruct[3]};
+}
+// 0x1200018 Hello: 0
+// 0x120001c Hello: 1
+// 0x1200020 Hello: 2
+// 0x1200020 GoodBye: 2
+// 0x120001c GoodBye: 1
+// 0x1200018 GoodBye: 0
+\end{cpp}
+
+\mySamllsection{Special Deleters}
+
+std::unique\_ptr can be parametrized with special deleters: std::unique\_ptr<int, MyIntDeleter> up(new int(2011), myIntDeleter()). std::unique\_ptr uses by default the deleter of the resource.
+
+
+\mySamllsection{std::make\_unique}
+
+
+The helper function \href{http://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique}{std::make\_unique} was unlike its sibling std::make\_shared forgotten in the C++11 standard. std::make\_unique was, therefore, added with the C++14 standard. std::make\_unique enables it to create a std::unique\_ptr in a single step: std::unique\_ptr<int> up= std::make\_unique<int>(2014).
+
+
+\mySamllsection{std::shared\_ptr}
+
+\href{http://en.cppreference.com/w/cpp/memory/shared_ptr}{std::shared\_ptr} shares the ownership of the resource. They have two handles. One for the resource and one for the reference counter. By copying a std::shared\_ptr, the reference count is increased by one. It is decreased by one if the std::shared\_ptr goes out of scope. If the reference counter becomes the value 0 and there is no std::shared\_ptr referencing the resource anymore, the C++ runtime automatically releases the resource. The release of the resource occurs precisely when the last std::shared\_ptr goes out of scope. The C++ runtime guarantees that the call of the reference counter is an atomic operation. Because of this administration overhead, std::shared\_ptr requires more time and memory than a raw pointer or std::unique\_ptr.
+
+In the following table are the member functions of std::shared\_ptr.
+
+\begin{center}
+Member Functions of std::shared\_ptr
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Name} & \textbf{Description}                                             \\ \hline
+\endfirsthead
+%
+\endhead
+%
+get           & Returns a pointer to the resource                                \\ \hline
+get\_deleter  & Returns the delete function                                      \\ \hline
+reset         & Resets the resource                                              \\ \hline
+swap          & Swaps the resource                                               \\ \hline
+unique        & Checks if the std::shared\_ptr is exclsive owner of the resource \\ \hline
+use\_count    & Returns the value of the reference counter.                      \\ \hline
+\end{longtable}
+
+\mySamllsection{std::make\_shared}
+
+The helper function \href{http://en.cppreference.com/w/cpp/memory/shared_ptr/make_shared}{std::make\_shared} creates the resource, and returns it in a std::shared\_ptr. You should prefer std::make\_shared instead of the direct creation of a std::shared\_ptr, because std::make\_shared is faster.
+
+The following code sample shows a typical use case of a std::shared\_ptr.
+
+\filename{std::shared\_ptr}
+
+\begin{cpp}
+// sharedPtr.cpp
+...
+#include <memory>
+...
+class MyInt{
+public:
+	MyInt(int v):val(v){
+		std::cout << "Hello: " << val << '\n';
+	} ~
+	MyInt(){
+		std::cout << "Good Bye: " << val << '\n';
+	}
+private:
+	int val;
+};
+
+auto sharPtr= std::make_shared<MyInt>(1998); // Hello: 1998
+std::cout << sharPtr.use_count() << '\n'; // 1
+
+{
+	std::shared_ptr<MyInt> locSharPtr(sharPtr);
+	std::cout << locSharPtr.use_count() << '\n'; // 2
+}
+std::cout << sharPtr.use_count() << '\n'; // 1
+
+std::shared_ptr<MyInt> globSharPtr= sharPtr;
+std::cout << sharPtr.use_count() << '\n'; // 2
+
+globSharPtr.reset();
+std::cout << sharPtr.use_count() << '\n'; // 1
+sharPtr= std::shared_ptr<MyInt>(new MyInt(2011)); // Hello:2011
+												  // Good Bye: 1998
+...
+// Good Bye: 2011
+\end{cpp}
+
+The callable is, in this example, a function object. Therefore you can easily count how many instances of a class are created. The result is in the static variable count.
+
+\mySamllsection{std::shared\_ptr from this}
+
+You have to derive the class public from std::enable\_shared\_from\_this. You can create with the class \href{http://en.cppreference.com/w/cpp/memory/enable_shared_from_this}{std::enable\_shared\_from\_this} objects, which return a std::shared\_ptr on itself. The class supports the member function shared\_from\_this to return std::shared\_ptr to this:
+
+\filename{std::shared\_ptr from this}
+
+\begin{cpp}
+// enableShared.cpp
+...
+#include <memory>
+...
+class ShareMe: public std::enable_shared_from_this<ShareMe>{
+	std::shared_ptr<ShareMe> getShared(){
+		return shared_from_this();
+	}
+};
+
+std::shared_ptr<ShareMe> shareMe(new ShareMe);
+std::shared_ptr<ShareMe> shareMe1= shareMe->getShared();
+
+std::cout << (void*)shareMe.get() << '\n'; // 0x152d010
+std::cout << (void*)shareMe1.get() << '\n'; // 0x152d010
+std::cout << shareMe.use_count() << '\n'; // 2
+\end{cpp}
+
+You can see in the code sample that the get member functions reference the same object.
+
+\mySamllsection{std::weak\_ptr}
+
+\href{http://en.cppreference.com/w/cpp/memory/weak_ptr}{std::weak\_ptr} is not a smart pointer. std::weak\_ptr supports no transparent access to the resource because it only borrows the ressource from a std::shared\_ptr. std::weak\_ptr does not change the reference counter:
+
+\filename{std::weak\_ptr}
+
+\begin{cpp}
+// weakPtr.cpp
+...
+#include <memory>
+...
+auto sharedPtr= std::make_shared<int>(2011);
+std::weak_ptr<int> weakPtr(sharedPtr);
+
+std::cout << weakPtr.use_count() << '\n'; // 1
+std::cout << sharedPtr.use_count() << '\n'; // 1
+
+std::cout << weakPtr.expired() << '\n'; // false
+if( std::shared_ptr<int> sharedPtr1= weakPtr.lock() ) {
+	std::cout << *sharedPtr << '\n'; // 2011
+}
+else{
+	std::cout << "Don't get it!" << '\n';
+}
+
+weakPtr.reset();
+
+if( std::shared_ptr<int> sharedPtr1= weakPtr.lock() ) {
+	std::cout << *sharedPtr << '\n';
+}
+else{
+	std::cout << "Don't get it!" << '\n'; // Don't get it!
+}
+\end{cpp}
+
+The table provides an overview of the member functions of std::weak\_ptr.
+
+\begin{center}
+Member Functions of std::weak\_ptr
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{ll}
+\textbf{Name} & \textbf{Description}                        \\
+\endfirsthead
+%
+\endhead
+%
+expired       & Checks if the resource was deleted.         \\
+lock          & Creates a std::shared\_ptr on the resource  \\
+reset         & Resets the resource                         \\
+swap          & Swaps the resource                          \\
+use\_count    & Returns the value of the reference counter.
+\end{longtable}
+
+There is one reason for the existence of std::weak\_ptr. It breaks the cycle of std::shared\_ptr.
+
+\mySamllsection{Cyclic References}
+
+You get cyclic references of std::shared\_ptr if they refer to each other. So, the resource counter never becomes 0, and the resource is not automatically released. You can break this cycle if you embed a std::weak\_ptr into the cycle. std::weak\_ptr does not modify the reference counter.
+
+The code sample result is that the daughter is automatically released, but neither the son nor the mother. The mother refers to her son via a std::shared\_ptr, and her daughter via a std::weak\_ptr. Maybe it helps to see the structure of the code in an image.
+
+\myGraphic{0.9}{content/chapter2/images/3.jpg}{Cyclic references}
+
+Finally, here is the source code.
+
+\filename{Cyclic references}
+
+\begin{cpp}
+// cyclicReference.cpp
+...
+#include <memory>
+...
+using namespace std;
+
+struct Son, Daughter;
+
+struct Mother{
+	~Mother(){cout << "Mother gone" << endl;}
+	void setSon(const shared_ptr<Son> s ){mySon= s;}
+	void setDaughter(const shared_ptr<Daughter> d){myDaughter= d;}
+	shared_ptr<const Son> mySon;
+	weak_ptr<const Daughter> myDaughter;
+};
+
+struct Son{
+	Son(shared_ptr<Mother> m):myMother(m){}
+	~Son(){cout << "Son gone" << endl;}
+	shared_ptr<const Mother> myMother;
+};
+
+struct Daughter{
+	Daughter(shared_ptr<Mother> m):myMother(m){}
+	~Daughter(){cout << "Daughter gone" << endl;}
+	shared_ptr<const Mother> myMother;
+};
+
+{
+	shared_ptr<Mother> mother= shared_ptr<Mother>(new Mother);
+	shared_ptr<Son> son= shared_ptr<Son>(new Son(mother) );
+	shared_ptr<Daughter> daugh= shared_ptr<Daughter>(new Daughter(mother));
+	mother->setSon(son);
+	mother->setDaughter(daugh);
+}
+// Daughter gone
+\end{cpp}
+
+
