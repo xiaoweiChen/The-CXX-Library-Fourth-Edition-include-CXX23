@@ -1,0 +1,31 @@
+You can assign new elements to existing containers or swap two containers. For the assignment of a container cont2 to a container cont, there exists the copy assignment cont = cont2 and the move assignment cont = std::move(cont2). A special form of assignment is the one with an initializer list: cont= {1, 2, 3, 4, 5}. That’s not possible for std::array. The function swap exists in two forms. You have it as a member function cont(swap(cont2)) or as a function template std::swap(cont, cont2).
+
+\filename{Assignment and swap}
+
+\begin{cpp}
+// containerAssignmentAndSwap.cpp
+...
+#include <set>
+...
+std::set<int> set1{0, 1, 2, 3, 4, 5};
+std::set<int> set2{6, 7, 8, 9};
+
+for (auto s: set1) std::cout << s << " "; // 0 1 2 3 4 5
+for (auto s: set2) std::cout << s << " "; // 6 7 8 9
+
+set1= set2;
+for (auto s: set1) std::cout << s << " "; // 6 7 8 9
+for (auto s: set2) std::cout << s << " "; // 6 7 8 9
+
+set1= std::move(set2);
+for (auto s: set1) std::cout << s << " "; // 6 7 8 9
+for (auto s: set2) std::cout << s << " "; //
+
+set2= {60, 70, 80, 90};
+for (auto s: set1) std::cout << s << " "; // 6 7 8 9
+for (auto s: set2) std::cout << s << " "; // 60 70 80 90
+
+std::swap(set1, set2);
+for (auto s: set1) std::cout << s << " "; // 60 70 80 90
+for (auto s: set2) std::cout << s << " "; // 6 7 8 9
+\end{cpp}

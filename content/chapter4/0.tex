@@ -1,0 +1,69 @@
+\myGraphic{0.5}{content/chapter4/images/1.jpg}{Cippi builds a stack}
+
+The \href{http://en.cppreference.com/w/cpp/container}{sequence containers} have a lot in common, but each container has its particular domain. Before I dive into the details, I provide an overview of all five sequence containers of the std namespace.
+
+\begin{center}
+The sequence containers
+\end{center}
+
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|l|l|l|l|}
+\hline
+\textbf{Criteria}  & \textbf{array} & \textbf{vector} & \textbf{deque}     & \textbf{list}        & \textbf{forward\_list} \\ \hline
+\endfirsthead
+%
+\endhead
+%
+Size               & static         & dynamic         & dynamic            & dynamic              & dynamic                \\ \hline
+Implementation     & static array   & dynamic array   & sequence of arrays & doubled linked list  & single linked list     \\ \hline
+Access             & random         & random          & random             & forward and backward & forward                \\ \hline
+Optimized for insert and delete at &
+&
+end: O(1) &
+begin and end: O(1) &
+\begin{tabular}[c]{@{}l@{}}begin and end:O(1)\\ arbitrary:O(1)\end{tabular} &
+\begin{tabular}[c]{@{}l@{}}begin(1)\\ arbitrary:O(1)\end{tabular} \\ \hline
+Memory reservation &                & yes             & no                 & no                   & no                     \\ \hline
+Release of memory  &                & shrink\_to\_fit & shrink\_to\_fit    & always               & always                 \\ \hline
+Strength &
+\begin{tabular}[c]{@{}l@{}}no memory allocation;\\ minimal memory requirements\end{tabular} &
+95\% solution &
+insertion and delettion at the begin and end &
+insertion and deletion at an arbitrary position &
+\begin{tabular}[c]{@{}l@{}}fast insertion and deletion;\\ minimal memory requirements\end{tabular} \\ \hline
+Weakness &
+no dynamic memory allocation &
+Insertion and deletion at an arbitrary position:O(n) &
+Insertion and deletion at an arbitrary position:O(n) &
+no random access &
+no random access \\ \hline
+\end{longtable}
+
+
+I want to make a few additional remarks to the table.
+
+O(i) stands for an operation’s complexity (runtime). O(1) means that the runtime of an operation on a container is constant and independent of the container’s size. Conversely, O(n) means that the runtime depends linearly on the number of container elements. What does that mean for a std::vector? The access time on an element is independent of the size of the std::vector, but the insertion or deletion of an arbitrary element with k-times more elements is k-times slower.
+
+Although the random access on the elements of a std::vector has the same complexity O(1) as the random access on the elements of a std::deque, that doesn’t mean that both operations are equally fast.
+
+The complexity guarantee O(1) for the insertion or deletion into a double (std::list) or single linked list (std::forward\_list) is only guaranteed if the iterator points to the correct element.
+
+
+\begin{myNotic}{std::string is like std::vector<char>}
+Of course, std::string is no container of the standard template library. From a behavioral perspective, it is like a sequence container, especially like a std::vector<char>. Therefore I will treat std::string as a std::vector<char>.
+\end{myNotic}
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,76 @@
+An iterator allows you to access the elements of a container. If you use a begin and end iterator, you have a range, which you can further process. For a container cont, you get with cont.begin() the begin iterator and with cont.end() the end iterator, which defines a half-open range. It is half-open because the begin iterator belongs to the range, and the end iterator refers to a position past the range. The iterator pair cont.begin() and cont.end() enables it to modify the elements of the container.
+
+\begin{center}
+Creation and deletion of a container
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Iterator}               & \textbf{Description}                         \\ \hline
+\endfirsthead
+%
+\endhead
+%
+cont.begin() and cont.end()     & Pair of iterators to iterate forward.        \\ \hline
+cont.cbegin() and cont.cend()   & Pair of iterators to iterate const forward.  \\ \hline
+cont.rbegin() and cont.rend()   & Pair of iterators to iterate backward.       \\ \hline
+cont.crbegin() and cont.crend() & Pair of iterators to iterate const backward. \\ \hline
+\end{longtable}
+
+Now I can modify the container.
+
+\filename{Access the elements of a container}
+
+\begin{cpp}
+// containerAccess.cpp
+...
+#include <vector>
+...
+struct MyInt{
+	MyInt(int i): myInt(i){};
+	int myInt;
+};
+
+std::vector<MyInt> myIntVec;
+myIntVec.push_back(MyInt(5));
+myIntVec.emplace_back(1);
+std::cout << myIntVec.size() << '\n'; // 2
+
+std::vector<int> intVec;
+intVec.assign({1, 2, 3});
+for (auto v: intVec) std::cout << v << " "; // 1 2 3
+
+intVec.insert(intVec.begin(), 0);
+for (auto v: intVec) std::cout << v << " "; // 0 1 2 3
+
+intVec.insert(intVec.begin()+4, 4);
+for (auto v: intVec) std::cout << v << " "; // 0 1 2 3 4
+
+intVec.insert(intVec.end(), {5, 6, 7, 8, 9, 10, 11});
+
+for (auto v: intVec) std::cout << v << " "; // 0 1 2 3 4 5 6 7 8 9 10 11
+
+for (auto revIt= intVec.rbegin(); revIt != intVec.rend(); ++revIt)
+	std::cout << *revIt << " "; // 11 10 9 8 7 6 5 4 3 2 1 0
+
+intVec.pop_back();
+for (auto v: intVec ) std::cout << v << " "; // 0 1 2 3 4 5 6 7 8 9 10
+\end{cpp}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,28 @@
+
+\myGraphic{0.3}{content/chapter3/images/1.jpg}{Cippi prepares the packages}
+
+The sequence and associative containers of the Standard Template library have a lot in common. For example, the operations to create or delete a container, determine its size, access its elements, and assign or swap, are all independent of the type of elements of a container. Each container has at least one type parameter and an allocator for this type. The allocator works in the background most of the time. std::vector exemplifies this. The call std::vector<int> results in a call std::vector<int, std::allocator<int>{}>. Because of the std::allocator, you can adjust except for std::array the size of all containers dynamically. However, they have more in common. You can access the elements of a container with an iterator.
+
+Despite the high similarity, the containers differ in details. The chapters Sequence Container and Associative Container provide the details.
+
+With the sequence containers std::array, std::vector, std::deque, std::list, and std::forward\_list C++ has an expert on each domain.
+
+The associative containers can be classified into ordered and unordered ones.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

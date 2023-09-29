@@ -1,0 +1,83 @@
+Each container provides various constructors. To delete all container elements cont, you can use cont.clear(). It makes no difference whether you create a container, you delete them, or you add or remove elements. Each time the container takes care of the memory management.
+
+The table shows you the constructors and destructors of a container. In the following table, std:vector often stands for the rest of them.
+
+\begin{center}
+Creation and deletion of a container
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Type}   & \textbf{Example}                                            \\ \hline
+\endfirsthead
+%
+\endhead
+%
+Default         & std::vector\textless{}int\textgreater vec1                  \\ \hline
+Range                      & std::vector\textless{}int\textgreater vec2(vec1.begin(), vec1.end()) \\ \hline
+Copy            & std::vector\textless{}int\textgreater vec3(vec2)            \\ \hline
+Copy            & std::vector\textless{}int\textgreater vec3=vec2             \\ \hline
+Move            & std::vector\textless{}int\textgreater vec4(std::move(vec3)) \\ \hline
+Move            & std::vector\textless{}int\textgreater vec4=std::move(vec3)  \\ \hline
+Sequence(initializer list) & std::vector\textless{}int\textgreater vec5\{1,2,3,4,5\}              \\ \hline
+Sequence(intitalizer list) & std::vector\textless{}int\textgreater vec5=\{1,2,3,4,5\}             \\ \hline
+Destructor      & vec5.$\sim$vector()                                         \\ \hline
+Delete elements & vec5.clear()                                                \\ \hline
+\end{longtable}
+
+You have to specify the size of a std::array at compile time and use \href{https://en.cppreference.com/w/cpp/language/aggregate_initialization}{aggregate initialization} for initialization. std::array has no member functions for removing its elements.
+
+I use the different constructors on the various containers in the following example.
+
+
+\filename{Various constructors}
+
+\begin{cpp}
+// containerConstructor.cpp
+...
+#include <map>
+#include <unordered_map>
+#include <vector>
+...
+using namespace std;
+
+vector<int> vec= {1, 2, 3, 4, 5, 6, 7, 8, 9};
+map<string, int> m= {{"bart", 12345}, {"jenne", 34929}, {"huber", 840284} };
+unordered_map<string, int> um{m.begin(), m.end()};
+
+for (auto v: vec) cout << v << " "; // 1 2 3 4 5 6 7 8 9
+for (auto p: m) cout << p.first << "," << p.second << " ";
+// bart,12345 huber,840284 jenne,34929
+
+for (auto p: um) cout << p.first << "," << p.second << " ";
+// bart,12345 jenne,34929 huber,840284
+
+vector<int> vec2= vec;
+cout << vec.size() << endl; // 9
+cout << vec2.size() << endl; // 9
+
+vector<int> vec3= move(vec);
+cout << vec.size() << endl; // 0
+cout << vec3.size() << endl; // 9
+
+vec3.clear();
+cout << vec3.size() << endl; // 0
+\end{cpp}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
