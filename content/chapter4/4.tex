@@ -1,0 +1,76 @@
+
+\myGraphic{0.8}{content/chapter4/images/5.jpg}{}
+
+\href{http://en.cppreference.com/w/cpp/container/list}{std::list} is a doubly linked list. std::list needs the header <list>.
+
+Although it has a similar interface to std::vector or std::deque, std::list is quite different from both. That’s due to its structure.
+
+std::list makes the following points unique:
+
+\begin{itemize}
+\item
+It supports no random access.
+
+\item
+Access to an arbitrary element is slow because you have to iterate in the worst case through the whole list.
+
+\item
+To add or remove an element is fast if the iterator points to the right place.
+
+\item
+ If you add or remove an element, the iterator keeps valid.
+\end{itemize}
+
+Because of its unique structure, std::list has a few special member functions.
+
+
+\begin{center}
+Special member functions of std::list
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Member Functions} & \textbf{Description}                                                         \\ \hline
+\endfirsthead
+%
+\endhead
+%
+lis.merge(c)              & Merges the sorted list c into the sorted list lis, so that lis keeps sorted. \\ \hline
+lis.merge(c, op)     & Merges the sorted list c into the sorted list lis, so that lis keeps sorted. It uses op as sorting criterion. \\ \hline
+lis.remove(val)           & Removes all elements from lis with value val.                                \\ \hline
+lis.remove\_if(pre)       & Removes all elements from lis, fulfilling the predicate pre.                 \\ \hline
+lis.splice(pos, ...) & Splits the elements in lis before pos. The elements can be single elements, ranges, or lists.                 \\ \hline
+lis.unique()              & Removes adjacent element with the same value.                                \\ \hline
+lis.unique(pre)           & Removes adjacent elements, fulfilling the predicate pre.                     \\ \hline
+\end{longtable}
+
+Here are a few of the member functions in a code snippet.
+
+\filename{std::list}
+
+\begin{cpp}
+// list.cpp
+...
+#include <list>
+...
+std::list<int> list1{15, 2, 18, 19, 4, 15, 1, 3, 18, 5,
+	                  4, 7, 17, 9, 16, 8, 6, 6, 17, 1, 2};
+	                  
+list1.sort();
+for (auto l: list1) std::cout << l << " ";
+	// 1 1 2 2 3 4 4 5 6 6 7 8 9 15 15 16 17 17 18 18 19
+
+list1.unique();
+for (auto l: list1) std::cout << l << " ";
+	// 1 2 3 4 5 6 7 8 9 15 16 17 18 19
+
+std::list<int> list2{10, 11, 12, 13, 14};
+list1.splice(std::find(list1.begin(), list1.end(), 15), list2);
+for (auto l: list1) std::cout << l << " ";
+	// 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19
+\end{cpp}
+
+

@@ -1,0 +1,129 @@
+
+\myGraphic{0.8}{content/chapter4/images/3.jpg}{}
+
+\href{http://en.cppreference.com/w/cpp/container/vector}{std::vector} is a homogeneous container, which length is automatically adjusted at runtime. std::vector needs the header <vector>. As it stores its elements contiguously in memory, std::vector supports pointer arithmetic.
+
+\begin{cpp}
+for (int i= 0; i < vec.size(); ++i){
+	std::cout << vec[i] == *(vec + i) << '\n'; // true
+}
+\end{cpp}
+
+\begin{myTip}{Distinguish the round and curly braces when you create a std::vector}
+When constructing a std::vector, you must pay attention to a few special rules. The constructor with round braces in the following example creates a std::vector with ten elements, and the constructor with curly braces a std::vector with element 10.
+
+\begin{cpp}
+std::vector<int> vec(10);
+std::vector<int> vec{10};
+\end{cpp}
+
+The same rules hold for the expressions std::vector<int>(10, 2011) or std::vector<int>{10, 2011}. In the first case, you get a std::vector with ten elements initialized to 2011. In the second case, you get a std::vector with elements 10 and 2011. The behavior is because curly braces stand for an initializer list; therefore, the sequence constructor is used.
+\end{myTip}
+
+\mySamllsection{Size versus Capacity}
+
+The number of elements a std::vector has is usually smaller than the number of elements for which space is already reserved. That is for a simple reason. The size of the std::vector can increase without an expensive allocation of new memory.
+
+There are a few operations for using memory intelligently.
+
+\begin{center}
+Memory management of std::vector
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Member Functions} & \textbf{Description}                                       \\ \hline
+\endfirsthead
+%
+\endhead
+%
+vec.size()                & Number of elements of vec.                                 \\ \hline
+vec.capacity()            & Number of elements that vec can have without reallocation. \\ \hline
+vec.resize(n)             & vec will be increased to n elements.                       \\ \hline
+vec.reserve(n)            & Reserve memory for at least n elements.                    \\ \hline
+vec.shrink\_to\_fit()     & Reduces capacity of vec to its size.                       \\ \hline
+\end{longtable}
+
+
+The call vec.shrink\_to\_fit() is not binding. That means the runtime can ignore it. But on popular platforms, I always observed the desired behavior.
+
+So let’s use the operations.
+
+\filename{std::vector}
+
+\begin{cpp}
+// vector.cpp
+...
+#include <vector>
+...
+std::vector<int> intVec1(5, 2011);
+intVec1.reserve(10);
+std::cout << intVec1.size() << '\n'; // 5
+std::cout << intVec1.capacity() << '\n'; // 10
+
+intVec1.shrink_to_fit();
+std::cout << intVec1.capacity() << '\n'; // 5
+
+std::vector<int> intVec2(10);
+std::cout << intVec2.size() << '\n'; // 10
+
+std::vector<int> intVec3{10};
+std::cout << intVec3.size() << '\n'; // 1
+
+std::vector<int> intVec4{5, 2011};
+std::cout << intVec4.size() << '\n'; // 2
+\end{cpp}
+
+std::vector vec has a few member functions to access its elements. With vec.front(), you get the first element; with vec.back(), you get the last element of vec. To read or write the (n+1)-th element of vec, you can use the index operator vec[n] or the member function vec.at(n). The second one checks the boundaries of vec, so that you eventually get a std::out\_of\_range exception.
+
+Besides the index operator, std::vector offers additional member functions to assign, insert, create, or remove elements. See the following overview.
+
+\begin{center}
+Modify the elements of a std::vector
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Member Functions}  & \textbf{Description}                                           \\ \hline
+\endfirsthead
+%
+\endhead
+%
+vec.assign(...)            & Assigns one or more elements, a range, or an initializer list. \\ \hline
+vec.clear()                & Removes all elements from vec.                                 \\ \hline
+vec.emplace(pos, args...) & Create a new element before pos with the args in vec and returns the new position of the element.          \\ \hline
+vec.emplace\_back(args...) & Creates a new element in vec with args...                      \\ \hline
+vec.erase(...)             & Removes one element or a range and returns the next position.  \\ \hline
+vec.insert(pos, ...)      & Inserts one or more elements, a range, or an initializer list and returns the new position of the element. \\ \hline
+vec.pop\_back()            & Removes the last elements.                                     \\ \hline
+vec.push\_back(elem)       & Adds a copy of elem at the end of vec.                         \\ \hline
+\end{longtable}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

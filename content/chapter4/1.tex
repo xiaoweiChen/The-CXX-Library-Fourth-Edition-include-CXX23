@@ -1,0 +1,74 @@
+
+\myGraphic{0.8}{content/chapter4/images/2.jpg}{}
+
+
+The std::array combines the memory and runtime characteristic of a C array with the interface of
+
+std::vector. \href{http://en.cppreference.com/w/cpp/container/array}{std::array} is a homogeneous container of fixed length. It needs the header <array>.This means, in particular, the std::array knows its size.
+
+To initialize a std::array, you must follow a few special rules.
+
+\noindent
+std::array<int, 10> arr
+
+The 10 elements are not initialized.
+
+\noindent
+std::array<int, 10> arr{}
+
+The 10 elements are default initialized.
+
+\noindent
+std::array<int, 10> arr{1, 2, 3, 4, 5}
+
+The remaining elements are default initialized.
+
+std::array supports three types of index access.
+
+\begin{cpp}
+arr[n];
+arr.at(n);
+std::get<n>(arr);
+\end{cpp}
+
+The most often used first type form with angle brackets does not check the boundaries of the arr. This is in opposition to arr.at(n). You will eventually get a std::range-error exception. The last type shows the relationship of the std::array with the std::tuple because both are containers of fixed length.
+
+Here is a little bit of arithmetic with std::array.
+
+\filename{std::array}
+
+\begin{cpp}
+// array.cpp
+...
+#include <array>
+...
+std::array<int, 10> arr{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+for (auto a: arr) std::cout << a << " " ; // 1 2 3 4 5 6 7 8 9 10
+
+double sum= std::accumulate(arr.begin(), arr.end(), 0);
+std::cout << sum << '\n'; // 55
+
+double mean= sum / arr.size();
+std::cout << mean << '\n'; // 5.5
+std::cout << (arr[0] == std::get<0>(arr)); // true
+\end{cpp}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

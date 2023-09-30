@@ -1,0 +1,124 @@
+
+\myGraphic{0.8}{content/chapter4/images/6.jpg}{}
+
+\href{http://en.cppreference.com/w/cpp/container/forward_list}{std::forward\_list} is a singly linked list, which needs the header <forward\_list>. std::forward\_list has a drastically reduced interface and is optimized for minimal memory requirements.
+
+std::forward\_list has a lot in common with std::list:
+
+
+\begin{itemize}
+\item 
+It supports no random access.
+
+\item 
+Access to an arbitrary element is slow because you have to iterate forward through the whole list in the worst case.
+
+\item 
+To add or remove an element is fast if the iterator points to the right place.
+
+\item 
+If you add or remove an element, the iterator keeps valid.
+
+\item 
+Operations always refer to the beginning of the std::forward\_list or the position past the current element.
+\end{itemize}
+
+The characteristic that you can iterator a std::forward\_list forward has a significant impact. So the iterators cannot be decremented, so operations like It-- on iterators are not supported. For the same reason, std::forward\_list has no backward iterator. std::forward\_list is the only sequence container that doesn’t know its size.
+
+\begin{myTip}{std::forward\_list has an exceptional domain}
+std::forward\_list is the replacement for singly-linked lists. It’s optimized for minimal memory management and performance if insertion, extraction, or movement of elements only affects adjacent elements. This is typical for the sort algorithm.
+\end{myTip}
+
+The special member functions of std::forward\_list.
+
+\begin{center}
+Special member functions of std::forward\_list
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Member functions}         & \textbf{Description}                                                                           \\ \hline
+\endfirsthead
+%
+\endhead
+%
+forw.before\_begin()              & Returns an iterator before the first element.                                                  \\ \hline
+forw.emplace\_after(pos, args...) & Creates an element after pos with the arguments args...                                        \\ \hline
+forw.emplace\_front(args...)      & Creates an element at the beginning of forw with the arguments args...                         \\ \hline
+forw.erase\_after(pos, ...)       & Removes from forw the element pos or a range of elements, starting with pos.                   \\ \hline
+forw.insert\_after(pos, ...) & Inserts after pos new elements. There elements can be single elements, ranges, or initializer lists.                        \\ \hline
+forw.merge(c)                     & Merges the sorted forward list c into the sorted forward list forw, so that forw keeps sorted. \\ \hline
+forw.merge(c, op)            & Merges the forward sorted list c into the forward sorted list forw, so that forw keeps sorted. Uses op as sorting criteria. \\ \hline
+forw.splice\_after(pos, ...) & Splits the elements in forw before pos. The elements can be single elements, ranges or lists.                               \\ \hline
+forw.unique()                     & Removes adjacent elements with the same value.                                                 \\ \hline
+forw.unique(pre)                  & Removes adjacent elements, fulfilling the predicate pre.                                       \\ \hline
+\end{longtable}
+
+Let’s look at the unique member functions of std::forward\_list.
+
+\filename{std::forward\_list}
+
+\begin{cpp}
+// forwardList.cpp
+...
+#include<forward_list>
+...
+using std::cout;
+
+std::forward_list<int> forw;
+std::cout << forw.empty() << '\n'; // true
+
+forw.push_front(7);
+forw.push_front(6);
+forw.push_front(5);
+forw.push_front(4);
+forw.push_front(3);
+forw.push_front(2);
+forw.push_front(1);
+for (auto i: forw) cout << i << " "; // 1 2 3 4 5 6 7
+
+forw.erase_after(forw.before_begin());
+cout<< forw.front(); // 2
+
+std::forward_list<int> forw2;
+forw2.insert_after(forw2.before_begin(), 1);
+forw2.insert_after(++forw2.before_begin(), 2);
+forw2.insert_after(++(++forw2.before_begin()), 3);
+forw2.push_front(1000);
+for (auto i= forw2.cbegin();i != forw2.cend(); ++i) cout << *i << " ";
+	// 1000 1 2 3
+	
+auto IteratorTo5= std::find(forw.begin(), forw.end(), 5);
+forw.splice_after(IteratorTo5, std::move(for2));
+for (auto i= forw.cbegin(); i != forw.cend(); ++i) cout << *i << " ";
+	// 2 3 4 5 1000 1 2 3 6 7
+
+forw.sort();
+for (auto i= forw.cbegin(); i != forw.cend(); ++i) cout << *i << " ";
+	// 1 2 2 3 3 4 5 6 7 1000
+
+forw.reverse();
+for (auto i= forw.cbegin(); i != forw.cend(); ++i) cout << *i << " ";
+	// 1000 7 6 5 4 3 3 2 2 1
+
+forw.unique();
+for (auto i= forw.cbegin(); i != forw.cend(); ++i) cout << *i << " ";
+	// 1000 7 6 5 4 3 2 1
+\end{cpp}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

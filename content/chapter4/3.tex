@@ -1,0 +1,88 @@
+
+\myGraphic{0.8}{content/chapter4/images/4.jpg}{}
+
+\href{http://en.cppreference.com/w/cpp/container/deque}{std::deque}, which typically consists of a sequence of fixed-sized arrays, is quite similar to std::vector. std::deque need the header <deque>. The std::deque has three additional member functions, deq.push\_front(elem), deq.pop\_front() and deq.emplace\_front(args... ) to add or remove elements at its beginning.
+
+\filename{std::deque}
+
+\begin{cpp}
+// deque.cpp
+...
+#include <deque>
+...
+struct MyInt{
+	MyInt(int i): myInt(i){};
+	int myInt;
+};
+
+std::deque<MyInt> myIntDeq;
+
+myIntDeq.push_back(MyInt(5));
+myIntDeq.emplace_back(1);
+std::cout << myIntDeq.size() << '\n'; // 2
+
+std::deque<MyInt> intDeq;
+intDeq.assign({1, 2, 3});
+for (auto v: intDeq) std::cout << v << " "; // 1 2 3
+
+intDeq.insert(intDeq.begin(), 0);
+for (auto v: intDeq) std::cout << v << " "; // 0 1 2 3
+
+intDeq.insert(intDeq.begin()+4, 4);
+for (auto v: intDeq) std::cout << v << " "; // 0 1 2 3 4
+
+intDeq.insert(intDeq.end(), {5, 6, 7, 8, 9, 10, 11});
+for (auto v: intDeq) std::cout << v << " "; // 0 1 2 3 4 5 6 7 8 9 10 11
+
+for (auto revIt= intDeq.rbegin(); revIt != intDeq.rend(); ++revIt)
+	std::cout << *revIt << " "; // 11 10 9 8 7 6 5 4 3 2 1 0
+
+intDeq.pop_back();
+for (auto v: intDeq) std::cout << v << " "; // 0 1 2 3 4 5 6 7 8 9 10
+
+intDeq.push_front(-1);
+for (auto v: intDeq) std::cout << v << " "; // -1 0 1 2 3 4 5 6 7 8 9 10
+\end{cpp}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
