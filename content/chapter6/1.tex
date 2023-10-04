@@ -1,0 +1,151 @@
+C++ has std::stack, std::queue and std::priority\_queue as three special sequence containers. Most of you know these classic data structures from your education.
+
+The adaptors for containers
+
+\begin{itemize}
+\item 
+support a reduced interface for existing sequence containers,
+
+\item 
+can not be used with algorithms of the Standard Template Library,
+
+\item 
+are class templates that are parametrized by their data type and their container (std::vector, std::list, and std::deque),
+
+\item 
+use by default std::deque as the internal sequence container:
+
+\begin{cpp}
+template <typename T, typename Container= deque<T>>
+class stack;
+\end{cpp}
+\end{itemize}
+
+\mySamllsection{Stack}
+
+\myGraphic{0.6}{content/chapter6/images/2.jpg}{}
+
+The \href{http://en.cppreference.com/w/cpp/container/stack}{std::stack} follows the LIFO principle (Last In First Out). The stack sta, which needs the header <stack>, has three special member functions.
+
+With sta.push(e), you can insert a new element e at the top of the stack, remove it from the top with sta.pop() and reference it with sta.top(). The stack supports the comparison operators and knows its size. The stack operations have constant complexity.
+
+\filename{std::stack}
+
+\begin{cpp}
+// stack.cpp
+...
+#include <stack>
+...
+std::stack<int> myStack;
+
+std::cout << myStack.empty() << '\n'; // true
+std::cout << myStack.size() << '\n'; // 0
+
+myStack.push(1);
+myStack.push(2);
+myStack.push(3);
+std::cout << myStack.top() << '\n'; // 3
+
+while (!myStack.empty()){
+	std::cout << myStack.top() << " ";
+	myStack.pop();
+} // 3 2 1
+
+std::cout << myStack.empty() << '\n'; // true
+std::cout << myStack.size() << '\n'; // 0
+\end{cpp}
+
+
+\mySamllsection{Queue}
+
+\myGraphic{0.8}{content/chapter6/images/3.jpg}{}
+
+The \href{http://en.cppreference.com/w/cpp/container/queue}{std::queue} follows the FIFO principle (First In First Out). The queue que, which needs the header <queue>, has four special member functions.
+
+With que.push(e), you can insert an element e at the end of the queue and remove the first element from the queue with que.pop(). que.back() enables you to refer to the last component of the que, que.front() to the first element in the que. std::queue has similar characteristics as std::stack. So you can compare std::queue instances and get their sizes. The queue operations have constant complexity.
+
+\filename{std::queue}
+
+\begin{cpp}
+// queue.cpp
+...
+#include <queue>
+...
+std::queue<int> myQueue;
+
+std::cout << myQueue.empty() << '\n'; // true
+std::cout << myQueue.size() << '\n'; // 0
+
+myQueue.push(1);
+myQueue.push(2);
+myQueue.push(3);
+std::cout << myQueue.back() << '\n'; // 3
+std::cout << myQueue.front() << '\n'; // 1
+
+while (!myQueue.empty()){
+	std::cout << myQueue.back() << " ";
+	std::cout << myQueue.front() << " : ";
+	myQueue.pop();
+} // 3 1 : 3 2 : 3 3
+	
+std::cout << myQueue.empty() << '\n'; // true
+std::cout << myQueue.size() << '\n'; // 0
+\end{cpp}
+
+
+\mySamllsection{Priority Queue}
+
+\myGraphic{0.8}{content/chapter6/images/4.jpg}{}
+
+The \href{http://en.cppreference.com/w/cpp/container/priority_queue}{std::priority\_queue} is a reduced std::queue. It needs the header <queue>.
+
+The difference to the std::queue is that their greatest element is always at the top of the priority queue. std::priority\_queue pri uses by default the comparison operator std::less. Similar to std::queue, pri.push(e) inserts a new element e into the priority queue. pri.pop() removes the first element of the pri, but does that with logarithmic complexity. With pri.top(), you can reference the first element in the priority queue, which is the greatest one. The std::priority\_queue knows its size but doesn’t support the comparison operator on their instances.
+
+\filename{std::priority\_queue}
+
+\begin{cpp}
+// priorityQueue.cpp
+...
+#include <queue>
+...
+std::priority_queue<int> myPriorityQueue;
+
+std::cout << myPriorityQueue.empty() << '\n'; // true
+std::cout << myPriorityQueue.size() << '\n'; // 0
+
+myPriorityQueue.push(3);
+myPriorityQueue.push(1);
+myPriorityQueue.push(2);
+std::cout << myPriorityQueue.top() << '\n'; // 3
+
+while (!myPriorityQueue.empty()){
+	std::cout << myPriorityQueue.top() << " ";
+	myPriorityQueue.pop();
+} // 3 2 1
+
+std::cout << myPriorityQueue.empty() << '\n'; // true
+std::cout << myPriorityQueue.size() << '\n'; // 0
+
+std::priority_queue<std::string, std::vector<std::string>,
+					std::greater<std::string>> myPriorityQueue2;
+
+myPriorityQueue2.push("Only");
+myPriorityQueue2.push("for");
+myPriorityQueue2.push("testing");
+myPriorityQueue2.push("purpose");
+myPriorityQueue2.push(".");
+
+while (!myPriorityQueue2.empty()){
+	std::cout << myPriorityQueue2.top() << " ";
+	myPriorityQueue2.pop();
+} // . Only for purpose testing
+\end{cpp}
+
+
+
+
+
+
+
+
+

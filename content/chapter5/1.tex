@@ -1,0 +1,144 @@
+All eight ordered and unordered containers have in common that they associate a key with a value. You can use the key to get the value. To classify the associative containers, you have to answer three simple questions:
+
+\begin{itemize}
+\item 
+Are the keys sorted?
+
+\item 
+Does the key have an associated value?
+
+\item 
+Can a key appear more than once?
+\end{itemize}
+
+The following table with $2^3= 8$ rows gives the answers to the three questions. I answer a fourth question in the table. How fast is the access time of a key in the best case?
+
+
+\begin{center}
+Characteristics for associative containers
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|l|l|l|}
+\hline
+\textbf{Associative Container} & \textbf{Sorted} & \textbf{Associated Value} & \textbf{More Identical Keys} & \textbf{Access Time} \\ \hline
+\endfirsthead
+%
+\endhead
+%
+std::set                 & yes & no  & no  & logarithmic \\ \hline
+std::unordered\_set      & no  & no  & no  & constant    \\ \hline
+std::map                 & yes & yes & no  & logarithmic \\ \hline
+std::unordered\_map      & no  & yes & no  & constant    \\ \hline
+std::multiset            & yes & no  & yes & logarithmic \\ \hline
+std::unordered\_multiset & no  & no  & yes & constant    \\ \hline
+std::multimap            & yes & yes & yes & logarithmic \\ \hline
+std::unordered\_multimap & no  & yes & yes & constant    \\ \hline
+\end{longtable}
+
+Since C++98, C++ has ordered associative containers; with C++11, C++ has, in addition, unordered associative containers. Both classes have a very similar interface. That’s why the following code sample is identical for std::map and std::unordered\_map. To be more precise, the interface of std::unordered\_map is a superset of the interface of std::map. The same holds for the remaining three unordered associative containers. So, porting your code from the ordered to unordered containers is relatively easy.
+
+You can initialize the containers with an initializer list and add new elements with the index operator. To access the first element of the key/value pair p, you have p.first, and for the second element, you have p.second. p.first is the key, and p.second is the associated value of the pair.
+
+\filename{std::map versus std::unordered\_map}
+
+\begin{cpp}
+// orderedUnorderedComparison.cpp
+...
+#include <map>
+#include <unordered_map>
+
+// std::map
+
+std::map<std::string, int> m {{"Dijkstra", 1972}, {"Scott", 1976}};
+m["Ritchie"]= 1983;
+std::cout << m["Ritchie"]; // 1983
+for(auto p : m) std::cout << "{" << p.first << "," << p.second << "}";
+							// {Dijkstra,1972},{Ritchie,1983},{Scott,1976}
+m.erase("Scott");
+for(auto p : m) std::cout << "{" << p.first << "," << p.second << "}";
+								// {Dijkstra,1972},{Ritchie,1983}
+m.clear();
+std::cout << m.size() << '\n'; // 0
+
+// std::unordered_map
+std::unordered_map<std::string, int> um {{"Dijkstra", 1972}, {"Scott", 1976}};
+um["Ritchie"]= 1983;
+std::cout << um["Ritchie"]; // 1983
+for(auto p : um) std::cout << "{" << p.first << "," << p.second << "}";
+								// {Ritchie,1983},{Scott,1976},{Dijkstra,1972}
+um.erase("Scott");
+for(auto p : um) std::cout << "{" << p.first << "," << p.second << "}";
+								// {Ritchie,1983},{Dijkstra,1972}
+
+um.clear();
+std::cout << um.size() << '\n'; // 0
+\end{cpp}
+
+There is a subtle difference between the two program executions: The keys of the std::map are ordered, and the keys of the std::unordered\_map are unordered. The question is: Why do we have such similar containers in C++? I already pointed it out in the table. The answer is typically for C++: performance. The access time to the keys of an unordered associative container is constant and, therefore, independent of the container’s size. If the containers are big enough, the performance difference is significant. Look at the section about the performance.
+
+\mySamllsection{Contains}
+
+The member function associativeContainer.contains(ele) checks if associativeContainer has the element ele.
+
+\filename{Check if an associative container has an element}
+
+\begin{cpp}
+// containsElement.cpp
+...
+template <typename AssozCont>
+bool containsElement5(const AssozCont& assozCont) {
+	return assozCont.contains(5);
+}
+
+std::set<int> mySet{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+std::cout << "containsElement5(mySet): "
+		  << containsElement5(mySet); // true
+
+std::unordered_set<int> myUnordSet{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+std::cout << "containsElement5(myUnordSet): "
+		  << containsElement5(myUnordSet); // true
+
+std::map<int, std::string> myMap{ {1, "red"}, {2, "blue"}, {3, "green"} };
+std::cout << "containsElement5(myMap): "
+		  << containsElement5(myMap); // false
+
+std::unordered_map<int, std::string> myUnordMap{ {1, "red"}, {2, "blue"},
+												 {3, "green"} };
+std::cout << "containsElement5(myUnordMap): "
+		  << containsElement5(myUnordMap); // false
+\end{cpp}
+
+
+\mySamllsection{Insertion and Deletion}
+
+The insertion (insert and emplace) and deletion (erase) of elements in associative containers are similar to the rules of a std::vector. For an associative container that can have a key only once, the insertion fails if the key is already in the container. Additionally, ordered associative containers support a particular function ordAssCont.erase(key), which removes all pairs with the key and returns their number.
+
+\filename{Insertion and Deletion}
+
+\begin{cpp}
+// associativeContainerModify.cpp
+...
+#include <set>
+...
+std::multiset<int> mySet{3, 1, 5, 3, 4, 5, 1, 4, 4, 3, 2, 2, 7, 6, 4, 3, 6};
+
+for (auto s: mySet) std::cout << s << " ";
+	// 1 1 2 2 3 3 3 3 4 4 4 4 5 5 6 6 7
+
+mySet.insert(8);
+std::array<int, 5> myArr{10, 11, 12, 13, 14};
+mySet.insert(myArr.begin(), myArr.begin()+3);
+mySet.insert({22, 21, 20});
+for (auto s: mySet) std::cout << s << " ";
+	// 1 1 2 2 3 3 3 3 4 4 4 4 5 5 6 6 7 10 11 12 20 21 22
+	
+std::cout << mySet.erase(4); // 4
+mySet.erase(mySet.lower_bound(5), mySet.upper_bound(15));
+for (auto s: mySet) std::cout << s << " ";
+	// 1 1 2 2 3 3 3 3 20 21 22
+\end{cpp}
+
+

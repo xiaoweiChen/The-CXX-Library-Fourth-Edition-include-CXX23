@@ -1,0 +1,205 @@
+
+
+\mySamllsection{Overview}
+
+The ordered associative containers std::map and std::multimap associate their key with a value. Both are defined in the header <map>. std::set and std::multiset need the header <set>. This Table gives you the details.
+
+All four ordered containers are parametrized by their type, their allocator, and their comparison function. Depending on the type, the containers have default values for the allocator and the comparison function. The declaration of std::map and std::set shows this very nicely.
+
+
+\begin{cpp}
+template < class key, class val, class Comp= less<key>,
+		   class Alloc= allocator<pair<const key, val> >
+class map;
+
+template < class T, class Comp = less<T>,
+		   class Alloc = allocator<T> >
+class set;
+\end{cpp}
+
+
+The declaration of both associative containers shows that std::map has an associated value. The key and the value are used for the default allocator: allocator<pair<const key, val>{}>. With a little more imagination, you can derive more from the allocator. std::map has pairs of the type std::pair< const key, val>. The associated value val does not matter for the sort criteria: less<key>. All observations also hold for std::multimap and std::multiset.
+
+\mySamllsection{Keys and Values}
+
+There are special rules for the key and the value of an ordered associative container.
+
+The key has to be
+
+\begin{itemize}
+\item 
+sortable (by default <),
+
+\item 
+copyable and moveable.
+\end{itemize}
+
+The value has to be
+
+\begin{itemize}
+\item 
+default constructible,
+
+\item 
+copyable and moveable.
+\end{itemize}
+
+The key associated value builds a pair p to get with the member p.first the value p.second.
+
+\begin{cpp}
+#include <map>
+...
+std::multimap<char, int> multiMap= {{'a', 10}, {'a', 20}, {'b', 30}};
+for (auto p: multiMap) std::cout << "{" << p.first << "," << p.second << "} ";
+				// {a,10} {a,20} {b,30}
+\end{cpp}
+
+\mySamllsection{The Comparison Criterion}
+
+The default comparison criterion of the ordered associative containers is std::less. If you want to use a user-defined type as the key, you must overload the operator <. It’s sufficient to overload the operator < for your data type because the C++ runtime compares, with the help of the relation (! (elem1<elem2 || elem2<elem1)), two elements for equality.
+
+You can specify the sorting criterion as a template argument. This sorting criterion must implement a strict weak ordering.
+
+\begin{myNotic}{Strict weak ordering}
+Strict weak ordering for a sorting criterion on a set S is given if the following requirements are met.
+
+\begin{itemize}
+\item 
+For s from S has to hold, that’s < s‘ is impossible.
+
+\item 
+For all s1 and s2 from S must hold: If s1 < s2, then s2 < s1 is impossible.
+
+\item 
+For all s1, s2 and s3 with s1 < s2 and s2 < s3 must hold: s1 < s3.
+
+\item 
+For all s1, s2 and s3 with s1 not comparable with s2 and s2 not comparable with s3 must hold: s1 is not comparable with s3.
+\end{itemize}
+\end{myNotic}
+
+In contrast to the definition of strict weak ordering, using a comparison criterion with strict weak ordering is much simpler for a std::map.
+
+\begin{cpp}
+#include <map>
+...
+std::map<int, std::string, std::greater<int>> int2Str{
+	{5, "five"}, {1, "one"}, {4, "four"}, {3, "three"},
+	{2, "two"}, {7, "seven"}, {6, "six"} };
+for (auto p: int2Str) std::cout << "{" << p.first << "," << p.second << "} ";
+	// {7,seven} {6,six} {5,five} {4,four} {3,three} {2,two} {1,one}
+\end{cpp}
+
+\mySamllsection{Special Search Functions}
+
+Ordered associative containers are optimized for search. So they offer unique search functions.
+
+\begin{center}
+Special search functions of the ordered associative containers
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Search function} & \textbf{Description}                       \\ \hline
+\endfirsthead
+%
+\endhead
+%
+ordAssCont.count(key)    & Returns the number of values with the key. \\ \hline
+ordAssCont.find(key)         & Returns the iterator of key in ordAssCont. If there is no key in ordAssCont, it returns ordAssCont.end(). \\ \hline
+ordAssCont.lower\_bound(key) & Returns the iterator to the first key in ordAssCont in which key would be inserted.                       \\ \hline
+ordAssCont.upper\_bound(key) & Returns the last position of key in ordAssCont where key would be inserted.                               \\ \hline
+ordAssCont.equal\_range(key) & Returns the range ordAssCont.lower\_bound(key) and ordAssCont.upper\_bound(key) in a std::pair.           \\ \hline
+\end{longtable}
+
+Now, the application of the particular search functions.
+
+\filename{Search in an associative container}
+
+\begin{cpp}
+// associativeContainerSearch.cpp
+...
+#include <set>
+...
+std::multiset<int> mySet{3, 1, 5, 3, 4, 5, 1, 4, 4, 3, 2, 2, 7, 6, 4, 3, 6};
+
+for (auto s: mySet) std::cout << s << " ";
+	// 1 1 2 2 3 3 3 3 4 4 4 4 5 5 6 6 7
+	
+mySet.erase(mySet.lower_bound(4), mySet.upper_bound(4));
+for (auto s: mySet) std::cout << s << " ";
+	// 1 1 2 2 3 3 3 3 5 5 6 6 7
+std::cout << mySet.count(3) << '\n'; // 4
+std::cout << *mySet.find(3) << '\n'; // 3
+std::cout << *mySet.lower_bound(3) << '\n'; // 3
+std::cout << *mySet.upper_bound(3) << '\n'; // 5
+auto pair= mySet.equal_range(3);
+std::cout << "(" << *pair.first << "," << *pair.second << ")"; // (3,5)
+\end{cpp}
+
+
+\mySamllsection{std::map}
+
+\myGraphic{0.8}{content/chapter5/images/2.jpg}{}
+
+\href{http://en.cppreference.com/w/cpp/container/map}{std::map} is the most frequently used associative container. The reason is simple. It combines an often sufficient enough performance with a very convenient interface. You can access its elements via the index operator. If the key doesn’t exist, std:map creates a key/value pair. For the value, the default constructor is used.
+
+\begin{myTip}{Consider std::map as a generalization of std::vector}
+Often, std::map is called an associative array, because std::map supports the index operator like a sequence container. The subtle difference is that its index is not restricted to a number like in the case of std::vector. Its index can be almost any arbitrary type.
+
+The same observations hold for its namesake std::unordered\_map.
+\end{myTip}
+
+In addition to the index operator, std::map supports the at member function. The access via at is checked. So if the request key doesn’t exist in the std::map, a std::out\_of\_range exception is thrown.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

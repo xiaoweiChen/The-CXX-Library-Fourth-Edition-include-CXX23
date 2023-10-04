@@ -1,0 +1,54 @@
+The four associative containers std::flat\_map, std::flat\_multimap, std::flat\_set, and std::set\_multiset in C++23 are a drop-in replacement for the ordered associative containers std::map, std::multimap, std::set, and std::multiset. To be more precise, a std::flat\_map is a drop-in replacement for a std::map, a std::flat\_multimap is a drop-in replacement for a std::multimap, and so forth.
+
+The flat-ordered associative containers require separate sequence containers for their keys and values. This sequence container must support a random access iterator. By default, a std::vector is used, but a std::array, or a std::deque is also valid.
+
+The following code snippet shows the declaration of std::flat\_map, and std::flat\_set.
+
+
+\begin{cpp}
+template<class Key, class T,
+	class Compare = less<Key>,
+	class KeyContainer = vector<Key>, class MappedContainer = vector<T>>
+class flat_map;
+
+template<class Key,
+	class Compare = less<Key>,
+	class KeyContainer = vector<Key>>
+class flat_set;
+\end{cpp}
+
+The flat-ordered associative containers provide different time and space complexities than the ordered associative containers. The flat variants require less memory and are faster to read than their nonflat-ordered pendants. The following comparison goes more into the details about the flat and the non-flat-ordered associative containers.
+
+
+\begin{myTip}{Comparison of the Flat Ordered Associative Container and their Non-Flat Pendants}
+
+The flat variants provide better reading performance, such as iterating through the container, and require less memory. They also need that the elements must either be copyable or moveable. The flat variants support a random access iterator.
+
+The non-flat variants improve writing performance if you insert or delete elements. Additionally, the non-flat variants guarantee that the iterators stay valid after inserting or deleting elements. The non-flat variants support a bidirectional iterator.
+\end{myTip}
+
+
+\mySamllsection{std::sorted\_unique}
+
+You can use the constant std::sorted\_unique in a constructor call or in the member functions insert to specify that the elements are already sorted. This improves the performance of creating a flat-ordered associative container or inserting elements.
+
+The following code snippet creates a std::flat\_map from a sorted initializer list \{1, 2, 3, 4, 5\}.
+
+\begin{cpp}
+std::flat_map myFlatMap = { std::sorted_unique, {1, 2, 3, 4, 5}, {10, 11, 1, 5, -4} };
+\end{cpp}
+
+Using the constant std::sorted\_unique with non-sorted elements is undefined behavior.
+
+
+
+
+
+
+
+
+
+
+
+
+
