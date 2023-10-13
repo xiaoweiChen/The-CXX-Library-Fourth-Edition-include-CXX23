@@ -1,0 +1,84 @@
+At first, don’t call them \href{https://en.wikipedia.org/wiki/Functor}{functors}. That’s a well-defined term from the category theory.
+
+\href{http://en.cppreference.com/w/cpp/utility/functional}{Function objects} are objects that behave like functions. As function objects are objects, they can have attributes and, therefore, state. They achieve this due to their call operator being implemented.
+
+\begin{cpp}
+struct Square{
+	void operator()(int& i){i= i*i;}
+};
+
+std::vector<int> myVec{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+
+std::for_each(myVec.begin(), myVec.end(), Square());
+
+for (auto v: myVec) std::cout << v << " "; // 1 4 9 16 25 36 49 64 81 100
+\end{cpp}
+
+\begin{myTip}{Instantiate function objects to use them}
+	
+It’s a common error that only the name of the function object (Square) and not the instance of the function object (Square()) is used in an algorithm: std::for\_each(myVec.begin(), myVec.end(), Square). That’s, of course, an error. You have to use the instance: std::for\_each(myVec.begin(), myVec.end(), Square())
+\end{myTip}
+
+\mySamllsection{Predefined Function Objects}
+
+C++ offers a bunch of predefined function objects. They need the header <functional>. These predefined function objects are beneficial to change the default behavior of the containers. For example, the ordered associative containers’ keys are by default sorted using the predefined function object std::less. But you may want to use std::greater instead:
+
+\begin{cpp}
+std::map<int, std::string> myDefaultMap; // std::less<int>
+std::map<int, std::string, std::greater<int> mySpecialMap>; // std::greater<int>
+\end{cpp}
+
+There are function objects in the Standard Template Library for arithmetic, logic, bitwise operations, negation, and comparison.
+
+\begin{center}
+Predefined function objects
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Function object for} &
+\textbf{Representative} \\ \hline
+\endfirsthead
+%
+\endhead
+%
+Negation &
+std::negate\textless{}T\textgreater{}() \\ \hline
+Arithmetic &
+\begin{tabular}[c]{@{}l@{}}std::plus\textless{}T\textgreater{}(), std::minus\textless{}T\textgreater{}()\\ std::multiplies\textless{}T\textgreater{}(), std::divides\textless{}T\textgreater{}()\\ std::modulus\textless{}T\textgreater{}()\end{tabular} \\ \hline
+Comparison &
+\begin{tabular}[c]{@{}l@{}}std::equal\_to\textless{}T\textgreater{}(), std::not\_equal\_to\textless{}T\textgreater{}()\\ std::less\textless{}T\textgreater{}(), std::greater\textless{}T\textgreater{}()\\ std::less\_equal\textless{}T\textgreater{}(), std::greater\_equal\textless{}T\textgreater{}()\end{tabular} \\ \hline
+Logical &
+\begin{tabular}[c]{@{}l@{}}std::logical\_not\textless{}T\textgreater{}()\\ std::logincl\_and\textless{}T\textgreater{}(), std::logical\_or\textless{}T\textgreater{}()\end{tabular} \\ \hline
+Bitwise &
+\begin{tabular}[c]{@{}l@{}}std::bit\_and\textless{}T\textgreater{}(), std::bit\_or\textless{}T\textgreater{}()\\ std::bit\_xor\textless{}T\textgreater{}()\end{tabular} \\ \hline
+\end{longtable}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

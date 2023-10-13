@@ -1,0 +1,66 @@
+You must keep a few rules in your head to use the algorithms.
+
+The algorithms are defined in various headers.
+
+<algorithm>: Contains the general algorithms.
+<numeric> : Contains the numeric algorithms.
+
+Many algorithms have the name suffix \_if and \_copy.
+
+\_if: The algorithm can be parametrized by a predicate.
+\_copy: The algorithm copies its elements in another range.
+
+Algorithms like auto num= std::count(InpIt first, InpIt last, const T\& val) return the number of elements equal to val. num is of type iterator\_traits<InpIt>::difference\_type. You have the guarantee that num is sufficient to hold the result. Because of the automatic return type deduction with auto, the compiler will give you the right types.
+
+\begin{myTip}{If the container uses an additional range, it has to be valid}
+
+The algorithm std::copy\_if uses an iterator to the beginning of its destination range. This destination range has to be valid.
+\end{myTip}
+
+\begin{myNotic}{Naming conventions for the algorithms}
+
+I use a few naming conventions for the type of arguments and the algorithms’ return type to make them easier to read.
+
+\begin{center}
+Signature of the algorithms
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Name} & \textbf{Description}   \\ \hline
+\endfirsthead
+%
+\endhead
+%
+InIt          & Input iterator         \\ \hline
+FedIt         & Forward iterator       \\ \hline
+BiIt          & Bidirectional iterator \\ \hline
+UnFunc        & Unary callable         \\ \hline
+BiFunc        & Binary callable        \\ \hline
+UnPre         & Unary predicate        \\ \hline
+BiPre         & Binary predicate       \\ \hline
+Search  & The searcher encapsulates the search algorithm.                                    \\ \hline
+ValType & From the input range, automatically deduced value type.                            \\ \hline
+Num     & typename std::iterator\_traits\textless{}ForwardIt\textgreater{}::difference\_type \\ \hline
+ExePol        & Execution policy       \\ \hline
+\end{longtable}
+
+\end{myNotic}
+
+\mySamllsection{Iterators are the Glue}
+
+Iterators define the range of the container on which the algorithms work. They describe a half-open range. In a half-open range, the begin iterator points to the beginning, and the end iterator points to one position after the range.
+
+The iterators can be categorized based on their capabilities. See the Categories section of the Iterators chapter. The algorithms provide conditions to the iterators. Like in the case of std::rotate, most of the time, a forward iterator is sufficient. But that doesn’t hold for std::reverse. std::reverse requires a bidirectional iterator.
+
+
+
+
+
+
+
+
+

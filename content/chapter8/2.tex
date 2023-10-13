@@ -1,0 +1,59 @@
+Each container generates its suitable iterator on request. For example, an std::unordered\_map generates constant and non-constant forward iterators.
+
+\begin{cpp}
+std::unordered_map<std::string, int>::iterator unMapIt= unordMap.begin();
+std::unordered_map<std::string, int>::iterator unMapIt= unordMap.end();
+
+std::unordered_map<std::string, int>::const_iterator unMapIt= unordMap.cbegin();
+std::unordered_map<std::string, int>::const_iterator unMapIt= unordMap.cend();
+\end{cpp}
+
+In addition, std::map supports the backward iterators:
+
+\begin{cpp}
+std::map<std::string, int>::reverse_iterator mapIt= map.rbegin();
+std::map<std::string, int>::reverse_iterator mapIt= map.rend();
+
+std::map<std::string, int>::const_reverse_iterator mapIt= map.crbegin();
+std::map<std::string, int>::const_reverse_iterator mapIt= map.crend();
+\end{cpp}
+
+\begin{myTip}{Use auto for iterator definition}
+Iterator definition is very labor intensive. The automatic type deduction with auto reduces the writing to the bare minimum.
+
+\begin{cpp}
+std::map<std::string, int>::const_reverse_iterator
+mapIt= map.crbegin();
+auto mapIt2= map.crbegin();
+\end{cpp}
+\end{myTip}
+
+\filename{Iterator creation}
+
+\begin{cpp}
+// iteratorCreation.cpp
+...
+using namespace std;
+...
+map<string, int> myMap{{"Rainer", 1966}, {"Beatrix", 1966}, {"Juliette", 1997},
+						{"Marius", 1999}};
+	
+auto endIt= myMap.end();
+for (auto mapIt= myMap.begin(); mapIt != endIt; ++mapIt)
+	cout << "{" << mapIt->first << "," << mapIt->second << "}";
+		// {Beatrix,1966},{Juliette,1997},{Marius,1999},{Rainer,1966}
+
+vector<int> myVec{1, 2, 3, 4, 5, 6, 7, 8, 9};
+vector<int>::const_iterator vecEndIt= myVec.end();
+vector<int>::iterator vecIt;
+for (vecIt= myVec.begin(); vecIt != vecEndIt; ++vecIt) cout << *vecIt << " ";
+	// 1 2 3 4 5 6 7 8 9
+
+vector<int>::const_reverse_iterator vecEndRevIt= myVec.rend();
+vector<int>::reverse_iterator revIt;
+for (revIt= myVec.rbegin(); revIt != vecEndRevIt; ++revIt) cout << *revIt << " ";
+	// 9 8 7 6 5 4 3 2 1
+\end{cpp}
+
+
+

@@ -1,0 +1,213 @@
+A std::mdspan is a non-owning multidimensional view of a contiguous sequence of objects. Often, this multidimensional view is called a multidimensional array. The contiguous sequence of objects can be a plain C-array, a pointer with a size, a std::array, a std::vector, or a std::string.
+
+The number of dimensions and the size of each dimension determine the shape of the multidimensional array. The number of dimensions is called rank, and the size of each dimension extension. The size of the std::mdspan is the product of all dimensions that are not 0. You can access the elements of a std::mdspan using the multidimensional index operator [].
+
+Each dimension of a std::mdspan can have a static extent or a dynamic extent. static extent means that its length is specified at compile time; dynamic extent means that its length is specified at run time.
+
+\filename{Definition of std::mdspan}
+
+\begin{cpp}
+template<
+	class T,
+	class Extents,
+	class LayoutPolicy = std::layout_right,
+	class AccessorPolicy = std::default_accessor<T>
+> class mdspan;
+\end{cpp}
+
+\begin{itemize}
+\item 
+T: the contiguous sequence of objects
+
+\item 
+Extents: specifies the number of dimensions as their size; each dimension can have a static extent or a dynamic extent
+
+\item 
+LayoutPolicy: specifies the layout policy to access the underlying memory
+
+\item 
+AccessorPolicy: specifies how the underlying elements are referenced
+\end{itemize}
+
+Thanks to \href{https://en.cppreference.com/w/cpp/language/class_template_argument_deduction}{class template argument deduction (CTAG)} in C++17, the compiler can often automatically deduce the template arguments.
+
+\filename{Two 2-dimensional arrays}
+
+\begin{cpp}
+// mdspan.cpp
+
+#include <mdspan>
+#include <iostream>
+#include <vector>
+
+int main() {
+
+	std::vector myVec{1, 2, 3, 4, 5, 6, 7, 8};
+	
+	std::mdspan m{myVec.data(), 2, 4};
+	std::cout << "m.rank(): " << m.rank() << '\n';
+	
+	for (std::size_t i = 0; i < m.extent(0); ++i) {
+		for (std::size_t j = 0; j < m.extent(1); ++j) {
+			std::cout << m[i, j] << ' ';
+		}
+		std::cout << '\n';
+	}
+	
+	std::cout << '\n';
+	
+	std::mdspan m2{myVec.data(), 4, 2};
+	std::cout << "m2.rank(): " << m2.rank() << '\n';
+	for (std::size_t i = 0; i < m2.extent(0); ++i) {
+		for (std::size_t j = 0; j < m2.extent(1); ++j) {
+			std::cout << m2[i, j] << ' ';
+		}
+		std::cout << '\n';
+	}
+
+}
+\end{cpp}
+
+I apply class template argument deduction three times in this example. Line 9 uses it for a std::vector, and lines 11 and 23 for a std::mdspan. The first 2-dimensional array m has a shape of (2, 4), the second one m2 a shape of (4, 2). Lines 12 and 24 display the ranks of both std::mdspan. Thanks to the extent of each dimension (lines 14 and 15), and the index operator in line 16, it is straightforward to iterate through multidimensional arrays.
+
+\myGraphic{0.4}{content/chapter7/images/4.jpg}{Two 2-dimensional arrays}
+
+If your multidimensional array should have a static extent, you have to specify the template arguments.
+
+\filename{Explicitly specifying the template arguments of a std::mdspan}
+
+\begin{cpp}
+// staticDynamicExtent.cpp
+
+#include <mdspan>
+...
+
+std::mdspan<int, std::extents<std::size_t, 2, 4>> m{myVec.data()}; // (1)
+std::cout << "m.rank(): " << m.rank() << '\n';
+
+for (std::size_t i = 0; i < m.extent(0); ++i) {
+	for (std::size_t j = 0; j < m.extent(1); ++j) {
+		std::cout << m[i, j] << ' ';
+	}
+	std::cout << '\n';
+}
+
+std::mdspan<int, std::extents<std::size_t, std::dynamic_extent, std::dynamic_extent>>
+				m2{myVec.data(), 4, 2}; // (2)
+std::cout << "m2.rank(): " << m2.rank() << '\n';
+
+for (std::size_t i = 0; i < m2.extent(0); ++i) {
+	for (std::size_t j = 0; j < m2.extent(1); ++j) {
+		std::cout << m2[i, j] << ' ';
+	}
+	std::cout << '\n';
+}
+\end{cpp}
+
+he program staticDynamicExtent.cpp is based on the previous program mdspan.cpp, and produces the same output. The difference is, that the std::mdspan m (1) has a static extent. For completeness, std::mdspan m2 (2) has a dynamic extent. Consequentially, the shape of m is specified with template arguments, but the shape of m2 is with function arguments.
+
+A std::mdspan allows you to specify the layout policy to access the underlying memory. By default, std::layout\_right (C, C++ or \href{https://en.wikipedia.org/wiki/Python_(programming_language)}{Python} style) is used, but you can also specify std::layout\_left (\href{https://en.wikipedia.org/wiki/Fortran}{Fortran} or \href{https://en.wikipedia.org/wiki/MATLAB}{MATLAB} style). The following graphic exemplifies, in which sequence the elements of the std::mdspan are accessed.
+
+\myGraphic{0.6}{content/chapter7/images/5.jpg}{std::layout\_right and std::layout\_left}
+
+Traversing two std::mdspan with the layout policy std::layout\_right and std::layout\_left shows the difference.
+
+\filename{Using a std::mdspan with std::layout\_right and std::layout\_left}
+
+\begin{cpp}
+// mdspanLayout.cpp
+...
+#include <mdspan>
+
+std::vector myVec{1, 2, 3, 4, 5, 6, 7, 8};
+
+std::mdspan<int, // (1)
+	std::extents<std::size_t, std::dynamic_extent, std::dynamic_extent>,
+	std::layout_right> m2{myVec.data(), 4, 2};
+
+std::cout << "m.rank(): " << m.rank() << '\n';
+
+for (std::size_t i = 0; i < m.extent(0); ++i) {
+	for (std::size_t j = 0; j < m.extent(1); ++j) {
+		std::cout << m[i, j] << ' ';
+	}
+	std::cout << '\n';
+}
+
+std::cout << '\n';
+
+std::mdspan<int,
+	std::extents<std::size_t, std::dynamic_extent, std::dynamic_extent>,
+	std::layout_left> m2{myVec.data(), 4, 2}; // (2)
+std::cout << "m2.rank(): " << m2.rank() << '\n';
+
+for (std::size_t i = 0; i < m2.extent(0); ++i) {
+	for (std::size_t j = 0; j < m2.extent(1); ++j) {
+		std::cout << m2[i, j] << ' ';
+	}
+	std::cout << '\n';
+}
+\end{cpp}
+
+The std::mdspan m uses std::layout\_right (1), the other std::mdspan std::layout\_left (1). Thanks to class template argument deduction, the constructor call of std::mdspan (1) needs no explicit template arguments and is equivalent to the following expression: std::mdspan m2\{myVec.data(), 4, 2\}.
+
+The output of the program shows the two different layout strategies.
+
+\myGraphic{0.4}{content/chapter7/images/6.jpg}{std::mdspan with std::layout\_left}
+
+The following table presents an overview of std::mdspan’s interface.
+
+\begin{center}
+Functions of a std::mdspan md
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Function} & \textbf{Descrption}                                       \\ \hline
+\endfirsthead
+%
+\endhead
+%
+md{[}ind{]}       & Access the ind-th element.                                \\ \hline
+md.size           & Returns the size of the mltidimensional array.            \\ \hline
+md.rank           & Returns the dimension of the multidimensional array.      \\ \hline
+md.extents(i)     & Returns the size of the i-th dimension.                   \\ \hline
+md.data\_handle   & Returns a pointer to the contiguous sequence of elements. \\ \hline
+\end{longtable}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

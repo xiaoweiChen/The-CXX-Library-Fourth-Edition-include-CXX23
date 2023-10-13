@@ -1,0 +1,13 @@
+\myGraphic{0.6}{content/chapter9/images/1.jpg}{Cippi slides down the slide}
+
+
+\begin{myNotic}{This chapter is intentionally not exhaustive}
+This book is about the C++ Standard library. Therefore, I will not go into the details of callable units. I provide as much information as necessary to use them in the Standard Template Library algorithms correctly. An exhaustive discussion of callable units should be part of a book about the C++ core language.
+\end{myNotic}
+
+Many STL algorithms and containers can be parametrized with callable units (short callable). A callable is something that behaves like a function. Not only are these functions but also function objects and lambda functions. Predicates are special functions that return a boolean as a result. If a predicate has one argument, it’s called a unary predicate. If a predicate has two arguments, it’s called a binary predicate. The same holds for functions. A function taking one argument is a unary function; a function taking two arguments is a binary function.
+
+\begin{myTip}{To change the elements of a container, your algorithm should take them by reference}
+	
+Callables can receive their arguments by value or reference from their container. To modify the container elements, they must address them directly, so the callable must get them by reference.
+\end{myTip}

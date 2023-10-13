@@ -1,0 +1,84 @@
+The global functions std::begin, std::end, std::prev, std::next, std::distance, and std::advance make your handling of the iterators a lot easier. Only the function std::prev requires a bidirectional iterator. All functions need the header <iterator>. The table gives you an overview.
+
+\begin{center}
+Useful functions for iterators
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Global function} & \textbf{Description}                                      \\ \hline
+\endfirsthead
+%
+\endhead
+%
+std::begin(cont)         & Returns a begin iterator to the container cont.           \\ \hline
+std::end(cont)           & Returns an end iterator to the container cont.            \\ \hline
+std::rbegin(cont)        & Returns a reverse begin iterator to the container cont.   \\ \hline
+std::rend(cont)          & Returns a reverse end iterator to the container cont.     \\ \hline
+std::cbegin(cont)        & Returns a constant begin iterator to the container cont.  \\ \hline
+std::cend(cont)          & Returns a constant end iterator to the containter cont.   \\ \hline
+std::crbegin(cont)      & Returns a reverse constant begin iterator to the container cont. \\ \hline
+std::crend(cont)        & Returns a reverse constant end iterator to the container cont.   \\ \hline
+std::prev(it)            & Returns an iterator, which points to a position before it \\ \hline
+std::next(it)            & Returns an iterator, which points to a position after it. \\ \hline
+std::distance(fir, sec) & Returns the number of elements between fir and sec.              \\ \hline
+std::advance(it, n)      & Puts the iterator it n positions further.                 \\ \hline
+\end{longtable}
+
+Now, here is the application of the valuable functions.
+
+
+\filename{Helper functions for iterators}
+
+\begin{cpp}
+// iteratorUtilities.cpp
+...
+#include <iterator>
+...
+using std::cout;
+
+std::unordered_map<std::string, int> myMap{{"Rainer", 1966}, {"Beatrix", 1966},
+											{"Juliette", 1997}, {"Marius", 1999}};
+	
+for (auto m: myMap) cout << "{" << m.first << "," << m.second << "} ";
+	// {Juliette,1997},{Marius,1999},{Beatrix,1966},{Rainer,1966}
+	
+auto mapItBegin= std::begin(myMap);
+cout << mapItBegin->first << " " << mapItBegin->second; // Juliette 1997
+
+auto mapIt= std::next(mapItBegin);
+cout << mapIt->first << " " << mapIt->second; // Marius 1999
+cout << std::distance(mapItBegin, mapIt); // 1
+
+std::array<int, 10> myArr{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+for (auto a: myArr) std::cout << a << " "; // 0 1 2 3 4 5 6 7 8 9
+
+auto arrItEnd= std::end(myArr);
+auto arrIt= std::prev(arrItEnd);
+
+cout << *arrIt << '\n'; // 9
+
+std::advance(arrIt, -5);
+cout << *arrIt; // 4
+\end{cpp}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

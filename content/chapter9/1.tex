@@ -1,0 +1,15 @@
+Functions are the simplest callables. They can have - apart from static variables - no state. Because the definition of a function is often widely separated from its use or even in a different translation unit, the compiler has fewer opportunities to optimize the resulting code.
+
+\begin{cpp}
+void square(int& i){ i = i*i; }
+std::vector<int> myVec{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+
+std::for_each(myVec.begin(), myVec.end(), square);
+for (auto v: myVec) std::cout << v << " "; // 1 4 9 16 25 36 49 64 81 100
+\end{cpp}
+
+
+
+
+
+

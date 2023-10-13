@@ -1,0 +1,129 @@
+A std::span stands for an object that refers to a contiguous sequence of objects. A std::span, sometimes also called a view, is never an owner. This contiguous sequence of objects can be a plain C-array, a pointer with a size, a std::array, astd::vector, or a std::string. You can also access subsequences.
+
+\begin{myTip}{std::span does not decay}
+	
+When you invoke a function taking a C-array, decay occurs. The function takes the Carray via a pointer to its first element. The C-array to pointer conversion is error-prone because all length information to the C-array is lost.
+
+In contrast, a std::span knows its length.
+
+\begin{cpp}
+// copySpanArray.cpp
+...
+#include <span>
+
+template <typename T>
+void copy_n(const T* p, T* q, int n){}
+
+template <typename T>
+void copy(std::span<const T> src, std::span<T> des){}
+
+int arr1[] = {1, 2, 3};
+int arr2[] = {3, 4, 5};
+
+copy_n(arr1, arr2, 3); // (1)
+copy<int>(arr1, arr2); // (2)
+\end{cpp}
+
+In contrast to the C-array (1), a function taking a C-array via a std::span (2) does not need an explicit argument for its length.
+\end{myTip}
+
+A std::span can have a static extent or a dynamic extent. A typical implementation of std::span with a dynamic extent holds a pointer to its first element and length. By default, std::span has a dynamic extent:
+
+\filename{Definition of std::span}
+
+\begin{cpp}
+template <typename T, std::size_t Extent = std::dynamic_extent>
+class span;
+\end{cpp}
+
+The following table presents the functions of a std::span.
+
+\begin{center}
+Functions of a std::span sp
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Function} & \textbf{Description}                                \\ \hline
+\endfirsthead
+%
+\endhead
+%
+sp.front()        & Access the first element.                           \\ \hline
+sp.back()         & Access the last element.                            \\ \hline
+sp{[}i{]}         & Access the i-th element.                            \\ \hline
+sp.data()         & Returns a pointer to the beginning of the sequence. \\ \hline
+sp.size\_bytes()  & Returns the size of the sequence in bytes.          \\ \hline
+sp.empty()        & Returns true if the sequence is empty.              \\ \hline
+\begin{tabular}[c]{@{}l@{}}sp.first\textless{}count\textgreater{}()\\ sp.first(count)\end{tabular} &
+Returns a subspan consisting of the first count elements of the sequence. \\ \hline
+\begin{tabular}[c]{@{}l@{}}sp.last\textless{}count\textgreater{}()\\ sp.last(count)\end{tabular} &
+Returns a subspan consisting of the last count elements of the sequence. \\ \hline
+\begin{tabular}[c]{@{}l@{}}sp.subspan\textless{}fist, count\textgreater{}()\\ sp.subspan(frist, count)\end{tabular} &
+Returns a subspan consisting of count elements starting at first. \\ \hline
+\end{longtable}
+
+
+\filename{std::span taking different arguments}
+
+\begin{cpp}
+// printSpan.cpp
+...
+#include <span>
+
+void printMe(std::span<int> container) {
+	std::cout << "container.size(): " << container.size() << '\n';
+	for(auto e : container) std::cout << e << ' ';
+	std::cout << "\n\n";
+}
+std::cout << '\n';
+
+int arr[]{1, 2, 3, 4};
+printMe(arr); // (1)
+
+std::vector vec{1, 2, 3, 4, 5};
+printMe(vec); // (2)
+
+std::array arr2{1, 2, 3, 4, 5, 6};
+printMe(arr2); // (3)
+\end{cpp}
+
+A std::span can be initialized with a C-array, a std::vector (1), or a std::array (2).
+
+
+\myGraphic{0.6}{content/chapter7/images/2.jpg}{Automatic size deduction of a std::span}
+
+\begin{myTip}{Prefer std::string\_view to std::span}
+A std::string is a contiguous sequence of characters. Consequently, you could initialize a std::span with a std::string. You should prefer std::string\_view to std::span because a std::string\_view represents a view of a sequence of characters and not a sequence of objects such as std::span. The interface of a std::string\_view is string-like, but the interface of a std::span is quite generic.
+\end{myTip}
+
+You can modify an entire span or only a subspan. When you modify a span, you modify the referenced objects.
+
+\filename{Modify the objects referenced by a std::span}
+
+\begin{cpp}
+// spanTransform.cpp
+...
+#include <span>
+
+std::vector vec{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+printMe(vec);
+
+std::span span1(vec); // (1)
+std::span span2{span1.subspan(1, span1.size() - 2)}; // (2)
+std::transform(span2.begin(), span2.end(), // (3)
+				span2.begin(),
+				[](int i){ return i * i; });
+				
+printMe(vec);
+printMe(span1);
+\end{cpp}
+
+I defined the function printMe in the previous example quadSpan.cpp. span1 references the std::vector vec (1). In contrast, span2 references only the underlying vec elements, excluding the first and the last element (2). Consequently, mapping each element to its square only addresses those elements (3).
+
+\myGraphic{0.6}{content/chapter7/images/3.jpg}{Modify the objects referenced by a std::span}
+
+

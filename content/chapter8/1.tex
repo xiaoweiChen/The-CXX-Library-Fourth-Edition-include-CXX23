@@ -1,0 +1,71 @@
+Their capabilities can categorize iterators. The category of an iterator depends on the type of container used. C++ has forward, bidirectional, random access, and contiguous iterators. With the forward iterator, you can iterate the container forward, with the bidirectional iterator, in both directions. The random access iterator allows it to directly access an arbitrary element. In particular, the random iterator enables iterator arithmetic and ordering comparisons (e.g.: <). A contiguous iterator is a random access iterator and requires that the elements of the container are stored contiguously in memory.
+
+The table below is a representation of containers and their iterator categories. The bidirectional iterator includes the forward iterator functionalities. The random access iterator includes the forward and the bidirectional iterator functionalities. It and It2 are iterators, n is a natural number.
+
+\begin{center}
+The iterator categories of the container
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|l|}
+\hline
+\textbf{Iterator category} &
+\textbf{Properties} &
+\textbf{Containers} \\ \hline
+\endfirsthead
+%
+\endhead
+%
+Forward iterator &
+\begin{tabular}[c]{@{}l@{}}++It, It++, *It\\ It == It2, It != It2\end{tabular} &
+\begin{tabular}[c]{@{}l@{}}std::unordered\_set\\ std::unordered\_map\\ std::unordered\_multiset\\ std::unordered\_multimap\\ std::forward\_list\end{tabular} \\ \hline
+Bidirectional iterator &
+--It, It-- &
+\begin{tabular}[c]{@{}l@{}}std::set\\ std::map\\ std::multiset\\ std::multimap\\ std::list\end{tabular} \\ \hline
+Random access iterator &
+\begin{tabular}[c]{@{}l@{}}It{[}i{]}\\ It += n, It -= n\\ It+n, It-n\\ n+It\\ It-It2\end{tabular} &
+std::deque \\ \hline
+Contiguous iterator &
+\begin{tabular}[c]{@{}l@{}}It \textless It2, It \textless{}= It2, It \textgreater It2\\ It \textgreater{}= It2\end{tabular} &
+\begin{tabular}[c]{@{}l@{}}std::array\\ std::vector\\ std::string\end{tabular} \\ \hline
+\end{longtable}
+
+The input iterator and the output iterator are special forward iterators: they can read and write their pointed element only once.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

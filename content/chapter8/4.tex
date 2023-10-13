@@ -1,0 +1,136 @@
+Iterator adaptors enable the use of iterators in insert mode or with streams. They need the header <iterator>.
+
+\mySamllsection{Insert iterators}
+
+With the three insert iterators std::front\_inserter, std::back\_inserter and std::inserter, you can insert an element into a container at the beginning, at the end, or an arbitrary position, respectively. The three map their functionality on the container cont underlying member functions. The memory for the elements will automatically be provided.
+
+The table below gives you two pieces of information: Which member function of the containers are internally used and which iterators can be used depends on the container’s type.
+
+\begin{center}
+The three insert iterators
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|l|}
+\hline
+\textbf{Name}             & \textbf{internally used member function} & \textbf{Container}                                             \\ \hline
+\endfirsthead
+%
+\endhead
+%
+std::front\_inserter(val) & cont.push\_front(val)                    & \begin{tabular}[c]{@{}l@{}}std::deque\\ std::list\end{tabular} \\ \hline
+std::back\_inserter(val) & cont.push\_back(val) & \begin{tabular}[c]{@{}l@{}}std::vector\\ std::deque\\ std::list\\ std::string\end{tabular}                       \\ \hline
+std::inserter(val, pos)  & con.insert(pos, val) & \begin{tabular}[c]{@{}l@{}}std::vector\\ std::deque\\ std::list\\ std::string\\ std::map\\ std::set\end{tabular} \\ \hline
+\end{longtable}
+
+
+You can combine the algorithms in the STL with the three insert iterators.
+
+\begin{cpp}
+#include <iterator>
+...
+std::deque<int> deq{5, 6, 7, 10, 11, 12};
+std::vector<int> vec{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+
+std::copy(std::find(vec.begin(), vec.end(), 13),
+			vec.end(), std::back_inserter(deq));
+
+for (auto d: deq) std::cout << d << " ";
+	// 5 6 7 10 11 12 13 14 15
+
+std::copy(std::find(vec.begin(), vec.end(), 8),
+std::find(vec.begin(), vec.end(), 10),
+std::inserter(deq,
+std::find(deq.begin(), deq.end(), 10)));d
+for (auto d: deq) std::cout << d << " ";
+	// 5 6 7 8 9 10 11 12 13 14 15
+	
+std::copy(vec.rbegin()+11, vec.rend(),
+std::front_inserter(deq));
+for (auto d: deq) std::cout << d << " ";
+		// 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+\end{cpp}
+
+\mySamllsection{Stream iterators}
+
+
+Stream iterator adaptors can use streams as a data source or data sink. C++ offers two functions to create istream iterators and two to create ostream iterators. The created istream iterators behave like input iterators, the ostream iterators act like insert iterators.
+
+\begin{center}
+The four stream iterators
+\end{center}
+
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Function}                                         & \textbf{Description}                     \\ \hline
+\endfirsthead
+%
+\endhead
+%
+std::istream\_iterator\textless{}T\textgreater{}          & Creates an end-if-stream iterator.       \\ \hline
+std::istream\_iterator\textless{}T\textgreater{}(istream) & Creates an istream iterator for istream. \\ \hline
+std::ostream\_iterator\textless{}T\textgreater{}(ostream) & Creates an ostream iterator for ostream. \\ \hline
+std::ostream\_iterator\textless{}T\textgreater{}(ostream, delim) & Creates an ostream iterator for ostream with the delimiter delim. \\ \hline
+\end{longtable}
+
+
+Thanks to the stream iterator adapter, you can directly read from or write to a stream.
+
+The following interactive program fragment reads natural numbers from std::cin in an endless loop and pushes them onto the vector myIntVec. If the input is not a natural number, an error in the input stream will occur. All numbers in myIntVec are copied to std::cout, separated by :. Now you can see the result on the console.
+
+\begin{cpp}
+#include <iterator>
+...
+std::vector<int> myIntVec;
+std::istream_iterator<int> myIntStreamReader(std::cin);
+std::istream_iterator<int> myEndIterator;
+
+// Possible input
+// 1
+// 2
+// 3
+// 4
+// z
+while(myIntStreamReader != myEndIterator){
+	myIntVec.push_back(*myIntStreamReader);
+	++myIntStreamReader;
+}
+
+std::copy(myIntVec.begin(), myIntVec.end(),
+			std::ostream_iterator<int>(std::cout, ":"));
+			// 1:2:3:4:
+\end{cpp}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
