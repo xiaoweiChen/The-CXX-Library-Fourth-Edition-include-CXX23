@@ -1,0 +1,338 @@
+Non-modifying algorithms are algorithms for searching and counting elements. However, you can also check properties on ranges, compare ranges, or search for ranges within ranges.
+
+\mySamllsection{Search Elements}
+
+You can search for elements in three different ways.
+
+Returns an element in a range:
+
+\begin{cpp}
+InpIt find(InpIt first, InpI last, const T& val)
+InpIt find(ExePol pol, FwdIt first, FwdIt last, const T& val)
+
+InpIt find_if(InpIt first, InpIt last, UnPred pred)
+InpIt find_if(ExePol pol, FwdIt first, FwdIt last, UnPred pred)
+
+InpIt find_if_not(InpIt first, InpIt last, UnPred pre)
+InpIt find_if_not(ExePol pol, FwdIt first, FwdIt last, UnPred pre)
+\end{cpp}
+
+Returns the first element of a range in a range:
+
+\begin{cpp}
+FwdIt1 find_first_of(InpIt1 first1, InpIt1 last1,
+					 FwdIt2 first2, FwdIt2 last2)
+FwdIt1 find_first_of(ExePol pol, FwdIt1 first1, FwdIt1 last1,
+					 FwdIt2 first2, FwdIt2 last2)
+					 
+FwdIt1 find_first_of(InpIt1 first1, InpIt1 last1,
+					 FwdIt2 first2, FwdIt2 last2, BiPre pre)
+FwdIt1 find_first_of(ExePol pol, FwdIt1 first1, FwdIt1 last1,
+					 FwdIt2 first2, FwdIt2 last2, BiPre pre)
+\end{cpp}
+
+Returns identical, adjacent elements in a range:
+
+\begin{cpp}
+FwdIt adjacent_find(FwdIt first, FwdIt last)
+FwdIt adjacent_find(ExePol pol, FwdIt first, FwdIt last)
+
+FwdIt adjacent_find(FwdIt first, FwdI last, BiPre pre)
+FwdIt adjacent_find(ExePol pol, FwdIt first, FwdI last, BiPre pre)
+\end{cpp}
+
+The algorithms require input or forward iterators as arguments and return an iterator on the element when successfully found. If the search is not successful, they return an end iterator.
+
+\filename{std::find, std::find\_if, std::find\_if\_not, std::find\_of, and std::adjacent\_fint}
+
+\begin{cpp}
+// find.cpp
+...
+#include <algorithm>
+...
+using namespace std;
+
+bool isVowel(char c){
+	string myVowels{"aeiouäöü"};
+	set<char> vowels(myVowels.begin(), myVowels.end());
+	return (vowels.find(c) != vowels.end());
+}
+
+list<char> myCha{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'};
+int cha[]= {'A', 'B', 'C'};
+
+cout << *find(myCha.begin(), myCha.end(), 'g'); // g
+cout << *find_if(myCha.begin(), myCha.end(), isVowel); // a
+cout << *find_if_not(myCha.begin(), myCha.end(), isVowel); // b
+
+auto iter= find_first_of(myCha.begin(), myCha.end(), cha, cha + 3);
+if (iter == myCha.end()) cout << "None of A, B or C."; // None of A, B or C.
+auto iter2= find_first_of(myCha.begin(), myCha.end(), cha, cha+3,
+				[](char a, char b){ return toupper(a) == toupper(b); });
+				
+if (iter2 != myCha.end()) cout << *iter2; // a
+auto iter3= adjacent_find(myCha.begin(), myCha.end());
+if (iter3 == myCha.end()) cout << "No same adjacent chars.";
+										// No same adjacent chars.
+										
+auto iter4= adjacent_find(myCha.begin(), myCha.end(),
+				[](char a, char b){ return isVowel(a) == isVowel(b); });
+if (iter4 != myCha.end()) cout << *iter4; // b
+\end{cpp}
+
+\mySamllsection{Count Elements}
+
+You can count elements with the STL with and without a predicate.
+
+Returns the number of elements:
+
+\begin{cpp}
+Num count(InpIt first, InpIt last, const T& val)
+Num count(ExePol pol, FwdIt first, FwdIt last, const T& val)
+
+Num count_if(InpIt first, InpIt last, UnPred pre)
+Num count_if(ExePol pol, FwdIt first, FwdIt last, UnPred pre)
+\end{cpp}
+
+Count algorithms take input iterators as arguments and return the number of elements matching val or the predicate.
+
+\filename{std::count, and std::count\_if}
+
+\begin{cpp}
+// count.cpp
+...
+#include <algorithm>
+...
+std::string str{"abcdabAAAaefaBqeaBCQEaadsfdewAAQAaafbd"};
+std::cout << std::count(str.begin(), str.end(), 'a'); // 9
+std::cout << std::count_if(str.begin(), str.end(),
+							[](char a){ return std::isupper(a); }); // 12
+\end{cpp}
+
+
+\mySamllsection{Check Conditions on Ranges}
+
+The three functions std::all\_of, std::any\_of, and std::none\_of answer the question if all, at least one, or no element of a range satisfies the condition. The functions need as arguments input iterators and a unary predicate and return a boolean.
+
+Checks if all elements of the range satisfy the condition:
+
+\begin{cpp}
+bool all_of(InpIt first, InpIt last, UnPre pre)
+bool all_of(ExePol pol, FwdIt first, FwdIt last, UnPre pre)
+\end{cpp}
+
+Checks if at least one element of the range satisfies the condition:
+
+\begin{cpp}
+bool any_of(InpIt first, InpIt last, UnPre pre)
+bool any_of(ExePol pol, FwdIt first, FwdIt last, UnPre pre)
+\end{cpp}
+
+Checks if no element of the range satisfies the condition:
+
+\begin{cpp}
+bool none_of(InpIt first, InpIt last, UnPre pre)
+bool none_of(ExePol pol, FwdIt first, FwdIt last, UnPre pre)
+\end{cpp}
+
+As promised, the example:
+
+\filename{std::all\_of, std::any\_of, and std::none\_of}
+
+\begin{cpp}
+// allAnyNone.cpp
+...
+#include <algorithm>
+...
+auto even= [](int i){ return i%2; };
+std::vector<int> myVec{1, 2, 3, 4, 5, 6, 7, 8, 9};
+std::cout << std::any_of(myVec.begin(), myVec.end(), even); // true
+std::cout << std::all_of(myVec.begin(), myVec.end(), even); // false
+std::cout << std::none_of(myVec.begin(), myVec.end(), even); // false
+\end{cpp}
+
+\mySamllsection{Compare Ranges}
+
+With std::equal, you can compare ranges on equality. With std::lexicographical\_compare, std:: lexicographical\_compare\_three\_way, and std::mismatch, you discover the smaller range.
+
+Checks if both ranges are equal:
+
+\begin{cpp}
+bool equal(InpIt first1, InpIt last1, InpIt first2)
+bool equal(ExePol pol, FwdIt first1, FwdIt last1, FwdIt first2)
+
+bool equal(InpIt first1, InpIt last1, InpIt first2, BiPre pred)
+bool equal(ExePol pol, FwdIt first1, FwdIt last1, FwdIt first2, BiPre pred)
+
+bool equal(InpIt first1, InpIt last1,
+		   InpIt first2, InpIt last2)
+bool equal(ExePol pol, FwdIt first1, FwdIt last1,
+		   FwdIt first2, FwdIt last2)
+		   
+bool equal(InpIt first1, InpIt last1,
+		   InpIt first2, InpIt last2, BiPre pred)
+bool equal(ExePol pol, FwdIt first1, FwdIt last1,
+		   FwdIt first2, FwdIt last2, BiPre pred)
+\end{cpp}
+
+Checks if the first range is smaller than the second:
+
+\begin{cpp}
+bool lexicographical_compare(InpIt first1, InpIt last1,
+							 InpIt first2, InpIt last2)
+bool lexicographical_compare(ExePol pol, FwdIt first1, FwdIt last1,
+							 FwdIt first2, FwdIt last2)
+							 
+bool lexicographical_compare(InpIt first1, InpIt last1,
+							 InpIt first2, InpIt last2, BiPre pred)
+bool lexicographical_compare(ExePol pol, FwdIt first1, FwdIt last1,
+							 FwdIt first2, FwdIt last2, BiPre pred)
+\end{cpp}
+
+Checks if the first range is smaller than the second. Applies \href{https://en.cppreference.com/w/cpp/language/operator_comparison}{three-way comparison}. It returns the strongest applicable comparison category type.
+
+\begin{cpp}
+bool lexicographical_compare_three_way(InpIt first1, InpIt last1,
+									   InpIt first2, InpIt last2)
+bool lexicographical_compare_three_way(InpIt first1, InpIt last1,
+									   InpIt first2, InpIt last2,
+									   BiPre pre)
+\end{cpp}
+
+Finds the first position at which both ranges are not equal:
+
+\begin{cpp}
+pair<InpIt, InpIt> mismatch(InpIt first1, InpIt last1,
+							InpIt first2)
+pair<InpIt, InpIt> mismatch(ExePol pol, FwdIt first1, FwdIt last1,
+							FwdIt first2)
+							
+pair<InpIt, InpIt> mismatch(InpIt first1, InpIt last1,
+							InpIt first2, BiPre pred)
+pair<InpIt, InpIt> mismatch(ExePol pol, FwdIt first1, FwdIt last2,
+							FwdIt first2, BiPre pred)
+							
+pair<InpIt, InpIt> mismatch(InpIt first1, InpIt last1,
+							InpIt first2, InpIt last2)
+pair<InpIt, InpIt> mismatch(ExePol pol, FwdIt first1, FwdIt last1,
+							FwdIt first2, FwdIt last2)
+							
+pair<InpIt, InpIt> mismatch(InpIt first1, InpIt last1,
+							InpIt first2, InpIt last2, BiPre pred)
+pair<InpIt, InpIt> mismatch(ExePol pol, FwdIt first1, FwdIt last1,
+							FwdIt first2, FwdIt last2, BiPre pred)
+\end{cpp}
+
+The algorithms take input iterators and eventually a binary predicate. std::mismatch returns as its result a pair pa of input iterators. pa.first holds an input iterator for the first element that is not equal. pa.second holds the corresponding input iterator for the second range. If both ranges are identical, you get two end iterators.
+
+\filename{std::equal, std::lexicographical\_compare, and std::mismatch}
+
+\begin{cpp}
+// equalLexicographicalMismatch.cpp
+...
+#include <algorithm>
+...
+using namespace std;
+
+string str1{"Only For Testing Purpose." };
+string str2{"only for testing purpose." };
+cout << equal(str1.begin(), str1.end(), str2.begin()); // false
+cout << equal(str1.begin(), str1.end(), str2.begin(),
+			  [](char c1, char c2){ return toupper(c1) == toupper(c2);} );
+																// true
+
+str1= {"Only for testing Purpose." };
+str2= {"Only for testing purpose." };
+auto pair= mismatch(str1.begin(), str1.end(), str2.begin());
+if (pair.first != str1.end()){
+	cout << distance(str1.begin(), pair.first)
+		 << "at (" << *pair.first << "," << *pair.second << ")"; // 17 at (P,p)
+}
+
+auto pair2= mismatch(str1.begin(), str1.end(), str2.begin(),
+					 [](char c1, char c2){ return toupper(c1) == toupper(c2); });
+if (pair2.first == str1.end()){
+	cout << "str1 and str2 are equal"; // str1 and str2 are equal
+}
+\end{cpp}
+
+\mySamllsection{Search for Ranges within Ranges}
+
+std::search searches for a range in another range from the beginning, std::find\_end from the end. std::search\_n searches for n consecutive elements in the range.
+
+All algorithms take a forward iterator, can be parametrized by a binary predicate, and return an end iterator for the first range, if the search is unsuccessful.
+
+Searches the second range in the first one and returns the position. It starts at the beginning:
+
+\begin{cpp}
+FwdIt1 search(FwdIt1 first1, FwdIt1 last1, FwdIt2 first2, FwdIt2 last2)
+FwdIt1 search(ExePol pol, FwdIt1 first1, FwdIt1 last1,
+			  FwdIt2 first2, FwdIt2 last2)
+			  
+FwdIt1 search(FwdIt1 first1, FwdIt1 last1,
+			  FwdIt2 first2, FwdIt2 last2, BiPre pre)
+FwdIt1 search(ExePol pol, FwdIt1 first1, FwdIt1 last1,
+			  FwdIt2 first2, FwdIt2 last2, BiPre pre)
+			  
+FwdIt1 search(FwdIt1 first, FwdIt last1, Search search)
+\end{cpp}
+
+Searches the second range in the first one and returns the positions. It starts at the end:
+
+\begin{cpp}
+FwdIt1 find_end(FwdIt1 first1, FwdIt1 last1, FwdIt2 first2 FwdIt2 last2)
+FwdIt1 find_end(ExePol pol, FwdIt1 first1, FwdIt1 last1,
+				FwdIt2 first2 FwdIt2 last2)
+				
+FwdIt1 find_end(FwdIt1 first1, FwdIt1 last1, FwdIt2 first2, FwdIt2 last2,
+				BiPre pre)
+FwdIt1 find_end(ExePol pol, FwdIt1 first1, FwdIt1 last1,
+				FwdIt2 first2, FwdIt2 last2, BiPre pre)
+\end{cpp}
+
+Searches count consecutive values in the first range:
+
+\begin{cpp}
+FwdIt search_n(FwdIt first, FwdIt last, Size count, const T& value)
+FwdIt search_n(ExePol pol, FwdIt first, FwdIt last, Size count, const T& value)
+
+FwdIt search_n(FwdIt first, FwdIt last, Size count, const T& value, BiPre pre)
+FwdIt search_n(ExePol pol, FwdIt first,
+			   FwdIt last, Size count, const T& value, BiPre pre)
+\end{cpp}
+
+\begin{myWarning}{The algorithm search\_n is very special}
+	
+The algorithm FwdIt search\_n(FwdIt first, FwdIt last, Size count, const T\& value, BiPre pre) is very special. The binary predicate BiPre uses as the first argument the values of the range and as the second argument the value value.
+\end{myWarning}
+
+\filename{std::find, std::find\_end, and std::search\_n}
+
+\begin{cpp}
+// search.cpp
+...
+#include <algorithm>
+...
+using std::search;
+
+std::array<int, 10> arr1{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+std::array<int, 5> arr2{3, 4, -5, 6, 7};
+
+auto fwdIt= search(arr1.begin(), arr1.end(), arr2.begin(), arr2.end());
+if (fwdIt == arr1.end()) std::cout << "arr2 not in arr1."; // arr2 not in arr1.
+
+auto fwdIt2= search(arr1.begin(), arr1.end(), arr2.begin(), arr2.end(),
+					[](int a, int b){ return std::abs(a) == std::abs(b); });
+if (fwdIt2 != arr1.end()) std::cout << "arr2 at position "
+					<< std::distance(arr1.begin(), fwdIt2) << " in arr1.";
+													// arr2 at position 3 in arr1.
+\end{cpp}
+
+
+
+
+
+
+
+
+
