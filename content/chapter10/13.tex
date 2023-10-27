@@ -1,0 +1,61 @@
+
+std::prev\_permutation and std::next\_permutation return the previous smaller or next greater permutation of the newly ordered range. If a smaller or greater permutation is unavailable, the algorithms return false. Both algorithms need bidirectional iterators. Per default, the predefined sorting criterion std::less is used. If you use your sorting criterion, it has to obey the strict weak ordering. If not, the program has undefined behavior.
+
+Applies the previous permutation to the range:
+
+\begin{cpp}
+bool prev_permutation(BiIt first, BiIt last)
+bool prev_permutation(BiIt first, BiIt last, BiPred pre)
+\end{cpp}
+
+Applies the next permutation to the range:
+
+\begin{cpp}
+bool next_permutation(BiIt first, BiIt last)
+bool next_permutation(BiIt first, BiIt last, BiPred pre)
+\end{cpp}
+
+You can generate with both algorithms all permutations of the range.
+
+\filename{Permutation algorithms}
+
+\begin{cpp}
+// permutation.cpp
+...
+#include <algorithm>
+...
+
+std::vector<int> myInts{1, 2, 3};
+do{
+	for (auto i: myInts) std::cout << i;
+	std::cout << " ";
+} while(std::next_permutation(myInts.begin(), myInts.end()));
+										// 123 132 213 231 312 321
+
+std::reverse(myInts.begin(), myInts.end());
+do{
+	for (auto i: myInts) std::cout << i;
+	std::cout << " ";
+} while(std::prev_permutation(myInts.begin(), myInts.end()));
+										// 321 312 231 213 132 123
+\end{cpp}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

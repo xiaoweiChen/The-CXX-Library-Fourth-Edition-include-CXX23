@@ -1,0 +1,96 @@
+Ranges and views are \href{https://en.cppreference.com/w/cpp/language/constraint}{concepts}. C++20 supports various kinds of ranges: 
+
+\noindent
+\textbf{std::range }
+
+A range is a group of items that you can iterator over. It provides a begin iterator and an end sentinel. End iterators are special sentinels.
+
+There are further refinements of std::range:
+
+\begin{center}
+Refinements of std::range
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Range(namespace std omitted)} & \textbf{Description}                                              \\ \hline
+\endfirsthead
+%
+\endhead
+%
+ranges::input\_range                  & Specifies a range whose iterator type satisfies input\_iterator   \\ \hline
+ranges::output\_range                 & Specifies a range whose iterator type satisfies output\_iterator  \\ \hline
+ranges::forward\_range                & Specifies a range whose iterator type satisfies forward\_iterator \\ \hline
+ranges::bidirectional\_range  & Specifies a range whose iterator type satisfies bidirectional\_iterator  \\ \hline
+ranges::random\_access\_range & Specifies a range whose iterator type satisfies random\_access\_iterator \\ \hline
+ranges::contiguous\_range     & Specifies a range whose iterator tye satisfies contiguous\_iterator      \\ \hline
+\end{longtable}
+
+
+A random\_access\_iterator provides random access to its elements and is implicit a bidirectional\_iterator; a bidirection\_iterator enables iterating in both directions and is implicit a forward\_iterator; a forward\_iterator iteration in one direction. The interface of a contigiuous\_iterator is the same, such as a bidirectional\_iterator interface. The contiguous\_iterator guarantees that the iterator refers to contiguous storage.
+
+\mySamllsection{Sentinel}
+
+The sentinel specifies the end of a range. For the containers of the STL, the end iterator is the sentinel. With C++20, the type of the sentinel can be different from the type of the begin iterator. The following example uses a space as a sentinel.
+
+\filename{Composing of ranges}
+
+\begin{cpp}
+// sentinelSpace.cpp
+...
+#include <algorithm>
+
+...
+
+struct Space {
+bool operator== (auto pos) const {
+	return *pos == ' ';
+}
+
+...
+
+const char* rainerGrimm = "Rainer Grimm";
+std::ranges::for_each(rainerGrimm, Space{}, [] (char c) { std::cout << c; }); // Rainer
+\end{cpp}
+
+Due to the space as sentinel, only Rainer is displayed in the last line.
+
+\mySamllsection{ranges::to}
+
+std::ranges::to is a convenient way in C++23 to construct a container from a range:
+
+\begin{cpp}
+std::vector<int> range(int begin, int end, int stepsize = 1) {
+	auto boundary = [end](int i){ return i < end; };
+	std::vector<int> result = std::ranges::views::iota(begin)
+	| std::views::stride(stepsize)
+	| std::views::take_while(boundary)
+	| std::ranges::to<std::vector>();
+	return result;
+}
+\end{cpp}
+
+The function range creates a std::vector<int> consisting of all elements for begin to end with the stepsize stepsize. begin must be smaller than end.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

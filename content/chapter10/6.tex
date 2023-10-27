@@ -1,0 +1,631 @@
+
+C++ has many algorithms to modify elements and ranges.
+
+\mySamllsection{Copy Elements and Ranges}
+
+You can copy ranges forward with std::copy, backward with std::copy\_backward, and conditionally with std::copy\_if. If you want to copy n elements, you can use std::copy\_n.
+
+Copies the range:
+
+\begin{cpp}
+OutIt copy(InpIt first, InpIt last, OutIt result)
+FwdIt2 copy(ExePol pol, FwdIt first, FwdIt last, FowdIt2 result)
+\end{cpp}
+
+Copies n elements:
+
+\begin{cpp}
+OutIt copy_n(InpIt first, Size n, OutIt result)
+FwdIt2 copy_n(ExePol pol, FwdIt first, Size n, FwdIt2 result)
+\end{cpp}
+
+Copies the elements dependent on the predicate pre.
+
+\begin{cpp}
+OutIt copy_if(InpIt first, InpIt last, OutIt result, UnPre pre)
+FwdIt2 copy_if(ExePol pol, FwdIt first, FwdIt last, FwdIt2 result, UnPre pre)
+\end{cpp}
+
+Copies the range backward:
+
+\begin{cpp}
+BiIt copy_backward(BiIt first, BiIt last, BiIt result)
+\end{cpp}
+
+The algorithms need input iterators and copy their elements to result. They return an end iterator to the destination range.
+
+\filename{Copy elements and ranges}
+
+\begin{cpp}
+// copy.cpp
+...
+#include <algorithm>
+...
+
+std::vector<int> myVec{0, 1, 2, 3, 4, 5, 6, 7, 9};
+std::vector<int> myVec2(10);
+
+std::copy_if(myVec.begin(), myVec.end(), myVec2.begin()+3,
+			 [](int a){ return a%2; });
+
+for (auto v: myVec2) std::cout << v << " "; // 0 0 0 1 3 5 7 9 00
+
+std::string str{"abcdefghijklmnop"};
+std::string str2{"---------------------"};
+
+std::cout << str2; // ---------------------
+std::copy_backward(str.begin(), str.end(), str2.end());
+std::cout << str2; // -----abcdefghijklmnop
+std::cout << str; // abcdefghijklmnop
+
+std::copy_backward(str.begin(), str.begin() + 5, str.end());
+std::cout << str; // abcdefghijkabcde
+\end{cpp}
+
+\mySamllsection{Replace Elements and Ranges}
+
+You have with std::replace, std::replace\_if, std::replace\_copy, and std::replace\_copy\_if four variations to replace elements in a range. The algorithms differ in two aspects. First, does the algorithm need a predicate? Second, does the algorithm copy the elements in the destination range? 
+
+Replaces the old elements in the range with newValue, if the old element has the value old.
+
+\begin{cpp}
+void replace(FwdIt first, FwdIt last, const T& old, const T& newValue)
+void replace(ExePol pol, FwdIt first, FwdIt last, const T& old,
+			 const T& newValue)
+\end{cpp}
+
+Replaces the old elements of the range with newValue, if the old element fulfills the predicate pred:
+
+\begin{cpp}
+void replace_if(FwdIt first, FwdIt last, UnPred pred, const T& newValue)
+void replace_if(ExePol pol, FwdIt first, FwdIt last, UnPred pred,
+			    const T& newValue)
+\end{cpp}
+
+Replaces the old elements in the range with newValue if the old element has the value old. Copies the result to result:
+
+\begin{cpp}
+OutIt replace_copy(InpIt first, InpIt last, OutIt result, const T& old,
+				   const T& newValue)
+FwdIt2 replace_copy(ExePol pol, FwdIt first, FwdIt last,
+					FwdIt2 result, const T& old, const T& newValue)
+\end{cpp}
+
+Replaces the old elements of the range with newValue, if the old element fulfills the predicate pred.
+
+Copies the result to result:
+
+\begin{cpp}
+OutIt replace_copy_if(InpIt first, InpIt last, OutIt result, UnPre pred,
+					  const T& newValue)
+FwdIt2 replace_copy_if(ExePol pol, FwdIt first, FwdIt last,
+					   FwdIt2 result, UnPre pred, const T& newValue)
+\end{cpp}
+
+The algorithms in action.
+
+\filename{Replace elements and ranges}
+
+\begin{cpp}
+// replace.cpp
+...
+#include <algorithm>
+...
+
+std::string str{"Only for testing purpose." };
+std::replace(str.begin(), str.end(), ' ', '1');
+std::cout << str; // Only1for1testing1purpose.
+
+std::replace_if(str.begin(), str.end(), [](char c){ return c == '1'; }, '2');
+std::cout << str; // Only2for2testing2purpose.
+
+std::string str2;
+std::replace_copy(str.begin(), str.end(), std::back_inserter(str2), '2', '3');
+std::cout << str2; // Only3for3testing3purpose.
+
+std::string str3;
+std::replace_copy_if(str2.begin(), str2.end(),
+std::back_inserter(str3), [](char c){ return c == '3'; }, '4');
+std::cout << str3; // Only4for4testing4purpose.
+\end{cpp}
+
+\mySamllsection{Remove Elements and Ranges}
+
+The four variations std::remove, std::remove\_if, std::remove\_copy and std::remove\_copy\_if support two kinds of operations. On the one hand, remove elements with and without a predicate from a range. On the other hand, copy the result of your modification to a new range.
+
+Removes the elements from the range, having the value val:
+
+\begin{cpp}
+FwdIt remove(FwdIt first, FwdIt last, const T& val)
+FwdIt remove(ExePol pol, FwdIt first, FwdIt last, const T& val)
+\end{cpp}
+
+Removes the elements from the range, fulfilling the predicate pred:
+
+\begin{cpp}
+FwdIt remove_if(FwdIt first, FwdIt last, UnPred pred)
+FwdIt remove_if(ExePol pol, FwdIt first, FwdIt last, UnPred pred)
+\end{cpp}
+
+Removes the elements from the range, having the value val. Copies the result to result:
+
+\begin{cpp}
+OutIt remove_copy(InpIt first, InpIt last, OutIt result, const T& val)
+FwdIt2 remove_copy(ExePol pol, FwdIt first, FwdIt last,
+					FwdIt2 result, const T& val)
+\end{cpp}
+
+Removes the elements from the range which fulfill the predicate pred. It copies the result to result.
+
+\begin{cpp}
+OutIt remove_copy_if(InpIt first, InpIt last, OutIt result, UnPre pred)
+FwdIt2 remove_copy_if(ExePol pol, FwdIt first, FwdIt last,
+						FwdIt2 result, UnPre pred)
+\end{cpp}
+
+The algorithms need input iterators for the source range and an output iterator for the destination range. They return, as a result, an end iterator for the destination range.
+
+\begin{myWarning}{Apply the erase-remove idiom}
+	
+The remove variations don’t remove an element from the range. They return the new logical end of the range. You have to adjust the size of the container with the erase-remove idiom.
+
+\filename{Remove elements and ranges}
+
+\begin{cpp}
+// remove.cpp
+...
+#include <algorithm>
+...
+
+std::vector<int> myVec{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+
+auto newIt= std::remove_if(myVec.begin(), myVec.end(),
+							[](int a){ return a%2; });
+for (auto v: myVec) std::cout << v << " "; // 0 2 4 6 8 5 6 7 8 9
+
+myVec.erase(newIt, myVec.end());
+for (auto v: myVec) std::cout << v << " "; // 0 2 4 6 8
+
+std::string str{"Only for Testing Purpose." };
+str.erase( std::remove_if(str.begin(), str.end(),
+			[](char c){ return std::isupper(c); }, str.end() ) );
+std::cout << str << '\n'; // nly for esting urpose.
+\end{cpp}
+\end{myWarning}
+
+\mySamllsection{Fill and Create Ranges}
+
+You can fill a range with std::fill and std::fill\_n; you can generate new elements with std::generate and std::generate\_n.
+
+Fills a range with elements:
+
+\begin{cpp}
+void fill(FwdIt first, FwdIt last, const T& val)
+void fill(ExePol pol, FwdIt first, FwdIt last, const T& val)
+\end{cpp}
+
+Fills a range with n new elements:
+
+\begin{cpp}
+OutIt fill_n(OutIt first, Size n, const T& val)
+FwdIt fill_n(ExePol pol, FwdIt first, Size n, const T& val)
+\end{cpp}
+
+Generates a range with a generator gen:
+
+\begin{cpp}
+void generate(FwdIt first, FwdIt last, Generator gen)
+void generate(ExePol pol, FwdIt first, FwdIt last, Generator gen)
+\end{cpp}
+
+Generates n elements of a range with the generator gen:
+
+\begin{cpp}
+OutIt generate_n(OutIt first, Size n, Generator gen)
+FwdIt generate_n(ExePol pol, FwdIt first, Size n, Generator gen)
+\end{cpp}
+
+The algorithms expect the value val or generator gen as an argument. gen has to be a function taking no argument and returning the new value. The return value of the algorithms std::fill\_n and std::generate\_n is an output iterator, pointing to the last created element.
+
+\filename{Fill and create ranges}
+
+\begin{cpp}
+// fillAndCreate.cpp
+...
+#include <algorithm>
+...
+
+int getNext(){
+	static int next{0};
+	return ++next;
+}
+
+std::vector<int> vec(10);
+std::fill(vec.begin(), vec.end(), 2011);
+for (auto v: vec) std::cout << v << " ";
+						// 2011 2011 2011 2011 2011 2011 2011 2011 2011 2011
+
+std::generate_n(vec.begin(), 5, getNext);
+for (auto v: vec) std::cout << v << " ";
+						// 1 2 3 4 5 2011 2011 2011 2011 2011
+\end{cpp}
+
+\mySamllsection{Move Ranges}
+
+std::move moves the ranges forward; std::move\_backward moves the ranges backward.
+
+Moves the range forward:
+
+\begin{cpp}
+OutIt move(InpIt first, InpIt last, OutIt result)
+FwdIt2 move(ExePol pol, FwdIt first, FwdIt last, Fwd2It result)
+\end{cpp}
+
+Moves the range backward:
+
+\begin{cpp}
+BiIt move_backward(BiIt first, BiIt last, BiIt result)
+\end{cpp}
+
+Both algorithms need a destination iterator result, to which the range is moved. In the case of the std::move algorithm, this is an output iterator. In the case of the std::move\_backward algorithm, this is a bidirectional iterator. The algorithms return an output or a bidirectional iterator, pointing to the initial position in the destination range.
+
+\begin{myWarning}{The source range may be changed}
+	
+std::move and std::move\_backward apply move semantics. Therefore the source range is valid but has not necessarily the same elements afterward.
+\end{myWarning}
+
+\filename{Move ranges}
+
+\begin{cpp}
+// move.cpp
+...
+#include <algorithm>
+...
+
+std::vector<int> myVec{0, 1, 2, 3, 4, 5, 6, 7, 9};
+std::vector<int> myVec2(myVec.size());
+std::move(myVec.begin(), myVec.end(), myVec2.begin());
+for (auto v: myVec2) std::cout << v << " "; // 0 1 2 3 4 5 6 7 9 0
+
+std::string str{"abcdefghijklmnop"};
+std::string str2{"---------------------"};
+std::move_backward(str.begin(), str.end(), str2.end());
+std::cout << str2; // -----abcdefghijklmnop
+\end{cpp}
+
+\mySamllsection{Swap Ranges}
+
+std::swap and std::swap\_ranges can swap objects and ranges.
+
+Swaps objects:
+
+\begin{cpp}
+void swap(T& a, T& b)
+\end{cpp}
+
+Swaps ranges:
+
+\begin{cpp}
+FwdIt swap_ranges(FwdIt1 first1, FwdIt1 last1, FwdIt first2)
+FwdIt swap_ranges(ExePol pol, FwdIt1 first1, FwdIt1 last1, FwdIt first2)
+\end{cpp}
+
+The returned iterator points to the last swapped element in the destination range.
+
+\begin{myWarning}{The ranges must not overlap}
+	
+\filename{Swap algorithms}
+
+\begin{cpp}
+// swap.cpp
+...
+#include <algorithm>
+...
+
+std::vector<int> myVec{0, 1, 2, 3, 4, 5, 6, 7, 9};
+std::vector<int> myVec2(9);
+std::swap(myVec, myVec2);
+for (auto v: myVec) std::cout << v << " "; // 0 0 0 0 0 0 0 0 0
+for (auto v: myVec2) std::cout << v << " "; // 0 1 2 3 4 5 6 7 9
+
+std::string str{"abcdefghijklmnop"};
+std::string str2{"---------------------"};
+std::swap_ranges(str.begin(), str.begin()+5, str2.begin()+5);
+std::cout << str << '\n'; // -----fghijklmnop
+std::cout << str2 << '\n'; // -----abcde-----------
+\end{cpp}
+\end{myWarning}
+
+\mySamllsection{Transform Ranges}
+
+The std::transform algorithm applies a unary or binary callable to a range and copies the modified elements to the destination range.
+
+Applies the unary callable fun to the elements of the input range and copies the result to result:
+
+\begin{cpp}
+OutIt transform(InpIt first1, InpIt last1, OutIt result, UnFun fun)
+FwdIt2 transform(ExePol pol, FwdIt first1, FwdIt last1, FwdIt2 result, UnFun fun)
+\end{cpp}
+
+Applies the binary callable fun to both input ranges and copies the result to result:
+
+\begin{cpp}
+OutIt transform(InpIt1 first1, InpIt1 last1, InpIt2 first2, OutIt result,
+			    BiFun fun)
+FwdIt3 transform(ExePol pol, FwdIt1 first1, FwdIt1 last1,
+				 FwdIt2 first2, FwdIt3 result, BiFun fun)
+\end{cpp}
+
+The difference between the two versions is that the first version applies the callable to each element of the range; the second version applies the callable to pairs of both ranges in parallel. The returned iterator points to one position after the last transformed element.
+
+\filename{Transform algorithms}
+
+\begin{cpp}
+// transform.cpp
+...
+#include <algorithm>
+...
+
+std::string str{"abcdefghijklmnopqrstuvwxyz"};
+std::transform(str.begin(), str.end(), str.begin(),
+				[](char c){ return std::toupper(c); });
+std::cout << str; // ABCDEFGHIJKLMNOPQRSTUVWXYZ
+
+std::vector<std::string> vecStr{"Only", "for", "testing", "purpose", "." };
+std::vector<std::string> vecStr2(5, "-");
+std::vector<std::string> vecRes;
+std::transform(vecStr.begin(), vecStr.end(),
+			   vecStr2.begin(), std::back_inserter(vecRes),
+			   [](std::string a, std::string b){ return std::string(b)+a+b; });
+for (auto str: vecRes) std::cout << str << " ";
+                             // -Only- -for- -testing- -purpose- -.-
+\end{cpp}
+
+\mySamllsection{Reverse Ranges}
+
+std::reverse and std::reverse\_copy invert the order of the elements in their range.
+
+Reverses the order of the elements in the range:
+
+\begin{cpp}
+void reverse(BiIt first, BiIt last)
+void reverse(ExePol pol, BiIt first, BiIt last)
+\end{cpp}
+
+Reverses the order of the elements in the range and copies the result to result:
+
+\begin{cpp}
+OutIt reverse_copy(BiIt first, BiIt last, OutIt result)
+FwdIt reverse_copy(ExePol pol, BiIt first, BiIt last, FwdIt result)
+\end{cpp}
+
+Both algorithms require bidirectional iterators. The returned iterator points to the output range result position before the elements are copied.
+
+\filename{Reverse range algorithms}
+
+\begin{cpp}
+// algorithmen.cpp
+...
+#include <algorithm>
+...
+
+std::string str{"123456789"};
+std::reverse(str.begin(), str.begin()+5);
+std::cout << str; // 543216789
+\end{cpp}
+
+\mySamllsection{Rotate Ranges}
+
+std::rotate and std::rotate\_copy rotate their elements.
+
+Rotates the elements in such a way that middle becomes the new first element:
+
+\begin{cpp}
+FwdIt rotate(FwdIt first, FwdIt middle, FwdIt last)
+FwdIt rotate(ExePol pol, FwdIt first, FwdIt middle, FwdIt last)
+\end{cpp}
+
+Rotates the elements so that middle becomes the new first element. Copies the result to result:
+
+\begin{cpp}
+OutIt rotate_copy(FwdIt first, FwdIt middle, FwdIt last, OutIt result)
+FwdIt2 rotate_copy(ExePol pol, FwdIt first, FwdIt middle, FwdIt last,
+				   FwdIt2 result)
+\end{cpp}
+
+Both algorithms need forward iterators. The returned iterator is an end iterator for the copied range.
+
+\filename{Rotate algorithms}
+
+\begin{cpp}
+// rotate.cpp
+...
+#include <algorithm>
+...
+
+std::string str{"12345"};
+for (auto i= 0; i < str.size(); ++i){
+	std::string tmp{str};
+	std::rotate(tmp.begin(), tmp.begin()+i , tmp.end());
+	std::cout << tmp << " ";
+} // 12345 23451 34512 45123 51234
+\end{cpp}
+
+\mySamllsection{Shift Ranges}
+
+The C++20 function std::shift\_left and std::shift\_right shift elements in a range. Both algorithm return a forward iterator.
+
+Shift the elements of a range towards the beginning of the range by n. Returns the end of the resulting range.
+
+\begin{cpp}
+FwdIt shift_left(FwdIt first, FwdIt last, Num n)
+FwdIt shift_left(ExePol pol, FwdIt first, FwdIt last, Num n)
+\end{cpp}
+
+Shift the elements of a range towards the end of the range by n. Returns the beginning of the resulting range.
+
+\begin{cpp}
+FwdIt shift_right(FwdIt first, FwdIt last, Num n)
+FwdIt shift_right(ExePol pol, FwdIt first, FwdIt last, Num n)
+\end{cpp}
+
+The operation on std::shift\_left and std::shift\_right has no effect if n == 0 || n >= last - first. The elements of the range are moved.
+
+\filename{Shift elements of a range}
+
+\begin{cpp}
+// shiftRange.cpp
+...
+#include <algorithm>
+...
+
+std::vector<int> myVec{1, 2, 3, 4, 5, 6, 7};
+for (auto v: myVec) std::cout << v << " "; // 1 2 3 4 5 6 7
+
+auto newEnd = std::shift_left(myVec.begin(), myVec.end(), 2);
+myVec.erase(newEnd, myVec.end());
+for (auto v: myVec) std::cout << v << " "; // 3 4 5 6 7
+
+auto newBegin = std::shift_right(myVec.begin(), myVec.end(), 2);
+myVec.erase(myVec.begin(), newBegin);
+for (auto v: myVec) std::cout << v << " "; // 3 4 5
+\end{cpp}
+
+\mySamllsection{Randomly Shuffle Ranges}
+
+You can randomly shuffle ranges with std::random\_shuffle and std::shuffle.
+
+Randomly shuffles the elements in a range:
+
+\begin{cpp}
+void random_shuffle(RanIt first, RanIt last)
+\end{cpp}
+
+Randomly shuffles the elements in the range by using the random number generator gen:
+
+\begin{cpp}
+void random_shuffle(RanIt first, RanIt last, RanNumGen&& gen)
+\end{cpp}
+
+Randomly shuffles the elements in a range, using the uniform random number generator gen:
+
+\begin{cpp}
+void shuffle(RanIt first, RanIt last, URNG&& gen)
+\end{cpp}
+
+The algorithms need random access iterators. RanNumGen\&\& gen has to be a callable, taking an argument and returning a value within its arguments. URNG\&\& gen has to be a uniform random number generator.
+
+\begin{myTip}{Prefer std::shuffle}
+	
+Use std::shuffle instead of std::random\_shuffle. std::random\_shuffle has been deprecated since C++14 and removed in C++17 because it uses the C function rand internally.
+\end{myTip}
+
+\filename{Randomly shuffle algorithms}
+
+\begin{cpp}
+// shuffle.cpp
+...
+#include <algorithm>
+...
+
+using std::chrono::system_clock;
+using std::default_random_engine;
+std::vector<int> vec1{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+std::vector<int> vec2(vec1);
+
+std::random_shuffle(vec1.begin(), vec1.end());
+for (auto v: vec1) std::cout << v << " "; // 4 3 7 8 0 5 2 1 6 9
+
+unsigned seed= system_clock::now().time_since_epoch().count();
+std::shuffle(vec2.begin(), vec2.end(), default_random_engine(seed));
+for (auto v: vec2) std::cout << v << " "; // 4 0 2 3 9 6 5 1 8 7
+\end{cpp}
+
+seed initializes the random number generator.
+
+\mySamllsection{Remove Duplicates}
+
+With the algorithms std::unique and std::unique\_copy, you have more opportunities to remove adjacent duplicates. You can do this with and without a binary predicate.
+
+Removes adjacent duplicates:
+
+\begin{cpp}
+FwdIt unique(FwdIt first, FwdIt last)
+FwdIt unique(ExePol pol, FwdIt first, FwdIt last)
+\end{cpp}
+
+Removes adjacent duplicates, satisfying the binary predicate:
+
+\begin{cpp}
+FwdIt unique(FwdIt first, FwdIt last, BiPred pre)
+FwdIt unique(ExePol pol, FwdIt first, FwdIt last, BiPred pre)
+\end{cpp}
+
+Removes adjacent duplicates and copies the result to result:
+
+\begin{cpp}
+OutIt unique_copy(InpIt first, InpIt last, OutIt result)
+FwdIt2 unique_copy(ExePol pol, FwdIt first, FwdIt last, FwdIt2 result)
+\end{cpp}
+
+Removes adjacent duplicates, satisfying the binary predicate, and copies the result to result:
+
+\begin{cpp}
+OutIt unique_copy(InpIt first, InpIt last, OutIt result, BiPred pre)
+FwdIt2 unique_copy(ExePol pol, FwdIt first, FwdIt last,
+				   FwdIt2 result, BiPred pre)
+\end{cpp}
+
+\begin{myWarning}{The unique algorithms return the new logical end iterator}
+	
+The unique algorithms return the logical end iterator of the range. The elements must be be removed with the erase-remove idiom.
+\end{myWarning}
+
+\filename{Remove duplicates algorithms}
+
+\begin{cpp}
+// removeDuplicates.cpp
+...
+#include <algorithm>
+...
+
+std::vector<int> myVec{0, 0, 1, 1, 2, 2, 3, 4, 4, 5,
+					   3, 6, 7, 8, 1, 3, 3, 8, 8, 9};
+					   
+myVec.erase(std::unique(myVec.begin(), myVec.end()), myVec.end());
+for (auto v: myVec) std::cout << v << ""; // 0 1 2 3 4 5 3 6 7 8 1 3 8 9
+
+std::vector<int> myVec2{1, 4, 3, 3, 3, 5, 7, 9, 2, 4, 1, 6, 8,
+						0, 3, 5, 7, 8, 7, 3, 9, 2, 4, 2, 5, 7, 3};
+std::vector<int> resVec;
+resVec.reserve(myVec2.size());
+std::unique_copy(myVec2.begin(), myVec2.end(), std::back_inserter(resVec),
+				[](int a, int b){ return (a%2) == (b%2); } );
+for(auto v: myVec2) std::cout << v << " ";
+						// 1 4 3 3 3 5 7 9 2 4 1 6 8 0 3 5 7 8 7 3 9 2 4 2 5 7 3
+for(auto v: resVec) std::cout << v << " "; // 1 4 3 2 1 6 3 8 7 2 5
+\end{cpp}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

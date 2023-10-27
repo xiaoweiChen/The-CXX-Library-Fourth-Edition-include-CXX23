@@ -1,0 +1,137 @@
+
+\myGraphic{0.6}{content/chapter10/images/4.jpg}{}
+
+\begin{myTip}{What is a heap?}
+	
+A heap is a binary search tree in which parent elements are always bigger than their child elements. Heap trees are optimized for the efficient sorting of elements.
+\end{myTip}
+
+You can create with std::make\_heap a heap. You can push with std::push\_heap new elements on the heap. On the contrary, you can pop the largest element with std::pop\_heap from the heap. Both operations respect the heap characteristics. std::push\_heap moves the last element of the range on the heap; std::pop\_heap moves the biggest element of the heap to the last position in the range. You can check with std::is\_heap if a range is a heap. You can determine with std::is\_heap\_until until which position the range is a heap. std::sort\_heap sorts the heap.
+
+The heap algorithms require that the ranges and the algorithm use the same sorting criterion. If not, the program has undefined behavior. Per default, the predefined sorting criterion std::less is used. If you use your sorting criterion, it has to obey the strict weak ordering. If not, the program has undefined behavior.
+
+Creates a heap from the range:
+
+\begin{cpp}
+void make_heap(RaIt first, RaIt last)
+void make_heap(RaIt first, RaIt last, BiPre pre)
+\end{cpp}
+
+Checks if the range is a heap:
+
+\begin{cpp}
+bool is_heap(RaIt first, RaIt last)
+bool is_heap(ExePol pol, RaIt first, RaIt last)
+
+bool is_heap(RaIt first, RaIt last, BiPre pre)
+bool is_heap(ExePol pol, RaIt first, RaIt last, BiPre pre)
+\end{cpp}
+
+Determines until which position the range is a heap:
+
+\begin{cpp}
+RaIt is_heap_until(RaIt first, RaIt last)
+RaIt is_heap_until(ExePol pol, RaIt first, RaIt last)
+
+RaIt is_heap_until(RaIt first, RaIt last, BiPre pre)
+RaIt is_heap_until(ExePol pol, RaIt first, RaIt last, BiPre pre)
+\end{cpp}
+
+Sorts the heap:
+
+\begin{cpp}
+void sort_heap(RaIt first, RaIt last)
+void sort_heap(RaIt first, RaIt last, BiPre pre)
+\end{cpp}
+
+It pushes the last element of the range onto the heap. [first, last-1) has to be a heap.
+
+\begin{cpp}
+void push_heap(RaIt first, RaIt last)
+void push_heap(RaIt first, RaIt last, BiPre pre)
+\end{cpp}
+
+Removes the biggest element from the heap and puts it to the end of the range:
+
+\begin{cpp}
+void pop_heap(RaIt first, RaIt last)
+void pop_heap(RaIt first, RaIt last, BiPre pre)
+\end{cpp}
+
+With std::pop\_heap, you can remove the greatest element from the heap. Afterward, the greatest element is the last element of the range. To remove the element from the heap h, use h.pop\_back.
+
+\filename{Heap algorithms}
+
+\begin{cpp}
+// heap.cpp
+...
+#include <algorithm>
+...
+
+std::vector<int> vec{4, 3, 2, 1, 5, 6, 7, 9, 10};
+std::make_heap(vec.begin(), vec.end());
+for (auto v: vec) std::cout << v << " "; // 10 9 7 4 5 6 2 3 1
+std::cout << std::is_heap(vec.begin(), vec.end()); // true
+
+vec.push_back(100);
+std::cout << std::is_heap(vec.begin(), vec.end()); // false
+std::cout << *std::is_heap_until(vec.begin(), vec.end()); // 100
+for (auto v: vec) std::cout << v << " "; // 10 9 7 4 5 6 2 3 1 100
+
+std::push_heap(vec.begin(), vec.end());
+std::cout << std::is_heap(vec.begin(), vec.end()); // true
+for (auto v: vec) std::cout << v << " "; // 100 10 7 4 9 6 2 3 1 5
+
+std::pop_heap(vec.begin(), vec.end());
+for (auto v: vec) std::cout << v << " "; // 10 9 7 4 5 6 2 3 1 100
+std::cout << *std::is_heap_until(vec.begin(), vec.end()); // 100
+
+vec.resize(vec.size()-1);
+std::cout << std::is_heap(vec.begin(), vec.end()); // true
+std::cout << vec.front() << '\n'; // 10
+\end{cpp}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

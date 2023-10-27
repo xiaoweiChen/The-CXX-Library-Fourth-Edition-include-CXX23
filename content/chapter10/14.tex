@@ -1,0 +1,327 @@
+The numeric algorithms std::accumulate, std::adjacent\_difference, std::partial\_sum, std::inner\_product and std::iota and the six additional C++17 algorithms std::exclusive\_scan, std::inclusive\_scan, std::transform\_exclusive\_scan, std::transform\_inclusive\_scan, std::reduce, and std::transform\_reduce are special. All of them are defined in the header <numeric>. They are widely applicable because they can invoked with a callable.
+
+Accumulates the elements of the range. init is the start value:
+
+\begin{cpp}
+T accumulate(InpIt first, InpIt last, T init)
+T accumulate(InpIt first, InpIt last, T init, BiFun fun)
+\end{cpp}
+
+Calculates the difference between adjacent elements of the range and stores the result in result:
+
+\begin{cpp}
+OutIt adjacent_difference(InpIt first, InpIt last, OutIt result)
+FwdIt2 adjacent_difference(ExePol pol, FwdIt first, FwdIt last, FwdIt2 result)
+
+OutIt adjacent_difference(InpIt first, InpIt last, OutIt result, BiFun fun)
+FwdIt2 adjacent_difference(ExePol pol, FwdIt first, FwdIt last,
+						   FwdIt2 result, BiFun fun)
+\end{cpp}
+
+Calculates the partial sum of the range:
+
+\begin{cpp}
+OutIt partial_sum(InpIt first, InpIt last, OutIt result)
+OutIt partial_sum(InpIt first, InpIt last, OutIt result, BiFun fun)
+\end{cpp}
+
+Calculates the inner product (scalar product) of the two ranges and returns the result:
+
+\begin{cpp}
+T inner_product(InpIt first1, InpIt last1, OutIt first2, T init)
+T inner_product(InpIt first1, InpIt last1, OutIt first2, T init,
+				BiFun fun1, BiFun fun2)
+\end{cpp}
+
+Assigns each element of the range a by one sequentially increasing value. The start value is val:
+
+\begin{cpp}
+void iota(FwdIt first, FwdIt last, T val)
+\end{cpp}
+
+The algorithms are more challenging to get.
+
+std::accumulate without callable uses the following strategy:
+
+\begin{cpp}
+result = init;
+result += *(first+0);
+result += *(first+1);
+...
+\end{cpp}
+
+std::adjacent\_difference without callable uses the following strategy:
+
+\begin{cpp}
+*(result) = *first;
+*(result+1) = *(first+1) - *(first);
+*(result+2) = *(first+2) - *(first+1);
+...
+\end{cpp}
+
+std::partial\_sum without callable uses the following strategy:
+
+\begin{cpp}
+*(result) = *first;
+*(result+1) = *first + *(first+1);
+*(result+2) = *first + *(first+1) + *(first+2)
+...
+\end{cpp}
+
+The challenging algorithm variation inner\_product(InpIt, InpIt, OutIt, T, BiFun fun1, BiFun fun2) with two binary callables uses the following strategy: The second callable fun2 is applied to each pair of the ranges to generate the temporary destination range tmp, and the first callable is applied to each element of the destination range tmp for accumulating them and therefore generating the final result.
+
+\filename{Numeric algorithms}
+
+\begin{cpp}
+// numeric.cpp
+...
+#include <numeric>
+...
+
+std::array<int, 9> arr{1, 2, 3, 4, 5, 6, 7, 8, 9};
+std::cout << std::accumulate(arr.begin(), arr.end(), 0); // 45
+std::cout << std::accumulate(arr.begin(), arr.end(), 1,
+							 [](int a, int b){ return a*b; } ); // 362880
+
+std::vector<int> vec{1, 2, 3, 4, 5, 6, 7, 8, 9};
+std::vector<int> myVec;
+std::adjacent_difference(vec.begin(), vec.end(),
+				std::back_inserter(myVec), [](int a, int b){ return a*b; });
+for (auto v: myVec) std::cout << v << " "; // 1 2 6 12 20 30 42 56 72
+std::cout << std::inner_product(vec.begin(), vec.end(), arr.begin(), 0); // 285
+
+myVec= {};
+std::partial_sum(vec.begin(), vec.end(), std::back_inserter(myVec));
+for (auto v: myVec) std::cout << v << " "; // 1 3 6 10 15 21 28 36 45
+
+std::vector<int> myLongVec(10);
+std::iota(myLongVec.begin(), myLongVec.end(), 2000);
+for (auto v: myLongVec) std::cout << v << " ";
+						// 2000 2001 2002 2003 2004 2005 2006 2007 2008 2009
+\end{cpp}
+
+\mySamllsection{New Parallel Algorithms with C++17}
+
+The six new algorithms typically used for parallel execution are known as \href{https://en.wikipedia.org/wiki/Prefix_sum}{prefix sum}. The behavior of the algorithms is undefined if the given binary callables are not associative and commutative.
+
+reduce: reduces the elements of the range. init is the start value.
+
+\begin{itemize}
+\item
+Behaves the same as std::accumulate, but the range may be rearranged.
+\end{itemize}
+
+\begin{cpp}
+ValType reduce(InpIt first, InpIt last)
+ValType reduce(ExePol pol, InpIt first, InpIt last)
+
+T reduce(InpIt first, InpIt last, T init)
+T reduce(ExePol pol, InpIt first, InpIt last, T init)
+
+T reduce(InpIt first, InpIt last, T init, BiFun fun)
+T reduce(ExePol pol, InpIt first, InpIt last, T init, BiFun fun)
+\end{cpp}
+
+transform\_reduce: transforms and reduces the elements of one or two ranges. init is the start value.
+
+\begin{itemize}
+\item
+Behaves similar to std::inner\_product, but the range may be rearranged.
+
+\item
+If applied to two ranges
+\begin{itemize}
+\item
+if not provided, multiplication is used for transforming the ranges into one range, and addition is used to reduce the intermediate range into the result
+
+\item
+if provided, fun1 is used for the transforming step, and fun2 is used for the reducing step
+\end{itemize}
+
+\item
+If applied to a single range
+\begin{itemize}
+\item
+fun2 is used for transforming the given range
+\end{itemize}
+\end{itemize}
+
+\begin{cpp}
+T transform_reduce(InpIt first, InpIt last, InpIt first2, T init)
+T transform_reduce(InpIt first, InpIt last,
+				   InpIt first2, T init, BiFun fun1, BiFun fun2)
+
+T transform_reduce(FwdIt first, FwdIt last, FwdIt first2, T init)
+T transform_reduce(ExePol pol, FwdIt first, FwdIt last,
+				   FwdIt first2, T init, BiFun fun1, BiFun fun2)
+
+T transform_reduce(InpIt first, InpIt last, T init, BiFun fun1, UnFun fun2)
+T transform_reduce(ExePol pol, FwdIt first, FwdIt last,
+				   T init, BiFun fun1, UnFun fun2)
+\end{cpp}
+
+\begin{myTip}{MapReduce in C++17}
+
+The \href{https://www.haskell.org/}{Haskell} function map is called std::transform in C++. When you substitute transform with map in the name std::transform\_reduce, you will get std::map\_reduce. \href{https://en.wikipedia.org/wiki/MapReduce}{MapReduce} is the well-known parallel framework that first maps each value to a new value then reduces in the second phase all values to the result.
+
+The algorithm is directly applicable in C++17. Each word is mapped to its length in the map phase, and the lengths of all words are then reduced to their sum during the reduce phase. The result is the sum of the length of all words.
+
+\begin{cpp}
+std::vector<std::string> str{"Only", "for", "testing", "purpose"};
+
+std::size_t result= std::transform_reduce(std::execution::par,
+				str.begin(), str.end(), 0,
+				[](std::size_t a, std::size_t b){ return a + b; },
+				[](std::string s){ return s.length(); });
+
+std::cout << result << '\n'; // 21
+\end{cpp}
+
+\end{myTip}
+
+exclusive\_scan: computes the exclusive prefix sum using a binary operation.
+
+\begin{itemize}
+\item
+Behaves similar to std::reduce, but provides a range of all prefix sums
+
+\item
+excludes the last element in each iteration
+\end{itemize}
+
+\begin{cpp}
+OutIt exclusive_scan(InpIt first, InpIt last, OutIt first, T init)
+FwdIt2 exclusive_scan(ExePol pol, FwdIt first, FWdIt last,
+					  FwdIt2 first2, T init)
+
+OutIt exclusive_scan(InpIt first, InpIt last, OutIt first, T init, BiFun fun)
+FwdIt2 exclusive_scan(ExePol pol, FwdIt first, FwdIt last,
+					  FwdIt2 first2, T init, BiFun fun)
+\end{cpp}
+
+inclusive\_scan: computes the inclusive prefix sum using a binary operation.
+
+\begin{itemize}
+\item
+Behaves similar to std::reduce, but provides a range of all prefix sums
+
+\item
+includes the last element in each iteration
+\end{itemize}
+
+\begin{cpp}
+OutIt inclusive_scan(InpIt first, InpIt last, OutIt first2)
+FwdIt2 inclusive_scan(ExePol pol, FwdIt first, FwdIt last, FwdIt2 first2)
+
+OutIt inclusive_scan(InpIt first, InpIt last, OutIt first, BiFun fun)
+FwdIt2 inclusive_scan(ExePol pol, FwdIt first, FwdIt last,
+					  FwdIt2 first2, BiFun fun)
+
+OutIt inclusive_scan(InpIt first, InpIt last, OutIt firs2t, BiFun fun, T init)
+FwdIt2 inclusive_scan(ExePol pol, FwdIt first, FwdIt last,
+					  FwdIt2 first2, BiFun fun, T init)
+\end{cpp}
+
+transform\_exclusive\_scan: first transforms each element and then computes the exclusive prefix sums.
+
+\begin{cpp}
+OutIt transform_exclusive_scan(InpIt first, InpIt last, OutIt first2, T init, BiFun fun, UnFun fun2)
+FwdIt2 transform_exclusive_scan(ExePol pol, FwdIt first, FwdIt last, FwdIt2 first2, T init, BiFun fun, UnFun fun2)
+\end{cpp}
+
+transform\_inclusive\_scan: first transforms each element of the input range and then computes the inclusive prefix sums.
+
+\begin{cpp}
+OutIt transform_inclusive_scan(InpIt first, InpIt last, OutIt first2,
+							   BiFun fun, UnFun fun2)
+
+FwdIt2 transform_inclusive_scan(ExePol pol, FwdIt first, FwdIt last,
+								FwdIt first2,
+								BiFun fun, UnFun fun2)
+
+OutIt transform_inclusive_scan(InpIt first, InpIt last, OutIt first2,
+							   BiFun fun, UnFun fun2,
+							   T init)
+
+FwdIt2 transform_inclusive_scan(ExePol pol, FwdIt first, FwdIt last,
+								FwdIt first2,
+								BiFun fun, UnFun fun2,
+								T init)
+\end{cpp}
+
+The following example illustrates the usage of the six algorithms using the parallel execution policy.
+
+\filename{The new algorithms}
+
+\begin{cpp}
+// newAlgorithms.cpp
+...
+#include <execution>
+#include <numeric>
+
+...
+
+std::vector<int> resVec{1, 2, 3, 4, 5, 6, 7, 8};
+std::exclusive_scan(std::execution::par,
+					resVec.begin(), resVec.end(), resVec.begin(), 1,
+					[](int fir, int sec){ return fir * sec; });
+
+for (auto v: resVec) std::cout << v << " "; // 1 1 2 6 24 120 720 5040
+
+std::vector<int> resVec2{1, 2, 3, 4, 5, 6, 7, 8};
+
+std::inclusive_scan(std::execution::par,
+					resVec2.begin(), resVec2.end(), resVec2.begin(),
+					[](int fir, int sec){ return fir * sec; }, 1);
+
+for (auto v: resVec2) std::cout << v << " "; // 1 2 6 24 120 720 5040 40320
+
+std::vector<int> resVec3{1, 2, 3, 4, 5, 6, 7, 8};
+std::vector<int> resVec4(resVec3.size());
+std::transform_exclusive_scan(std::execution::par,
+							  resVec3.begin(), resVec3.end(),
+							  resVec4.begin(), 0,
+							  [](int fir, int sec){ return fir + sec; },
+							  [](int arg){ return arg *= arg; });
+
+for (auto v: resVec4) std::cout << v << " "; // 0 1 5 14 30 55 91 140
+
+std::vector<std::string> strVec{"Only", "for", "testing", "purpose"};
+std::vector<int> resVec5(strVec.size());
+std::transform_inclusive_scan(std::execution::par,
+							  strVec.begin(), strVec.end(),
+							  resVec5.begin(),
+							  [](auto fir, auto sec){ return fir + sec; },
+							  [](auto s){ return s.length(); }, 0);
+
+for (auto v: resVec5) std::cout << v << " "; // 4 7 14 21
+
+std::vector<std::string> strVec2{"Only", "for", "testing", "purpose"};
+
+std::string res = std::reduce(std::execution::par,
+						strVec2.begin() + 1, strVec2.end(), strVec2[0],
+						[](auto fir, auto sec){ return fir + ":" + sec; });
+
+std::cout << res; // Only:for:testing:purpose
+
+std::size_t res7 = std::transform_reduce(std::execution::par,
+						strVec2.begin(), strVec2.end(), 0,
+						[](std::size_t a, std::size_t b){ return a + b; },
+						[](std::string s){ return s.length(); });
+
+std::cout << res7; // 21
+\end{cpp}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,41 @@
+\myGraphic{0.6}{content/chapter11/images/1.jpg}{Cippi starts the pipeline job}
+
+The ranges library was added with C++20, but has powerful extensions with C++23. The algorithms of the ranges library are lazy, operate directly on the container, and can be composed. Furthermore, most of the classical STL algorithms have ranges pendants, which support projections and provide additional safety guarantees.
+
+\filename{Composing of ranges}
+
+\begin{cpp}
+// rangesFilterTransform.cpp
+...
+#include <ranges>
+
+std::vector<int> numbers = {1, 2, 3, 4, 5, 6};
+
+auto results = numbers | std::views::filter([](int n){ return n % 2 == 0; })
+				       | std::views::transform([](int n){ return n * 2; });
+				       
+for (auto v: results) std::cout << v << " "; // 4 8 12
+\end{cpp}
+
+You have to read the expression from left to right. The pipe symbol | stands for function composition: First, all numbers can pass which are even (std::views::filter([](int n)\{ return n \% 2 == 0;\})). Afterward, each remaining number is mapped to its double (std::views::transform([](int n)\{return n * 2; \})).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

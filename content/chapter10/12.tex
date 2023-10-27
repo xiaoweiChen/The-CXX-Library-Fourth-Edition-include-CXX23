@@ -1,0 +1,108 @@
+You can determine the minimum, maximum, minimum, and maximum pair of a range with the algorithms std::min\_element, std::max\_element, and std::minmax\_element. Each algorithm can invoked with a binary predicate. Additionally, C++17 enables it to clamp a value between a pair of boundary values.
+
+Returns the minimum element of the range:
+
+\begin{cpp}
+constexpr FwdIt min_element(FwdIt first, FwdIt last)
+FwdIt min_element(ExePol pol, FwdIt first, FwdIt last)
+
+constexpr FwdIt min_element(FwdIt first, FwdIt last, BinPre pre)
+FwdIt min_element(ExePol pol, FwdIt first, FwdIt last, BinPre pre)
+\end{cpp}
+
+Returns the maximum element of the range:
+
+\begin{cpp}
+constexpr FwdIt max_element(FwdIt first, FwdIt last)
+FwdIt max_element(ExePol pol, FwdIt first, FwdIt last)
+
+constexpr FwdIt max_element(FwdIt first, FwdIt last, BinPre pre)
+FwdIt max_element(ExePol pol, FwdIt first, FwdIt last, BinPre pre)
+\end{cpp}
+
+Returns the pair std::min\_element and std::max\_element of the range:
+
+\begin{cpp}
+constexpr pair<FwdIt, FwdIt> minmax_element(FwdIt first, FwdIt last)
+pair<FwdIt, FwdIt> minmax_element(ExePol pol, FwdIt first, FwdIt last)
+
+constexpr pair<FwdIt, FwdIt> minmax_element(FwdIt first, FwdIt last, BinPre pre)
+pair<FwdIt, FwdIt> minmax_element(ExePol pol, FwdIt first, FwdIt last,
+								  BinPre pre)
+\end{cpp}
+
+The first one is returned if the range has more than one minimum or maximum element.
+
+\filename{Minimum and maximum algorithms}
+
+\begin{cpp}
+// minMax.cpp
+...
+#include <algorithm>
+...
+
+int toInt(const std::string& s){
+	std::stringstream buff;
+	buff.str("");
+	buff << s;
+	int value;
+	buff >> value;
+	return value;
+}
+
+std::vector<std::string> myStrings{"94", "5", "39", "-4", "-49", "1001", "-77",
+							       "23", "0", "84", "59", "96", "6", "-94"};
+auto str= std::minmax_element(myStrings.begin(), myStrings.end());
+
+std::cout << *str.first << ":" << *str.second; // -4:96
+
+auto asInt= std::minmax_element(myStrings.begin(), myStrings.end(),
+			[](std::string a, std::string b){ return toInt(a) < toInt(b); });
+std::cout << *asInt.first << ":" << *asInt.second; // -94:1001
+\end{cpp}
+
+std::clamp clamps a value between a pair of boundary values:
+
+\begin{cpp}
+constexpr const T& clamp(const T& v, const T& lo, const T& hi);
+constexpr const T& clamp(const T& v, const T& lo, const T& hi, BinPre pre);
+\end{cpp}
+
+Returns a reference to v if lo is less than v and v is less than hi. Otherwise, it returns a reference to lo or hi. By default, < is used as the comparison criteria but you can also provide a binary predicate pre.
+
+\filename{Clamp a value}
+
+\begin{cpp}
+// clamp.cpp
+...
+#include <algorithm>
+...
+
+auto values = {1, 2, 3, 4, 5, 6, 7};
+for (auto v: values) std::cout << v << ' '; // 1 2 3 4 5 6 7
+
+auto lo = 3;
+auto hi = 6;
+for (auto v: values) std::cout << std::clamp(v, lo, hi) << ' '; // 3 3 3 4 5 6 6
+\end{cpp}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

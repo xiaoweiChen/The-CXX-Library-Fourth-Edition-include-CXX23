@@ -1,0 +1,95 @@
+
+
+\begin{myTip}{What is a partition?}
+
+A partition of a set is a decomposition of a set in subsets so that each element of the set is precisely in one subset. A binary predicate defines the subset so that the members of the first subset fulfill the predicate. The remaining elements are in the second subset.
+\end{myTip}
+
+C++ offers a few functions for dealing with partitions. They all need a unary predicate pre. std::partition and std::stable\_partition partition a range and return the partition point. With std::partition\_point, you can get the partition point of a partition. Afterward, you can check the partition with std::is\_partitioned or copy it with std::partition\_copy.
+
+Checks if the range is partitioned:
+
+\begin{cpp}
+bool is_partitioned(InpIt first, InpIt last, UnPre pre)
+bool is_partitioned(ExePol pol, FwdIt first, FwdIt last, UnPre pre)
+\end{cpp}
+
+Partitions the range:
+
+\begin{cpp}
+FwdIt partition(FwdIt first, FwdIt last, UnPre pre)
+FwdIt partition(ExePol pol, FwdIt first, FwdIt last, UnPre pre)
+\end{cpp}
+
+Partitions the range (stable):
+
+\begin{cpp}
+BiIt stable_partition(FwdIt first, FwdIt last, UnPre pre)
+BiIt stable_partition(ExePol pol, FwdIt first, FwdIt last, UnPre pre)
+\end{cpp}
+
+Copies a partition in two ranges:
+
+\begin{cpp}
+pair<OutIt1, OutIt2> partition_copy(InIt first, InIt last,
+					 OutIt1 result_true, OutIt2 result_false, UnPre pre)
+pair<FwdIt1, FwdIt2> partition_copy(ExePol pol, FwdIt1 first, FwdIt1 last,
+					 FwdIt2 result_true, FwdIt3 result_false, UnPre pre)
+\end{cpp}
+
+Returns the partition point:
+
+\begin{cpp}
+FwdIt partition_point(FwdIt first, FwdIt last, UnPre pre)
+\end{cpp}
+
+A std::stable\_partition guarantees, contrary to a std::partition that the elements preserve their relative order. The returned iterator FwdIt and BiIt point to the second subset of the partition’s initial position. The pair std::pair<OutIt, OutIt> of the algorithm std::partition\_copy contains the end iterator of the subsets result\_true and result\_false. The behavior of std::partition\_point is undefined if the range is not partitioned.
+
+\filename{Partition algorithms}
+
+\begin{cpp}
+// partition.cpp
+...
+#include <algorithm>
+...
+using namespace std;
+
+bool isOdd(int i){ return (i%2) == 1; }
+vector<int> vec{1, 4, 3, 4, 5, 6, 7, 3, 4, 5, 6, 0, 4,
+				8, 4, 6, 6, 5, 8, 8, 3, 9, 3, 7, 6, 4, 8};
+auto parPoint= partition(vec.begin(), vec.end(), isOdd);
+for (auto v: vec) cout << v << " ";
+					// 1 7 3 3 5 9 7 3 3 5 5 0 4 8 4 6 6 6 8 8 4 6 4 4 6 4 8
+
+for (auto v= vec.begin(); v != parPoint; ++v) cout << *v << " ";
+					// 1 7 3 3 5 9 7 3 3 5 5
+for (auto v= parPoint; v != vec.end(); ++v) cout << *v << " ";
+					// 4 8 4 6 6 6 8 8 4 6 4 4 6 4 8
+
+cout << is_partitioned(vec.begin(), vec.end(), isOdd); // true
+list<int> le;
+list<int> ri;
+partition_copy(vec.begin(), vec.end(), back_inserter(le), back_inserter(ri),
+			   [](int i) { return i < 5; });
+for (auto v: le) cout << v << ""; // 1 3 3 3 3 0 4 4 4 4 4 4
+for (auto v: ri) cout << v << ""; // 7 5 9 7 5 5 8 6 6 6 8 8 6 6 8
+\end{cpp}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

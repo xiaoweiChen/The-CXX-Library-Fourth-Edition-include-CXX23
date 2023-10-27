@@ -1,0 +1,86 @@
+The binary search algorithms use the fact that the ranges are already sorted. To search for an element, use std::binary\_search. With std::lower\_bound, you get an iterator for the first element, being no smaller than the given value. With std::upper\_bound, you get an iterator back for the first element, which is bigger than the given value. std:::equal\_range combines both algorithms.
+
+If the container has n elements, you need on average log2(n) comparisons for the search. The binary search requires you to use the same comparison criterion you used for sorting the container. The default comparison criterion is std::less, but you can adjust it. Your sorting criterion has to obey the strict weak ordering. If not, the program is undefined.
+
+The member functions of an unordered associative container are, in general, faster.
+Searches the element val in the range:
+
+\begin{cpp}
+bool binary_search(FwdIt first, FwdIt last, const T& val)
+bool binary_search(FwdIt first, FwdIt last, const T& val, BiPre pre)
+\end{cpp}
+
+Returns the position of the first element of the range, being not smaller than val:
+
+\begin{cpp}
+FwdIt lower_bound(FwdIt first, FwdIt last, const T& val)
+FwdIt lower_bound(FwdIt first, FwdIt last, const T& val, BiPre pre)
+\end{cpp}
+
+Returns the position of the first element of the range, being bigger than val:
+
+\begin{cpp}
+FwdIt upper_bound(FwdIt first, FwdIt last, const T& val)
+FwdIt upper_bound(FwdIt first, FwdIt last, const T& val, BiPre pre)
+\end{cpp}
+
+Returns the pair std::lower\_bound and std::upper\_bound for the element val:
+
+\begin{cpp}
+pair<FwdIt, FwdIt> equal_range(FwdIt first, FwdIt last, const T& val)
+pair<FwdIt, FwdIt> equal_range(FwdIt first, FwdIt last, const T& val, BiPre pre)
+\end{cpp}
+
+Finally, here is the code snippet.
+
+\filename{Binary search algorithms}
+
+\begin{cpp}
+// binarySearch.cpp
+...
+#include <algorithm>
+...
+using namespace std;
+
+bool isLessAbs(int a, int b){
+	return abs(a) < abs(b);
+}
+vector<int> vec{-3, 0, -3, 2, -3, 5, -3, 7, -0, 6, -3, 5,
+				-6, 8, 9, 0, 8, 7, -7, 8, 9, -6, 3, -3, 2};
+
+sort(vec.begin(), vec.end(), isLessAbs);
+for (auto v: vec) cout << v << " ";
+	// 0 0 0 2 2 -3 -3 -3 -3 -3 3 -3 5 5 -6 -6 6 7 -7 7 8 8 8 9 9
+cout << binary_search(vec.begin(), vec.end(), -5, isLessAbs); // true
+cout << binary_search(vec.begin(), vec.end(), 5, isLessAbs); // true
+
+auto pair= equal_range(vec.begin(), vec.end(), 3, isLessAbs);
+cout << distance(vec.begin(), pair.first); // 5
+cout << distance(vec.begin(), pair.second)-1; // 11
+
+for (auto threeIt= pair.first;threeIt != pair.second; ++threeIt)
+	cout << *threeIt << " "; // -3 -3 -3 -3 -3 3 -3
+\end{cpp}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

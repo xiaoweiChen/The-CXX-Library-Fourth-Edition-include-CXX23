@@ -1,0 +1,121 @@
+You can sort a range with std::sort or std::stable\_sort or sort until a position with std::partial\_sort. In addition, std::partial\_sort\_copy copies the partially sorted range. With std::nth\_element, you can assign an element the sorted position in the range. You can check with std::is\_sorted if a range is sorted. If you want to know until which position a range is sorted, use std::is\_sorted\_until.
+
+Per default, the predefined function object std::less is used as a sorting criterion. However, you can use your sorting criterion. This has to obey the strict weak ordering.
+
+Sorts the elements in the range:
+
+\begin{cpp}
+void sort(RaIt first, RaIt last)
+void sort(ExePol pol, RaIt first, RaIt last)
+
+void sort(RaIt first, RaIt last, BiPre pre)
+void sort(ExePol pol, RaIt first, RaIt last, BiPre pre)
+\end{cpp}
+
+Sorts the elements in the range (stable):
+
+\begin{cpp}
+void stable_sort(RaIt first, RaIt last)
+void stable_sort(ExePol pol, RaIt first, RaIt last)
+
+void stable_sort(RaIt first, RaIt last, BiPre pre)
+void stable_sort(ExePol pol, RaIt first, RaIt last, BiPre pre)
+\end{cpp}
+
+Sorts partially the elements in the range until middle:
+
+\begin{cpp}
+void partial_sort(RaIt first, RaIt middle, RaIt last)
+void partial_sort(ExePol pol, RaIt first, RaIt middle, RaIt last)
+
+void partial_sort(RaIt first, RaIt middle, RaIt last, BiPre pre)
+void partial_sort(ExePol pol, RaIt first, RaIt middle, RaIt last, BiPre pre)
+\end{cpp}
+
+Sorts partially the elements in the range and copies them in the destination ranges result\_first and result\_last:
+
+\begin{cpp}
+RaIt partial_sort_copy(InIt first, InIt last,
+					   RaIt result_first, RaIt result_last)
+RaIt partial_sort_copy(ExePol pol, FwdIt first, FwdIt last,
+					   RaIt result_first, RaIt result_last)
+
+RaIt partial_sort_copy(InIt first, InIt last,
+					   RaIt result_first, RaIt result_last, BiPre pre)
+RaIt partial_sort_copy(ExePol pol, FwdIt first, FwdIt last,
+					   RaIt result_first, RaIt result_last, BiPre pre)
+\end{cpp}
+
+Checks if a range is sorted:
+
+\begin{cpp}
+bool is_sorted(FwdIt first, FwdIt last)
+bool is_sorted(ExePol pol, FwdIt first, FwdIt last)
+
+bool is_sorted(FwdIt first, FwdIt last, BiPre pre)
+bool is_sorted(ExePol pol, FwdIt first, FwdIt last, BiPre pre)
+\end{cpp}
+
+Returns the position to the first element that doesn’t satisfy the sorting criterion:
+
+\begin{cpp}
+FwdIt is_sorted_until(FwdIt first, FwdIt last)
+FwdIt is_sorted_until(ExePol pol, FwdIt first, FwdIt last)
+
+FwdIt is_sorted_until(FwdIt first, FwdIt last, BiPre pre)
+FwdIt is_sorted_until(ExePol pol, FwdIt first, FwdIt last, BiPre pre)
+\end{cpp}
+
+Reorders the range so that the n-th element has the right (sorted) position:
+
+\begin{cpp}
+void nth_element(RaIt first, RaIt nth, RaIt last)
+void nth_element(ExePol pol, RaIt first, RaIt nth, RaIt last)
+
+void nth_element(RaIt first, RaIt nth, RaIt last, BiPre pre)
+void nth_element(ExePol pol, RaIt first, RaIt nth, RaIt last, BiPre pre)
+\end{cpp}
+
+Here is a code snippet.
+
+\filename{Sort algorithms}
+
+\begin{cpp}
+// sort.cpp
+...
+#include <algorithm>
+...
+
+std::string str{"RUdAjdDkaACsdfjwldXmnEiVSEZTiepfgOIkue"};
+std::cout << std::is_sorted(str.begin(), str.end()); // false
+
+std::partial_sort(str.begin(), str.begin()+30, str.end());
+std::cout << str; // AACDEEIORSTUVXZaddddeeffgiijjkwspnmluk
+
+auto sortUntil= std::is_sorted_until(str.begin(), str.end());
+std::cout << *sortUntil; // s
+for (auto charIt= str.begin(); charIt != sortUntil; ++charIt)
+	std::cout << *charIt; // AACDEEIORSTUVXZaddddeeffgiijjkw
+
+std::vector<int> vec{1, 0, 4, 3, 5};
+auto vecIt= vec.begin();
+
+while(vecIt != vec.end()){
+	std::nth_element(vec.begin(), vecIt++, vec.end());
+	std::cout << std::distance(vec.begin(), vecIt) << "-th ";
+	for (auto v: vec) std::cout << v << "/";
+}
+// 1-th 01435/2-th 01435/3-th 10345/4-th 30145/5-th 10345
+\end{cpp}
+
+
+
+
+
+
+
+
+
+
+
+
