@@ -1,0 +1,117 @@
+\href{http://en.cppreference.com/w/cpp/header/random}{Random numbers} are necessary for many domains, e.g., test software, generate cryptographic keys, or computer games. The random number facility of C++ consists of two components. There is the generation of the random numbers and the distribution of these random numbers. Both parts need the header <random>.
+
+\mySamllsection{Random Number Generator}
+
+The random number generator generates a random number stream between a minimum and maximum value. This stream is initialized by a “so-called” seed, guaranteeing different random number sequences.
+
+\begin{cpp}
+#include <random>
+...
+std::random_device seed;
+std::mt19937 generator(seed());
+\end{cpp}
+
+A random number generator gen of type Generator supports four different requests:
+
+\noindent
+\textbf{Generator::result\_type}
+
+Data type of the generated random number.
+
+\noindent
+\textbf{gen()}
+
+Returns a random number.
+
+\noindent
+\textbf{gen.min()}
+
+Returns the minimum random number that can be returned by gen().
+
+\noindent
+\textbf{gen.max()}
+
+Returns the maximum random number that can be returned by gen. \\
+
+The random number library supports several random number generators. The best known are the Mersenne Twister, the std::default\_random\_engine chosen by the implementation, and std::random\_device. std::random\_device is the only true random number generator, but not all platforms offer it.
+
+\mySamllsection{Random Number Distribution}
+
+The random number distribution maps the random number with the random number generator gen to the selected distribution.
+
+\begin{cpp}
+#include <random>
+...
+
+std::random_device seed;
+std::mt19937 gen(seed());
+std::uniform_int_distribution<> unDis(0, 20); // distribution between 0 and 20
+unDis(gen); // generates a random number
+\end{cpp}
+
+C++ has several discrete and continuous random number distributions. The discrete random number distribution generates integers. The continuous random number distribution generates floating-point numbers.
+
+\begin{cpp}
+class bernoulli_distribution;
+template<class T = int> class uniform_int_distribution;
+template<class T = int> class binomial_distribution;
+template<class T = int> class geometric_distribution;
+template<class T = int> class negative_binomial_distribution;
+template<class T = int> class poisson_distribution;
+template<class T = int> class discrete_distribution;
+template<class T = double> class exponential_distribution;
+template<class T = double> class gamma_distribution;
+template<class T = double> class weibull_distribution;
+template<class T = double> class extreme_value_distribution;
+template<class T = double> class normal_distribution;
+template<class T = double> class lognormal_distribution;
+template<class T = double> class chi_squared_distribution;
+template<class T = double> class cauchy_distribution;
+template<class T = double> class fisher_f_distribution;
+template<class T = double> class student_t_distribution;
+template<class T = double> class piecewise_constant_distribution;
+template<class T = double> class piecewise_linear_distribution;
+template<class T = double> class uniform_real_distribution;
+\end{cpp}
+
+Class templates with a default template argument int are discrete. The Bernoulli distribution generates booleans.
+
+Here is an example using the Mersenne Twister std::mt19937 as the pseudo-random number generator for generating one million random numbers. The random number stream is mapped to the uniform and normal (or Gaussian) distribution.
+
+\filename{Random numbers}
+
+\begin{cpp}
+// random.cpp
+...
+#include <random>
+...
+
+static const int NUM= 1000000;
+std::random_device seed;
+std::mt19937 gen(seed());
+std::uniform_int_distribution<> uniformDist(0, 20); // min= 0; max= 20
+std::normal_distribution<> normDist(50, 8); // mean= 50; sigma= 8
+
+std::map<int, int> uniformFrequency;
+std::map<int, int> normFrequency;
+for (int i= 1; i <= NUM; ++i){
+	++uniformFrequency[uniformDist(gen)];
+	++normFrequency[round(normDist(gen))];
+}
+\end{cpp}
+
+The following pictures show the uniform and the normal distribution of the one million random numbers as a plot.
+
+\myGraphic{0.6}{content/chapter12/images/2.jpg}{}
+
+\myGraphic{0.6}{content/chapter12/images/3.jpg}{}
+
+
+
+
+
+
+
+
+
+

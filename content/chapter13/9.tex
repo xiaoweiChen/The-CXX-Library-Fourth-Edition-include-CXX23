@@ -1,0 +1,74 @@
+The C++20 member function str.starts\_with(prefix) and str.end\_with(suffix) check for a string str if it begins with a prefix or ends with a suffix. Additionally, in C++23 you can check with str.contains if a string has a substring.
+
+
+\mySamllsection{Check for a Prefix or a Suffix}
+
+The member function str.starts\_with(prefix) and str.end\_with(suffix) check for a given string str if it begins with a prefix or ends with a suffix. The substring can be a std::string\_view, a single character, or a string.
+
+\filename{Check if the string starts with or ends with a prefix or suffix}
+
+\begin{cpp}
+// startWithEndsWith.cpp
+...
+#include <string>
+...
+std::string helloWorld = "hello world";
+
+std::cout << helloWorld.starts_with("hello") << '\n'; // true
+std::cout << helloWorld.starts_with("llo") << '\n'; // false
+
+std::cout << helloWorld.ends_with("world") << '\n'; // true
+std::cout << helloWorld.ends_with("wo") << '\n'; // false
+\end{cpp}
+
+\mySamllsection{Check for a Containing Substring}
+
+str.contains checks with if a string has a substring. The substring can be a std::string\_view, a single character, or a string.
+
+\filename{Check if the string contains a substring}
+
+\begin{cpp}
+// containsString.cpp
+...
+#include <string>
+...
+std::string helloWorld = "hello world";
+
+std::cout << helloWorld.contains("hello") << '\n'; // true
+std::cout << helloWorld.contains("llo") << '\n'; // true
+std::cout << helloWorld.contains('w') << '\n'; // true
+std::cout << helloWorld.contains('W') << '\n'; // false
+\end{cpp}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

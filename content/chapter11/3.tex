@@ -1,0 +1,158 @@
+A range adaptor transforms a range into a view.
+
+\begin{cpp}
+std::vector<int> numbers = {1, 2, 3, 4, 5, 6};
+auto results = numbers | std::views::filter([](int n){ return n % 2 == 0; })
+				       | std::views::transform([](int n){ return n * 2; });
+\end{cpp}
+
+In this code snippet, numbers is the range, and std::views::filter and std::views::transform are the views.
+
+The ranges library in C++20 has a rich set of views.
+
+\begin{center}
+Views in C++20
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{View}                                                                                & \textbf{Description}                                     \\ \hline
+\endfirsthead
+%
+\endhead
+%
+\begin{tabular}[c]{@{}l@{}}std::views::all\_t\\ std::views::all\end{tabular}                 & Takes all elements.                                      \\ \hline
+std::ranges::ref\_view                                                                       & Takes all elements of another range.                     \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::ranges::filter\_view\\ std::views::filter\end{tabular}       & Takes the elements which satisfy the predicate.          \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::ranges::transfrom\_view\\ std::views::transform\end{tabular} & Transfroms each element.                                 \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::ranges::take\_view\\ std::views::take\end{tabular}           & Takes the first n elements of another view.              \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::ranges::take\_while\_view\\ std::views::take\_while\end{tabular} &
+Takes the elements of another view as long as the predicate returns true. \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::ranges::drop\_view\\ std::views::drop\end{tabular}           & Skips the first n elements of another view.              \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::ranges::drop\_while\_view\\ std::views::drop\_while\end{tabular} &
+Skips the initial elements of another view until the predicate returns false. \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::ranges::join\_view\\ std::views::join\end{tabular}           & Join a view of ranges.                                   \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::ranges::split\_view\\ std::views::split\end{tabular}         & Splits a view by using a delimiter.                      \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::ranges::common\_view\\ std::views::common\end{tabular}       & Converts a view into a std::ranges::common\_range.       \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::ranges::reverse\_view\\ std::views::reverse\end{tabular}     & Iterates in reverse order.                               \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::ranges::basic\_istream\_view\\ std::views::istream\_view\end{tabular} &
+Appplies operator\textgreater{}\textgreater pn the view. \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::ranges::elements\_view\\ std::views::elements\end{tabular}   & Creates a view on the n-th element of tuples.            \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::ranges::keys\_views\\ std::views::keys\end{tabular}          & Creates a view on the first element of pair-like values. \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::ranges::values\_views\\ std::views::values\end{tabular} &
+Creates a view on the second element of pair-like values. \\ \hline
+\end{longtable}
+
+In general, you can use a view such as std::views::transform with the alternative name std::ranges:: transform\_view.
+
+Thanks to the ranges library, algorithms can be directly applied to the containers, can be composed, and are lazy.
+
+C++23 supports additional views:
+
+\begin{center}
+Views in C++23
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{View}                                                                                  & \textbf{Description}                                 \\ \hline
+\endfirsthead
+%
+\endhead
+%
+\begin{tabular}[c]{@{}l@{}}std::ranges::zip\_view\\ std::views::zip\end{tabular}               & Creates a view of tuples.                            \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::ranges::zip\_transform\_view\\ std::views::zip\_transform\end{tabular} &
+Creates a view of tuples by applying the transformation function. \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::ranges::adjacent\_view\\ std::views::adjacent\end{tabular}     & Creates a view of adjacent elements.                 \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::ranges::adjacent\_transform\_view\\ std::views::adjacent\_transform\end{tabular} &
+Creates a view of adjacent elements by applying the transformation function. \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::ranges::join\_with\_view\\ std::views::join\_with\end{tabular} &
+Joins existing ranges into a view by applying a delimiter. \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::ranges::slide\_view\\ std::views::slide\end{tabular}           & Creates N-tuples by taking a view and a number N.    \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::ranges::chunk\_view\\ std::views::chunk\end{tabular}           & Creates N-chunks of a view and a number N.           \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::ranges::chunk\_by\_view\\ std::views::chunk\_by\end{tabular}   & Creates chunks of a view based on a predicate.       \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::ranges::as\_const\_view\\ std::views::as\_const\end{tabular}   & Converts a view into a constant range.               \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::ranges::as\_rvalue\_view\\ std::views::as\_rvalue\end{tabular} & Casts each element into an rvalue.                   \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::ranges::stride\_view\\ std::views::stride\end{tabular}         & Creates a view of the N-th elements of another view. \\ \hline
+\end{longtable}
+
+The following code snippet applies the C++23 views.
+
+\filename{New views in C++23}
+
+\begin{cpp}
+// cpp23Ranges.cpp
+...
+#include <ranges>
+...
+
+std::vector vec = {1, 2, 3, 4};
+
+for (auto i : vec | std::views::adjacent<2>) {
+	std::cout << '(' << i.first << ", " << i.second << ") "; // (1, 2) (2, 3) (3, 4)
+}
+
+for (auto i : vec | std::views::adjacent_transform<2>(std::multiplies())) {
+	std::cout << i << ' '; // 2 6 12
+}
+
+std::print("{}\n", vec | std::views::chunk(2)); // [[1, 2], [3, 4],
+std::print("{}\n", vec | std::views::slide(2)); // [[1, 2], [2, 3], [3, 4]
+for (auto i : vec | std::views::slide(2)) {
+	std::cout << '[' << i[0] << ", " << i[1] << "] "; // [1, 2] [2, 3] [3, 4] [4, 5]
+}
+
+std::vector vec2 = {1, 2, 3, 0, 5, 2};
+std::print("{}\n", vec2 | std::views::chunk_by(std::ranges::less_equal{}));
+														// [[1, 2, 3], [0, 5], [2]]
+
+for (auto i : vec | std::views::slide(2)) {
+	std::cout << '[' << i[0] << ", " << i[1] << "] "; // [1, 2] [2, 3] [3, 4] [4, 5]
+}
+\end{cpp}
+
+\mySamllsection{generator}
+
+std::generator in C++23 is the first concrete coroutine generator. A std::generator generates a sequence of elements by repeatedly resuming the coroutine from which is was paused.
+
+\filename{The coroutine generator std::generator}
+
+\begin{cpp}
+// generator.cpp
+...
+#include <generator>
+#include <ranges>
+
+...
+
+std::generator<int> fib() {
+	co_yield 0; // 1
+	auto a = 0;
+	auto b = 1;
+	for(auto n : std::views::iota(0)) {
+		auto next = a + b;
+		a = b;
+		b = next;
+		co_yield next; // 2
+	}
+}
+
+...
+
+for (auto f : fib() | std::views::take(10)) { // 3
+	std::cout << f << " "; // 0 1 1 2 3 5 8 13 21 34
+}
+\end{cpp}
+
+The function fib return a coroutine. This coroutine creates an infinite stream of Fibonacci numbers. The stream of numbers starts with 0 (1) and continues with the following Fibonacci number (2). The ranges-based for-loop requests explicitly the first 10 Fibonacci numbers (3).
+
+
+
+
+

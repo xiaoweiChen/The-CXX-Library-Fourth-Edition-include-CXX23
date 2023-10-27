@@ -1,0 +1,17 @@
+Strings support the well-known comparison operators ==, !=, <, >, >=. The comparison of two strings takes place on their elements.
+
+\filename{String comparison}
+
+\begin{cpp}
+// stringComparisonAndConcatenation.cpp
+...
+#include <string>
+...
+
+std::string first{"aaa"};
+std::string second{"aaaa"};
+
+std::cout << (first < first) << '\n'; // false
+std::cout << (first <= first) << '\n'; // true
+std::cout << (first < second) << '\n'; // true
+\end{cpp}

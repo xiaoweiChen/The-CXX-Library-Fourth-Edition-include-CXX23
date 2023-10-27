@@ -1,0 +1,77 @@
+\myGraphic{0.6}{content/chapter13/images/1.jpg}{Cippi plays with a snake}
+
+A \href{http://en.cppreference.com/w/cpp/string/basic_string}{string} is a sequence of characters. C++ has many member functions to analyze or change a string. C++-strings are the safe replacement for C Strings: const char*. Strings need the header <string>.
+
+\myGraphic{0.6}{content/chapter13/images/2.jpg}{}
+
+
+\begin{myTip}{A string is similar to a std::vector}
+A string feels like a std::vector containing characters. It supports a very similar interface. This means that you have the algorithms of the Standard Template Library to operate on a string.
+
+The following code snippet has the std::string name with the value RainerGrimm. I use the STL algorithm std::find\_if to get the upper letter and then extract my first and last name into the variables firstName and lastName. The expression name.begin()+1 shows, that strings support random access iterators:
+
+\filename{string versus vector}
+
+\begin{cpp}
+// string.cpp
+...
+#include <algorithm>
+#include <string>
+
+std::string name{"RainerGrimm"};
+auto strIt= std::find_if(name.begin()+1, name.end(),
+						[](char c){ return std::isupper(c); });
+if (strIt != name.end()){
+	firstName= std::string(name.begin(), strIt);
+	lastName= std::string(strIt, name.end());
+}
+\end{cpp}
+\end{myTip}
+
+Strings are class templates parametrized by their character, character trait, and allocator. The character trait and the allocator have defaults.
+
+\begin{cpp}
+template <typename charT,
+		  typename traits= char_traits<charT>,
+		  typename Allocator= allocator<charT> >
+class basic_string;
+\end{cpp}
+
+C++ has synonyms for the character types char, wchar\_t, char16\_t and char32\_t
+
+\begin{cpp}
+typedef basic_string<char> string;
+typedef basic_string<wchar_t> wstring;
+typedef basic_string<char16_t> u16string;
+typedef basic_string<char32_t> u32string;
+\end{cpp}
+
+\begin{myTip}{std::string is the string}
+If we speak in C++ about a string, we refer with 99 \% probability to the specialization std::basic\_string for the character type char. This statement is also true for this book.
+\end{myTip}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

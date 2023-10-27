@@ -1,0 +1,98 @@
+
+C++ offers the ability to search in a string in many variations. Each variation exists in various overloaded forms.
+
+\begin{myTip}{Search is called find}
+Odd enough, the algorithms for searching in a string start with the name find. If the search was successful, you get the index of type std::string::size\_type. If not, you get the constant std::string::npos. The first character has index 0.
+\end{myTip}
+
+The find algorithms support:
+
+\begin{itemize}
+\item 
+search for a character, a C String, or a C++-string,
+
+\item 
+search for a character from a C or C++-string,
+
+\item 
+search forward and backward,
+
+\item 
+search positive (does contain) or negative(does not contain) for characters from a C or C++- string,
+
+\item 
+start the search at an arbitrary position in the string.
+\end{itemize}
+
+The arguments of all six variations of the find functions follow a similar pattern. The first argument is the text you are searching for. The second argument holds the start position of the search, and the third the number of characters starting from the second argument.
+
+Here are the six variations.
+
+\begin{center}
+Find variations of the string
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Member Functions} & \textbf{Description}                                                      \\ \hline
+\endfirsthead
+%
+\endhead
+%
+str.find(...)             & Returns the first position of a character, a C or C++-string in str.      \\ \hline
+str.rfind(...)            & Returns the last position of a character, a C or C++-string in str.       \\ \hline
+str.find\_first\_of(...)  & Returns the first position of a char acter from a C or C++-string in str. \\ \hline
+str.find\_last\_of(...)   & Returns the last position of a character from a C or C++-string in str.   \\ \hline
+str.find\_first\_not\_of(...) & Returns the first position of a character in str, which is not from a C or C++-string. \\ \hline
+std.find\_last\_not\_of(...)  & Returns the last position of a character in str, which is not from a C or C++-string.  \\ \hline
+\end{longtable}
+
+\filename{Find(search) in a string}
+
+\begin{cpp}
+// stringFind.cpp
+...
+#include <string>
+...
+std::string str;
+auto idx= str.find("no");
+if (idx == std::string::npos) std::cout << "not found"; // not found
+str= {"dkeu84kf8k48kdj39kdj74945du942"};
+std::string str2{"84"};
+std::cout << str.find('8'); // 4
+std::cout << str.rfind('8'); // 11
+std::cout << str.find('8', 10); // 11
+std::cout << str.find(str2); // 4
+std::cout << str.rfind(str2); // 4
+std::cout << str.find(str2, 10); // 18446744073709551615
+str2="0123456789";
+std::cout << str.find_first_of("678"); // 4
+std::cout << str.find_last_of("678"); // 20
+std::cout << str.find_first_of("678", 10); // 11
+std::cout << str.find_first_of(str2); // 4
+std::cout << str.find_last_of(str2); // 29
+std::cout << str.find_first_of(str2, 10); // 10
+std::cout << str.find_first_not_of("678"); // 0
+std::cout << str.find_last_not_of("678"); // 29
+std::cout << str.find_first_not_of("678", 10); // 10
+std::cout << str.find_first_not_of(str2); // 0
+std::cout << str.find_last_not_of(str2); // 26
+std::cout << str.find_first_not_of(str2, 10); // 12
+\end{cpp}
+
+The call std::find(str2, 10) returns std::string::npos. If I display that value, I get on my platform 18446744073709551615.
+
+
+
+
+
+
+
+
+
+
+
+

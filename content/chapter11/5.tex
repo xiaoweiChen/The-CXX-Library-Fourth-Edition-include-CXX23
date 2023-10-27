@@ -1,0 +1,61 @@
+The ranges library supports function composition using the | symbol.
+
+\filename{Ranges work directly on the container}
+
+\begin{cpp}
+// rangesComposition.cpp
+...
+#include <ranges>
+std::map<std::string, int> freqWord{ {"witch", 25}, {"wizard", 33}, {"tale", 45},
+									 {"dog", 4}, {"cat", 34}, {"fish", 23} };
+
+std::cout << "All words: "; // (1)
+for (const auto& name : std::views::keys(freqWord)) { std::cout << name << " "; } \
+
+std::cout << "All words reverse: "; // (2)
+for (const auto& name : std::views::keys(freqWord) | std::views::reverse) {
+	std::cout << name << " ";
+}
+
+std::cout << "The first 4 words: "; // (3)
+for (const auto& name : std::views::keys(freqWord) | std::views::take(4)) {
+	std::cout << name << " ";
+}
+
+std::cout << "All words starting with w: "; // (4)
+auto firstw = [](const std::string& name){ return name[0] == 'w'; };
+for (const auto& name : std::views::keys(freqWord) | std::views::filter(firstw)) {
+	std::cout << name << " ";
+}
+\end{cpp}
+
+In this case, I’m only interested in the keys. I display all of them (1), all of them reversed (2), the first four (3), and the keys starting with the letter ‘w’ (4).
+
+The pipe symbol | is syntactic sugar for function composition. Instead of C(R), you can write R | C. Consequentially, the next three lines are equivalent.
+
+\begin{cpp}
+auto rev1 = std::views::reverse(std::views::keys(freqWord));
+auto rev2 = std::views::keys(freqWord) | std::views::reverse;
+auto rev3 = freqWord | std::views::keys | std::views::reverse;
+\end{cpp}
+
+Finally, here is the output of the program:
+
+\myGraphic{0.6}{content/chapter11/images/3.jpg}{}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

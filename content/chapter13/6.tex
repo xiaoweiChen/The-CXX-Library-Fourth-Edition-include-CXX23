@@ -1,0 +1,82 @@
+Access to the elements of a string str is very convenient because the string supports random access iterators. You can access with str.front() the first character, and with str.back() the last character of the string. With str[n] and str.at(n), you get the n-th element by index.
+
+The following table provides an overview.
+
+\begin{center}
+Access the elements of the string
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Member Functions} & \textbf{Example}                                                              \\ \hline
+\endfirsthead
+%
+\endhead
+%
+str.front()               & Returns the first character of str.                                           \\ \hline
+str.back()                & Returns the last character of str.                                            \\ \hline
+std{[}n{]}                & Returns the n-th character of str. The string boundaries will not be checked. \\ \hline
+std.at(n) & Returns the n-th character of str. The string boundaries will be checked. If the boundaries are violated, a std::out\_of\_range exception is thrown. \\ \hline
+\end{longtable}
+
+\filename{Element access}
+
+\begin{cpp}
+// stringAccess.cpp
+...
+#include <string>
+...
+
+std::string str= {"0123456789"};
+std::cout << str.front() << '\n'; // 0
+std::cout << str.back() << '\n'; // 9
+for (int i= 0; i <= 3; ++i){
+	std::cout << "str[" << i << "]:" << str[i] << "; ";
+} // str[0]: 0; str[1]: 1; str[2]: 2; str[3]: 3;
+
+std::cout << str[10] << '\n'; // undefined behaviour
+try{
+	str.at(10);
+}
+catch (const std::out_of_range& e){
+	std::cerr << "Exception: " << e.what() << '\n';
+} // Exception: basic_string::at
+
+std::cout << *(&str[0]+5) << '\n'; // 5
+std::cout << *(&str[5]) << '\n'; // 5
+std::cout << str[5] << '\n'; // 5
+\end{cpp}
+
+It is exciting to see in the example that the compiler performs the invocation str[10]. The access outside the string boundaries is undefined behavior. On the contrary, the compiler complains about the call str.at(10).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,85 @@
+C++ offers many member functions to create strings from C or C++-strings. Under the hood, a C string is always involved for creating a C++-string. That changes with C++14, because the new C++ standard support C++-string literals: std::string str{"string"s}. The C string literals "string literal" becomes with the suffix s a C++-string literal: "string literal"s.
+
+The table gives an overview of the member functions to create and delete a C++-string.
+
+\begin{center}
+Member Functions to create and delete a string
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Member Functions}        & \textbf{Example}                        \\ \hline
+\endfirsthead
+%
+\endhead
+%
+Default                          & std::string str                         \\ \hline
+Copies from a C++-string         & std::string str(oth)                    \\ \hline
+Moves from a C++-string          & std::string str(std::move(oth))         \\ \hline
+From the range of a C++-string   & std::string(oth.begin(), oth.end())     \\ \hline
+From a substring of a C++-string & std::string(oth, otherIndex)            \\ \hline
+From a substring of a C++-string & std::string(oth, otherIndex, strlen)    \\ \hline
+From a C string                  & std::string str("c-string")             \\ \hline
+From a C array                   & std::string str("c-array", len)         \\ \hline
+From characters                  & std::string str(num, 'c')               \\ \hline
+From an initializer list         & std::string str(\{'a', 'b', 'c', 'd'\}) \\ \hline
+From a substring                 & str = other.substring(3, 10)            \\ \hline
+Destructor                       & str.$\sim$string()                      \\ \hline
+\end{longtable}
+
+\filename{Creation of a string}
+
+\begin{cpp}
+// stringConstructor.cpp
+...
+#include <string>
+...
+std::string defaultString;
+std::string other{"123456789"};
+std::string str1(other); // 123456789
+std::string tmp(other); // 123456789
+std::string str2(std::move(tmp)); // 123456789
+std::string str3(other.begin(), other.end()); // 123456789
+std::string str4(other, 2); // 3456789
+std::string str5(other, 2, 5); // 34567
+std::string str6("123456789", 5); // 12345
+std::string str7(5, '1'); // 11111
+std::string str8({'1', '2', '3', '4', '5'}); // 12345
+std::cout << str6.substr(); // 12345
+std::cout << str6.substr(1); // 2345
+std::cout << str6.substr(1, 2); // 23
+\end{cpp}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,123 @@
+
+Strings have many operations to modify them. str.assign assigns a new string to the string str. With str.swap you can swap two strings. To remove a character from a string, use str.pop\_back or str.erase. On contrary, str.clear or str.erase deletes the whole string. To append new characters to a string, use +=, std.append or str.push\_back. You can use str.insert to insert new characters or str.replace to replace characters.
+
+
+\begin{center}
+Member Functions for modifying a string
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Member Functions}  & \textbf{Description}                                 \\ \hline
+\endfirsthead
+%
+\endhead
+%
+str=str2                   & Assigns str2 to str.                                 \\ \hline
+str.assign(...)            & Assigns to str a new string.                         \\ \hline
+str.swap(str2)             & Swaps str and str2.                                  \\ \hline
+str.pop\_back()            & Removes the last character from str.                 \\ \hline
+str.erase(...)             & Removes characters from str.                         \\ \hline
+str.clear()                & Clears the str.                                      \\ \hline
+str.append(...)            & Appends characters to str.                           \\ \hline
+str.push\_back(s)          & Appends the charactoer s to str.                     \\ \hline
+str.insert(pos, ...)       & Inserts characters in str starting at pos.           \\ \hline
+str.replace(pos, len, ...) & Replaces the len characters from str starting at pos \\ \hline
+\end{longtable}
+
+The operations are available in many overloaded versions. The member functions str.assign, str.append, str.insert, and str.replace are very similar. All four can be invoked with C++-strings and substrings, characters, C strings, C string arrays, ranges, and initializer lists. str.erase can erase a single character, ranges, and many characters starting at a given position.
+
+The following code snippet shows many of the variations. For simplicity reasons, only the effects of the strings modifications are displayed:
+
+\filename{Modifying strings}
+
+\begin{cpp}
+// stringModification.cpp
+...
+#include <string>
+...
+
+std::string str{"New String"};
+std::string str2{"Other String"};
+
+str.assign(str2, 4, std::string::npos); // r String
+str.assign(5, '-'); // -----
+
+str= {"0123456789"};
+str.erase(7, 2); // 01234569
+str.erase(str.begin()+2, str.end()-2); // 012
+str.erase(str.begin()+2, str.end()); // 01
+str.pop_back(); // 0
+str.erase(); //
+
+str= "01234";
+str+= "56"; // 0123456
+str+= '7'; // 01234567
+str+= {'8', '9'}; // 0123456789
+str.append(str); // 01234567890123456789
+str.append(str, 2, 4); // 012345678901234567892345
+str.append(3, '0'); // 012345678901234567892345000
+str.append(str, 10, 10); // 01234567890123456789234500001234567989
+str.push_back('9'); // 012345678901234567892345000012345679899
+
+str= {"345"};
+str.insert(3, "6789"); // 3456789
+str.insert(0, "012"); // 0123456789
+
+str= {"only for testing purpose."};
+str.replace(0, 0, "0"); // 0nly for testing purpose.
+str.replace(0, 5, "Only", 0, 4); // Only for testing purpose.
+str.replace(16, 8, ""); // Only for testing.
+
+str.replace(4, 0, 5, 'y'); // Onlyyyyyy for testing.
+str.replace(str.begin(), str.end(), "Only for testing purpose.");
+										// Only for testing purpose.
+str.replace(str.begin()+4, str.end()-8, 10, '#');
+										// Only#############purpose.
+\end{cpp}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

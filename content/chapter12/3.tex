@@ -1,0 +1,86 @@
+C++ supports basic and advanced mathematical constants. The mathematical constants have the data type double. They are in the namespace std::number and part of the header <numbers>.
+
+\begin{center}
+The mathematical constants
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Mathematical Constant} & \textbf{Meaning} \\ \hline
+\endfirsthead
+%
+\endhead
+%
+std::numbers::e                & $e$                \\ \hline
+std::numbers::log2e            & $log_{2}e$                 \\ \hline
+std::numbers::log10e           & $log_{10}e$                  \\ \hline
+std::numbers::pi               & $\pi$              \\ \hline
+std::numbers::inv\_pi          & $\frac{1}{\pi}$                \\ \hline
+std::numbers::inv\_sqrtpi      & $\frac{1}{\sqrt{\pi}}$      \\ \hline
+std::numbers::ln2              & $ln2$                  \\ \hline
+std::numbers::ln10             & $ln10$                  \\ \hline
+std::numbers::sqrt2            & $\sqrt{2}$                 \\ \hline
+std::numbers::sqrt3            & $\sqrt{3}$                 \\ \hline
+std::numbers::inv\_sqrt3       & $\frac{1}{\sqrt{3}}$         \\ \hline
+std::numbers::egamma           &  \href{https://en.wikipedia.org/wiki/Euler%E2%80%93Mascheroni_constant}{Euler-Mascheroni constant}                \\ \hline
+std::numbers::phi              &      $\phi$            \\ \hline
+\end{longtable}
+
+The following code snippet displays all mathematical constants.
+
+\filename{Mathematic functions}
+
+\begin{cpp}
+// mathematicalConstants.cpp
+#include <numbers>
+...
+
+std::cout<< std::setprecision(10);
+
+std::cout << "std::numbers::e: " << std::numbers::e << '\n';
+std::cout << "std::numbers::log2e: " << std::numbers::log2e << '\n';
+std::cout << "std::numbers::log10e: " << std::numbers::log10e << '\n';
+std::cout << "std::numbers::pi: " << std::numbers::pi << '\n';
+std::cout << "std::numbers::inv_pi: " << std::numbers::inv_pi << '\n';
+std::cout << "std::numbers::inv_sqrtpi: " << std::numbers::inv_sqrtpi << '\n';
+std::cout << "std::numbers::ln2: " << std::numbers::ln2 << '\n';
+std::cout << "std::numbers::sqrt2: " << std::numbers::sqrt2 << '\n';
+std::cout << "std::numbers::sqrt3: " << std::numbers::sqrt3 << '\n';
+std::cout << "std::numbers::inv_sqrt3: " << std::numbers::inv_sqrt3 << '\n';
+std::cout << "std::numbers::egamma: " << std::numbers::egamma << '\n';
+std::cout << "std::numbers::phi: " << std::numbers::phi << '\n';
+\end{cpp}
+
+\myGraphic{0.8}{content/chapter12/images/4.jpg}{}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

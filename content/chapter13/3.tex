@@ -1,0 +1,103 @@
+The number of elements a string has (str.size()) is in general, smaller than the number of elements for which space is reserved: str.capacity(). Therefore if you add elements to a string, there will not automatically be new memory allocated. std:max\_size() return how many elements a string can maximal have. For the three member functions the following relation holds: str.size() <= str.capacity() <= str.max\_size().
+
+The following table shows the member functions for dealing with the memory management of the string.
+
+\begin{center}
+Member Functions to create and delete a string
+\end{center}
+
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Member Functions} & \textbf{Description}                                  \\ \hline
+\endfirsthead
+%
+\endhead
+%
+str.empty()               & Checks if str has elements.                           \\ \hline
+str.size(), str.length()  & Number of elements of the str.                        \\ \hline
+str.capacity()            & Number of elements str can have without reallocation. \\ \hline
+str.max\_size()           & Number of elements str can maximal have.              \\ \hline
+std.resize(n)             & Resize str to n elements.                             \\ \hline
+str.resize\_and\_overwrite(n, op) & Resize str to n elements and applies the operation op to its elements. \\ \hline
+str.reserve(n)            & Reserve memory for a least n elements.                \\ \hline
+std.shrink\_to\_fit()     & Adjusts the capacity of the string to it's size.      \\ \hline
+\end{longtable}
+
+The request str.shrink\_to\_fit() is, as in the case of std::vector, non-binding.
+
+\filename{Size versus capacity}
+
+\begin{cpp}
+// stringSizeCapacity.cpp
+...
+#include <string>
+...
+
+void showStringInfo(const std::string& s){
+	std::cout << s << ": ";
+	std::cout << s.size() << " ";
+	std::cout << s.capacity() << " ";
+	std::cout << s.max_size() << " ";
+}
+
+std::string str;
+showStringInfo(str); // "": 0 0 4611686018427387897
+
+str +="12345";
+showStringInfo(str); // "12345": 5 5 4611686018427387897
+
+str.resize(30);
+showStringInfo(str); // "12345": 30 30 4611686018427387897
+
+str.reserve(1000);
+showStringInfo(str); // "12345": 30 1000 4611686018427387897
+
+str.shrink_to_fit();
+showStringInfo(str); // "12345": 30 30 4611686018427387897
+\end{cpp}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,87 @@
+C++ inherited many numeric functions from C. They need the header \href{http://en.cppreference.com/w/cpp/numeric/math}{<cmath>}. The table below shows the names of these functions.
+
+\begin{center}
+Mathematical functions in <cmath>
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{lllll}
+pow   & sin  & tanh  & asinh  & fabs  \\
+\endfirsthead
+%
+\endhead
+%
+exp   & cos  & asin  & aconsh & fmod  \\
+sqrt  & tan  & acos  & atanh  & frexp \\
+log   & sinh & atan  & ceil   & ldexp \\
+log10 & cosh & atan2 & floor  & modf 
+\end{longtable}
+
+Additionally, C++ inherits mathematical functions from C. They are defined in the header \href{http://en.cppreference.com/w/cpp/numeric/math}{<cstdlib>}.
+
+Once more, here are the names.
+
+\begin{center}
+Mathematical functions in <cstdlib>
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{llll}
+abs  & llabs & ldiv  & srand \\
+\endfirsthead
+%
+\endhead
+%
+labs & div   & lldiv & rand 
+\end{longtable}
+
+All functions for integers are available for the types int, long, and ‘long long; all functions for floating-point numbers are available for the types float, double, and 'long double.
+
+The numeric functions need to be qualified with the namespace std.
+
+\filename{Mathematic functions}
+
+\begin{cpp}
+// mathFunctions.cpp
+...
+#include <cmath>
+#include <cstdlib>
+...
+
+std::cout << std::pow(2, 10); // 1024
+std::cout << std::pow(2, 0.5); // 1.41421
+std::cout << std::exp(1); // 2.71828
+std::cout << std::ceil(5.5); // 6
+std::cout << std::floor(5.5); // 5
+std::cout << std::fmod(5.5, 2); // 1.5
+
+double intPart;
+auto fracPart= std::modf(5.7, &intPart);
+std::cout << intPart << " + " << fracPart; // 5 + 0.7
+std::div_t divresult= std::div(14, 5);
+std::cout << divresult.quot << " " << divresult.rem; // 2 4
+
+// seed
+std::srand(time(nullptr));
+for (int i= 0;i < 10; ++i) std::cout << (rand()%6 + 1) << " ";
+											// 3 6 5 3 6 5 6 3 1 5
+\end{cpp}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,58 @@
+\myGraphic{0.6}{content/chapter13/images/3.jpg}{}
+
+While the conversion of a C string into a C++-string id done implicitly, you must explicitly request the conversion from a C++-string into a C string. str.copy() copies the content of a C++-string without the terminating $ \verb|\|$0 character. str.data() and str.c\_str() includes the terminating null character.
+
+\begin{myWarning}{Be careful with str.data() and str.c\_str()}
+The return value of the two member functions str.data() and std.c\_str() is invalid, if you modify the str.
+
+\filename{C versus C++-strings}
+
+\begin{cpp}
+// stringCversusC++.cpp
+...
+#include<string>
+...
+
+std::string str{"C++-String"};
+str += " C-String";
+std::cout << str; // C++-String C-String
+const char* cString= str.c_str();
+char buffer[10];
+str.copy(buffer, 10);
+str+= "works";
+// const char* cString2= cString; // ERROR
+std::string str2(buffer, buffer+10);
+std::cout<< str2; // C++-String
+\end{cpp}
+\end{myWarning}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

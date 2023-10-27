@@ -1,0 +1,69 @@
+The algorithms of the \href{https://en.cppreference.com/w/cpp/header/algorithm}{algorithm library} and the \href{https://en.cppreference.com/w/cpp/header/memory}{memory libray} have \href{https://en.cppreference.com/w/cpp/algorithm/ranges}{ranges pendants}. They start with the namespace std::ranges. The \href{https://en.cppreference.com/w/cpp/header/numeric}{numeric library} does not have a ranges pendant. In the following listing, I display one of the five overloads of the std::sort algorithm and one of the two overloads of the new std::ranges::sort algorithm.
+
+\begin{cpp}
+template< class ExecutionPolicy, class RandomIt, class Compare >
+void sort( ExecutionPolicy&& policy,
+		   RandomIt first, RandomIt last, Compare comp );
+
+template <std::random_access_iterator I, std::sentinel_for<I> S,
+		class Comp = ranges::less, class Proj = std::identity>
+requires std::sortable<I, Comp, Proj>
+constexpr I sort(I first, S last, Comp comp = {}, Proj proj = {});
+\end{cpp}
+
+First, std::sort takes a range given by a begin and end iterator. The iterators must be a random access iterator. It requires an execution policy. Compare lets you specify the sorting strategy of std::sort.
+
+Furthermore, when you study the overload of std::ranges::sort, you notice that it takes a range defined by a random-access begin iterator and a sentinel. Additionally, this overload takes a predicate Comp, and a projection Proj. The predicate Comp uses for default less, and the projection Proj the identity \href{https://en.cppreference.com/w/cpp/utility/functional/identity}{std::identity}. A projection is a mapping of a set into a subset:
+
+\begin{cpp}
+struct PhoneBookEntry{
+	std::string name;
+	int number;
+};
+
+std::vector<PhoneBookEntry> phoneBook{ {"Brown", 111}, {"Smith", 444}, {"Grimm", 666},
+							{"Butcher", 222}, {"Taylor", 555}, {"Wilson", 333} };
+							
+std::ranges::sort(phoneBook, std::ranges::greater(), &PhoneBookEntry::name);
+\end{cpp}
+
+The phoneBook is sorted in a descending order based on the projection \&PhoneBookEntry::name.
+
+The std::random\_access\_iterator, std::sortable, and std::sentinel\_for are \href{https://www.modernescpp.com/index.php/tag/concepts}{concepts}.
+
+std::ranges::sort does not support execution policies.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

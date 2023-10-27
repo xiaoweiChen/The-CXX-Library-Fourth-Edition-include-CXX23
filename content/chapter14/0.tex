@@ -1,0 +1,65 @@
+\myGraphic{0.6}{content/chapter14/images/1.jpg}{Cippi ovserves a Snake}
+
+A \href{http://en.cppreference.com/w/cpp/string/basic_string_view}{string view} is a non-owning reference to a string. It represents a view of a sequence of characters. This sequence of characters can be a C++-string or a C-string. A string view needs the header <string\_view>.
+
+\begin{myTip}{A string view is a for copying optimized string}
+From a birds-eye perspective, the purpose of std::string\_view is to avoid copying data that is already owned by someone else and to allow immutable access to a std::string like object. The string view is a restricted string that supports only immutable operations. Additionally, a string view sv has two additional mutating operations: sv.remove\_prefix and sv.remove\_suffix.
+\end{myTip}
+
+String views are class templates parameterized by their character and their character trait. The character trait has a default. In contrast to a string, a string view is non-owner and, therefore, needs no allocator.
+
+\begin{cpp}
+template<
+	class CharT,
+	class Traits = std::char_traits<CharT>
+> class basic_string_view;
+\end{cpp}
+
+According to strings, string views exist four synonyms for the underlying character types char, wchar\_t, char16\_t, and char32\_t.
+
+\begin{cpp}
+typedef std::string_view std::basic_string_view<char>
+typedef std::wstring_view std::basic_string_view<wchar_t>
+typedef std::u16string_view std::basic_string_view<char16_t>
+typedef std::u32string_view std::basic_string_view<char32_t>
+\end{cpp}
+
+\begin{myNotic}{std::string\_view is the string view}
+If we speak in C++ about a string view, we refer with 99\% probability to the specialization std::basic\_string\_view for the character type char. This statement is also true for this book.
+\end{myNotic}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

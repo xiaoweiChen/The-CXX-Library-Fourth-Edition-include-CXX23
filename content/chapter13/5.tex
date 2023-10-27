@@ -1,0 +1,23 @@
+The + operator is overloaded for strings, so you can add strings.
+
+\begin{myWarning}{The + operator is only overloaded for C++-strings}
+The C++ type system permits it to concatenate C++ and C strings to C++-strings, but not to concatenate C++ and C strings to C strings. The reason is that the + operator is overloaded for C++-strings. Therefore only the second line is valid C++ because the C is implicitly converted to a C++-string:
+	
+\filename{String Concatenation}
+
+\begin{cpp}
+// stringComparisonAndConcatenation.cpp
+...
+#include <string>
+...
+std::string wrong= "1" + "1"; // ERROR
+std::string right= std::string("1") + "1"; // 11
+\end{cpp}
+\end{myWarning}
+
+
+
+
+
+
+

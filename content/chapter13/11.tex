@@ -1,0 +1,101 @@
+
+\myGraphic{0.6}{content/chapter13/images/4.jpg}{}
+
+You can convert with std::to\_string(val) and std::to\_wstring(val) numbers or floating-point numbers to the corresponding std::string or std::wstring. You have the function family of the sto* functions for the opposite direction for converting numbers or floating-point numbers to strings. All functions need the header <string>.
+
+\begin{myTip}{Read sto* as string to}
+The seven ways to convert a string into a natural or floating-point number follow a simple pattern. All functions start with sto and add other characters, denoting the type to which the strings should be converted to. E.g. stol stands for a string to long or stod for a string to double.
+\end{myTip}
+
+The sto functions all have the same interface. The example shows it for the type long.
+
+\begin{cpp}
+std::stol(str, idx= nullptr, base= 10)
+\end{cpp}
+
+The function takes a string and determines the long representation to the base base. stol ignores leading spaces and optionally returns the index of the first invalid character in idx. By default, the base is 10. Valid values for the base are 0 and 2 until 36. If you use base 0 the compiler automatically determines the type based on the format of the string. If the base is greater than ten, the compiler encodes them in the characters a until z. The representation is analogous to the representation of hexadecimal numbers.
+
+The table gives an overview of all functions.
+
+\begin{center}
+Numeric conversion of strings
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Member Function} & \textbf{Descrption}                  \\ \hline
+\endfirsthead
+%
+\endhead
+%
+std::to\_string(val)     & Converts val into a std::string.     \\ \hline
+std::to\_wstring(val)    & Converts val into a std::wstring.    \\ \hline
+std::stoi(str)           & Returns an int value.                \\ \hline
+std::stol(str)           & Returns a long value.                \\ \hline
+std::stoll(str)          & Returns a long long value.           \\ \hline
+std::stoul(str)          & Returns an unsigned long value.      \\ \hline
+std::stoull(str)         & Returns an unsigned long long value. \\ \hline
+std::stof(str)           & Returns a float value.               \\ \hline
+std::stod(str)           & Returns a double value.              \\ \hline
+std::stold(str)          & Returns an long double value.        \\ \hline
+\end{longtable}
+
+
+\begin{myNotic}{Where is the stou function?}
+In case you’re curious, the C++ sto functions are thin wrappers around the C strto* functions, but there is no strtou function in C. Therefore, C++ has no stou function.
+\end{myNotic}
+
+The functions throw a std::invalid\_argument exception if the conversion is impossible. If the determined value is too big for the destination type you get a std::out\_of\_range exception.
+
+\filename{Numeric conversion}
+
+\begin{cpp}
+// stringNumericConversion.cpp
+...
+#include <string>
+...
+
+std::string maxLongLongString=
+			std::to_string(std::numeric_limits<long long>::max());
+std::wstring maxLongLongWstring=
+			std::to_wstring(std::numeric_limits<long long>::max());
+
+std::cout << std::numeric_limits<long long>::max(); // 9223372036854775807
+std::cout << maxLongLongString; // 9223372036854775807
+std::wcout << maxLongLongWstring; // 9223372036854775807
+
+std::string str("10010101");
+std::cout << std::stoi(str); // 10010101
+std::cout << std::stoi(str, nullptr, 16); // 268501249
+std::cout << std::stoi(str, nullptr, 8); // 2101313
+std::cout << std::stoi(str, nullptr, 2); // 149
+
+std::size_t idx;
+std::cout << std::stod(" 3.5 km", &idx); // 3.5
+std::cout << idx; // 6
+
+try{
+	std::cout << std::stoi(" 3.5 km") << '\n'; // 3
+	std::cout << std::stoi(" 3.5 km", nullptr, 2) << '\n';
+}
+catch (const std::exception& e){
+	std::cerr << e.what() << '\n';
+} // stoi
+\end{cpp}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
