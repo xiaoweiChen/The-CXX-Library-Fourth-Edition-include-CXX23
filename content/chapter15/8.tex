@@ -1,0 +1,92 @@
+
+
+It’s pretty convenient to iterate with std::regex\_iterator and std::regex\_token\_iterator through the matched texts. std::regex\_iterator supports the matches and their capture groups. std::regex\_token\_iterator supports more. You can address the components of each capture. Using a negative index enables it to access the text between the matches.
+
+\mySamllsection{std::regex\_iterator}
+
+C++ defines the following four type synonyms for std::regex\_iterator.
+
+\begin{cpp}
+typedef cregex_iterator regex_iterator<const char*>
+typedef wcregex_iterator regex_iterator<const wchar_t*>
+typedef sregex_iterator regex_iterator<std::string::const_iterator>
+typedef wsregex_iterator regex_iterator<std::wstring::const_iterator>
+\end{cpp}
+
+You can use std::regex\_iterator to count the occurrences of the words in a text:
+
+\filename{std::regex\_iterator}
+
+\begin{cpp}
+// regexIterator.cpp
+...
+#include <regex>
+...
+
+using std::cout;
+std::string text{"That's a (to me) amazingly frequent question. It may be the most freque\
+ntly asked question. Surprisingly, C++11 feels like a new language: The pieces just fit t\
+ogether better than they used to, and I find a higher-level style of programming more nat\
+ural than before and as efficient as ever." };
+
+std::regex wordReg{R"(\w+)"};
+std::sregex_iterator wordItBegin(text.begin(), text.end(), wordReg);
+const std::sregex_iterator wordItEnd;
+std::unordered_map<std::string, std::size_t> allWords;
+for (; wordItBegin != wordItEnd; ++wordItBegin){
+	++allWords[wordItBegin->str()];
+}
+for (auto wordIt: allWords) cout << "(" << wordIt.first << ":"
+								        << wordIt.second << ")";
+					// (as:2)(of:1)(level:1)(find:1)(ever:1)(and:2)(natural:1) ...
+\end{cpp}
+
+A word consists of a least one character (\verb|\|w+). This regular expression is used to define the begin iterator wordItBegin and the end iterator wordItEnd. The iteration through the matches happens in the for loop. Each word increments the counter: ++allWords[wordItBegin]->str()]. A word with counter equals to 1 is created if it is not already in allWords.
+
+\mySamllsection{std::regex\_token\_iterator}
+
+C++ defines the following four type synonyms for std::regex\_token\_iterator.
+
+\begin{cpp}
+typedef cregex_iterator regex_iterator<const char*>
+typedef wcregex_iterator regex_iterator<const wchar_t*>
+typedef sregex_iterator regex_iterator<std::string::const_iterator>
+typedef wsregex_iterator regex_iterator<std::wstring::const_iterator>
+\end{cpp}
+
+std::regex\_token\_iterator enables you to use indexes to explicitly specify which capture groups you are interested in. If you don’t specify the index, you will get all capture groups, but you can also request specific capture groups using their respective index. The -1 index is particular: You can use -1 to address the text between the matches:
+
+\filename{std::regex\_token\_iterator}
+
+\begin{cpp}
+// tokenIterator.cpp
+...
+using namespace std;
+
+std::string text{"Pete Becker, The C++ Standard Library Extensions, 2006:"
+				 "Nicolai Josuttis, The C++ Standard Library, 1999:"
+				 "Andrei Alexandrescu, Modern C++ Design, 2001"};
+	
+regex regBook(R"((\w+)\s(\w+),([\w\s\+]*),(\d{4}))");
+sregex_token_iterator bookItBegin(text.begin(), text.end(), regBook);
+
+const sregex_token_iterator bookItEnd;
+while (bookItBegin != bookItEnd){
+	cout << *bookItBegin++ << endl;
+} // Pete Becker,The C++ Standard Library Extensions,2006
+  // Nicolai Josuttis,The C++ Standard Library,1999
+
+sregex_token_iterator bookItNameIssueBegin(text.begin(), text.end(),
+										   regBook, {{2,4}});
+const sregex_token_iterator bookItNameIssueEnd;
+\end{cpp}
+
+
+
+
+
+
+
+
+
+

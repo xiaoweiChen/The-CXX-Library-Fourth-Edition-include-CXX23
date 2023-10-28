@@ -1,0 +1,80 @@
+
+std::regex\_replace and std::match\_results.format in combination with capture groups enables you to format text. You can use a format string together with a placeholder to insert the value.
+
+Here are both possibilities:
+
+\filename{Formatting with regex}
+
+\begin{cpp}
+// format.cpp
+...
+#include <regex>
+...
+
+std::string future{"Future"};
+const std::string unofficial{"unofficial, C++0x"};
+const std::string official{"official, C++11"};
+
+std::regex regValues{"(.*),(.*)"};
+std::string standardText{"The $1 name of the new C++ standard is $2."};
+std::string textNow= std::regex_replace(unofficial, regValues, standardText);
+std::cout << textNow << '\n';
+			// The unofficial name of the new C++ standard is C++0x.
+
+std::smatch smatch;
+if (std::regex_match(official, smatch, regValues)){
+	std::cout << smatch.str(); // official,C++11
+	std::string textFuture= smatch.format(standardText);
+	std::cout << textFuture << '\n';
+} // The official name of the new C++ standard is C++11.
+\end{cpp}
+
+In the function call std::regex\_replace(unoffical, regValues, standardText), the text matching the first and second capture group of the regular expression regValues is extracted from the string unofficial. The placeholders \$1 and \$2 in the text standardText are then replaced by the extracted values. The strategy of smatch.format(standardTest) is similar, but there is a difference: 
+
+The creation of the search results smatch is separated from their usage when formatting the string.
+
+In addition to capture groups, C++ supports additional format escape sequences. You can use them in format strings:
+
+\begin{center}
+Format escape sequences
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Format escape sequence} & \textbf{Description}                        \\ \hline
+\endfirsthead
+%
+\endhead
+%
+\$\&                            & Returns the total match(0th capture group). \\ \hline
+$$                              & Returns \$.                                 \\ \hline
+\$`(backward tic)               & Returns the text before the total match.    \\ \hline
+\$\^{A}＇(forward tic) & Returns the text after the total match. \\ \hline
+'\$ i'                          & Returns the ith capture group.              \\ \hline
+\end{longtable}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

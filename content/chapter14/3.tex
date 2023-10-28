@@ -1,0 +1,94 @@
+The call stringView.swap(stringView2) swaps the content of the two string views. The member functions remove\_prefix and remove\_suffix are unique to a string view because a string supports neither. remove\_prefix shrinks its start forward; remove\_suffix shrinks its end backward.
+
+\filename{Non-modifying operations}
+
+\begin{cpp}
+// string_view.cpp
+...
+#include <string_view>
+
+...
+
+using namespace std;
+string str = " A lot of space";
+string_view strView = str;
+strView.remove_prefix(min(strView.find_first_not_of(" "), strView.size()));
+cout << str << endl // " A lot of space
+	 << strView << endl; // "A lot of space"
+	 
+char arr[] = {'A',' ','l','o','t',' ','o','f',' ',
+			  's','p','a','c','e','\0', '\0', '\0'};
+string_view strView2(arr, sizeof arr);
+auto trimPos = strView2.find('\0');
+if(trimPos != strView2.npos) strView2.remove_suffix(strView2.size() - trimPos);
+cout << arr << ": " << sizeof arr << endl // A lot of space: 17
+	 << strView2 << ": " << strView2.size() << endl; // A lot of space: 14
+\end{cpp}
+
+\begin{myTip}{No memory allocation with a string view}
+If you create a string view or copy a string view, no memory allocation is necessary. This contrasts with a string; creating or copying a string requires memory allocation.
+
+\filename{Memory allocation}
+
+\begin{cpp}
+// stringView.cpp
+...
+include <string_view>
+...
+
+void* operator new(std::size_t count){
+	std::cout << " " << count << " bytes" << '\n';
+	return malloc(count);
+}
+
+void getString(const std::string&){}
+
+void getStringView(std::string_view){}
+
+std::string large = "012345678901234567890"
+					"1234567890123456789"; // 41 bytes allocated
+std::string substr = large.substr(10); // 31 bytes allocated
+
+std::string_view largeStringView{large.c_str(), // 0 bytes allocated
+								large.size()};
+largeStringView.remove_prefix(10); // 0 bytes allocated
+
+getString(large);
+getString("012345678901234567890"
+		  "1234567890123456789"); // 41 bytes allocated
+const char message []= "0123456789012345678901234567890123456789";
+getString(message); // 41 bytes allocated
+
+getStringView(large); // 0 bytes allocated
+getStringView("012345678901234567890"
+			  "1234567890123456789"); // 0 bytes allocated
+getStringView(message); // 0 bytes allocated
+\end{cpp}
+
+Thanks to the global overload operator new, I can observe each memory allocation.
+
+\end{myTip}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

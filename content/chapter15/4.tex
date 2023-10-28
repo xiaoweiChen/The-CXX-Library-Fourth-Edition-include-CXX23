@@ -1,0 +1,67 @@
+
+std::regex\_match determines if the text matches a text pattern. You can further analyze the search result of type std::match\_results.
+
+The code snippet below shows three simple applications of std::regex\_match: a C string, a C++ string, and a range returning only a boolean. The three variants are available for std::match\_results objects, respectively.
+
+\filename{std::match}
+
+\begin{cpp}
+// match.cpp
+...
+#include <regex>
+...
+
+std::string numberRegEx(R"([-+]?([0-9]*\.[0-9]+|[0-9]+))");
+std::regex rgx(numberRegEx);
+const char* numChar{"2011"};
+
+if (std::regex_match(numChar, rgx)){
+	std::cout << numChar << "is a number." << '\n';
+} // 2011 is a number.
+
+const std::string numStr{"3.14159265359"};
+if (std::regex_match(numStr, rgx)){
+	std::cout << numStr << " is a number." << '\n';
+} // 3.14159265359 is a number.
+
+const std::vector<char> numVec{{'-', '2', '.', '7', '1', '8', '2',
+								'8', '1', '8', '2', '8'}};
+if (std::regex_match(numVec.begin(), numVec.end(), rgx)){
+	for (auto c: numVec){ std::cout << c ;};
+	std::cout << "is a number." << '\n';
+} // -2.718281828 is a number
+\end{cpp}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

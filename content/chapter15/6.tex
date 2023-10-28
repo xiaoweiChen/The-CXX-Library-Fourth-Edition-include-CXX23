@@ -1,0 +1,72 @@
+
+std::regex\_replace replaces sequences in a text matching a text pattern. It returns in the simple form std::regex\_replace(text, regex, replString) its result as string. The function replaces an occurrence of regex in text with replString.
+
+\filename{std::replace}
+
+\begin{cpp}
+// replace.cpp
+...
+#include <regex>
+...
+using namespace std;
+
+string future{"Future"};
+string unofficialName{"The unofficial name of the new C++ standard is C++0x."};
+
+regex rgxCpp{R"(C\+\+0x)"};
+string newCppName{"C++11"};
+string newName{regex_replace(unofficialName, rgxCpp, newCppName)};
+
+regex rgxOff{"unofficial"};
+string makeOfficial{"official"};
+string officialName{regex_replace(newName, rgxOff, makeOfficial)};
+
+cout << officialName << endl;
+							// The official name of the new C++ standard is C++11.
+\end{cpp}
+
+In addition to the simple version, C++ has a version of std::regex\_replace working on ranges. It enables you to push the modified string directly into another string:
+
+\begin{cpp}
+typedef basic_regex<char> regex;
+std::string str2;
+std::regex_replace(std::back_inserter(str2),
+				   text.begin(), text.end(), regex,replString);
+\end{cpp}
+
+All variants of std::regex\_replace have an additional optional parameter. If you set the parameter to std::regex\_constants::format\_no\_copy, you will get the part of the text matching the regular expression. The unmatched text is not copied. If you set the parameter to std::regex\_constants::format\_first\_only std::regex\_replace will only be applied once.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

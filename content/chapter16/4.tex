@@ -1,0 +1,105 @@
+
+If you overload the input and output operators, your data type behaves like a built-in data type.
+
+\begin{cpp}
+friend std::istream& operator>> (std::istream& in, Fraction& frac);
+friend std::ostream& operator<< (std::ostream& out, const Fraction& frac);
+\end{cpp}
+
+For overloading the input and output operators, you have to keep a few rules in mind:
+
+\begin{itemize}
+\item 
+To support the chaining of input and output operations, you have to get and return the input and output streams by non-constant reference.
+
+\item 
+To access the private members of the class, the input and output operators have to be friends of your data type.
+ 
+\item 
+The input operator >{}> takes its data type as a non-constant reference.
+
+\item 
+The output operator <{}< takes its data type as a constant reference.
+\end{itemize}
+
+\filename{Overloading input and output operator}
+
+\begin{cpp}
+// overloadingInOutput.cpp
+class Fraction{
+public:
+	Fraction(int num= 0, int denom= 0):numerator(num), denominator(denom){}
+	friend std::istream& operator>> (std::istream& in, Fraction& frac);
+	friend std::ostream& operator<< (std::ostream& out, const Fraction& frac);
+private:
+	int numerator;
+	int denominator;
+};
+
+std::istream& operator>> (std::istream& in, Fraction& frac){
+	in >> frac.numerator;
+	in >> frac.denominator;
+	return in;
+}
+
+std::ostream& operator<< (std::ostream& out, const Fraction& frac){
+	out << frac.numerator << "/" << frac.denominator;
+	return out;
+}
+
+Fraction frac(3, 4);
+std::cout << frac; // 3/4
+
+std::cout << "Enter two numbers: ";
+Fraction fracDef;
+
+std::cin >> fracDef; // <1 2>
+std::cout << fracDef; // 1/2
+\end{cpp}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

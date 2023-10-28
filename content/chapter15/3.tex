@@ -1,0 +1,181 @@
+
+
+The object of type std::match\_results is the result of a std::regex\_match or std::regex\_search. std::match\_results is a sequence container having at least one capture group of a std::sub\_match object. The std::sub\_match objects are sequences of characters.
+
+\begin{myNotic}{What is a capture group?}
+Capture groups allow it to further analyze the search result in a regular expression. They are defined by a pair of parentheses ( ). The regular expression ((a+)(b+)(c+)) has four capture groups: ((a+)(b+)(c+)), (a+), (b+) and (c+) The total result is the 0-th capture group.
+\end{myNotic}
+
+C++ has four types of synonyms of type std::match\_results:
+
+\begin{cpp}
+typedef match_results<const char*> cmatch;
+typedef match_results<const wchar_t*> wcmatch;
+typedef match_results<string::const_iterator> smatch;
+typedef match_results<wstring::const_iterator> wsmatch;
+\end{cpp}
+
+The search result std::smatch smatch has a powerful interface.
+
+\begin{center}
+Interface of std::smatch
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Member Function}            & \textbf{Description}                                       \\ \hline
+\endfirsthead
+%
+\endhead
+%
+smatch.size()                       & Returns the number of capture groups.                      \\ \hline
+smatch.empty()                      & Returns if the search result has a capture group.          \\ \hline
+smatch{[}i{]}                       & Returns the i-th capture group.                            \\ \hline
+smatch.length(i)                    & Returns the length of the i-th capture group.              \\ \hline
+smatch.position(i)                  & Returns the position of the i-th capture group.            \\ \hline
+smatch.str(i)                       & Returns the i-th capture group as string.                  \\ \hline
+smatch.prefix() and smatch.suffix() & Returns the string before and after the capture group.     \\ \hline
+smatch.begin() and smatch.end()     & Returns the begin and end iterator for the capture groups. \\ \hline
+smatch.format(...)                  & Formats std::smatch objects for the output.                \\ \hline
+\end{longtable}
+
+The following program shows the output of the first four capture groups for different regular expressions.
+
+\filename{Capture groups}
+
+\begin{cpp}
+// captureGroups.cpp
+...
+#include<regex>
+...
+using namespace std;
+
+void showCaptureGroups(const string& regEx, const string& text){
+	regex rgx(regEx);
+	smatch smatch;
+	if (regex_search(text, smatch, rgx)){
+		cout << regEx << text << smatch[0] << " " << smatch[1]
+		<< " "<< smatch[2] << " " << smatch[3] << endl;
+	}
+}
+
+showCaptureGroups("abc+", "abccccc");
+showCaptureGroups("(a+)(b+)", "aaabccc");
+showCaptureGroups("((a+)(b+))", "aaabccc");
+showCaptureGroups("(ab)(abc)+", "ababcabc");
+...
+\end{cpp}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{llllll}
+reg Expr       & text     & smatch{[}0{]} & smatch{[}1{]} & smatch{[}2{]} & smatch{[}3{]} \\
+\endfirsthead
+%
+\endhead
+%
+abc+           & abccccc  & abccccc       &               &               &               \\
+(a+)(b+)(c+)   & aaabccc  & aaabccc       & aaa           & b             & ccc           \\
+((a+)(b+)(c+)) & aaabccc  & aaabccc       & aaabccc       & aaa           & b             \\
+(ab)(abc)+     & ababcabc & ababcabc      & ab            & abc           &              
+\end{longtable}
+
+
+\mySamllsection{std::sub\_match}
+
+The capture groups are of type std::sub\_match. As with std::match\_results C++ defines the following four type synonyms.
+
+\begin{cpp}
+typedef sub_match<const char*> csub_match;
+typedef sub_match<const wchar_t*> wcsub_match;
+typedef sub_match<string::const_iterator> ssub_match;
+typedef sub_match<wstring::const_iterator> wssub_match;
+\end{cpp}
+
+You can further analyze the capture group cap
+
+\begin{center}
+The std::sub\_match object
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Member Function} & \textbf{Description}                     \\ \hline
+\endfirsthead
+%
+\endhead
+%
+cap.matched()            & Indicates if this match was successful.  \\ \hline
+cap.first() and cap.end() & Returns the begin and end iterator of the character sequence.    \\ \hline
+cap.length()             & Returns the length of the capture group. \\ \hline
+cap.str()                & Returns the capture group as string.     \\ \hline
+cap.compare(other)        & Compares the current capture group with the other capture group. \\ \hline
+\end{longtable}
+
+Here is a code snippet showing the interplay between the search result std::match\_results and its capture groups std::sub\_match.
+
+\filename{std::sub\_match}
+
+\begin{cpp}
+// subMatch.cpp
+...
+#include <regex>
+...
+using std::cout;
+std::string privateAddress="192.168.178.21";
+std::string regEx(R"((\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3}))");
+std::regex rgx(regEx);
+std::smatch smatch;
+if (std::regex_match(privateAddress, smatch, rgx)){
+	for (auto cap: smatch){
+		cout << "capture group: " << cap << '\n';
+		if (cap.matched){
+			std::for_each(cap.first, cap.second, [](int v){
+				cout << std::hex << v << " ";});
+			cout << '\n';
+		}
+	}
+}
+...
+\end{cpp}
+
+\begin{shell}
+capture group: 192.168.178.21
+31 39 32 2e 31 36 38 2e 31 37 38 2e 32 31
+
+capture group: 192
+31 39 32
+
+capture group: 168
+31 36 38
+
+capture group: 178
+31 37 38
+
+capture group: 21
+32 31
+\end{shell}
+
+The regular expression regEx stands for an IPv4 address. regEx extracts the address’s components using capture groups. Finally, the capture groups and the characters in ASCII are displayed in hexadecimal values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

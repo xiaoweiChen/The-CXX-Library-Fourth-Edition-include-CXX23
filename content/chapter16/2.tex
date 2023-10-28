@@ -1,0 +1,407 @@
+
+The stream classes std::istream and std::ostream are often used for the reading and writing of data. Use of std::istream classes requires the <istream> header; use of std::ostream classes requires the <ostream> header. You can have both with the header <iostream>. std::istream is a typedef for the class basic\_istream and the character type char, std::ostream for the class basic\_ostream respectively:
+
+\begin{cpp}
+typedef basic_istream<char> istream;
+typedef basic_ostream<char> ostream;
+\end{cpp}
+
+C++ has four predefined stream objects for the convenience of dealing with the keyboard and the monitor.
+
+\begin{center}
+The four predefined stream objects
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|l|l|}
+\hline
+\textbf{Stream object} & \textbf{C pendant} & \textbf{Device} & \textbf{Buffered} \\ \hline
+\endfirsthead
+%
+\endhead
+%
+std::cin               & stdin              & keyboard        & yes               \\ \hline
+std::cout              & stdout             & console         & yes               \\ \hline
+std::cerr              & stderr             & console         & no                \\ \hline
+std::clog              &                    & monitor         & yes               \\ \hline
+\end{longtable}
+
+
+\begin{myNotic}{The stream objects are also available for wchar\_t}
+The four stream objects for wchar\_t, std::wcin, std::wcout, std::wcerr, and std::wclog are by far not so heavily used as their char pendants. Therefore I treat them only marginally.
+\end{myNotic}
+
+The stream objects are sufficient to write a program that reads from the command line and returns the sum.
+
+\filename{The stream objects}
+
+\begin{cpp}
+// IOStreams.cpp
+...
+#include <iostream>
+
+int main(){
+	std::cout << "Type in your numbers";
+	std::cout << "(Quit with an arbitrary character): " << std::endl;
+				// 2000 <Enter> 11 <a>
+	int sum{0};
+	int val;
+	while (std::cin >> val) sum += val;
+	std::cout << "Sum: " << sum; // Sum: 2011
+}
+\end{cpp}
+
+The minor program above uses the stream operators <{}< and >{}> and the stream manipulator std::endl.
+
+The insert operator <{}< pushes characters onto the output stream std::cout; the extract operator >{}> pulls the characters from the input stream std::cin. You can build chains of insert or extract operators because both operators return a reference to themselves.
+
+std::endl is a stream manipulator because it puts a ‘\verb|\|n’ character onto std::cout and flushes the output buffer.
+
+Here are the most frequently used stream manipulators.
+
+\begin{center}
+The most frequently used stream manipulators
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|l|}
+\hline
+\textbf{Manipulator} & \textbf{Stream type} & \textbf{Description}                                 \\ \hline
+\endfirsthead
+%
+\endhead
+%
+std::endl            & output               & Inserts a new-line character and flushes the stream. \\ \hline
+std::flush           & output               & Flushes the stream.                                  \\ \hline
+std::ws              & input                & Discards leading whitespace.                         \\ \hline
+\end{longtable}
+
+\mySamllsection{Input}
+
+You can read in C++ in two ways from the input stream: Formatted with the extractor >> and unformatted with explicit member functions.
+
+\mySamllsection{Formatted Input}
+
+The extraction operator >{}>
+
+\begin{itemize}
+\item 
+is predefined for all built-in types and strings,
+
+\item 
+can be implemented for user-defined data types,
+
+\item 
+can be configured by format specifiers.
+\end{itemize}
+
+\begin{myTip}{std::cin ignores by default leading whitespace}
+\begin{cpp}
+#include <iostream>
+...
+int a, b;
+std::cout << "Two natural numbers: " << '\n';
+std::cin >> a >> b; // < 2000 11>
+std::cout << "a: " << a << " b: " << b;
+\end{cpp}
+\end{myTip}
+
+\mySamllsection{Unformatted Input}
+
+There are many member functions for the unformatted input from an input stream is.
+
+\begin{center}
+Unformatted input from an input stream
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Member Function}                          & \textbf{Description}                                                                 \\ \hline
+\endfirsthead
+%
+\endhead
+%
+is.get(ch)                                        & Reads one character into ch.                                                         \\ \hline
+is.get(buf, num)                                  & Reads at most num characters into the buffer buf.                                    \\ \hline
+is.getline(buf, num{[}, delim{]}) &
+\begin{tabular}[c]{@{}l@{}}Reads at most num characters into the buffer buf.\\ Uses the line-delimiter delim(default \textbackslash{}n) optionally.\end{tabular} \\ \hline
+is.gcount()                                       & Returns the number of last extracted characters from is by an unformatted operation. \\ \hline
+is.ignore(streamsize sz=1, int delim=end-of-file) & Ignores sz characters until delim.                                                   \\ \hline
+is.peek()                                         & Gets one character from is without consuming it.                                     \\ \hline
+is.unget()                                        & Pushes the last read character back to is.                                           \\ \hline
+is.putback(ch)                                    & Pushes the character ch onto the stream is.                                          \\ \hline
+\end{longtable}
+
+\begin{myTip}{std::string has a getline function}
+The getline function of std::string has a big advantage above the getline function of the istream. The std::string automatically takes care of its memory. On the contrary, you must reserve the memory for the buffer buf in the is.get(buf, num) function.
+\end{myTip}
+
+\begin{cpp}
+// inputUnformatted.cpp
+...
+#include <iostream>
+...
+std::string line;
+std::cout << "Write a line: " << '\n';
+
+std::getline(std::cin, line); // <Only for testing purpose.>
+std::cout << line << '\n'; // Only for testing purpose.
+
+std::cout << "Write numbers, separated by;" << '\n';
+while (std::getline(std::cin, line, ';') ) {
+	std::cout << line << " ";
+} // <2000;11;a>
+  // 2000 11
+\end{cpp}
+
+
+\mySamllsection{Output}
+
+You can push characters with the insert operator <{}< onto the output stream.
+
+The insert operator <{}<
+
+\begin{itemize}
+\item 
+is predefined for all built-in types and strings,
+
+\item 
+can be implemented for user-defined data types,
+
+\item 
+can be adjusted by format specifiers.
+\end{itemize}
+
+
+\mySamllsection{Format Specifier}
+
+Format specifiers enable you to adjust the input and output data explicitly.
+
+\begin{myNotic}{I use manipulators as format specifiers}
+The format specifiers are available as manipulators and flags. I only present manipulators in this book because their functionality is quite similar, and manipulators are more comfortable to use.
+
+\filename{Manipulators as format specifiers}
+
+\begin{cpp}
+// formatSpecifier.cpp
+...
+#include <iostream>
+...
+int num{2011};
+
+std::cout.setf(std::ios::hex, std::ios::basefield);
+std::cout << num << '\n'; // 7db
+std::cout.setf(std::ios::dec, std::ios::basefield);
+std::cout << num << '\n'; // 2011
+
+std::cout << std::hex << num << '\n'; // 7db
+std::cout << std::dec << num << '\n'; // 2011
+\end{cpp}
+
+\end{myNotic}
+
+The following tables present the important format specifiers. The format specifiers are sticky except for the field width, which is reset after each application.
+
+The manipulators without arguments require the header <iostream>; the manipulators with arguments require the header <iomanip>.
+
+\begin{center}
+Displaying of boolean values
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|l|}
+\hline
+\textbf{Manipulator} & \textbf{Stream type} & \textbf{Description}                       \\ \hline
+\endfirsthead
+%
+\endhead
+%
+std::boolalpha       & input and output     & Displays the boolean as a word.            \\ \hline
+std::noboolalpha     & input and output     & Displays the boolean as a number(default). \\ \hline
+\end{longtable}
+
+\begin{center}
+Set the field width and the fill character
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|l|}
+\hline
+\textbf{Manipulator} & \textbf{Stream type} & \textbf{Description}                            \\ \hline
+\endfirsthead
+%
+\endhead
+%
+std::setw(val)       & input and output     & Sets the field width to val.                    \\ \hline
+std::setfill(c)      & output stream        & Sets the fill character to c (default: spaces). \\ \hline
+\end{longtable}
+
+
+
+\begin{center}
+Alignment of the text
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|l|}
+\hline
+\textbf{Manipulator} & \textbf{Stream type} & \textbf{Description}                                \\ \hline
+\endfirsthead
+%
+\endhead
+%
+std::left            & output               & Aligns the output left.                             \\ \hline
+std::right           & output               & Aligns the output right.                            \\ \hline
+std::internal        & output               & Aligns the signs of numbers left, the values right. \\ \hline
+\end{longtable}
+
+\begin{center}
+Positive signs and upper or lower case
+\end{center}
+
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|l|}
+\hline
+\textbf{Manipulator} & \textbf{Stream type} & \textbf{Description}                                    \\ \hline
+\endfirsthead
+%
+\endhead
+%
+std::showpos         & output               & Displays positive signs.                                \\ \hline
+std::noshowpos       & output               & Doesn't display positive signs(default).                \\ \hline
+std::uppercase       & output               & Uses upper case characters for numeric values(defulat). \\ \hline
+std::lowercase       & output               & Uses lower case characters for numeric values.          \\ \hline
+\end{longtable}
+
+
+\begin{center}
+Display of the numeric base
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|l|}
+\hline
+\textbf{Manipulator} & \textbf{Stream type} & \textbf{Description}                             \\ \hline
+\endfirsthead
+%
+\endhead
+%
+std::oct             & input and output     & Uses natural numbers in octal format.            \\ \hline
+std::dec             & input and output     & Uses natural numbers in decimal format(default). \\ \hline
+std::hex             & input and output     & Uses natural numbers in hexadecimal format.      \\ \hline
+std::showbase        & output               & Displays the numeric base.                       \\ \hline
+std::noshowbase      & output               & Doesn't display the numeric base(default).       \\ \hline
+\end{longtable}
+
+There are special rules for floating-point numbers:
+
+\begin{itemize}
+\item 
+The number of significant digits (digits after the comma) is, by default, six.
+
+\item 
+If the number of significant digits is not big enough, the number is displayed in scientific notation.
+ 
+\item 
+Leading and trailing zeros are not displayed.
+
+\item 
+If possible, the decimal point is not displayed.
+\end{itemize}
+
+
+\begin{center}
+Floating point numbers
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|l|}
+\hline
+\textbf{Manipulator}   & \textbf{Stream type} & \textbf{Description}                                      \\ \hline
+\endfirsthead
+%
+\endhead
+%
+std::setprecision(val) & output               & Adjusts the precision of the output to val.               \\ \hline
+std::showpoint         & output               & Displays the decimal point.                               \\ \hline
+std::noshowpoint       & output               & Doesn't display the decimal point(default).               \\ \hline
+std::fixed             & output               & Displays the floating-point number in decimal format.     \\ \hline
+std::scientific        & output               & Displays the floating-point number in scientific format.  \\ \hline
+std::hecfloat          & output               & Displays the floating-point number in hexadecimal format. \\ \hline
+std::defaultfloat & output & Displays the floating-point number in default floating-point notation. \\ \hline
+\end{longtable}
+
+\filename{Format specifier}
+
+\begin{cpp}
+// formatSpecifierOutput.cpp
+...
+#include <iomanip>
+#include <iostream>
+...
+
+std::cout.fill('#');
+std::cout << -12345;
+std::cout << std::setw(10) << -12345; // ####-12345
+std::cout << std::setw(10) << std::left << -12345; // -12345####
+std::cout << std::setw(10) << std::right << -12345; // ####-12345
+std::cout << std::setw(10) << std::internal << -12345; //-####12345
+
+std::cout << std::oct << 2011; // 3733
+std::cout << std::hex << 2011; // 7db
+
+std::cout << std::showbase;
+std::cout << std::dec << 2011; // 2011
+std::cout << std::oct << 2011; // 03733
+std::cout << std::hex << 2011; // 0x7db
+
+std::cout << 123.456789; // 123.457
+std::cout << std::fixed;
+std::cout << std::setprecision(3) << 123.456789; // 123.457
+std::cout << std::setprecision(6) << 123.456789; // 123.456789
+std::cout << std::setprecision(9) << 123.456789; // 123.456789000
+
+std::cout << std::scientific;
+std::cout << std::setprecision(3) << 123.456789; // 1.235e+02
+std::cout << std::setprecision(6) << 123.456789; // 1.234568e+02
+std::cout << std::setprecision(9) << 123.456789; // 1.234567890e+02
+
+std::cout << std::hexfloat;
+std::cout << std::setprecision(3) << 123.456789; // 0x1.edd3c07ee0b0bp+6
+std::cout << std::setprecision(6) << 123.456789; // 0x1.edd3c07ee0b0bp+6
+std::cout << std::setprecision(9) << 123.456789; // 0x1.edd3c07ee0b0bp+6
+
+std::cout << std::defaultfloat;
+std::cout << std::setprecision(3) << 123.456789; // 123
+std::cout << std::setprecision(6) << 123.456789; // 123.457
+std::cout << std::setprecision(9) << 123.456789; // 123.456789
+
+\end{cpp}
+
+
+
+
+
+
+
+

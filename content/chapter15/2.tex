@@ -1,0 +1,65 @@
+
+
+Objects of type regular expression are instances of the class template template <class charT, class traits= regex\_traits <charT>{}> class basic\_regex parametrized by their character type and traits class. The traits class defines the interpretation of the properties of regular grammar. There are two type synonyms in C++:
+
+\begin{cpp}
+typedef basic_regex<char> regex;
+typedef basic_regex<wchar_t> wregex;
+\end{cpp}
+
+You can further customize the object of type regular expression. Therefore you can specify the grammar used or adapt the syntax. As mentioned, C++ supports the basic, extended, awk, grep, and egrep grammars. A regular expression qualified by the std::regex\_constants::icase flag is case insensitive. If you want to adopt the syntax, you have to specify the grammar explicitly.
+
+\filename{Specify the grammar}
+
+\begin{cpp}
+// regexGrammar.cpp
+...
+#include <regex>
+...
+using std::regex_constants::ECMAScript;
+using std::regex_constants::icase;
+
+std::string theQuestion="C++ or c++, that's the question.";
+std::string regExprStr(R"(c\+\+)");
+
+std::regex rgx(regExprStr);
+std::smatch smatch;
+
+if (std::regex_search(theQuestion, smatch, rgx)){
+	std::cout << "case sensitive: " << smatch[0]; // c++
+}
+
+std::regex rgxIn(regExprStr, ECMAScript|icase);
+if (std::regex_search(theQuestion, smatch, rgxIn)){
+	std::cout << "case insensitive: " << smatch[0]; // C++
+}
+\end{cpp}
+
+If you use the case-sensitive regular expression rgx, the result of the search in the text theQuestion is c++. That’s not the case if your case-insensitive regular expression rgxIn is applied. Now you get the match string C++.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

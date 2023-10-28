@@ -1,0 +1,93 @@
+
+std::regex\_search checks if the text contains a text pattern. You can use the function with and without a std::match\_results object and apply it to a C string, a C++ string, or a range.
+
+The example below shows how to use std::regex\_search with texts of type const char*, std::string, const wchar\_t*, and std::wstring.
+
+\filename{std::search}
+
+\begin{cpp}
+// search.cpp
+...
+#include <regex>
+...
+
+// regular expression holder for time
+std::regex crgx("([01]?[0-9]|2[0-3]):[0-5][0-9]");
+
+// const char*
+std::cmatch cmatch;
+
+const char* ctime{"Now it is 23:10." };
+if (std::regex_search(ctime, cmatch, crgx)){
+	std::cout << ctime << '\n'; // Now it is 23:10.
+	std::cout << "Time: " << cmatch[0] << '\n'; // Time: 23:10
+}
+
+// std::string
+std::smatch smatch;
+
+std::string stime{"Now it is 23:25." };
+if (std::regex_search(stime, smatch, crgx)){
+	std::cout << stime << '\n'; // Now it is 23:25.
+	std::cout << "Time: " << smatch[0] << '\n'; // Time: 23:25
+}
+
+// regular expression holder for time
+std::wregex wrgx(L"([01]?[0-9]|2[0-3]):[0-5][0-9]");
+
+// const wchar_t*
+std::wcmatch wcmatch;
+
+const wchar_t* wctime{L "Now it is 23:47." };
+if (std::regex_search(wctime, wcmatch, wrgx)){
+	std::wcout << wctime << '\n'; // Now it is 23:47.
+	std::wcout << "Time: " << wcmatch[0] << '\n'; // Time: 23:47
+}
+
+// std::wstring
+std::wsmatch wsmatch;
+
+std::wstring wstime{L "Now it is 00:03." };
+if (std::regex_search(wstime, wsmatch, wrgx)){
+	std::wcout << wstime << '\n'; // Now it is 00:03.
+	std::wcout << "Time: " << wsmatch[0] << '\n'; // Time: 00:03
+}
+\end{cpp}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,405 @@
+A stream is an infinite data stream on which you can push or pull data. String streams and file streams enable strings and files to interact with the stream directly.
+
+\mySamllsection{String Streams}
+
+String streams need the header <sstream>. They are not connected to an input or output stream and store their data in a string.
+
+Whether you use a string stream for input or output or with the character type char or wchar\_t, there are various string stream classes:
+
+\noindent
+\\\textbf{std::istringstream and std::wistringstream}
+
+String stream for the input data of type char and wchar
+_t.
+
+\noindent
+\textbf{std::ostringstream and std::wostringstream}
+
+String stream for the output data of type char and wchar
+_t.
+
+\noindent
+\textbf{std::stringstream and std::wstringstream}
+
+String stream for the input or output data of type char and wchar
+_t.\\
+
+Typical operations on a string stream are:
+
+\begin{itemize}
+\item 
+Write data in a string stream:
+
+\begin{cpp}
+std::stringstream os;
+os << "New String";
+os.str("Another new String");
+\end{cpp}
+
+\item 
+Read data from a string stream:
+
+\begin{cpp}
+std::stringstream os;
+std::string str;
+os >> str;
+str= os.str();
+\end{cpp}
+
+\item 
+Clear a string stream:
+
+\begin{cpp}
+std::stringstream os;
+os.str("");
+\end{cpp}
+\end{itemize}
+
+String streams are often used for the type-safe conversion between strings and numeric values:
+
+\filename{String streams}
+
+\begin{cpp}
+// stringStreams.cpp
+...
+#include <sstream>
+...
+
+template <typename T>
+T StringTo ( const std::string& source ){
+	std::istringstream iss(source);
+	T ret;
+	iss >> ret;
+	return ret;
+}
+
+template <typename T>
+std::string ToString(const T& n){
+	std::ostringstream tmp ;
+	tmp << n;
+	return tmp.str();
+}
+
+std::cout << "5= " << StringTo<int>("5"); // 5
+std::cout << "5 + 6= " << StringTo<int>("5") + 6; // 11
+std::cout << ToString(StringTo<int>("5") + 6 ); // "11"
+std::cout << "5e10: " << std::fixed << StringTo<double>("5e10"); // 50000000000
+\end{cpp}
+
+\mySamllsection{File Streams}
+
+File streams enable you to work with files. The file streams automatically manage the lifetime of their file. They need the header <fstream>.
+
+Whether you use a file stream for input or output or with the character type char or wchar\_t, there are various file stream classes:
+
+\noindent
+\\\textbf{std::ifstream and std::wifstream.}
+
+File stream for the input data of type char and wchar\_t.
+
+\noindent
+\textbf{std::ofstream and std::wofstream}
+
+File stream for the output data of type char and wchar\_t.
+
+\noindent
+\textbf{std::fstream and std::wfstream}
+
+File stream for the input and output data of type char and wchar\_t.
+
+\noindent
+\textbf{std::filebuf and std::wfilebuf}
+
+Data buffer of type char and wchar\_t.\\
+
+\begin{myWarning}{Set the file position pointer}
+File streams used for reading and writing must set the file position pointer after the contests change.
+\end{myWarning}
+
+Flags enable you to set the opening mode of a file stream.
+
+\begin{center}
+Flags for the opening of a file stream
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Flag}    & \textbf{Description}                                                             \\ \hline
+\endfirsthead
+%
+\endhead
+%
+std::ios::in     & Opens the file stream for reading(default for std::ifstream and std::wifstream). \\ \hline
+std::ios::out    & Opens the file stream for writing(default for std::ofstream and std::wofstream). \\ \hline
+std::ios::app    & Appends the character to the end of the file stream.                             \\ \hline
+std::ios::ate & Sets the initial position of the file position pointer at the end of the file stream. \\ \hline
+std::ios::trunc  & Deletes the original file.                                                       \\ \hline
+std::ios::binary & Suppresses the interpretation of an escape sequence in the file stream.          \\ \hline
+\end{longtable}
+
+It’s pretty easy to copy the file named in to the file named out with the file buffer in.rdbuf(). Error handling needs to be included in this short example.
+
+\begin{cpp}
+#include <fstream>
+...
+std::ifstream in("inFile.txt");
+std::ofstream out("outFile.txt");
+out << in.rdbuf();
+\end{cpp}
+
+In the following table, I compare the C++ mode and the C mode to open a file.
+
+\begin{center}
+Opening of a file with C++ and C
+\end{center}
+
+
+
+The file must exist with the modes "r" and "r+". On the contrary, the file is created with "a" and "w+". The file is overwritten with "w".
+
+You can explicitly manage the lifetime of a file stream.
+
+\begin{center}
+Managing the lifetime of a file stream
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|l|}
+\hline
+\textbf{C++ mode}                          & \textbf{Desciption}        & \textbf{C mode} \\ \hline
+\endfirsthead
+%
+\endhead
+%
+std::ios::in                               & Reads the file.            & "r"             \\ \hline
+std::ios::out                              & Writes the file            & "w"             \\ \hline
+std::ios::out|std::ios::app                & Appends to the file.       & "a"             \\ \hline
+std::ios::in|std::ios::out                 & Raeds and writes the file. & "r+"            \\ \hline
+std::ios::in|std::ios::out|std::ios::trunc & Writes and reads the file. & "w+"            \\ \hline
+\end{longtable}
+
+\mySamllsection{Random Access}
+
+Random access enables you to set the file position pointer arbitrarily.
+
+When a file stream is constructed, the file’s position pointer points to the beginning of the file. You can adjust the position with the member functions of the file stream file.
+
+\begin{center}
+Navigate in a file stream
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Member Function} & \textbf{Description}                    \\ \hline
+\endfirsthead
+%
+\endhead
+%
+file.tellg()             & Returns the read position of file.      \\ \hline
+file.tellp()             & Returns the write position of file.     \\ \hline
+file.seekg(pos)          & Sets the read position of file to pos.  \\ \hline
+file.seekp(pos)          & Sets the write position of file to pos. \\ \hline
+file.seekg(off. rpos) & Sets the read position of file to the offset off relative to rpos.  \\ \hline
+file.seekp(off, rpos) & Sets the write position of file to the offset off relative to rpos. \\ \hline
+\end{longtable}
+
+off has to be a number. rpos can have three values:
+
+\noindent
+\\\textbf{std::ios::beg}
+
+Position at the beginning of the file.
+
+\noindent
+\textbf{std::ios::cur}
+
+Position at the current position.
+
+\noindent
+\textbf{std::ios::end}
+
+Position at the end of the file.
+
+\begin{myWarning}{Respect the file boundaries}
+If you randomly access a file, the C++ runtime does not check the file boundaries. Reading or writing data outside the boundaries is undefined behavior.
+\end{myWarning}
+
+\filename{Random access}
+
+\begin{cpp}
+// randomAccess.cpp
+...
+#include <fstream>
+...
+
+void writeFile(const std::string name){
+	std::ofstream outFile(name);
+	if (!outFile){
+		std::cerr << "Could not open file " << name << '\n';
+		exit(1);
+	}
+	for (unsigned int i= 0; i < 10 ; ++i){
+		outFile << i << " 0123456789" << '\n';
+	}
+}
+std::string random{"random.txt"};
+writeFile(random);
+std::ifstream inFile(random);
+
+if (!inFile){
+	std::cerr << "Could not open file " << random << '\n';
+	exit(1);
+}
+
+std::string line;
+
+std::cout << inFile.rdbuf();
+// 0 0123456789
+// 1 0123456789
+...
+// 9 0123456789
+
+std::cout << inFile.tellg() << '\n'; // 200
+
+inFile.seekg(0); // inFile.seekg(0, std::ios::beg);
+getline(inFile, line);
+std::cout << line; // 0 0123456789
+
+inFile.seekg(20, std::ios::cur);
+getline(inFile, line);
+std::cout << line; // 2 0123456789
+
+inFile.seekg(-20, std::ios::end);
+getline(inFile, line);
+std::cout << line; // 9 0123456789
+\end{cpp}
+
+\mySamllsection{State of the Stream}
+
+Flags represent the state of the stream stream. The member functions for dealing with these flags need the header <iostream>.
+
+\begin{center}
+State of a stream
+\end{center}
+
+Here are examples of conditions causing the different states of a stream:
+
+
+std::ios::eofbit
+
+\begin{itemize}
+\item 
+Reading beyond the last valid character.
+\end{itemize}
+
+std::ios::failbit
+
+\begin{itemize}
+\item 
+False formatted reading.
+
+\item 
+Reading beyond the last valid character.
+
+\item 
+Opening of a file went wrong.
+\end{itemize}
+
+std::ios::badbit
+
+\begin{itemize}
+\item 
+Size of the stream buffer cannot be adjusted.
+
+\item 
+Code conversion of the stream buffer went wrong.
+
+\item 
+A part of the stream threw an exception.
+\end{itemize}
+
+stream.fail() returns whether std::ios::failbit or std::ios::badbit is set.
+
+The state of a stream can be read and set.
+
+\noindent
+\\\textbf{stream.clear()}
+
+Initializes the flags and sets the stream in the goodbit state.
+
+\noindent
+\textbf{stream.clear(sta)}
+
+Initializes the flags and set the stream into sta state.
+
+\noindent
+\textbf{stream.rdstate()}
+
+Returns the current state.
+
+\noindent
+\textbf{stream.setstate(fla})
+
+Sets the additional flag fla.\\
+
+Operations on a stream only work if the stream is in the goodbit state. If the stream is in the badbit state, you cannot set it back to goodbit state.
+
+\filename{State of a stream}
+
+\begin{cpp}
+// streamState.cpp
+...
+#include <iostream>
+...
+std::cout << std::cin.fail() << '\n'; // false
+
+int myInt;
+while (std::cin >> myInt){ // <a>
+	std::cout << myInt << '\n'; //
+	std::cout << std::cin.fail() << '\n'; //
+}
+
+std::cin.clear();
+std::cout << std::cin.fail() << '\n'; // false
+\end{cpp}
+
+The input of the character a causes the stream std::cin to be in std::ios::failbit state. Therefore a' and std::cin.fail() cannot be displayed. First, you have to initialize the stream std::cin‘.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

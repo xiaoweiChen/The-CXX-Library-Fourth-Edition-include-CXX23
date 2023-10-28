@@ -1,0 +1,77 @@
+\myGraphic{0.6}{content/chapter15/images/1.jpg}{Cippi analysis tracks in the Snow}
+
+\href{http://en.cppreference.com/w/cpp/regex}{Regular expression} is a language for describing text patterns. They need the header <regex>.
+
+Regular expressions are a powerful tool for the following tasks:
+
+\begin{itemize}
+\item 
+Check if a text matches a text pattern: std::regex\_match
+
+\item 
+Search for a text pattern in a text: std::regex\_search
+
+\item 
+Replace a text pattern with a text: std::regex\_replace
+
+\item 
+Iterate through all text patterns in a text: std::regex\_iterator and std::regex\_token\_iterator
+\end{itemize}
+
+C++ supports six different grammar for regular expressions. By default, the ECMAScript grammar is used. This one is the most powerful grammar of the six grammars and is quite similar to the grammar used in Perl 5. The other five grammars are the basic, extended, awk, grep, and egrep grammars.
+
+\begin{myTip}{Use raw strings}
+Use raw string literals in regular expressions. The regular expression for the text C++ is quite ugly: C\verb|\\|+\verb|\\|+. You have to use two backslashes for each + sign. First, the + sign is a unique character in a regular expression. Second, the backslash is a special character in a string. Therefore one backslash escapes the + sign; the other backslash escapes the backslash. By using a raw string literal, the second backslash is not necessary anymore because the backslash is not interpreted in the string.
+
+\begin{cpp}
+#include <regex>
+...
+std::string regExpr("C\\+\\+");
+std::string regExprRaw(R"(C\+\+)");
+\end{cpp}
+
+\end{myTip}
+
+Dealing with regular expressions is typically done in three steps:
+
+\begin{enumerate}[label=\Roman*.]
+\item 
+Define the regular expression:
+
+\begin{cpp}
+std::string text="C++ or c++.";
+std::string regExpr(R"(C\+\+)");
+std::regex rgx(regExpr);
+\end{cpp}
+
+\item 
+Store the result of the search:
+
+\begin{cpp}
+std::smatch result;
+std::regex_search(text, result, rgx);
+\end{cpp}
+
+\item 
+Process the result:
+
+\begin{cpp}
+std::cout << result[0] << '\n';
+\end{cpp}
+
+\end{enumerate}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

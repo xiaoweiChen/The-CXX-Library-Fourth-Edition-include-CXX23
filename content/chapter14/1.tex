@@ -1,0 +1,48 @@
+You can create an empty string view. You can also create a string view from an existing string, character array, or string view.
+
+The table below gives you an overview of the various ways of creating a string view.
+
+\begin{center}
+Member Functions to create and set a string view
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Member Functions} & \textbf{Example}                              \\ \hline
+\endfirsthead
+%
+\endhead
+%
+Empty string view         & std::string\_view str\_view                   \\ \hline
+From a C-String           & std::string\_view str\_view2("C-string")      \\ \hline
+From a string view        & std::string\_view str\_view3(str\_view2)      \\ \hline
+From a C array            & std::string\_view str\_view4(arr, sizeof arr) \\ \hline
+From a string\_view       & str\_view4 = str\_view3.substring(2, 3)       \\ \hline
+From a string view        & std::string\_view str\_view5 = str\_view4     \\ \hline
+\end{longtable}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
