@@ -1,0 +1,109 @@
+\myGraphic{0.6}{content/chapter18/images/1.jpg}{Cippi sorts here painting stuff}
+
+The \href{http://en.cppreference.com/w/cpp/filesystem}{filesystem} is based on \href{http://www.boost.org/doc/libs/1_65_1/libs/filesystem/doc/index.htm}{boost::filesystem}. Some of its components are optional. This means not all functionality of std::filesytem is available on each implementation of the filesystem library. For example, FAT-32 does not support symbolic links.
+
+The library is based on three concepts: file, file name, and path.
+
+\begin{itemize}
+\item 
+A file is an object that holds data that you can write to or read from. A file has a name and a file type. A file type can be a directory, hard link, symbolic link, or regular file.
+
+\begin{itemize}
+\item 
+A directory is a container for holding other files. The current directory is represented by a dot "."; two dots represent the parent directory"..".
+
+\item 
+A hard link associates a name with an existing file.
+
+\item 
+A symbolic link associates a name with a path that may exist.
+
+\item 
+A regular file is a directory entry that is neither a directory, a hard link, nor a symbolic link.
+\end{itemize}
+
+\item 
+A file name is a string that represents a file. It is implementation-defined which characters are allowed, how long the name could be, or if the name is case sensitive.
+
+\item 
+A path is a sequence of entries that identifies the location of a file. It has an optional root-name such a “C:” on Windows, followed by a root-directory such a “/” on Unix. Additional parts can be directories, hard links, symbolic links, or regular files. A path can be absolute, canonical, or relative.
+
+\begin{itemize}
+\item 
+An absolute path is a path that identifies a file.
+
+\item 
+A canonical path is a path that includes neither a symbolic link nor the relative paths "." (current directory) or ".."(parent directory).
+
+\item 
+A relative path specifies a path relative to a location in the file system. Paths such as "." (current directory), ".."(parent directory), or "home/rainer" are relative paths. On Unix, they do not start at the root-directory "/".
+\end{itemize}
+\end{itemize}
+
+Here is an introductory example of the filesystem.
+
+\filename{Overview to the filesystem library}
+
+\begin{cpp}
+// filesystem.cpp
+...
+#include <filesystem>
+
+...
+
+namespace fs = std::filesystem;
+
+std::cout << "Current path: " << fs::current_path() << '\n'; // (1)
+
+std::string dir= "sandbox/a/b";
+fs::create_directories(dir); // (2)
+
+std::ofstream("sandbox/file1.txt");
+fs::path symPath= fs::current_path() /= "sandbox"; // (3)
+symPath /= "syma";
+fs::create_symlink("a", "symPath"); // (4)
+
+std::cout << "fs::is_directory(dir): " << fs::is_directory(dir) << '\n';
+std::cout << "fs::exists(symPath): " << fs::exists(symPath) << '\n';
+std::cout << "fs::symlink(symPath): " << fs::is_symlink(symPath) << '\n';
+
+for(auto& p: fs::recursive_directory_iterator("sandbox")){ // (5)
+	std::cout << p << '\n';
+}
+fs::remove_all("sandbox");
+\end{cpp}
+
+fs::current\_path() (1) returns the current path. You can create a directory hierarchy (2) with std::filesystem::create\_directories. The /= operator is overloaded for a path (3). Therefore, I can directly create a symbolic link (4) or check a file’s properties. The call recursive\_directory\_iterator (5) allows you to traverse directories recursively.
+
+\myGraphic{0.6}{content/chapter18/images/2.jpg}{}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

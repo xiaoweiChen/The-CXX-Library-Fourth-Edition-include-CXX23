@@ -1,0 +1,141 @@
+Many non-member functions exist for manipulating the filesystem.
+
+\begin{center}
+The non-member functions for manipulating the filesystem
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Non-mmeber functions}                 & \textbf{Description}                                            \\ \hline
+\endfirsthead
+%
+\endhead
+%
+absolute                                      & Composes an absolute path.                                      \\ \hline
+canonical and weakly\_canonical               & Composes a canonical path.                                      \\ \hline
+relative and proximate                        & Composes a relative path.                                       \\ \hline
+copy                                          & Copies files or directories.                                    \\ \hline
+copy\_file                                    & Copies file contents.                                           \\ \hline
+copy\_symlink                                 & Copies a synbolic link.                                         \\ \hline
+create\_directory and create\_directories     & Creates a new directory.                                        \\ \hline
+create\_hard\_link                            & Craetes a hard link.                                            \\ \hline
+create\_symlink and create\_directoy\_symlink & Creates a symbolic link.                                        \\ \hline
+current\_path                                 & Returns the current working directory.                          \\ \hline
+exists                                        & Checks if the path refers to an existing file.                  \\ \hline
+equivalent                                    & Checks if two paths refer to the same file.                     \\ \hline
+file\_size                                    & Returns the size of file.                                       \\ \hline
+hard\_link\_count                             & Returns the number of hard links to a file.                     \\ \hline
+last\_write\_time                             & Gets and sets the time of the last file modification.           \\ \hline
+premissions                                   & Modifies the file access premissions.                           \\ \hline
+read\_symlink                                 & Gets the target of the symbolic link.                           \\ \hline
+remove                                        & Removes a file or an empty directory.                           \\ \hline
+remove\_all                                   & Removes a file or a directory with all its content recursively. \\ \hline
+rename                                        & Moves or renames a file or directory.                           \\ \hline
+resize\_file                                  & Changes the size of a file by truncation.                       \\ \hline
+space                                         & Returns the free space on the filesystem.                       \\ \hline
+status                                        & Determines the file attributes.                                 \\ \hline
+symlink\_status                               & Determines the file attributes and checks the symlink target.   \\ \hline
+temp\_directory\_path                         & Returns a directory for temporary files.                        \\ \hline
+\end{longtable}
+
+\mySamllsection{Read and set the last write time of a file}
+
+Thanks to the global function std::filesystem::last\_write\_time, you can read and set the last write time of a file. Here is an example based on the last\_write\_time example from \href{http://en.cppreference.com/w/cpp/experimental/fs/last_write_time}{en.cppreference.com}.
+
+\filename{Write time of a file}
+
+\begin{cpp}
+// fileTime.cpp
+...
+#include <filesystem>
+
+...
+
+namespace fs = std::filesystem;
+using namespace std::chrono_literals;
+
+...
+
+fs::path path = fs::current_path() / "rainer.txt";
+std::ofstream(path.c_str());
+const auto fTime = fs::last_write_time(path); // (1)
+const auto sTime = std::chrono::clock_cast<std::chrono::system_clock>(fTime); // (2)
+
+
+std::time_t cftime = std::chrono::system_clock::to_time_t(sTime);
+std::cout << "Write time on server " // (3)
+		  << std::asctime(std::localtime(&cftime));
+std::cout << "Write time on server " // (4)
+		  << std::asctime(std::gmtime(&cftime)) << '\n';
+
+const auto fTime2 = fTime + 2h; // (5)
+const auto sTime2 = std::chrono::clock_cast<std::chrono::system_clock>(fTime2); // (6)
+std::time_t cftime2 = std::chrono::system_clock::to_time_t(sTime2);
+std::cout << "Local time on client "
+		  << std::asctime(std::localtime(&cftime2)) << '\n';
+\end{cpp}
+
+Line (1) gives the write time of the newly created file. You can use fTime in (2) to cast it in a real time wall clock sTime. This sTime initializes std::chrono::system\_clock in the following line. cftime is of type std::filesystem::file\_time\_type, which is, in this case, an alias for std::chrono::system\_clock; therefore, you can initialize std::localtime in (3) and present the calendar time in a textual representation. Nothing will change if you use std::gmtime (4) instead of std::localtime. This puzzled me because the Coordinated Universal Time (UTC) differs 2 hours from Germany’s local time. That’s due to the server for the online compiler on en.cppreference.com. UTC and local time are set to the same time on the server.
+
+Here is the output of the program. I moved the write time of the file 2 hours to the future (5) and read it back from the filesystem (6). This adjusts the time, so it corresponds to the local time in Germany.
+
+\myGraphic{0.6}{content/chapter18/images/4.jpg}{}
+
+\mySamllsection{Space Information on the Filesystem}
+
+The global function std::filesystem::space returns a std::filesystem::space\_info object with three members: capacity, free, and available.
+
+\begin{itemize}
+\item 
+capacity: total size of the filesystem
+
+\item 
+free: free space on the filesystem
+
+\item 
+available: free space to a non-privileged process (equal or less than free)
+\end{itemize}
+
+All sizes are in bytes.
+
+The output of the following program is from cppreference.com. All paths I tried were on the same filesystem; therefore, I always get the same answer.
+
+\filename{Space information}
+
+\begin{cpp}
+// space.cpp
+...
+#include <filesystem>
+
+...
+
+namespace fs = std::filesystem;
+
+...
+
+fs::space_info root = fs::space("/");
+fs::space_info usr = fs::space("/usr");
+
+std::cout << ". Capacity Free Available\n"
+		  << "/ " << root.capacity << " "
+		  << root.free << " " << root.available << "\n"
+		  << "usr " << usr.capacity << " "
+		  << usr.free << " " << usr.available;
+\end{cpp}
+
+
+\myGraphic{0.6}{content/chapter18/images/5.jpg}{}
+
+
+
+
+
+
+
+
+
+
+

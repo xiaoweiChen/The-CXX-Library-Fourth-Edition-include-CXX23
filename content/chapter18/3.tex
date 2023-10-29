@@ -1,0 +1,117 @@
+By using the following predicates, you can easily ask for the file type.
+
+\begin{center}
+The file types of the filesystem
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{file types} & \textbf{Decription}                                      \\ \hline
+\endfirsthead
+%
+\endhead
+%
+is\_block\_file     & Checks if the path refers to a block file.               \\ \hline
+is\_character\_file & Checks if the path refers to a character file.           \\ \hline
+is\_directory       & CHecks if the path refers to a directory.                \\ \hline
+is\_empty           & Checks if the path refers to an empty file or directory. \\ \hline
+is\_fifo            & Checks if the path refers to a \href{https://en.wikipedia.org/wiki/Named_pipe}{named pipe}.               \\ \hline
+is\_other           & Checks if the path refers to another file.               \\ \hline
+is\_regular\_file   & Checks if the path refers to a regular file.             \\ \hline
+is\_socket          & Checks if the path refers to an IPC socket.              \\ \hline
+is\_symlink         & Checks if the path refers to a symbolic link.            \\ \hline
+status\_known       & Checks if the file status is known.                      \\ \hline
+\end{longtable}
+
+\mySamllsection{Getting the type of a file}
+
+The predicates give you information on the file type. More than one predicate may be right for one file. A symbolic link referencing a regular file is both a regular file and a symbolic link.
+
+\filename{Type of a file}
+
+\begin{cpp}
+// fileType.cpp
+...
+#include <filesystem>
+
+...
+
+namespace fs = std::filesystem;
+
+void printStatus(const fs::path& path_){
+	std::cout << path_;
+	if(!fs::exists(path_)) std::cout << " does not exist";
+	else{
+		if(fs::is_block_file(path_)) std::cout << " is a block file\n";
+		if(fs::is_character_file(path_)) std::cout << " is a character device\n";
+		if(fs::is_directory(path_)) std::cout << " is a directory\n";
+		if(fs::is_fifo(path_)) std::cout << " is a named pipe\n";
+		if(fs::is_regular_file(path_)) std::cout << " is a regular file\n";
+		if(fs::is_socket(path_)) std::cout << " is a socket\n";
+		if(fs::is_symlink(path_)) std::cout << " is a symlink\n";
+	}
+}
+
+...
+
+fs::create_directory("rainer");
+printStatus("rainer");
+
+std::ofstream("rainer/regularFile.txt");
+printStatus("rainer/regularFile.txt");
+
+fs::create_directory("rainer/directory");
+printStatus("rainer/directory");
+
+mkfifo("rainer/namedPipe", 0644);
+printStatus("rainer/namedPipe");
+
+struct sockaddr_un addr;
+addr.sun_family = AF_UNIX;
+std::strcpy(addr.sun_path, "rainer/socket");
+int fd = socket(PF_UNIX, SOCK_STREAM, 0);
+bind(fd, (struct sockaddr*)&addr, sizeof addr);
+printStatus("rainer/socket");
+
+fs::create_symlink("rainer/regularFile.txt", "symlink");
+printStatus("symlink");
+
+printStatus("dummy.txt");
+
+fs::remove_all("rainer");
+\end{cpp}
+
+\myGraphic{0.6}{content/chapter18/images/6.jpg}{}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

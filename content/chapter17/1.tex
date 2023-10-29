@@ -1,0 +1,91 @@
+C++ supports various formatting functions. The elementary compile-time formatting functions std::format, std::format\_to, and std::format\_to\_n. The run-time formatting functions std::vformat and std::vformat\_to in combination with the function std::make\_format\_args. Finally, the convenience functions std::print and std::println.
+
+The formatting library has three elementary formatting functions.
+
+\noindent
+\\\textbf{std::format}
+
+Returns the formatted string
+
+\noindent
+\textbf{std::format\_to}
+
+Writes the formatted string via an output iterator
+
+\noindent
+\textbf{std::format\_to\_n}
+
+Writes the formatted string via an output iterator but not more than n characters \\
+
+\begin{cpp}
+#include <format>
+....
+std::format("{1} {0}!", "world", "Hello"); // Hello world!
+
+std::string buffer;
+std::format_to(std::back_inserter(buffer),
+	"Hello, C++{}!\n", "20"); // Hello, C++20!
+\end{cpp}
+
+\mySamllsection{std::vformat, std::vformat\_to, and std::make\_format\_args}
+
+The three formatting functions std::format, std::format\_to, and std::format\_to\_n use a format string to create a formatted string. This format string must be a compile-time value. Consequentially, an invalid format string causes a compile-time error.
+
+For run-time format strings, there are the alternative functions std::vformat and std:: vformat\_to, which you have to use in combination with std::make\_format\_args.
+
+\begin{cpp}
+#include <format>
+...
+std::string formatString = "{1} {0}!";
+std::vformat(formatString, std::make_format_args("world", "Hello")); // Hello world
+\end{cpp}
+
+\mySamllsection{std::print, and std::println}
+
+The convenience functions std::print and std::println write to the output console. std::println adds a newline character to the output. Additionally, both functions enable it to write to an output file stream and support \href{https://en.wikipedia.org/wiki/Unicode}{Unicode}. You have to include the header <print>.
+
+\begin{cpp}
+#include <print>
+...
+std::print("{1} {0}!", "world", "Hello"); // prints "Hello world!"
+
+std::ofstream outFile("testfile.txt");
+std::print(outFile, "{1} {0}!", "world", "Hello"); // writes "Hello world!" into the out\
+File
+\end{cpp}
+
+\begin{myNotic}{I use std::format for the rest of this chapter}
+The compile-time formatting functions std::format, std::format\_to, and std::format\_to\_n, the run-time formatting functions std::vformat, and std::vformat\_n, and the convenience functions std::print, and std::println apply the same syntax for the format string. For simplicity, I use std::format for the rest of this chapter.
+\end{myNotic}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

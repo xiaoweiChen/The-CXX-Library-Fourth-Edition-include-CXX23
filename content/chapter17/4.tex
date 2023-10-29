@@ -1,0 +1,139 @@
+
+To format a user-defined type, I have to specialize the class \href{https://en.cppreference.com/w/cpp/utility/format/formatter}{std::formatter} for my user-defined type. This means, in particular, I have to implement the member functions parse and format.
+
+\begin{itemize}
+\item 
+parse:
+
+\begin{itemize}
+\item 
+Accepts the parse context
+
+\item 
+Parses the parse context
+
+\item 
+Returns an iterator to the end of the format specification
+
+\item 
+Throws a std::format\_error in case of an error
+\end{itemize}
+
+\item 
+format:
+
+\begin{itemize}
+\item 
+Gets the value t, which should be formatted, and the format context fc
+
+\item 
+Formats t according to the format context
+
+\item 
+Writes the output to fc.out()
+
+\item 
+Returns an iterator that represents the end of the output
+\end{itemize}
+
+\end{itemize}
+
+Let me put the theory into practice and format a std::vector.
+
+\mySamllsection{Formatting a std::vector}
+
+The specialization of the class std::formatter is as straightforward as possible. I specify a format specification which is applied to each element of the container.
+
+\begin{cpp}
+// formatVector.cpp
+
+#include <format>
+
+...
+
+template <typename T>
+struct std::formatter<std::vector<T>> {
+	
+	std::string formatString;
+	
+	auto constexpr parse(format_parse_context& ctx) { // (3)
+		formatString = "{:";
+			std::string parseContext(std::begin(ctx), std::end(ctx));
+			formatString += parseContext;
+			return std::end(ctx) - 1;
+		}
+	template <typename FormatContext>
+	auto format(const std::vector<T>& v, FormatContext& ctx) {
+		auto out= ctx.out();
+		std::format_to(out, "[");
+		if (v.size() > 0) std::format_to(out, formatString, v[0]);
+		for (int i= 1; i < v.size(); ++i) {
+			std::format_to(out, ", " + formatString, v[i]); // (1)
+		}
+		std::format_to(out, "]"); // (2)
+		return std::format_to(out, "\n" );
+	}
+};
+
+...
+
+std::vector<int> myInts{1, 2, 3, 4, 5};
+std::cout << std::format("{:}", myInts); // [1, 2, 3, 4, 5] // (4)
+std::cout << std::format("{:+}", myInts); // [+1, +2, +3, +4, +5]
+std::cout << std::format("{:03d}", myInts); // [001, 002, 003, 004, 005]
+std::cout << std::format("{:b}", myInts); // [1, 10, 11, 100, 101] // (5)
+
+std::vector<std::string> myStrings{"Only", "for", "testing"};
+std::cout << std::format("{:}", myStrings); // [Only, for, testing]
+std::cout << std::format("{:.3}", myStrings); // [Onl, for, tes]
+\end{cpp}
+
+The specialization for std::vector has the member functions parse and format. parse essentially creates the formatString applied to each element of the std::vector (1 and 2). The parse context ctx (3) contains the characters between the colon (:) and the closing curly braces (\}). The function returns an iterator to the closing curly braces (\}). The job of the member function format is more interesting. The format context returns the output iterator. Thanks to the output iterator and the function \href{https://en.cppreference.com/w/cpp/utility/format/format_to}{std::format\_to}, the elements of a std::vector are nicely displayed.
+
+The elements of the std::vector are formatted in a few ways. The first line (4) displays the numbers. The following line writes a sign before each number, aligns them to 3 characters, and uses the 0 as a fill character. Line (5) displays them in binary format. The remaining two lines output each string of the std::vector. The last line truncates each string to three characters.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

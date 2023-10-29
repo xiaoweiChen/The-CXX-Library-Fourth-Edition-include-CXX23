@@ -1,0 +1,217 @@
+You can specify the fill character and alignment of the text, the sign, the width, the precision of numbers, and the data type.
+
+\mySamllsection{Fill characters and alignment of text}
+
+\begin{itemize}
+\item 
+Fill character: per default space
+ 
+\item 
+Alignment:
+
+\begin{itemize}
+\item 
+<: left
+
+\item 
+>: right
+
+\item 
+\^{}: centered
+\end{itemize}
+
+\end{itemize}
+
+\begin{cpp}
+std::format("{:7}", 42);    // "     42"
+std::format("{:7}", 'x');   // "x      "
+std::format("{:*<7}", 'x'); // "x******"
+std::format("{:*>7}", 'x'); // "******x"
+std::format("{:*^7}", 'x'); // "***x***"
+std::format("{:7d}", c);    // "    120"
+std::format("{:7}", true);  // "true   "
+\end{cpp}
+
+\mySamllsection{Sign, width, and precision of numbers}
+
+\begin{itemize}
+\item 
+Sign
+
+\begin{itemize}
+\item 
++: number gets a sign symbol
+
+\item 
+-: negative numbers get a sign (default)
+
+\item 
+space: positive numbers get a space
+\end{itemize}
+
+\begin{cpp}
+double inf = std::numeric_limits<double>::infinity();
+double nan = std::numeric_limits<double>::quiet_NaN();
+
+std::format("{0:},{0:+},{0:-},{0: }", 1); // "1,+1,1, 1"
+std::format("{0:},{0:+},{0:-},{0: }", -1); // "-1,-1,-1,-1"
+std::format("{0:},{0:+},{0:-},{0: }", inf); // "inf,+inf,inf, inf"
+std::format("{0:},{0:+},{0:-},{0: }", nan); // "nan,+nan,nan, nan"
+\end{cpp}
+
+\item 
+\#:
+
+\begin{itemize}
+\item 
+uses the alternative format
+
+\item 
+integrals:
+
+\begin{itemize}
+\item 
+binary numbers: 0b
+
+\item 
+octal numbers: 0
+
+\item 
+hexadecimal numbers: 0x
+\end{itemize}
+
+\end{itemize}
+
+\item 
+0: fills with leading zeros
+
+\begin{cpp}
+std::format("{:+06d}", 120); // "+00120"
+std::format("{:#0f}", 120)); // "120.000000"
+std::format("{:0>15f}", 120)); // "00000120.000000"
+std::format("{:#06x}", 0xa); // "0x000a"
+\end{cpp}
+
+\item 
+Width: specifies the minimal width
+
+
+\item 
+Precision: can be applied to floating-point numbers and strings
+
+\begin{itemize}
+\item 
+Floating-point number: place after the decimal point
+
+\item 
+Strings: maximal number of characters
+\end{itemize}
+
+\begin{cpp}
+double d = 20.11;
+
+std::format("{}", d)); // " 20.11 "
+std::format("{:10}", d)); // " 20.11 "
+std::format("{:10.3}", d)); // " 20.1 "
+std::format("{:.3}", "Only a test."); // " Onl "
+\end{cpp}
+
+\end{itemize}
+
+\mySamllsection{Data types}
+
+The values are copied to the output if not other specified. You can explicitly specify the presentation of a value:
+
+\begin{itemize}
+\item 
+String presentation: s
+
+\item 
+Integer presentation:
+
+\begin{itemize}
+\item 
+b, B: binary
+
+\item
+d: decimal 
+
+\item 
+o: octal
+
+\item 
+x, X: hexadecimal
+\end{itemize}
+
+\item 
+Character presentation:
+
+\begin{itemize}
+\item 
+b, B, d, o, x, X: integer
+\end{itemize}
+
+\item 
+Bool:
+
+\begin{itemize}
+\item 
+s: true or false
+
+\item 
+b, B, d, o, x, X: integer
+\end{itemize}
+
+\item 
+Floating point:
+
+\begin{itemize}
+\item 
+e, E: scientific
+
+\item 
+f, F: decimal
+\end{itemize}
+
+\end{itemize}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

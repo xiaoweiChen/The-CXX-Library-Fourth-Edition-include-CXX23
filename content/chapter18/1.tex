@@ -1,0 +1,101 @@
+Many classes encapsulate a specific aspect of the filesystem.
+
+\begin{center}
+The various classes the filesystem
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Class}                 & \textbf{Description}                                      \\ \hline
+\endfirsthead
+%
+\endhead
+%
+path                           & Represents a path.                                        \\ \hline
+filesystem\_error              & Defines an exception object.                              \\ \hline
+directory\_entry               & Represents a directory entry.                             \\ \hline
+directory\_iterator            & Defines a directory iterator.                             \\ \hline
+recursive\_directory\_iterator & Defines a recursive directory iterator.                   \\ \hline
+file\_status                   & Stores information about the file.                        \\ \hline
+space\_info                    & Represents filesystem information.                        \\ \hline
+file\_type                     & Indicates the type of a file.                             \\ \hline
+perms                          & Represents file access premissions.                       \\ \hline
+perm\_options                  & Represents options for the function premissions.          \\ \hline
+copy\_options                  & Represents options for the functions copy and copy\_file. \\ \hline
+directory\_options & Represents options for the functions directory\_iterator and recursive\_directory\_iterator. \\ \hline
+file\_time\_type               & Represents file time.                                     \\ \hline
+\end{longtable}
+
+
+\mySamllsection{Manipulating the permissions of a file}
+
+The permissions for a file are represented by the class std::filesystem::perms. It is a \href{http://en.cppreference.com/w/cpp/concept/BitmaskType}{BitmaskType} and can, therefore, be manipulated by bitwise operations. The access permissions are based on \href{https://en.wikipedia.org/wiki/POSIX}{POSIX}.
+
+The program from \href{en.cppreference.com/w/cpp/filesystem/perms}{en.cppreference.com} shows how you can read and manipulate the owner, group, and other (world) bits of a file.
+
+\filename{Permissions of a file}
+
+\begin{cpp}
+// perms.cpp
+...
+#include <filesystem>
+...
+namespace fs = std::filesystem;
+void printPerms(fs::perms perm){
+	std::cout << ((perm & fs::perms::owner_read) != fs::perms::none ? "r" : "-")
+			<< ((perm & fs::perms::owner_write) != fs::perms::none ? "w" : "-")
+			<< ((perm & fs::perms::owner_exec) != fs::perms::none ? "x" : "-")
+			<< ((perm & fs::perms::group_read) != fs::perms::none ? "r" : "-")
+			<< ((perm & fs::perms::group_write) != fs::perms::none ? "w" : "-")
+			<< ((perm & fs::perms::group_exec) != fs::perms::none ? "x" : "-")
+			<< ((perm & fs::perms::others_read) != fs::perms::none ? "r" : "-")
+			<< ((perm & fs::perms::others_write) != fs::perms::none ? "w" : "-")
+			<< ((perm & fs::perms::others_exec) != fs::perms::none ? "x" : "-")
+			<< '\n';
+}
+
+...
+
+std::ofstream("rainer.txt");
+
+std::cout << "Initial file permissions for a file: ";
+printPerms(fs::status("rainer.txt").permissions()); // (1)
+
+fs::permissions("rainer.txt", fs::perms::add_perms | // (2)
+				 fs::perms::owner_all | fs::perms::group_all);
+std::cout << "Adding all bits to owner and group: ";
+printPerms(fs::status("rainer.txt").permissions());
+
+fs::permissions("rainer.txt", fs::perms::remove_perms | // (3)
+	fs::perms::owner_write | fs::perms::group_write | fs::perms::others_write);
+std::cout << "Removing the write bits for all: ";
+printPerms(fs::status("rainer.txt").permissions());
+\end{cpp}
+
+Thanks to the call fs::status("rainer.txt").permissions(), I get the permissions of the file rainer.txt and can display them in the function printPerms (1). By setting the type std::filesystem::add\_perms, I can add permissions to the owner and the group of the file (2). Alternatively, I can set the constant std::filesystem::remove\_perms for removing permissions (3).
+
+\myGraphic{0.6}{content/chapter18/images/3.jpg}{}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

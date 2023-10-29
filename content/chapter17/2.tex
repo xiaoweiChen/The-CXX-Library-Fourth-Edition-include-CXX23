@@ -1,0 +1,73 @@
+std::formathas the following syntax: std::format(FormatString, Args) 
+
+The format string FormatString consists of
+
+\begin{itemize}
+\item 
+Ordinary characters (except \{ and \})
+
+\item 
+Escape sequences \{\{ and \}\} that are replaced by \{ and \}
+
+\item 
+Replacement fields
+\end{itemize}
+
+A replacement field has the format
+
+\begin{itemize}
+\item 
+Beginning character \{
+\begin{itemize}
+\item 
+Argument-ID (optional)
+
+\item 
+Colon : followed by a format specification (optional)
+\end{itemize}
+
+\item 
+Closing character \}
+\end{itemize}
+
+The argument-id allows you to specify the index of the arguments in Args. The id’s start with 0. When you don’t provide the argument-id, the arguments are used as given. Either all replacement fields have to use an argument-id or none.
+
+std::formatter and its specializations define the format specification for the arguments.
+
+\begin{itemize}
+\item 
+basic types and string types: \href{https://en.cppreference.com/w/cpp/utility/format/formatter#Standard_format_specification}{standard format specification} based on \href{https://docs.python.org/3/library/string.html#formatspec}{Python’s format specification}.
+
+\item 
+chrono types: \href{https://en.cppreference.com/w/cpp/chrono/system_clock/formatter#Format_specification}{chrono format specification}
+
+\item 
+other types: user-defined format specification
+\end{itemize}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

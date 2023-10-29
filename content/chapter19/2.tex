@@ -1,0 +1,294 @@
+C++ has a set of atomic data types. First, there is std::atomic\_flag, and second the class template std::atomic. Additionally, you can define your atomic datatype using std::atomic.
+
+\mySamllsection{std::atomic\_flag}
+
+std::atomic\_flag is an atomic boolean. It has a clear and a set state. For simplicity reasons, I call the clear state false and the set state true. Its clear member function enables you to set its value to false. With the test\_and\_set member functions, you can set the value back to true and return the previous value. There is no member functions to ask for the current value. This changes with C++20. With C++20, a std::atomic\_flag has a test member function and can be used for thread synchronization via the member functions notify\_one, notify\_all, and wait.
+
+\begin{center}
+All operations of std::atomic\_flag atomicFlag
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Member functions} & \textbf{Description}                                           \\ \hline
+\endfirsthead
+%
+\endhead
+%
+atomicFlag.clear()        & Clear the atomic flag.                                         \\ \hline
+\begin{tabular}[c]{@{}l@{}}atomicFlag.test\_and\_set()\\ atomicFlag.test()(C++20)\end{tabular} &
+\begin{tabular}[c]{@{}l@{}}Sets the atomic flag and returns the old value.\\ Returns the value of the flag.\end{tabular} \\ \hline
+\begin{tabular}[c]{@{}l@{}}atomicFlag.notify\_one()(C++20)\\ atomicFlag.notify\_all()(C++20)\end{tabular} &
+\begin{tabular}[c]{@{}l@{}}Notifies one thread waiting on the atomic flag.\\ Notifies all threads waiting on the atomic flag.\end{tabular} \\ \hline
+atomicFlag.wait(b)(C++20) & Blocks the thread until notified and the atomic value changes. \\ \hline
+\end{longtable}
+
+The call atomicFlag.test() returns the atomicFlag value without changing it. Further on, you can use std::atomic\_flag for thread-synchronization: atomicFlag.wait(), atomicFlag.notify\_one(), and atomicFlag.notify\_all(). The member functions notify\_one or notify\_all notify one or all of the waiting atomic flags. atomicFlag.wait(boo) needs a boolean b. The call atomicFlag.wait(b) blocks until notified. It checks if the value of atomicFlag is equal to b and unblocks if not.
+
+You must initialize a std::atomic\_flag explicitly using ATOMIC\_FLAG\_INIT: std::atomic\_flag flag(ATOMIC\_FLAG\_INIT). In C++20, a default-constructed std::atomic\_flag is in its false‘ state.
+
+std::atomic\_flag has one outstanding property because it is the only guaranteed \href{https://en.wikipedia.org/wiki/Non-blocking_algorithm}{lock-free} atomic. The remaining powerful atomics can provide their functionality by using a locking mechanism such as std::mutex.
+
+\mySamllsection{std::atomic}
+
+There are various specializations of the class template std::atomic available. They require the header <atomic>. std::atomic<bool> and std::atomic<user-defined type> use the primary template. Partial specializations are available for pointers std::atomic<T*>, and with C++20 for smart pointers std::atomic<smart T*>, full specializations for integral types std::atomic<integral type>, and with C++20 for floating-point types std::atomic<floating-point>. You can define your atomic data type using std::atomic.
+
+\mySamllsection{Fundamental Atomic Interface}
+
+The three partial specializations std::atomic<bool>, std::atomic<user-defined type>, and std::atomic<smart T*> support the fundamental atomic interface.
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Member functions} &
+\textbf{Description} \\ \hline
+\endfirsthead
+%
+\endhead
+%
+is\_lock\_free &
+Checks if the atomic object is lock free. \\ \hline
+atomic\_ref\textless{}T\textgreater{}::is\_always\_lock\_free &
+Checks at compile time if the atomic type is always lock free. \\ \hline
+load &
+Atomically returns the value of the atomic. \\ \hline
+operator T &
+\begin{tabular}[c]{@{}l@{}}Atomically returns the value of the atomic.\\ Equivalent to atom.load().\end{tabular} \\ \hline
+store &
+Atomically replace the atomic value with the non-atomic. \\ \hline
+exchange &
+Atomically replace the value with the new value. Returns the old value. \\ \hline
+\begin{tabular}[c]{@{}l@{}}compare\_exchange\_strong\\ compare\_exchange\_weak\end{tabular} &
+Atomically compares and eventually exchanges the value. \\ \hline
+\begin{tabular}[c]{@{}l@{}}notify\_one(C++20)\\ notify\_all(C++20)\end{tabular} &
+\begin{tabular}[c]{@{}l@{}}Notifies one atomic wait operation.\\ Notifies all atomic wait operations.\end{tabular} \\ \hline
+wait(C++20) &
+\begin{tabular}[c]{@{}l@{}}Blocks until it is notified.\\ If the old value compares to unequal returns.\end{tabular} \\ \hline
+\end{longtable}
+
+compare\_exchange\_strong has the following syntax: bool compare\_exchange\_strong(T\& expected, T\& desired). Here is its behavior:
+
+\begin{itemize}
+\item 
+If the atomic comparison of atomicValue with expected returns true, atomicValue is set in the same atomic operation to desired.
+
+\item 
+If the comparison returns false, expected is set to atomicValue.
+\end{itemize}
+
+\mySamllsection{User Defined Atomics std::atomic<user-defined type>}
+
+Thanks to the class template std::atomic, you can define your user-defined atomic type.
+
+There are many substantial restrictions on a user-defined type if you use it for an atomic type std::atomic<user-defined type>. The atomic type std::atomic<user-defined type> supports the same interface as std::atomic<bool>.
+
+Here are the restrictions for a user-defined type to become an atomic type:
+
+\begin{itemize}
+\item 
+The copy assignment operator for a user-defined type must be trivial for all its base classes and non-static members. You must not define the copy assignment operator, but you can request it from the compiler using \href{http://en.cppreference.com/w/cpp/keyword/default}{default}.
+
+\item 
+a user-defined type must not have virtual member functions or virtual base classes
+
+\item 
+a user-defined type must be bitwise comparable so that the C functions \href{http://en.cppreference.com/w/cpp/string/byte/memcpy}{memcpy} or \href{http://en.cppreference.com/w/cpp/string/byte/memcmp}{memcmp} can be applied
+\end{itemize}
+
+Most popular platforms can use atomic operations for std::atomic<user-defined type> if the size of the user-defined type is not bigger than an int.
+
+\mySamllsection{Atomic Smart Pointers std::atomic<smart T*> (C++20)}
+
+A std::shared\_ptr consists of a control block and its resource. The control block is thread-safe, but access to the resource is not. This means modifying the reference counter is an atomic operation, and you have the guarantee that the resource is deleted precisely once. These are the guarantees std::shared\_ptr gives you. Using the partial template specialization std::atomic<std::shared\_ptr<T>{}> and std::atomic<std::weak\_ptr<T>{}> gives you the additionally guarantee that the access of the underlying object is thread-safe. In 2022, all operations on atomic smart pointers are not lock free.
+
+\mySamllsection{std::atomic<floating-point type> (C++20)}
+
+Additionally to the fundamental atomic interface, std::atomic<floating-point type> supports addition and subtraction.
+
+\begin{center}
+Additional operations to the fundamental atomic interface
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Member functions} & \textbf{Description}                  \\ \hline
+\endfirsthead
+%
+\endhead
+%
+fetch\_add, +=            & Atomically adds(subtracts) the value. \\ \hline
+fetch\_sub, -=            & Returns the old value.                \\ \hline
+\end{longtable}
+
+Full specializations for the types float, double, and long double are available.
+
+\mySamllsection{std::atomic<T*>}
+
+std::atomic<T*> is a partial specialization of the class template std::atomic. It behaves like a plain pointer T*. Additionally to std::atomic<floating-point type>, std::atomic<T*> supports pre- and post-increment or pre- and post-decrement operations.
+
+\begin{center}
+Additional operations to the std::atomic<floating-point type
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Member functions} & \textbf{Description}                                          \\ \hline
+\endfirsthead
+%
+\endhead
+%
+++, --                    & Increments or decrements(pre- and post-increment) the atomic. \\ \hline
+\end{longtable}
+
+Have a look at the short example.
+
+\begin{cpp}
+int intArray[5];
+std::atomic<int*> p(intArray);
+p++;
+assert(p.load() == &intArray[1]);
+p+=1;
+assert(p.load() == &intArray[2]);
+--p;
+assert(p.load() == &intArray[1]);
+\end{cpp}
+
+\mySamllsection{std::atomic<integral type>}
+
+For each integral type there is a full specialization std::atomic<integral type> of std::atomic. std::atomic<integral type> supports all operations that std::atomic<T*> or std::atomic<floating-point type> supports. Additionally, std::atomic<integral type supports the bitwise logical operators AND, OR, and XOR.
+
+\begin{center}
+All operations on atomic
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Member functions} &
+\textbf{Description} \\ \hline
+\endfirsthead
+%
+\endhead
+%
+\begin{tabular}[c]{@{}l@{}}fetch\_or, |=\\ fetch\_and, \&=\\ fethc\_xor, \textasciicircum{}=\end{tabular} &
+\begin{tabular}[c]{@{}l@{}}Atomically performs bitwise(AND, OR and XOR) operation with the value.\\ Returns the old value.\end{tabular} \\ \hline
+\end{longtable}
+
+There is a slight difference between the composite bitwise-assignment operation and the fetch version. The composite bitwise-assignment operation returns the new value; the fetch variation returns the old value.
+
+A more in-depth look provides more insight: no atomic multiplication, atomic division, or atomic shift operation is available. This is not a significant limitation because these operations are seldom needed and can easily be implemented. Here is an example of an atomic fetch\_mult function.
+
+\filename{An atomic multiplication with compare\_exchange\_strong}
+
+\begin{cpp}
+// fetch_mult.cpp
+
+#include <atomic>
+#include <iostream>
+
+template <typename T>
+T fetch_mult(std::atomic<T>& shared, T mult){
+	T oldValue = shared.load();
+	while (!shared.compare_exchange_strong(oldValue, oldValue * mult));
+	return oldValue;
+}
+
+int main(){
+	std::atomic<int> myInt{5};
+	std::cout << myInt << '\n';
+	fetch_mult(myInt,5);
+	std::cout << myInt << '\n';
+}
+\end{cpp}
+
+One point worth mentioning is that the multiplication in line 9 only happens if the relation oldValue == shared holds. I put the multiplication in a while loop to be sure that the multiplication always takes place because there are two instructions for the reading of oldValue in line 8 and its usage in line 9.
+
+Here is the result of the atomic multiplication.
+
+\myGraphic{0.8}{content/chapter19/images/2.jpg}{}
+
+\mySamllsection{std::atomic\_ref}
+
+Additionally, the class template std::atomic\_ref applies atomic operations to the referenced object. Concurrent writing and reading of atomic objects is thread-safe. The lifetime of the referenced object must exceed the lifetime of the atomic\_ref. std::atomic\_ref supports the same types and operations such as std::atomic does it for its underlying type.
+
+\begin{cpp}
+struct Counters {
+	int a;
+	int b;
+};
+
+Counter counter;
+std::atomic_ref<Counters> cnt(counter);
+\end{cpp}
+
+\mySamllsection{All Atomic Operations}
+
+The following table shows all atomic operations. To get further information about the operations, refer to the previous chapters on atomic data types.
+
+\begin{center}
+All atomic operations depending on the atomic type
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|l|l|l|l|}
+\hline
+\textbf{Member functions} &
+\textbf{atomic\_flag} &
+\multicolumn{1}{c|}{\textbf{\begin{tabular}[c]{@{}c@{}}atomic\textless{}bool\textgreater\\ atomic\textless{}user\textgreater\\ atomic\textless{}smart T*\textgreater{}\end{tabular}}} &
+\textbf{atomic\textless{}float\textgreater{}} &
+\textbf{atomic\textless{}T*\textgreater{}} &
+\textbf{atomic\textless{}int\textgreater{}} \\ \hline
+\endfirsthead
+%
+\endhead
+%
+test\_and\_set                                           & yes &     &     &     &     \\ \hline
+clear                                                    & yes &     &     &     &     \\ \hline
+is\_lock\_free                                           &     & yes & yes & yes & yes \\ \hline
+atomic\textless{}T\textgreater{}::is\_always\_lock\_free &     & yes & yes & yes & yes \\ \hline
+load                                                     &     & yes & yes & yes & yes \\ \hline
+operator T                                               &     & yes & yes & yes & yes \\ \hline
+store                                                    &     & yes & yes & yes & yes \\ \hline
+exchange                                                 &     & yes & yes & yes & yes \\ \hline
+compare\_exchange\_strong                                &     & yes & yes & yes & yes \\ \hline
+compare\_exchange\_weak                                  &     & yes & yes & yes & yes \\ \hline
+fetch\_add, +=                                           &     &     & yes & yes & yes \\ \hline
+fetch\_sub, -=                                           &     &     & yes & yes & yes \\ \hline
+fetch\_or, |=                                            &     &     &     &     & yes \\ \hline
+fetch\_and, \&=                                          &     &     &     &     & yes \\ \hline
+fecth\_xor, \textasciicircum{}=                          &     &     &     &     & yes \\ \hline
+++, --                                                   &     &     &     & yes & yes \\ \hline
+notify\_one(C++20)                                       & yes & yes & yes & yes & yes \\ \hline
+notify\_all(C++20)                                       & yes & yes & yes & yes & yes \\ \hline
+wait(C++20)                                              & yes & yes & yes & yes & yes \\ \hline
+\end{longtable}
+
+std::atomic<float> stands for atomic \href{https://en.cppreference.com/w/cpp/types/is_floating_point}{floating point types}, and std::atomic<int> for atomic \href{https://en.cppreference.com/w/cpp/types/is_integral}{integral types}.
+
+
+
+
+
+
+
+
+
+
+
+
+

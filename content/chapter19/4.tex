@@ -1,0 +1,141 @@
+The additional functionality of the cooperatively joining thread is based on the std::stop\_token, the std::stop\_callback, and the std::stop\_source. The following program should give you a general idea.
+
+\filename{Interrupt an non-interruptable and interruptable std::jthread}
+
+\begin{cpp}
+// interruptJthread.cpp
+
+...
+
+#include <thread>
+#include <stop_token>
+
+using namespace::std::literals;
+
+...
+
+std::jthread nonInterruptable([]{ // (1)
+	int counter{0};
+	while (counter < 10){
+		std::this_thread::sleep_for(0.2s);
+		std::cerr << "nonInterruptable: " << counter << '\n';
+		++counter;
+	}
+});
+
+std::jthread interruptable([](std::stop_token stoken){ // (2)
+	int counter{0};
+	while (counter < 10){
+		std::this_thread::sleep_for(0.2s);
+		if (stoken.stop_requested()) return; // (3)
+		std::cerr << "interruptable: " << counter << '\n';
+		++counter;
+	}
+});
+
+std::this_thread::sleep_for(1s);
+
+std::cerr << "Main thread interrupts both jthreads" << std:: endl;
+nonInterruptable.request_stop(); // (4)
+interruptable.request_stop();
+
+...
+\end{cpp}
+
+I start in the main program the two threads nonInterruptable and interruptable ((1) and (2)). In contrast to the thread nonInterruptable, the thread interruptable gets a std::stop\_token and uses it in (3) to check if it was interrupted: stoken.stop\_requested(). In case of an interrupt, the lambda function returns, and the thread ends. The call interruptable.request\_stop() (4) triggers the end of the thread. This does not hold for the previous call nonInterruptable.request\_stop(), which does not have an effect.
+
+\myGraphic{0.8}{content/chapter19/images/3.jpg}{}
+
+
+\mySamllsection{std::stop\_token, std::stop\_source, and std::stop\_callback}
+
+A stop\_token, a std::stop\_callback, or a std::stop\_source enables it to asynchronously request execution to stop or ask if an execution gets a stop signal. The std::stop\_token can be passed to an operation and afterward be used to actively poll the token for a stop request or to register a callback via std::stop\_callback. The std::stop\_source sents the stop request. This signal affects all associated std::stop\_token. The three classes std::stop\_source, std::stop\_token, and std::stop\_callback share the ownership of an associated stop state. The calls request\_stop(), stop\_requested(), and stop\_possible() are atomic operations.
+
+The components std::stop\_source and std::stop\_token provide the following attributes for stop handling.
+
+\filename{Constructors of std::stop\_source}
+
+\begin{cpp}
+stop_source();
+explicit stop_source(std::nostopstate_t) noexcept;
+\end{cpp}
+
+The default-constructed std::stop\_source gets a stop-source. The constructor taking std::nostopstate\_t constructs an empty std::stop\_source without an associated stop-state.
+
+\begin{center}
+Member functions of std::stop\_source src
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Member function} & \textbf{Description}                                                          \\ \hline
+\endfirsthead
+%
+\endhead
+%
+src.get\_token() &
+\begin{tabular}[c]{@{}l@{}}If stop\_possible(), returns a stop\_token for the associated stop-state.\\ Otherwise, it returns a default-constructed(empty) stop\_token.\end{tabular} \\ \hline
+src.stop\_possible()     & true if src can be requested to stop.                                         \\ \hline
+src.stop\_requested()    & true if stop\_possible() and request\_stop() was called by one of the owners. \\ \hline
+src.request\_stop() &
+\begin{tabular}[c]{@{}l@{}}Calls a stop request if stop\_possible() and !stop\_requested().\\ Otherwise, the call has no effect.\end{tabular} \\ \hline
+\end{longtable}
+
+
+src.stop\_possible() means that src has an associated stop-state. src.stop\_requested() returns true when src has an associated stop-state and was requested to stop before. src.request\_stop() is successful and returns true if src has an associated stop-state and has received a stop request.
+
+The call src.get\_token() returns the stop token stoken. Thanks to stoken, you can check if a stop request has been made or can be made for its associated stop source src. The stop token stoken observes the stop source src.
+
+
+\begin{center}
+Member functions of std::stop\_token stoken
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Member function} & \textbf{Description}                                                                                                                   \\ \hline
+\endfirsthead
+%
+\endhead
+%
+src.stop\_possible()     & Returns true if stoken has an associated stop-state.                                                                                   \\ \hline
+src.stop\_requested()    & \begin{tabular}[c]{@{}l@{}}true if request\_stop() was called on the accociated std::stop\_source src,\\ otherwise false.\end{tabular} \\ \hline
+\end{longtable}
+
+A default-constructed stop token has no associated stop state. stoken.stop\_possible also returns true if the stop request has already been made. stoken.stop\_requested() returns true when the stop token has an associated stop-state and has already received a stop request.
+
+If the std::stop\_token should be temporarily disabled, you can replace it with a default constructed token. A default constructed token has no associated stop-state. The following code snippet shows how to disable and enable a thread’s capability to accept stop requests.
+
+\filename{Temporarily disable a stop token}
+
+\begin{cpp}
+std::jthread jthr([](std::stop_token stoken) {
+	...
+	std::stop_token interruptDisabled;
+	std::swap(stoken, interruptDisabled); // (1)
+	... // (2)
+	std::swap(stoken, interruptDisabled);
+	...
+}
+\end{cpp}
+
+std::stop\_token interruptDisabled has no associated stop-state. This means the thread jthr can accept stop requests in all lines except lines (1) and (2).
+
+
+
+
+
+
+
+
+
+
+
+
+

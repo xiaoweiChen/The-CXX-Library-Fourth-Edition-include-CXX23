@@ -1,0 +1,238 @@
+
+To use the multithreading interface of C++, you need the header <thread>. C++ supports with C++11 a std::thread and with C++20 an improved std::jthread.
+
+\mySamllsection{std::thread}
+
+\mySamllsection{Creation}
+
+A thread std::thread represents an executable unit. This executable unit, which the thread immediately starts, gets its work package as a callable unit. A callable unit can be a function, a function object, or a lambda function:
+
+\filename{Thread creation}
+
+\begin{cpp}
+// threadCreate.cpp
+...
+#include <thread>
+...
+using namespace std;
+
+void helloFunction(){
+	cout << "function" << endl;
+}
+
+class HelloFunctionObject {
+public:
+	void operator()() const {
+		cout << "function object" << endl;
+	}
+};
+
+thread t1(helloFunction); // function
+
+HelloFunctionObject helloFunctionObject;
+thread t2(helloFunctionObject); // function object
+
+thread t3([]{ cout << "lambda function"; }); // lambda function
+\end{cpp}
+
+\mySamllsection{Lifetime}
+
+The creator of a thread has to take care of the lifetime of its created thread. The executable unit of the created thread ends with the end of the callable. Either the creator is waiting until the created thread t is done (t.join()) or the creator detaches itself from the created thread: t.detach(). A thread t is joinable if no call t.join() or t.detach() was performed on it. A joinable thread throws in its destructor the exception std::terminate, and the program terminates.
+
+\filename{Lifetime of a thread}
+
+\begin{cpp}
+// threadLifetime.cpp
+...
+#include <thread>
+...
+
+thread t1(helloFunction); // function
+
+HelloFunctionObject helloFunctionObject;
+thread t2(helloFunctionObject); // function object
+
+thread t3([]{ cout << "lambda function"; }); // lambda function
+
+t1.join();
+t2.join();
+t3.join();
+\end{cpp}
+
+A from its creator detached thread is typically called a daemon thread because it runs in the background.
+
+\begin{myWarning}{Move threads with caution}
+Threads can be moved but not copied.
+
+\begin{cpp}
+#include <thread>
+...
+std::thread t([]{ cout << "lambda function"; });
+std::thread t2;
+t2 = std::move(t);
+
+std::thread t3([]{ cout << "lambda function"; });
+t2 = std::move(t3); // std::terminate
+\end{cpp}
+
+By performing t2 = std::move(t) thread t2 gets the callable of thread t. Assuming thread t2 already had a callable and is joinable, the C++ runtime would call std::terminate. This happens exactly in t2 = std::move(t3) because t2 neither executed t2.join() nor t2.detach() before.
+\end{myWarning}
+
+\mySamllsection{Arguments}
+
+A std::thread is a variadic template. This means that it can get an arbitrary number of arguments by copy or reference. Either the callable or the thread can get the arguments. The thread delegates them to the callable: tPerCopy2 and tPerReference2.
+
+\begin{cpp}
+#include <thread>
+...
+
+using namespace std;
+
+void printStringCopy(string s){ cout << s; }
+void printStringRef(const string& s){ cout << s; }
+
+string s{"C++"};
+
+thread tPerCopy([=]{ cout << s; }); // C++
+thread tPerCopy2(printStringCopy, s); // C++
+tPerCopy.join();
+tPerCopy2.join();
+
+thread tPerReference([&]{ cout << s; }); // C++
+thread tPerReference2(printStringRef, s); // C++
+tPerReference.join();
+tPerReference2.join();
+\end{cpp}
+
+The first two threads get their argument s by copy, the second two by reference.
+
+\begin{myWarning}{By default, threads should get their arguments by	copy}
+\filename{Arguments of a thread}
+	
+\begin{cpp}
+// threadArguments.cpp
+...
+#include <thread>
+...
+
+using std::this_thread::sleep_for;
+using std::this_thread::get_id;
+
+struct Sleeper{
+	Sleeper(int& i_):i{i_}{};
+	void operator() (int k){
+		for (unsigned int j= 0; j <= 5; ++j){
+			sleep_for(std::chrono::milliseconds(100));
+			i += k;
+		}
+		std::cout << get_id(); // undefined behaviour
+	}
+	private:
+	int& i;
+};
+
+int valSleeper= 1000;
+
+std::thread t(Sleeper(valSleeper), 5);
+t.detach();
+
+std::cout << valSleeper; // undefined behaviour
+\end{cpp}
+
+This program snippet has undefined behavior. First, the lifetime of std::cout is bound to the lifetime of the main thread, and the created thread gets its variable valSleeper by reference. The issue is that the created thread could live longer than its creator, therefore, std::cout and valSleeper lose their validity if the main thread is done. Second, valSleeper is a shared, mutable variable which is concurrently used by the main thread and the child thread. Consequently, this is a data race.
+\end{myWarning}
+
+\mySamllsection{Operations}
+
+You can perform many operations on a thread t.
+
+\begin{center}
+Operations with a std::thread
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Member Function}                                                   & \textbf{Description}                                      \\ \hline
+\endfirsthead
+%
+\endhead
+%
+t.join()                                                                   & Waits until thread t has finished its executable unit.    \\ \hline
+t.detach()                                                                 & Executes the created thread t independent of the creator. \\ \hline
+t.joinable()                                                               & Checks if thread t supports the calls join or detach.     \\ \hline
+\begin{tabular}[c]{@{}l@{}}t.get\_id() and\\ std::this\_thread::get\_id()\end{tabular} & Returns the ideentity of the thread. \\ \hline
+std::thread::hardware\_concurrency()                                       & Indicates the number of threads that can run in parallel. \\ \hline
+std::this\_thread::sleep\_until(absTime)                                   & Puts the thread t to sleep until time absTime.            \\ \hline
+std::this\_thread::sleep\_for(relTime)                                     & Puts the thread t to sleep for the duration relTime.      \\ \hline
+std::this\_thread::yield()                                                 & Offers the system to run another thread.                  \\ \hline
+\begin{tabular}[c]{@{}l@{}}t.swap(t2) and\\ std::swap(t1, t2)\end{tabular} & Swaps the threads.                                        \\ \hline
+\end{longtable}
+
+You can only call t.join() or t.detach() once on a thread t. If you attempt to call these more than once, you get the exception std::system\_error. std::thread::hardware\_concurrency returns the number of cores or 0 if the runtime cannot determine the number. The sleep\_until and sleep\_for operations need a time point or a time duration as an argument.
+
+Threads cannot be copied but can be moved. A swap operation performs a move when possible.
+
+\filename{Operations on a thread}
+
+\begin{cpp}
+// threadMember Functions.cpp
+...
+#include <thread>
+...
+using std::this_thread::get_id;
+
+std::thread::hardware_concurrency(); // 4
+
+std::thread t1([]{ get_id(); }); // 139783038650112
+std::thread t2([]{ get_id(); }); // 139783030257408
+t1.get_id(); // 139783038650112
+t2.get_id(); // 139783030257408
+
+t1.swap(t2);
+
+t1.get_id(); // 139783030257408
+t2.get_id(); // 139783038650112
+get_id(); // 140159896602432
+\end{cpp}
+
+\mySamllsection{std::jthread}
+
+std::jthread stands for joining thread. In addition to std::thread from C++11, std::jthread can automatically join the started thread and signal an interrupt.
+
+\mySamllsection{Automatically Joining}
+
+The non-intuitive behavior of std::thread is the following: when a std::thread is still joinable, std::terminate is called in its destructor.
+
+On the contrary, a std::jthread thr automatically joins in its destructor if thr is still joinable.
+
+\filename{Terminating a still joinable std::jthread}
+
+\begin{cpp}
+// jthreadJoinable.cpp
+...
+#include <thread>
+...
+
+std::jthread thr{[]{ std::cout << "std::jthread" << "\n"; }}; // std::jthread
+
+std::cout << "thr.joinable(): " << thr.joinable() << "\n"; // thr.joinable(): true
+\end{cpp}
+
+Additionally to the std::thread, a std::jthread is interuptible.
+
+
+
+
+
+
+
+
+
+
+
+
+
+

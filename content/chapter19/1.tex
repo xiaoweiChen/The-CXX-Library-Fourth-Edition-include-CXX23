@@ -1,0 +1,72 @@
+The foundation of multithreading is a well-defined memory model. This memory model has to deal with the following points:
+
+\begin{itemize}
+\item 
+Atomic operations: Operations that can be performed without interruption.
+
+\item 
+Partial ordering of operations: Sequence of operations that must not be reordered.
+
+\item 
+Visible effects of operations: Guarantees when operations on shared variables are visible in other threads.
+\end{itemize}
+
+The C++ memory model has a lot in common with its predecessor: the Java memory model.
+Additionally, C++ permits the breaking of sequential consistency. Sequential consistency is the default behavior of atomic operations.
+
+Sequential consistency provides two guarantees.
+
+\begin{enumerate}
+\item 
+The instructions of a program are executed in source code order.
+
+\item 
+There is a global order of all operations on all threads.
+\end{enumerate}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
