@@ -1,0 +1,315 @@
+In addition to threads, C++ has tasks to perform work asynchronously. Tasks need the header <future>. A task is parameterized with a work package consisting of two associated components: a promise and a future. Both are connected via a data channel. The promise executes the work packages and puts the result in the data channel; the associated future picks up the result. Both communication endpoints can run in separate threads. It is special that the future can pick up the result later. Therefore, the calculation of the result by the promise is independent of the query of the result by the associated future.
+
+\begin{myTip}{Regard tasks as data channels}
+Tasks behave like data channels. The promise puts its result in the data channel. The future waits for it and picks it up.
+
+\myGraphic{0.6}{content/chapter19/images/13.jpg}{}
+\end{myTip}
+
+\mySamllsection{Threads versus Tasks}
+
+Threads are very different from tasks.
+
+You have to use a shared variable for the communication between the creator thread and the created thread. The task communicates via its data channel, which is implicitly protected. Therefore a task must not use a protection mechanism like a mutex.
+
+The creator thread is waiting for its child with the join call. The future fut is using the ‘fut.get() call which is blocking if no result is there.
+
+If an exception happens in the created thread, the created thread, the creator, and the whole process terminates. On the contrary, the promise can send exceptions to the future, which has to handle the exception.
+
+A promise can serve one or many futures. It can send a value, an exception, or only a notification.
+
+You can use a task as a safe replacement for a condition variable.
+
+\begin{cpp}
+#include <future>
+#include <thread>
+...
+
+int res;
+std::thread t([&]{ res= 2000+11;});
+t.join();
+std::cout << res << '\n'; // 2011
+
+auto fut= std::async([]{ return 2000+11; });
+std::cout << fut.get() << '\n'; // 2011
+\end{cpp}
+
+The child thread t and the asynchronous function call std::async calculates the sum of 2000 and 11. The creator thread gets the result from its child thread t via the shared variable res. The call std::async creates the data channel between the sender (promise) and the receiver (future). The future asks the data channel with fut.get() for the calculation result. The fut.get call is blocking.
+
+\mySamllsection{std::async}
+
+std::async behaves like an asynchronous function call. This function call takes a callable and its arguments. std::async is a variadic template and can, therefore, take an arbitrary number of arguments. The call of std::async returns a future object fut. That’s your handle for getting the result via fut.get(). Optionally you can specify a start policy for std::async. You can explicitly determine with the start policy if the asynchronous operation should be executed in the same thread (std::launch::deferred) or another thread (std::launch::async).
+
+The call auto fut= std::async(std::launch::deferred, ... ) will not immediately be executed. The call fut.get() starts the promise lazily.
+
+\filename{Lazy and eager with std::async}
+
+\begin{cpp}
+// asyncLazyEager.cpp
+...
+#include <future>
+...
+using std::chrono::duration;
+using std::chrono::system_clock;
+using std::launch;
+
+auto begin= system_clock::now();
+
+auto asyncLazy= std::async(launch::deferred, []{ return system_clock::now(); });
+auto asyncEager= std::async(launch::async, []{ return system_clock::now(); });
+std::this_thread::sleep_for(std::chrono::seconds(1));
+
+auto lazyStart= asyncLazy.get() - begin;
+auto eagerStart= asyncEager.get() - begin;
+
+auto lazyDuration= duration<double>(lazyStart).count();
+auto eagerDuration= duration<double>(eagerStart).count();
+
+std::cout << lazyDuration << " sec"; // 1.00018 sec.
+std::cout << eagerDuration << " sec"; // 0.00015489 sec.
+\end{cpp}
+
+The program’s output shows that the promise associated with the future asyncLazy is executed one second later than the promise associated with the future asyncEager. One second is precisely the time duration the creator is sleeping before the future asyncLazy asks for its result.
+
+\begin{myTip}{std::async should be your first choice}
+The C++ runtime determines if std::async is executed in a separate thread. The decision of the C++ runtime may depend on the number of your cores, the utilization of your system, or the size of your work package.
+\end{myTip}
+
+\mySamllsection{std::packaged\_task}
+
+std::packaged\_task enables you to build a simple wrapper for a callable, which can later be executed on a separate thread.
+
+Therefore four steps are necessary.
+
+\begin{enumerate}[label=\Roman*.]
+\item 
+Wrap your work:
+
+\begin{cpp}
+std::packaged_task<int(int, int)> sumTask([](int a, int b){ return a+b; });
+\end{cpp}
+
+\item
+Create a future:
+
+\begin{cpp}
+std::future<int> sumResult= sumTask.get_future();
+\end{cpp}
+ 
+\item 
+Perform the calculation:
+
+\begin{cpp}
+sumTask(2000, 11);
+\end{cpp}
+
+\item 
+Query the result:
+
+\begin{cpp}
+sumResult.get();
+\end{cpp}
+
+\end{enumerate}
+
+You can move either the std::package\_task or the std::future in a separate thread.
+
+\filename{std::packaged\_task}
+
+\begin{cpp}
+// packaged_task.cpp
+...
+#include <future>
+...
+
+using namespace std;
+
+struct SumUp{
+	int operator()(int beg, int end){
+		for (int i= beg; i < end; ++i ) sum += i;
+		return sum;
+	}
+	private:
+	int beg;
+	int end;
+	int sum{0};
+};
+
+SumUp sumUp1, sumUp2;
+
+packaged_task<int(int, int)> sumTask1(sumUp1);
+packaged_task<int(int, int)> sumTask2(sumUp2);
+
+future<int> sum1= sumTask1.get_future();
+future<int> sum2= sumTask2.get_future();
+
+deque< packaged_task<int(int, int)>> allTasks;
+allTasks.push_back(move(sumTask1));
+allTasks.push_back(move(sumTask2));
+
+int begin{1};
+int increment{5000};
+int end= begin + increment;
+
+while (not allTasks.empty()){
+	packaged_task<int(int, int)> myTask= move(allTasks.front());
+	allTasks.pop_front();
+	thread sumThread(move(myTask), begin, end);
+	begin= end;
+	end += increment;
+	sumThread.detach();
+}
+
+auto sum= sum1.get() + sum2.get();
+cout << sum; // 50005000
+\end{cpp}
+
+The promises (std::packaged\_task) are moved into the std::deque allTasks. The program iterates in the while loop through all promises. Each promise runs in its thread and performs its addition in the background (sumThread.detach()). The result is the sum of all numbers from 1 to 100000.
+
+\mySamllsection{std::promise and std::future}
+
+The pair std::promise and std::future provide the full control over the task.
+
+\begin{center}
+The Member Functions of the promise prom
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Member Function} & \textbf{Description} \\ \hline
+\endfirsthead
+%
+\endhead
+%
+\begin{tabular}[c]{@{}l@{}}prom.swap(prom2) and\\ std::swap(prom, prom2)\end{tabular} & Swaps the promises.                                           \\ \hline
+prom.get\_future()       & Returns the future.  \\ \hline
+prom.set\_value(val)     & Sets the value.      \\ \hline
+prom.set\_exception(ex)  & Sets the exception.  \\ \hline
+prom.set\_value\_at\_thread\_exit(val)                                                & Stores the value and makes it ready if the promise exits.     \\ \hline
+prom.set\_exception\_at\_thread\_exit(ex)                                             & Stores the exception and makes it ready if the promise exits. \\ \hline
+\end{longtable}
+
+If the promise sets the value or the exception more than once a std::future\_error exception is thrown.
+
+\begin{center}
+The Member Functions of the future fut
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Member Function} & \textbf{Description}           \\ \hline
+\endfirsthead
+%
+\endhead
+%
+fut.share()              & Returns a std::shared\_future. \\ \hline
+fut.get()   & Returns the result, which can be a value or an exception.                  \\ \hline
+fut.valid() & Checks if the result is available. Returns after the call fut.get() false. \\ \hline
+fut.wait()               & Waits for the result.          \\ \hline
+\end{longtable}
+
+\begin{center}
+The Member Functions of the future fut
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Member Function} & \textbf{Description}                      \\ \hline
+\endfirsthead
+%
+\endhead
+%
+fut.wait\_for(relTime)   & Waits for a time duration for the result. \\ \hline
+fut.wait\_until(absTime) & Waits until a time for the result.        \\ \hline
+\end{longtable}
+
+If a future fut asks more than once for the result, a std::future\_error exception is thrown. The future creates a shared future by the call fut.share(). Shared futures are associated with their promise, and can ask for the result independently. A shared future has the same interface as a future.
+
+Here is the usage of promise and future.
+
+\filename{Promise and future}
+
+\begin{cpp}
+// promiseFuture.cpp
+...
+#include <future>
+...
+
+void product(std::promise<int>&& intPromise, int a, int b){
+	intPromise.set_value(a*b);
+}
+
+int a= 20;
+int b= 10;
+
+std::promise<int> prodPromise;
+std::future<int> prodResult= prodPromise.get_future();
+
+std::thread prodThread(product, std::move(prodPromise), a, b);
+std::cout << "20*10= " << prodResult.get(); // 20*10= 200
+\end{cpp}
+
+The promise prodPromise is moved into a separate thread and performs its calculation. The future gets the result by prodResult.get().
+
+\mySamllsection{Synchronization}
+
+A future fut can be synchronized with is associated promise by the call fut.wait(). Contrary to condition variables, you need no locks and mutexes, and spurious and lost wakeups are impossible.
+
+\filename{Tasks for synchronisation}
+
+\begin{cpp}
+// promiseFutureSynchronise.cpp
+...
+#include <future>
+...
+
+void doTheWork(){
+	std::cout << "Processing shared data." << '\n';
+}
+
+void waitingForWork(std::future<void>&& fut){
+	std::cout << "Worker: Waiting for work." <<
+	'\n';
+	fut.wait();
+	doTheWork();
+	std::cout << "Work done." << '\n';
+}
+
+void setDataReady(std::promise<void>&& prom){
+	std::cout << "Sender: Data is ready." <<
+	'\n';
+	prom.set_value();
+}
+
+std::promise<void> sendReady;
+auto fut= sendReady.get_future();
+
+std::thread t1(waitingForWork, std::move(fut));
+std::thread t2(setDataReady, std::move(sendReady));
+\end{cpp}
+
+The call of the promise prom.set\_value() wakes up the future, which then can perform its work.
+
+\myGraphic{0.6}{content/chapter19/images/14.jpg}{}
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,76 @@
+Condition variables enable threads to be synchronized via messages. They need the header <condition\_variable>. One thread acts as a sender, and the other as a receiver of the message. The receiver waits for the notification of the sender. Typical use cases for condition variables are producer-consumer workflows.
+
+A condition variable can be the sender and receiver of the message.
+
+\begin{center}
+The Member Functions of the condition variable cv
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Member Function} & \textbf{Description}          \\ \hline
+\endfirsthead
+%
+\endhead
+%
+cv.notify\_one()         & Notifies a waiting thread.    \\ \hline
+cv.notify\_all()         & Notifies all waiting threads. \\ \hline
+cv.wait(lock, ...)                 & Waits for the notification while holding a std::unique\_lock.                     \\ \hline
+cv.wait\_for(lock, relTime, ...)   & Waits for a time duration for the notification while holding a std::unique\_lock. \\ \hline
+cv.wait\_until(lock, absTime, ...) & Waits until a time for the notification while holding a std::unique\_lock.        \\ \hline
+\end{longtable}
+
+
+The sender and receiver need a lock. In the case of the sender, a std::lock\_guard is sufficient because it only once calls lock and unlock. In the case of the receiver, a std::unique\_lock is necessary because it typically locks and unlocks its mutex a few times.
+
+\filename{Condition variable}
+
+\begin{cpp}
+// conditionVariable.cpp
+...
+#include <condition_variable>
+...
+
+std::mutex mutex_;
+std::condition_variable condVar;
+bool dataReady= false;
+
+void doTheWork(){
+	std::cout << "Processing shared data." << '\n';
+}
+
+void waitingForWork(){
+	std::cout << "Worker: Waiting for work." << '\n';
+	std::unique_lock<std::mutex> lck(mutex_);
+	condVar.wait(lck, []{ return dataReady; });
+	doTheWork();
+	std::cout << "Work done." << '\n';
+}
+
+void setDataReady(){
+	std::lock_guard<std::mutex> lck(mutex_);
+	dataReady=true;
+	std::cout << "Sender: Data is ready." << '\n';
+	condVar.notify_one();
+}
+
+std::thread t1(waitingForWork);
+std::thread t2(setDataReady);
+\end{cpp}
+
+\myGraphic{0.6}{content/chapter19/images/10.jpg}{}
+
+Using a condition variable may sound easy but there a two critical issues.
+
+\begin{myWarning}{Protection against spurious wakeup}
+To protect itself against spurious wakeup, the wait call of the condition variable should use an additional predicate. The predicate ensures that the notification is indeed from the sender. I use the lambda function []\{ return dataReady; \} as the predicate. dataReady is set to true by the sender.
+\end{myWarning}
+
+
+
+\begin{myWarning}{Protection against lost wakeup}
+To protect itself against lost wakeup, the wait call of the condition variable should use an additional predicate. The predicate ensures that the notification of the sender is not lost. The notification is lost if the sender notifies the receiver before the receiver is waiting. Therefore the receiver waits forever. The receiver now checks at first its predicate: []\{ return dataReady; \}.
+\end{myWarning}

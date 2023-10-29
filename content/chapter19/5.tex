@@ -1,0 +1,359 @@
+If more than one thread shares a variable, you must coordinate the access. That’s the job for mutexes and locks in C++.
+
+\mySamllsection{Data race}
+
+\noindent
+\textbf{A data race}
+
+A data race is a state in which at least two threads access shared data simultaneously, and at least one of the threads is a writer. Therefore the program has undefined behavior.
+
+You can observe very well the interleaving of threads if a few threads write to std::cout. In this case, the output stream std::cout is the shared variable.
+
+\filename{Unsychronised writing to std::cout}
+
+\begin{cpp}
+// withoutMutex.cpp
+...
+#include <thread>
+...
+
+using namespace std;
+
+struct Worker{
+	Worker(string n):name(n){};
+	void operator() (){
+		for (int i= 1; i <= 3; ++i){
+			this_thread::sleep_for(chrono::milliseconds(200));
+			cout << name << ": " << "Work " << i << endl;
+		}
+	}
+	private:
+	string name;
+};
+
+thread herb= thread(Worker("Herb"));
+thread andrei= thread(Worker(" Andrei"));
+thread scott= thread(Worker ("     Scott"));
+thread bjarne= thread(Worker("       Bjarne"));
+\end{cpp}
+
+\myGraphic{0.8}{content/chapter19/images/4.jpg}{}
+
+The output on std::cout is not coordinated.
+
+\begin{myTip}{The streams are thread-safe}
+The C++11 standard guarantees that the characters are written atomically. Therefore you don’t need to protect them. You only have to protect the interleaving of the threads on the stream if the entire read operation is not interleaved. That guarantee holds for the input and output streams.
+
+With C++20, we have synchronized output streams such as std::osyncstream and std::wosyncstream. The guarantee that the writing to one output stream is synchronized. The output is written to an internal buffer and flushed when it goes out of scope. A synchronized output stream can have a name such as synced\_out or be without a name.
+
+\filename{Synchronized outputstreams}
+
+\begin{cpp}
+{
+	std::osyncstream synced_out(std::cout);
+	synced_out << "Hello, ";
+	synced_out << "World!";
+	synced_out << '\n'; // no effect
+	synced_out << "and more!\n";
+} // destroys the synced_output and emits the internal buffer
+
+std::osyncstream(std::cout) << "Hello, " << "World!" << "\n";
+\end{cpp}
+\end{myTip}
+
+std::cout is, in the example, the shared variable, which should have exclusive access to the stream.
+
+\mySamllsection{Mutexes}
+
+Mutex (mutual exclusion) m' guarantees that only one thread can access the critical region at one time. They need the header <mutex>. A mutex m’ locks the critical section by the call m.lock() and unlocks it by m.unlock().
+
+\filename{Synchronisation with std::mutex}
+
+\begin{cpp}
+// mutex.cpp
+...
+#include <mutex>
+#include <thread>
+...
+
+using namespace std;
+
+std::mutex mutexCout;
+
+struct Worker{
+	Worker(string n):name(n){};
+	void operator() (){
+		for (int i= 1; i <= 3; ++i){
+			this_thread::sleep_for(chrono::milliseconds(200));
+			mutexCout.lock();
+			cout << name << ": " << "Work " << i << endl;
+			mutexCout.unlock();
+		}
+	}
+	private:
+	string name;
+};
+
+thread herb= thread(Worker("Herb"));
+thread andrei= thread(Worker(" Andrei"));
+thread scott= thread(Worker ("    Scott"));
+thread bjarne= thread(Worker("      Bjarne"));
+\end{cpp}
+
+Each thread after each other writes coordinated to std::cout because it uses the same mutex mutexCout.
+
+\myGraphic{0.6}{content/chapter19/images/5.jpg}{}
+
+C++ has five different mutexes. They can lock recursively, tentatively with and without time constraints.
+
+\begin{center}
+Mutex variations
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|l|l|l|l|}
+\hline
+\textbf{Member Function} & \textbf{mutex} & \textbf{recursive\_mutex} & \textbf{timed\_mutex} & \textbf{recursive\_timed\_mutex} & \textbf{shared\_timed\_mutex} \\ \hline
+\endfirsthead
+%
+\endhead
+%
+m.lock             & yes & yes & yes & yes & yes \\ \hline
+m.unlock           & yes & yes & yes & yes & yes \\ \hline
+m.try\_lock        & yes & yes & yes & yes & yes \\ \hline
+m.try\_lock\_for   &     &     & yes & yes & yes \\ \hline
+m.try\_lock\_until &     &     & yes & yes & yes \\ \hline
+\end{longtable}
+
+
+The std::shared\_time\_mutex enables it to implement reader-writer locks. The Member Function m.try\_lock\_for(relTime) needs a relative time duration; the Member Function m.try\_lock\_until(absTime) a absolute time point.
+
+
+\mySamllsection{Deadlocks}
+
+A deadlock is a state in which two or more threads are blocked because each thread waits for the release of a resource before it releases its resource.
+
+You can quickly get a deadlock if you forget to call m.unlock(). That happens, for example, in the case of an exception in the function getVar().
+
+\begin{cpp}
+m.lock();
+sharedVar= getVar();
+m.unlock()
+\end{cpp}
+
+\begin{myWarning}{Don’t call an unknown function while holding a lock}
+If the function getVar tries to get the same lock by calling m.lock(), you will get a deadlock because it will not be successful, and the call will block forever.
+\end{myWarning}
+
+Locking two mutexes in the wrong order is another typical reason for a deadlock.
+
+\filename{A deadlock}
+
+\begin{cpp}
+// deadlock.cpp
+...
+#include <mutex>
+...
+
+struct CriticalData{
+	std::mutex mut;
+};
+
+void deadLock(CriticalData& a, CriticalData& b){
+	a.mut.lock();
+	std::cout << "get the first mutex\n";
+	std::this_thread::sleep_for(std::chrono::milliseconds(1));
+	b.mut.lock();
+	std::cout << "get the second mutex\n";
+	a.mut.unlock(), b.mut.unlock();
+}
+
+CriticalData c1;
+CriticalData c2;
+
+std::thread t1([&]{ deadLock(c1, c2); });
+std::thread t2([&]{ deadLock(c2, c1); });
+\end{cpp}
+
+The short time window of one millisecond (std::this\_thread::sleep\_for(std::chrono::milliseconds(1))) is enough to produce with high probability a deadlock because each thread is waiting forever on the other mutex. The result is a standstill.
+
+\myGraphic{0.6}{content/chapter19/images/6.jpg}{}
+
+\begin{myTip}{Encapsulate a mutex in a lock}
+It’s very easy to forget to unlock a mutex or lock mutexes in a different order. To overcome most of the problems with a mutex, encapsulate it in a lock.
+\end{myTip}
+
+\mySamllsection{Locks}
+
+You should encapsulate a mutex in a lock to release the mutex automatically. A lock is an implementation of the RAII idiom because the lock binds the lifetime of the mutex to its lifetime. C++11 has std::lock\_guard for the simple and std::unique\_lock for the advanced use case, respectively. Both need the header <mutex>. With C++14 C++ has a std::shared\_lock, which is in the combination with the mutex std::shared\_time\_mutex the base for reader-writer locks.
+
+\mySamllsection{std::lock\_guard}
+
+std::lock\_guard supports only the simple use case. Therefore it can only bind its mutex in the constructor and release it in the destructor. So the synchronization of the worker example is reduced to the call of the constructor.
+
+\filename{Synchronisation with std::lock\_guard}
+
+\begin{cpp}
+// lockGuard.cpp
+...
+std::mutex coutMutex;
+
+struct Worker{
+	Worker(std::string n):name(n){};
+	void operator() (){
+		for (int i= 1; i <= 3; ++i){
+			std::this_thread::sleep_for(std::chrono::milliseconds(200));
+			std::lock_guard<std::mutex> myLock(coutMutex);
+			std::cout << name << ": " << "Work " << i << '\n';
+		}
+	}
+	private:
+	std::string name;
+};
+\end{cpp}
+
+\mySamllsection{std::unique\_lock}
+
+The usage of std::unique\_lock is more expensive than that of std::lock\_guard. On the contrary, a std::unique\_lock can be created with and without a mutex, explicitly lock or release its mutex, or delay its mutex’s lock.
+
+The following table shows the Member Functions of a std::unique\_lock lk.
+
+\begin{center}
+The interface of std::unique\_lock
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Member Function}                                                      & \textbf{Description}                                         \\ \hline
+\endfirsthead
+%
+\endhead
+%
+lk.lock()                                                                     & Locks the associated mutex.                                  \\ \hline
+std::lock(lk1, lk2, ...)                                                      & Locks atomically the arbitrary number of associated mutexes. \\ \hline
+\begin{tabular}[c]{@{}l@{}}lk.try\_lock() and\\ lk.try\_lock\_for(relTime) and\\ lk.try\_lock\_until(absTime)\end{tabular} & Tries to lock the associated mutex. \\ \hline
+lk.release()                                                                  & Release the mutex. The mutex remains locaked.                \\ \hline
+\begin{tabular}[c]{@{}l@{}}lk.swap(lk2) and\\ std::swap(lk, lk2)\end{tabular} & Swaps the locks.                                             \\ \hline
+lk.mutex()                                                                    & Returns a pointer to the associated mutex.                   \\ \hline
+lk.owns\_lock()                                                               & Checks if the lock has a mutex.                              \\ \hline
+\end{longtable}
+
+Deadlocks caused by acquiring locks in a different order can easily be solved by std::atomic.
+
+\filename{std::unique\_lock}
+
+\begin{cpp}
+// deadLockResolved. cpp
+...
+#include <mutex>
+...
+
+using namespace std;
+struct CriticalData{
+	mutex mut;
+};
+
+void deadLockResolved(CriticalData& a, CriticalData& b){
+	unique_lock<mutex>guard1(a.mut, defer_lock);
+	cout << this_thread::get_id() << ": get the first lock" << endl;
+	this_thread::sleep_for(chrono::milliseconds(1));
+	unique_lock<mutex>guard2(b.mut, defer_lock);
+	cout << this_thread::get_id() << ": get the second lock" << endl;
+	cout << this_thread::get_id() << ": atomic locking";
+	lock(guard1, guard2);
+}
+
+CriticalData c1;
+CriticalData c2;
+
+thread t1([&]{ deadLockResolved(c1, c2); });
+thread t2([&]{ deadLockResolved(c2, c1); });
+\end{cpp}
+
+Because of the argument std::defer\_lock of the std::unique\_lock, the locking of a.mut and b.mut is deferred. The locking takes place atomically in the call std::lock(guard1, guard2).
+
+\myGraphic{0.6}{content/chapter19/images/7.jpg}{}
+
+\mySamllsection{std::shared\_lock}
+
+std::shared\_lock has the same interface as std::unique\_lock. Also, a std::shared\_lock supports the case where multiple threads share the same locked mutex. For this special use case, you must use a std::shared\_lock in combination with a std::shared\_timed\_mutex. However, if multiple threads use the same std::shared\_time\_mutex in a std::unique\_lock, only one thread can own it.
+
+\begin{cpp}
+#include <mutex>
+...
+
+std::shared_timed_mutex sharedMutex;
+
+std::unique_lock<std::shared_timed_mutex> writerLock(sharedMutex);
+
+std::shared_lock<std::shared_time_mutex> readerLock(sharedMutex);
+std::shared_lock<std::shared_time_mutex> readerLock2(sharedMutex);
+\end{cpp}
+
+The example presents the typical reader-writer lock scenario. The writerLock of type std::unique\_lock<std::shared\_timed\_mutex> can only exclusively have the sharedMutex. Both of the reader locks readerLock and readerLock2 of type std::share\_lock<std::shared\_time\_mutex> can share the same mutex sharedMutex.
+
+\mySamllsection{Thread-safe Initialization}
+
+If you don’t modify the data, it’s sufficient to initialize them in a thread-safe way. C++ offers various ways to achieve this: using a constant expression, using static variables with block scope, or using the function std::call\_once combined with the flag std::once::flag.
+
+
+\mySamllsection{Constant Expressions}
+
+A constant expression is initialized at compile time. Therefore they are per se thread-safe. By using the keyword constexpr before a variable, the variable becomes a constant expression. Instances of user-defined type can also be a constant expression and therefore be initialized in a thread-safe way if the Member Functions are declared as constant expressions.
+
+\begin{cpp}
+struct MyDouble{
+	constexpr MyDouble(double v):val(v){};
+	constexpr double getValue(){ return val; }
+private:
+	double val
+};
+
+constexpr MyDouble myDouble(10.5);
+std::cout << myDouble.getValue(); // 10.5
+\end{cpp}
+
+\mySamllsection{Static Variables Inside a Block}
+
+If you define a static variable in a block, the C++11 runtime guarantees that it is initialized in a threadsafe way.
+
+\begin{cpp}
+void blockScope(){
+	static int MySharedDataInt= 2011;
+}
+\end{cpp}
+
+\mySamllsection{std::call\_once and std::once\_flag}
+
+std::call\_once takes two arguments: the flag std::once\_flag and a callable. The C++ runtime guarantees with the help of the flag std::once\_flag that the callable is executed exactly once.
+
+\filename{Thread-safe initialisation}
+
+\begin{cpp}
+// callOnce.cpp
+...
+#include <mutex>
+...
+
+using namespace std;
+
+once_flag onceFlag;
+void do_once(){
+	call_once(onceFlag, []{ cout << "Only once." << endl; });
+}
+thread t1(do_once);
+thread t2(do_once);
+\end{cpp}
+
+Although both threads executed the function do\_once, only one of them is successful, and the lambda function []\{cout <{}< "Only once." <{}< endl;\} is executed exactly once.
+
+\myGraphic{0.6}{content/chapter19/images/8.jpg}{}
+
+You can use the same std::once\_flag to register different callables, and only one of these callables is called.
+
+

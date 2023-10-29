@@ -1,0 +1,72 @@
+
+Using the keyword thread\_local, you have thread-local data, also known as thread-local storage. Each thread has its copy of the data. Thread-local data behave like static variables. They are created at their first usage, and their lifetime is bound to the lifetime of their thread.
+
+\filename{Thread local data}
+
+\begin{cpp}
+	// threadLocal.cpp
+	...
+	std::mutex coutMutex;
+	thread_local std::string s("hello from ");
+	
+	void addThreadLocal(std::string const& s2){
+		s+= s2;
+		std::lock_guard<std::mutex> guard(coutMutex);
+		std::cout << s << '\n';
+		std::cout << "&s: " << &s << '\n';
+		std::cout << '\n';
+	}
+	
+	std::thread t1(addThreadLocal, "t1");
+	std::thread t2(addThreadLocal, "t2");
+	std::thread t3(addThreadLocal, "t3");
+	std::thread t4(addThreadLocal, "t4");
+\end{cpp}
+
+Each thread has its copy of the thread\_local string. Therefore, each string s modifies its string independently, and each string has its unique address:
+
+\myGraphic{0.6}{content/chapter19/images/9.jpg}{}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

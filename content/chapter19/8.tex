@@ -1,0 +1,108 @@
+Semaphores are a synchronization mechanism that controls concurrent access to a shared resource. A counting semaphore is a special semaphore with a counter greater than zero. The counter is initialized in the constructor. Acquiring the semaphore decreases the counter, and releasing the semaphore increases the counter. If a thread tries to acquire the semaphore when the counter is zero, the thread will block until another thread increments the counter by releasing the semaphore.
+
+C++20 supports a std::binary\_semaphore, which is an alias for a std::counting\_semaphore<1>. In this case, the least maximal value is 1.
+
+\begin{cpp}
+using binary_semaphore = std::counting_semaphore<1>;
+\end{cpp}
+
+In contrast to a std::mutex, a std::counting\_semaphore is not bound to a thread. This means that the acquire and release call can happen on different threads. The following table presents the interface of a std::counting\_semaphore.
+
+\begin{center}
+Member Functions of a semaphore sem
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Member Function}         & \textbf{Description}                             \\ \hline
+\endfirsthead
+%
+\endhead
+%
+counting\_semaphore::max()       & Return the maximum value of the counter.         \\ \hline
+sem.release(upd=1)               & Atomically increases counter by upd.             \\ \hline
+sem.acquire() & Performs sem.try\_acquire and blocks until counter is greater than zero. \\ \hline
+sem.try\_acquire()               & Atomically decrements the counter.               \\ \hline
+sem.try\_acquire\_for(relTime)   & Performs sem.try\_acquire for the time duration. \\ \hline
+sem.try\_acquire\_intil(absTime) & Performs sem.try\_acquire until the time point.  \\ \hline
+\end{longtable}
+
+The Member Function sem.try\_lock\_for(relTime) requires a relative time duration; the Member Function sem.try\_lock\_until(absTime) requires an absolute time point.
+
+Semaphores are often the safer and faster alternative to condition variables:
+
+\filename{std::counting\_semaphoree}
+
+\begin{cpp}
+// threadSynchronisationSemaphore.cpp
+#include <semaphore>
+
+...
+
+std::counting_semaphore<1> prepareSignal(0); // (1)
+
+void prepareWork() {
+	
+	myVec.insert(myVec.end(), {0, 1, 0, 3});
+	std::cout << "Sender: Data prepared." << '\n';
+	prepareSignal.release(); // (2)
+}
+
+void completeWork() {
+	
+	std::cout << "Waiter: Waiting for data." << '\n';
+	prepareSignal.acquire(); // (3)
+	myVec[2] = 2;
+	std::cout << "Waiter: Complete the work." << '\n';
+	for (auto i: myVec) std::cout << i << " ";
+	std::cout << '\n';
+}
+
+...
+
+std::thread t1(prepareWork);
+std::thread t2(completeWork);
+
+t1.join();
+t2.join();
+\end{cpp}
+
+The std::counting\_semaphore prepareSignal (line 1) can have the values 0 and 1. In the concrete example, it’s initialized with 0. This means that the call prepareSignal.release() sets the value to 1 (line 2) and unblocks the call prepareSignal.acquire() (line 3).
+
+\myGraphic{0.6}{content/chapter19/images/11.jpg}{}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

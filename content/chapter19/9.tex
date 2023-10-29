@@ -1,0 +1,146 @@
+Latches and barriers are coordination types that enable some threads to block until a counter becomes zero. With C++20, we have latches and barriers in two variations: std::latch, and std::barrier.
+
+\mySamllsection{std::latch}
+
+Now, I have a closer look at the interface of a std::latch.
+
+\begin{center}
+Member function of a std::latch lat
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Member function} & \textbf{Description}         \\ \hline
+\endfirsthead
+%
+\endhead
+%
+lat.count\_down(upd=1)       & Atomically descrements the counter by upd without blocking the caller.  \\ \hline
+lat.try\_wait()          & Returns true if counter == 0 \\ \hline
+lat.wait()                   & Returns immediately if counter == 0. If not, blocks until counter == 0. \\ \hline
+lat.arrive\_and\_wait(upd=1) & Equivalent to count\_down(upd); wait();.                                \\ \hline
+\end{longtable}
+
+
+The default value for upd is 1. When upd is greater than the counter or negative, the program has undefined behavior. The call lat.try\_wait() does never wait as its name suggests.
+
+The following program uses two std::latch to build a boss-workers workflow. I synchronized the output to std::cout using the function synchronizedOut (line 13). This synchronization makes it easier to follow the workflow.
+
+\filename{std::latch}
+
+\begin{cpp}
+// bossWorkers.cpp
+
+#include <latch>
+...
+
+std::latch workDone(2);
+std::latch goHome(1); // (5)
+
+void synchronizedOut(const std::string s) {
+	std::lock_guard<std::mutex> lo(coutMutex);
+	std::cout << s;
+}
+
+class Worker {
+public:
+	Worker(std::string n): name(n) { };
+	void operator() (){
+		// notify the boss when work is done
+		synchronizedOut(name + ": " + "Work done!\n");
+		workDone.count_down(); // (3)
+		// waiting before going home
+		goHome.wait();
+		synchronizedOut(name + ": " + "Good bye!\n");
+	}
+private:
+	std::string name;
+};
+
+...
+
+std::cout << "BOSS: START WORKING! " << '\n';
+Worker herb("   Herb"); // (1)
+std::thread herbWork(herb);
+
+Worker scott("    Scott"); // (2)
+std::thread scottWork(scott);
+
+workDone.wait(); // (4)
+
+std::cout << '\n';
+
+goHome.count_down();
+
+std::cout << "BOSS: GO HOME!" << '\n';
+
+herbWork.join();
+scottWork.join();
+\end{cpp}
+
+The idea of the workflow is straightforward. The two workers, herb, and scott (lines 1 and 2), must fulfill their job. When they finished their job (line 3), they count down the std::latch workDone. The boss (main-thread) is blocked in line (4) until the counter becomes 0. When the counter is 0, the boss uses the second std::latch goHome to signal its workers to go home. In this case, the initial counter is 1 (line 5). The call goHome.wait(0) blocks until the counter becomes 0.
+
+\myGraphic{0.6}{content/chapter19/images/12.jpg}{}
+
+A std::barrier is similar to a std::latch.
+
+\mySamllsection{std::barrier}
+
+There are two differences between a std::latch and a std::barrier. First, you can use a std::barrier more than once, and second, you can set the counter for the next step (iteration). Immediately after the counter becomes zero, the so-called completion step starts. In this completion step, a \href{https://en.cppreference.com/w/cpp/named_req/Callable}{callable} is invoked. The std::barrier gets its callable in its constructor.
+
+The completion step performs the following steps:
+
+\begin{enumerate}
+\item 
+All threads are blocked.
+
+\item 
+An arbitrary thread is unblocked and executes the callable.
+
+\item 
+If the completion step is done, all threads are unblocked.
+\end{enumerate}
+
+\begin{center}
+Member functions of a std::barrier bar
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Member function} & \textbf{Description}                           \\ \hline
+\endfirsthead
+%
+\endhead
+%
+bar.arrive(upd)          & Atomically decrements counter by upd.          \\ \hline
+bar.wait()              & Blocks at the synchronization point until the completion step is done.  \\ \hline
+bar.arrive\_and\_wait()  & Equivalent to wait(arrive())                   \\ \hline
+bar.arrive\_and\_drop() & Decrements the counter for the current and the subsequent phase by one. \\ \hline
+std::barrier::max        & Maximum value supported by the implementation. \\ \hline
+\end{longtable}
+
+The bar.arrive\_and\_drop() call essentially means that the counter is decremented by one for the next phase.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

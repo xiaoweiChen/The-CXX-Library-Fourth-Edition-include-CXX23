@@ -1,0 +1,81 @@
+\myGraphic{0.6}{content/chapter20/images/1.jpg}{Cippi waters the flowers}
+
+We don’t get with C++20 concrete coroutines; we have with C++20 a framework for implementing coroutines. In C++23, we have the first concrete coroutine with std::generator in the ranges library. This chapter gives you only a rough idea of the challenging coroutine framework.
+
+Coroutines are functions that can suspend and resume their execution while keeping their state. To achieve this, a coroutine consists of three parts: the promise object, the coroutine handle, and the coroutine frame.
+
+\begin{itemize}
+\item 
+The promise object is manipulated from within the coroutine and returns its result via the promise object.
+
+\item 
+The coroutine handle is a non-owning handle to resume or destroy the coroutine frame from the outside.
+
+\item 
+The coroutine frame is an internal, typically heap-allocated state. It consists of the already mentioned promise object, the coroutine’s copied parameters, the representation of the suspensions point, local variables whose lifetime ends before the current suspension point, and local variables whose lifetime exceeds the current suspension point.
+\end{itemize}
+
+Two requirements are necessary to optimize the allocation of the coroutine: 
+
+A function that uses the keywords co\_return instead of return, co\_yield, or co\_await becomes a coroutine implicitly.
+
+The new keywords extend the execution of C++ functions with two new concepts.
+
+\noindent
+\\\textbf{co\_yield expression}
+
+Allows it to write a generator function. The generator function returns a new value each time. A generator function is a data stream from which you can pick values. The data stream can be infinite.
+
+\filename{A generator}
+
+\begin{cpp}
+Generator<int> getNext(int start = 0, int step = 1) noexcept {
+	auto value = start;
+	for (int i = 0;; ++i){
+		co_yield value;
+		value += step;
+	}
+}
+\end{cpp}
+
+\noindent
+\\\textbf{co\_await expression}
+
+Suspends and resumes the execution of the expression. If you use the co\_await expression in a function func, the call auto getResult = func() does not block if the function’s result is unavailable. Instead of resource-consuming blocking, you have resource-friendly waiting. The expression has to be a so-called awaitable expression and must support the following three functions await\_ready, await\_suspend, and await\_resume.
+
+\filename{A coroutine}
+
+\begin{cpp}
+Acceptor acceptor{443};
+
+while (true){
+	Socket socket= co_await acceptor.accept();
+	auto request= co_await socket.read();
+	auto response= handleRequest(request);
+	co_await socket.write(response);
+}
+\end{cpp}
+
+The awaitable expression expr in the co\_await expr has to implement the functions await\_ready, await\_suspend, and await\_resume.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
