@@ -1,50 +1,47 @@
-You must perform three steps to use a library in a program. At first, you have to include the header files with the \#include statement, so the compiler knows the library’s names. Alternatively, you can import with C++23 the standard library using import std;. Because the C++ standard library names are in the namespace std, you can use them in the second step fully qualified, or you have to import them in the global namespace. The third and final step is to specify the libraries for the linker to get an executable. This third step is often optional. The following lines explain the three steps.
+要在程序中使用库，必须执行三个步骤。首先，必须使用\#include语句包含头文件，以便编译器知道库的名称。或者，可以使用import std;在c++ 23中导入标准库。由于C++标准库名称位于命名空间std中，因此可以在第二步中使用限定的名称，或者必须在全局命名空间中导入。第三步也是最后一步是指定链接器获取可执行文件所需的库。第三步通常是可选的。下面几行解释了这三个步骤。
 
-\mySamllsection{Include Header Files}
+\mySamllsection{包含头文件}
 
-The preprocessor includes the file, following the \#include statement. That is, most of the time, a header file. The header files are placed in angle brackets:
+预处理器在\#include语句之后包含该文件。在大多数情况下，这是一个头文件。头文件放在尖括号中:
 
 \begin{cpp}
 #include <iostream>
 #include <vector>
 \end{cpp}
 
-\hspace*{\fill} \\ %插入空行
-\begin{tcolorbox}[breakable,enhanced jigsaw,colback=red!5!white,colframe=red!75!black,title={Specify all necessary header files}]
+\begin{myWarning}{指定所有必要的头文件}
+编译器可以自由地向头文件中添加额外的头文件。因此，程序可能拥有所有必需的头文件，尽管没有指定它们。不建议依赖此功能。所有需要的头文件都应该明确指定。否则，编译器升级或代码移植可能会引发编译错误。
+\end{myWarning}
 
-The compiler is free to add additional headers to the header files. So your program may have all the necessary headers, although you didn’t specify them. It’s not recommended to rely on this feature. All needed headers should always be explicitly specified. Otherwise, a compiler upgrade or code porting may provoke a compilation error.
+\mySamllsection{导入标准库}
 
-\end{tcolorbox}
-
-\mySamllsection{Import the Standard Library}
-
-In C++23, you can import the entire standard library using the import statement:
+C++23中，可以使用import语句导入整个标准库:
 
 \begin{cpp}
 import std;
 \end{cpp}
 
-The import std; statement imports everything in the namespace std from C++ headers and C wrapper headers such as std::printf from <cstdio>. Also ::operator new, or ::operator delete from the <new> header is imported.
+import std;语句从c++头文件和C包装头文件(如std::printf from <cstdio>)中导入命名空间std中的所有内容。此外，还从<new>报头中导入::operator new或::operator delete。
 
-If you also want to import the global namespace counterparts such as ::printf from the C wrapper header <stdio.h>, use the import std.compat.
+若还想从C包装器头文件<stdio.h>中导入全局命名空间对应项，例如::printf，请使用import std.compat。
 
-\begin{myWarning}{Prefer importing modules to including headers}
+\begin{myWarning}{比起包含头文件，更推荐导入模块}
 
-Modules have many advantages over header files. These advantages hold for the modularized standard library but also user-defined modules.
+模块与头文件相比有许多优点。这些优点不仅适用于模块化的标准库，也适用于用户定义的模块。
 
-Modules are imported only once, and this process is literally for free. It makes no difference in which order you import modules, and duplicate names with modules are very unlikely. Modules enable you to express the logical structure of your code because you can explicitly specify names that should be exported or not. Additionally, you can bundle a few modules into a more extensive module and provide them to your customer as a logical package.
-
-\end{myWarning}
-
-\begin{myWarning}{Parallel use of header files and modules}
-
-I use both syntactic forms: headers files and modules in the following code snippets. You should only use one of them exclusively.
+模块只导入一次，而且这个过程实际上无开销。导入模块的顺序没有区别，并且模块的重复名称是非常不可能的。模块能够表达代码的逻辑结构，可以显式指定应该导出或不导出的名称。此外，可以将几个模块捆绑成一个更广泛的模块，并将它们作为一个逻辑包提供给用户。
 
 \end{myWarning}
 
-\mySamllsection{Usage of Namespaces}
+\begin{myWarning}{并行使用头文件和模块}
 
-If you use qualified names, you should use them precisely as defined. For each namespace, you must put the scope resolution operator ::. More libraries of the C++ standard library use nested namespaces.
+在以下代码片段中，我使用了两种语法形式:头文件和模块。你应该只使用其中一种。
+
+\end{myWarning}
+
+\mySamllsection{使用命名空间}
+
+若使用限定名，则应精确地按照定义使用它们。对于每个命名空间，必须使用范围解析操作符::。C++标准库的更多库使用嵌套命名空间。
 
 \begin{cpp}
 #include <iostream> // either
@@ -56,13 +53,13 @@ std::cout << "Hello world:" << '\n';
 auto timeNow= std::chrono::system_clock::now();
 \end{cpp}
 
-\mySamllsection{Unqualified Use of Names}
+\mySamllsection{使用非限定名称}
 
-You can use names in C++ with the using declaration and the using directive.
+C++中，可以通过using声明和using指令来使用名称。
 
-\mySamllsection{Using Declaration}
+\mySamllsection{使用声明}
 
-A using declaration adds a name to the visibility scope in which you applied the using declaration:
+using声明将一个名称添加到应用using声明的可见性范围中:
 
 \begin{cpp}
 #include <iostream> // either
@@ -78,19 +75,19 @@ cout << "Hello world:" << endl; // unqualified name
 auto timeNow= now(); // unqualified name
 \end{cpp}
 
-The application of a using declaration has the following consequences:
+using声明的应用有以下后果:
 
 \begin{itemize}
 \item
-An ambiguous lookup and a compiler error occur if the same name was declared in the same visibility scope.
+若在相同可见性作用域中声明了相同的名称，则会出现查找不明确和编译器错误。
 
 \item
-If the same name was declared in a surrounding visibility scope, it will be hidden by the using declaration.
+若在周围的可见性作用域中声明了相同的名称，则将被using声明隐藏。
 \end{itemize}
 
-\mySamllsection{Using Directive}
+\mySamllsection{使用指令}
 
-The using directive permits it to use all namespace names without qualification.
+using指令允许它不加限制地使用所有命名空间名称。
 
 \begin{cpp}
 #include <iostream> // either
@@ -104,30 +101,30 @@ cout << "Hello world:" << endl; // unqualified name
 auto timeNow= chrono::system_clock::now(); // partially qualified name
 \end{cpp}
 
-A using directive adds no name to the current visibility scope; it only makes the name accessible. That implies:
+using指令不给当前可见性作用域添加任何名称，只能使名称可访问。所以:
 
 \begin{itemize}
 \item
-An ambiguous lookup and a compiler error occur if the same name was declared in the same visibility scope.
+若在相同可见性作用域中声明了相同的名称，则会出现查找不明确和编译器错误。
 
 \item
-A name in the local namespace hides a name declared in a surrounding namespace.
+本地名称空间中的名称隐藏了在周围名称空间中声明的名称。
 
 \item
-An ambiguous lookup and, therefore, a compiler error occurs if the same name gets visible from different namespaces or if a name in the namespace hides a name in the global scope.
+若在不同的名称空间中可以看到相同的名称，或者名称空间中的名称隐藏了全局作用域中的名称，则会发生歧义查找，从而导致编译器错误。
 \end{itemize}
 
-\begin{myWarning}{Use using directives with great care in source files}
+\begin{myWarning}{在源文件中小心使用using指令}
 
-using directives should be used with great care in source files because by the directive using namespace std all names from std becomes visible. That includes names which accidentally hide names in the local or surrounding namespace.
+在源文件中使用ssing指令应该非常小心，因为通过使用命名空间std的指令，所有来自std的名字都是可见的。这包括在本地或周围名称空间中意外隐藏名称的名称。
 
-Don’t use using directives in header files. If you include a header with using namespace std directive, all names from std become visible.
+不要在头文件中使用using指令。若包含了一个带有using namespace std指令的头文件，那么std中的所有名字都是可见的。
 
 \end{myWarning}
 
-\mySamllsection{Namespace Alias}
+\mySamllsection{命名空间别名}
 
-A namespace alias defines a synonym for a namespace. It’s often convenient to use an alias for a long namespace name or an nested namespaces
+命名空间别名定义命名空间的同义词。对于较长的名称空间名称或嵌套的名称空间，使用别名通常很方便
 
 \begin{cpp}
 #include <chrono> // either
@@ -139,12 +136,12 @@ auto nowFirst= sysClock::now();
 auto nowSecond= std::chrono::system_clock::now();
 \end{cpp}
 
-Because of the namespace alias, you can address the now function qualified, and with the alias. A namespace alias must not hide a name.
+由于命名空间别名的存在，可以使用该别名来处理现在限定的函数。命名空间别名不能隐藏名称。
 
 
-\mySamllsection{Build an Executable}
+\mySamllsection{构建可执行文件}
 
-It is only seldom necessary to link explicitly against a library. That sentence is platform-dependent. For example, with the current g++ or clang++ compiler, you should link against the pthread library to get the multithreading functionality.
+很少需要针对库显式链接，并且是平台相关的。例如，对于当前的g++或clang++编译器，应该链接到pthread库以获得多线程功能。
 
 \begin{shell}
 g++ -std=c++14 thread.cpp -o thread -pthread

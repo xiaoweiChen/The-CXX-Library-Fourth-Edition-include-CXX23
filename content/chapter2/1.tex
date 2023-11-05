@@ -1,10 +1,10 @@
-You can apply the many variations of the min, max, and minmax functions to values and initializer lists. These functions need the header <algorithm>. On the contrary, the functions std::move, std::forward, std::to\_underlying, and std::swap are defined in the header <utility>. You can apply them to arbitrary values.
+可以将min、max和minmax函数的许多变体应用于值和初始化列表。这些函数需要头文件<algorithm>。相反，std::move、std::forward、std::to\_underlying和std::swap函数在头文件<utility>中定义。
 
-\mySamllsection{std::min, std::max, and std::minmax}
+\mySamllsection{std::min, std::max和std::minmax}
 
-The functions \href{http://en.cppreference.com/w/cpp/algorithm/min}{std::min}, \href{http://en.cppreference.com/w/cpp/algorithm/max}{std::max}, and \href{http://en.cppreference.com/w/cpp/algorithm/minmax}{std::minmax}, defined in the header <algorithm>, act on values and initializer lists and give you the requested value back as a result. In the case of std::minmax, you get a std::pair. The first element of the pair is the minimum; the second is the maximum of the values. The less operator (<) is used by default, but you can apply your comparison operator. This function needs two arguments and returns a boolean. Functions that either return true or false are called predicates.
+在header <algorithm>中定义的函数\href{http://en.cppreference.com/w/cpp/algorithm/min}{std::min}、\href{http://en.cppreference.com/w/cpp/algorithm/max}{std::max}和\href{http://en.cppreference.com/w/cpp/algorithm/minmax}{std::minmax}作用于值和初始化器列表，并返回所请求的值作为结果。在std::minmax的情况下，了得到一个std::pair。这对的第一个元素是最小值;第二个是值的最大值。默认情况下使用less操作符(<)，但您可以应用比较操作符。这个函数需要两个参数并返回一个布尔值。返回true或false的函数称为谓词。
 
-\mySamllsection{The functions std::min, std::max, and std::minmax}
+\mySamllsection{std::min, std::max和std::minmax}
 
 \begin{cpp}
 // minMax.cpp
@@ -28,10 +28,10 @@ cout << pairSeq.first << "," << pairSeq.second; // -5,2014
 cout << pairAbs.first << "," << pairAbs.second; // 1,2014
 \end{cpp}
 
-The table provides an overview of the functions std::min, std::max and std::minmax
+该表提供了std::min、std::max和std::minmax函数的概述
 
 \begin{center}
-The variations of std::min, std::max, and std::minmax
+std::min、std::max和std::minmax的不同
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -39,34 +39,33 @@ The variations of std::min, std::max, and std::minmax
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-\textbf{Function}           & \textbf{Description}                                                                \\ \hline
+\textbf{函数}           & \textbf{描述}                                                                \\ \hline
 \endfirsthead
 %
 \endhead
 %
-min(a, b)                   & Returns the smaller value of a and b                                                \\ \hline
-min(a, b, comp)             & Returns the smaller value of a and b according to the predicate comp.               \\ \hline
-min(initialiser list)       & Returns the smallest value of the initializer list.                                 \\ \hline
-min(initialiser list, comp) & Returns the smallest value of the initializer list according to the predicate comp. \\ \hline
-max(a, b)                   & Returns the greater value of a and b.                                               \\ \hline
-max(a, b, comp)             & Returns the greater value of a and b according to the predicate comp.               \\ \hline
-max(initialiser list)       & Returns the greatest value of the initializer list.                                 \\ \hline
-max(initialiser list, comp) & Returns the grestest value of the initializer list according to the predicate comp. \\ \hline
-minmax(a, b)                & Returns the smaller and greater value of a and b.                                   \\ \hline
-minmax(a, b, comp)          & Returns the smaller and greater value of a and b according to the predicate comp.   \\ \hline
-minmax(initialiser list)    & Returns the samllest and the greatest value of the initializer list.                \\ \hline
-minmax(initialiser list, comp) & Returns the samllest and the greatest value of the initializer list according to the predicate comp. \\ \hline
+min(a, b)                   & 返回a和b中较小的值                                                \\ \hline
+min(a, b, comp)             & 根据谓词comp返回a和b的较小值。               \\ \hline
+min(initialiser list)       & 返回初始化列表的最小值。                                 \\ \hline
+min(initialiser list, comp) & 根据谓词comp返回初始化项列表的最小值。 \\ \hline
+max(a, b)                   & 返回a和b中较大的值。                                               \\ \hline
+max(a, b, comp)             & 根据谓词comp返回a和b中较大的值。               \\ \hline
+max(initialiser list)       & 返回初始化项列表的最大值。                                 \\ \hline
+max(initialiser list, comp) & 根据谓词comp返回初始化项列表的最大值。 \\ \hline
+minmax(a, b)                & 返回a和b的较大和较小的值。                                   \\ \hline
+minmax(a, b, comp)          & 根据谓词comp返回a和b的较大和较小的值。   \\ \hline
+minmax(initialiser list)    & 返回初始化项列表的最小值和最大值。                \\ \hline
+minmax(initialiser list, comp) & 根据谓词comp返回初始化项列表的最小值和最大值。 \\ \hline
 \end{longtable}
 
-\mySamllsection{std::midpoint, and std::lerp}
+\mySamllsection{std::midpoint和std::lerp}
 
-he function std::midpoint(a, b) calculates the midpoint between a and b. a and b can be integers, floating-point numbers, or pointers. If a and b are pointers, they must point to the same array object.
-The function std::midpoint requires the header <numeric>.
+函数std::midpoint(a, b)计算a和b之间的中点。a和b可以是整数、浮点数或指针。若a和b是指针，必须指向同一个数组对象。函数std::midpoint要求包含头文件<numeric>。
 
-The function std::lerp(a, b, t) calculates the linear interpolation of two numbers. It requires the header <cmath>. The return value is a + t(b - a).
+函数std::lerp(a, b, t)计算两个数字的线性插值，需要头文件<cmath>。返回值是a + t(b - a)。
 
 
-\mySamllsection{std::midpoint, and std::lerp}
+\mySamllsection{std::midpoint和std::lerp}
 
 \begin{cpp}
 // midpointLerp.cpp
@@ -86,27 +85,27 @@ for (auto v: {0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0}) {
 
 \myGraphic{0.4}{content/chapter2/images/2.jpg}{}
 
-\mySamllsection{std::cmp\_equal, std::cmp\_not\_equal, std::cmp\_less, std::cmp\_greater, std::cmp\_less\_equal, and std::cmp\_greater\_equal}
+\mySamllsection{std::cmp\_equal, std::cmp\_not\_equal, std::cmp\_less, std::cmp\_greater, std::cmp\_less\_equal和std::cmp\_greater\_equal}
 
 
-The in the header <utility> definfined functions std::cmp\_equal, std::cmp\_not\_equal, std::cmp\_less, std::cmp\_greater, std::cmp\_less\_equal, and std::cmp\_greater\_equal provide safe comparison of integers. Safe comparison means that the comparison of a negative signed integer compares less than an unsigned integer, and that the comparison of values other than a signed or unsigned integer gives a compile-time error.
+头文件<utility>中定义的函数std::cmp\_equal、std::cmp\_not\_equal、std::cmp\_less、std::cmp\_greater、std::cmp\_less\_equal和std::cmp\_greater\_equal提供了整数的安全比较。安全比较对负符号整数的比较小于对无符号整数的比较，并且对有符号整数或无符号整数以外的值的比较，会产生编译时错误。
 
 
-\begin{myWarning}{Integer conversion with builtin integers}
-The following code snippet exemplifies the issue of signed/unsigned comparison.
+\begin{myWarning}{使用内置整数进行整数转换}
+下面的代码片段举例说明了有符号/无符号比较的问题。
 
 \begin{cpp}
 -1 < 0u; // true
 std::cmp_greater( -1, 0u); // false
 \end{cpp}
 
--1 as a signed integer is promoted to an unsigned type which causes a surprising result.
+作为有符号整数的-1会提升为无符号类型，会导致一个令人意外的结果。
 
 \end{myWarning}
 
 \mySamllsection{std::move}
 
-The function \href{http://en.cppreference.com/w/cpp/utility/move}{std::move}, defined in the header <utility>, authorizes the compiler to move the resource. In the so-called move semantics, the source object’s values are moved to the new object. Afterward, the source is in a well-defined but indeterminate state. Most of the time, that is the default state of the source. By using std::move, the compiler converts the source arg to an rvalue reference: static\_cast<std::remove\_reference<decltype(arg)>::type\&\&> (arg). If the compiler can not apply the move semantics, it falls back to the copy semantics:
+头文件<utility>中定义了函数\href{http://en.cppreference.com/w/cpp/utility/move}{std::move}，授权编译器移动资源。移动语义中，源对象的值移动到新对象中。之后，源处于定义良好但不确定的状态。大多数情况下，这是源的默认状态。通过使用std::move，编译器将源参数转换为右值引用:static\_cast<std::remove\_reference<decltype(arg)>::type\&\&>(arg)。若编译器不能应用移动语义，则会退回到复制语义:
 
 \begin{cpp}
 #include <utility>
@@ -119,17 +118,17 @@ myVec = std::move(myBigVec); // move semantics
 \end{cpp}
 
 
-\begin{myTip}{To move is cheaper than to copy}
+\begin{myTip}{移动比复制廉价}
 	
-The move semantics has two advantages. Firstly, it is often a good idea to use cheap moving instead of expensive copying. So there is no extra allocation and deallocation of memory necessary. Secondly, there are objects which can not be copied. E.g., a thread or a lock.
+移动语义有两个优点。首先，使用便宜的移动而不是昂贵的复制通常是一个好主意。因此不需要额外的内存分配和释放。其次，有些对象是不能复制的。例如，线程或锁。
 
 \end{myTip}
 
 \mySamllsection{std::forward}
 
-The function \href{http://en.cppreference.com/w/cpp/utility/forward}{std::forward}, defined in the header <utility>, empowers you to write function templates, which can identically forward their arguments. Typical use cases for std::forward are factory functions or constructors. Factory functions create an object and should, therefore, pass their arguments unmodified. Constructors often use their arguments to initialize their base class with identical arguments. So std::forward is the perfect tool for authors of generic libraries:
+头文件<utility>中定义的函数\href{http://en.cppreference.com/w/cpp/utility/forward}{std::forward}能够编写函数模板，这些函数模板可以相同地转发它们的参数。std::forward的典型用例是工厂函数或构造函数。工厂函数创建一个对象，因此应该不加修改地传递其参数。构造函数通常使用实参来初始化具有相同实参的基类。所以std::forward对于泛型库作者来说是一个完美的工具:
 
-\filename{Perfect forwarding}
+\filename{完美转发}
 
 \begin{cpp}
 // forward.cpp
@@ -159,24 +158,24 @@ typedef std::vector<int> IntVec;
 IntVec intVec= createT<IntVec>(initialiser_list<int>({1, 2, 3}));
 \end{cpp}
 
-The function template createT has to take their arguments as a \href{https://isocpp.org/blog/2012/11/universal-references-in-c11-scott-meyers}{universal reference}: Args\&\&… args. A universal reference, or forwarding reference, is an rvalue reference in a type deduction context.
+函数模板createT必须以\href{https://isocpp.org/blog/2012/11/universal-references-in-c11-scott-meyers}{通用引用}: args\&\&…args的形式接受参数。通用引用或转发引用是类型演绎上下文中的右值引用。
 
-\begin{myTip}{std::forward enables completely generic functions in combination with variadic templates}
+\begin{myTip}{std::forward支持与可变模板结合使用的完全泛型函数}
 	
-If you use std::forward together with variadic templates, you can define fully generic function templates. Your function template can accept an arbitrary number of arguments and forward them unchanged.
+若将std::forward与可变模板一起使用，则可以定义完全泛型的函数模板。函数模板可以接受任意数量的参数，并且不加修改地对其进行转发。
 	
 \end{myTip}
 
 \mySamllsection{std::to\_underlying}
 
-The function std::to\_underlying in C++23 converts an enumeration enum to is underlying type Enum. This function is a convenience function for the expression static\_cast<std::underlying\_type<Enum>::type>(enum), using the type traits function std::underlying\_type.
+C++23中的std::to\_underlying函数将枚举enum转换为其底层类型Enum。这个函数是表达式static\_cast<std::underlying\_type<Enum>::type>(Enum)的方便函数，使用类型特征函数std::underlying\_type。
 
 
 \mySamllsection{std::swap}
 
-With the function \href{http://en.cppreference.com/w/cpp/algorithm/swap}{std::swap} defined in the header <utility>, you can easily swap two objects. The generic implementation in the C++ standard library internally uses the function std::move.
+通过<utility>中定义的函数\href{http://en.cppreference.com/w/cpp/algorithm/swap}{std::swap}，可以轻松地交换两个对象。C++标准库中的泛型实现会在内部使用std::move函数。
 
-\filename{Move-semantic with std::swap}
+\filename{std::swap中使用移动语义}
 
 \begin{cpp}
 // swap.cpp
