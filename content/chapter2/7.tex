@@ -96,19 +96,20 @@ Composite type categories
 % Please add the following required packages to your document preamble:
 % \usepackage{longtable}
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
-\begin{longtable}[c]{ll}
-\textbf{Composite type categories} & \textbf{Primary type category}                 \\
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{Composite type categories} & \textbf{Primary type category}                 \\ \hline
 \endfirsthead
 %
 \endhead
 %
-is\_arithmetic                     & is\_floating\_point or is\_integral            \\
-is\_fundamental                    & is\_arithmetic or is\_void                     \\
-is\_object          & is\_arithmetic or is\_enum or is\_pointer or is\_member\_pointer                      \\
-is\_reference                      & is\_lvalue\_reference or is\_rvalue\_reference \\
-is\_compound                       & complement of is\_fundamental                  \\
-is\_member\_pointer & is\_member\_object\_pointer or is\_member\_function\_pointer                          \\
-is\_scalar          & is\_arithmetic or is\_enum or is\_pointer or is\_member\_pointer or is\_null\_pointer
+is\_arithmetic                     & is\_floating\_point or is\_integral            \\ \hline
+is\_fundamental                    & is\_arithmetic or is\_void                     \\ \hline
+is\_object          & is\_arithmetic or is\_enum or is\_pointer or is\_member\_pointer                      \\ \hline
+is\_reference                      & is\_lvalue\_reference or is\_rvalue\_reference \\ \hline
+is\_compound                       & complement of is\_fundamental                  \\ \hline
+is\_member\_pointer & is\_member\_object\_pointer or is\_member\_function\_pointer                          \\ \hline
+is\_scalar          & is\_arithmetic or is\_enum or is\_pointer or is\_member\_pointer or is\_null\_pointer \\ \hline
 \end{longtable}
 
 \mySamllsection{Type Properties}

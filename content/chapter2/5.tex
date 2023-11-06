@@ -1,16 +1,16 @@
-A reference wrapper is a \href{http://en.cppreference.com/w/cpp/concept/CopyConstructible}{copy-constructible} and \href{http://en.cppreference.com/w/cpp/concept/CopyAssignable}{copy-assignable} wrapper for an object of type\&, which is defined in the header <functional>. You have an object that behaves like a reference but can be copied. In opposite to classic references, \href{http://en.cppreference.com/w/cpp/utility/functional/reference_wrapper}{std::reference\_wrapper} objects support two additional use cases:
+引用包装器是类型为引用的\href{http://en.cppreference.com/w/cpp/concept/CopyConstructible}{复制构造函数}和\href{http://en.cppreference.com/w/cpp/concept/CopyAssignable}{复制赋值}包装器，它在头文件<functional>中定义。您有一个行为类似于引用但可以复制的对象。与经典引用相反，\href{http://en.cppreference.com/w/cpp/utility/functional/reference_wrapper}{std::reference\_wrapper}对象支持两个额外的用例:
 
 \begin{itemize}
 \item 
-You can use them in containers of the Standard Template Library. std::vector<std::reference\_wrapper<int>{}> myIntRefVector
+可以在标准模板库的容器中使用它们。std::vector<std::reference\_wrapper<int>{}> myIntRefVector
 
 \item 
-You can copy instances of classes which have std::reference\_wrapper objects. That is, in general, not possible with references.
+可以复制具有std::reference\_wrapper对象的类的实例。通常，这不适用于引用。
 \end{itemize}
 
-The get member function allows access to the reference: myInt.get(). You can use a reference wrapper to encapsulate and invoke a callable.
+get成员函数允许访问引用:myInt.get()，可以使用引用包装器来封装和调用可调用对象。
 
-\filename{Reference wrappers}
+\filename{引用包装器}
 
 \begin{cpp}
 // referenceWrapperCallable.cpp
@@ -27,11 +27,11 @@ std::reference_wrapper<callableUnit> refWrap(foo);
 refWrap(); // Invoked
 \end{cpp}
 
-\mySamllsection{std::ref and std::cref}
+\mySamllsection{std::ref 和 std::cref}
 
-With the helper functions \href{http://en.cppreference.com/w/cpp/utility/functional/ref}{std::ref} and \href{http://en.cppreference.com/w/cpp/utility/functional/ref}{std::cref}, you can easily create reference wrappers for variables. std::ref will create a non-constant reference wrapper, std::cref a constant one:
+使用辅助函数\href{http://en.cppreference.com/w/cpp/utility/functional/ref}{std::ref}和\href{http://en.cppreference.com/w/cpp/utility/functional/ref}{std::cref}，可以轻松地为变量创建引用包装器。std::ref将创建一个非常量引用包装器，std::cref将创建一个常量引用包装器。
 
-\filename{The helper functions std::ref and std::cref}
+\filename{辅助函数std::ref和std::cref}
 
 \begin{cpp}
 // referenceWrapperRefCref.cpp
@@ -61,7 +61,7 @@ doubleMe(std::ref(i));
 std::cout << i << '\n'; // 2
 \end{cpp}
 
-It is possible to invoke the function invokeMe taking a constant reference to a std::string with a nonconstant std::string s wrapped in a std::cref(s). When I wrap the variable i in the helper function std::ref, the function template doubleMe is invoked with a reference. Consequentially, the variable i is doubled.
+可以使用std::string的常量引用和std::cref(s)封装的非常量std::string来调用invokeMe函数。当在辅助函数std::ref中包装变量i时，将使用引用调用函数模板doubleMe。因此，变量i被加倍。
 
 
 

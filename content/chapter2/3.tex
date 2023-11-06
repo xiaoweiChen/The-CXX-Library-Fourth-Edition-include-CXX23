@@ -1,16 +1,16 @@
-You can build pairs of arbitrary types with \href{http://en.cppreference.com/w/cpp/utility/pair}{std::pair}. The class template std::pair needs the header <utility>. std::pair has a default, copy and move constructor. Pair objects can be swapped: std::swap(pair1, pair2).
+可以使用\href{http://en.cppreference.com/w/cpp/utility/pair}{std::pair}构建任意类型对。类模板std::pair需要头文件<utility>。pair有一个默认的复制和移动构造函数，其对象可以交换:std::swap(pair1, pair2)。
 
-Pairs are often used in the C++ library. For example, the function std::minmax returns its result as a pair, the associative container std::map, std::unordered\_map, std::multimap and std::unordered\_multimap manage their key/value association in pairs.
+C++库中经常使用pair。例如，函数std::minmax以对的形式返回结果，关联容器std::map、std::unordered\_map、std::multimap和std::unordered\_multimap以对的方式管理它们的键/值关联性。
 
-To get the elements of a pair p, you can access them directly or through an index. So, with p.first or std::get<0>(p), you get the first with p.second or std::get<1>(p), you get the second element of the pair.
+要获取pair p中的元素，可以直接访问，也可以通过索引访问。因此，使用p.first或std::get<0>(p)，将获得第一个;使用p.second或std::get<1>(p)，您将获得对的第二个元素。
 
-Pairs support the comparison operators ==, !=, <, >, <= and >=. When comparing two pairs for identity, members pair1.first and pair2.first are compared first, and then pair1.second and pair2.second. The same strategy holds for the other comparison operators.
+对支持比较操作符==、!=、<、>、<=和>=。当比较两个对的身份时，成员pair1.first和pair2.first先比较，然后是pair1.second和pair2.second再比较。同样的策略也适用于其他比较操作符。
 
 \mySamllsection{std::make\_pair}
 
-C++ has the practical help function \href{http://en.cppreference.com/w/cpp/utility/pair/make_pair}{std::make\_pair} to generate pairs without specifying their types. std::make\_pair automatically deduces their types.
+C++有一个实用的辅助函数\href{http://en.cppreference.com/w/cpp/utility/pair/make_pair}{std::make\_pair}，可以在不指定类型的情况下生成对子。std::make\_pair会自动推导出它们的类型。
 
-\filename{The helper function std::make\_pair}
+\filename{辅助函数std::make\_pair}
 
 \begin{cpp}
 // pair.cpp

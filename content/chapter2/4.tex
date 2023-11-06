@@ -1,15 +1,14 @@
-You can create tuples of arbitrary length and types with \href{http://en.cppreference.com/w/cpp/utility/tuple}{std::tuple}. The class template needs the header <tuple>. std::tuple is a generalization of std::pair. Tuples with two elements and pairs can be converted into each other. Like std::pair, the tuple has a default, a copy, and a move constructor.
+可以使用\href{http://en.cppreference.com/w/cpp/utility/tuple}{std::tuple}创建任意长度和类型的元组。类模板需要头文件<tuple>。std::tuple是std::pair的泛化形式。包含两个元素和对的元组可以相互转换。与std::pair一样，元组也有一个默认构造函数、一个复制构造函数和一个移动构造函数。
 
-You can swap tuples with the function std::swap.
-std::get can access the i-th element of a tuple: std::get<i-1>(t). By std::get<type>(t), you can directly refer to the element of the type type.
+可以使用std::swap函数交换元组。std::get可以访问元组的第i个元素:std::get<i-1>(t)。通过std::get<type>(t)，可以直接引用类型type的元素。
 
-Tuples support the comparison operators ==, !=, <, >, <= and >=. If you compare two tuples, the elements of the tuples are compared lexicographically. The comparison starts at the index 0.
+元组支持比较操作符==、!=、<、>、<=和>=。若比较两个元组，则按字典顺序比较元组的元素。比较从索引0开始。
 
 \mySamllsection{std::make\_tuple}
 
-The helper function \href{http://en.cppreference.com/w/cpp/utility/tuple/make_tuple}{std::make\_tuple} provides a convenient way to create a tuple. You don’t have to specify the types. The compiler automatically deduces them.
+辅助函数\href{http://en.cppreference.com/w/cpp/utility/tuple/make_tuple}{std::make\_tuple}提供了一种创建元组的方便方法。不必指定类型，编译器会自动推导出它们。
 
-\filename{The helper function std::make\_tuple}
+\filename{辅助函数std::make\_tuple}
 
 \begin{cpp}
 // tuple.cpp
@@ -36,11 +35,11 @@ auto pair= std::make_pair(1, true);
 std::tuple<int, bool> tup= pair;
 \end{cpp}
 
-\mySamllsection{std::tie and std::ignore}
+\mySamllsection{std::tie和std::ignore}
 
-\href{http://en.cppreference.com/w/cpp/utility/tuple/tie}{std::tie} enables you to create tuples that reference variables. You can explicitly ignore tuple elements with \href{http://en.cppreference.com/w/cpp/utility/tuple/ignore}{std::ignore}.
+\href{http://en.cppreference.com/w/cpp/utility/tuple/tie}{std::tie} 允许创建引用变量的元组。可以使用\href{http://en.cppreference.com/w/cpp/utility/tuple/ignore}{std::ignore}显式忽略元组元素。
 
-\filename{The helper functions std::tie and std::ignore}
+\filename{辅助函数std::tie和std::ignore}
 
 \begin{cpp}
 // tupleTie.cpp

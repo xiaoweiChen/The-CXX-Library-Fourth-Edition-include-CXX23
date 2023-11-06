@@ -1,17 +1,17 @@
 
-The three functions std::bind, std::bind\_front, std::bind\_back, and std::functions fit very well together. While std::bind, std::bind\_front, or std::bind\_back enables you to create new function objects on the fly, std::function takes these temporary function objects and binds them to a variable.
+std::bind、std::bind\_front、std::bind\_back和std::functions这三个函数配合得非常好。std::bind、std::bind\_front或std::bind\_back能够动态地创建新的函数对象，而std::function接受这些临时函数对象并将它们绑定到一个变量。
 
-\begin{myTip}{std::bind, std::bind\_front, std::bind\_back, and std::function are mostly superfluous}
+\begin{myTip}{std::bind, std::bind\_front, std::bind\_back和std::function常常是多余的}
 	
-std::bind and std::function, which were part of \href{https://en.wikipedia.org/wiki/C%2B%2B_Technical_Report_1}{TR1}, std::bind\_front, and std::bind\_back are mostly not necessary in C++. First, you can use lambdas instead of std::bind, std::bind\_front, std::bind\_back, and second, you can most often use the automatic type deduction with auto instead of std::function.
+std::bind和std::function，它们是\href{https://en.wikipedia.org/wiki/C%2B%2B_Technical_Report_1}{TR1}，std::bind\_front和std::bind\_back的一部分，在C++中大多是不必要的。首先，可以使用Lambda来代替std::bind、std::bind\_front、std::bind\_back;其次，可以经常使用auto来代替std::function进行自动类型推断。
 	
 \end{myTip}
 
 \mySamllsection{std::bind}
 
-The function std::bind is more powerful than std::bind\_front or std::bind\_back because std::bind allows the arguments to be bound to an arbitrary position. While std::bind, std::bind\_front, and std::bind\_back enables you to create new function objects on the fly, std::function takes these temporary function objects and binds them to a variable. These functions are powerful tools from functional programming and require the header <functional>.
+函数std::bind比std::bind\_front或std::bind\_back更强大，因为std::bind允许将参数绑定到任意位置。std::bind、std::bind\_front和std::bind\_back能够动态地创建新的函数对象，而std::function接受这些临时函数对象并将它们绑定到一个变量。这些函数是函数式编程的强大工具，并且需要头文件<functional>。
 
-\filename{Creating and binding function objects}
+\filename{创建和绑定函数对象}
 
 \begin{cpp}
 // bindAndFunction.cpp
@@ -34,39 +34,39 @@ function<double(double>> myDiv3 = bind_front(divMe, 2000); // 200
 function<double(double)> myDiv4 = bind_back(divMe, 10); // 200
 \end{cpp}
 
-Because of \href{http://en.cppreference.com/w/cpp/utility/functional/bind}{std::bind}, you can create function objects in a variety of ways:
+\href{http://en.cppreference.com/w/cpp/utility/functional/bind}{std::bind}可以用多种方式创建函数对象:
 
 \begin{itemize}
 \item 
-bind the arguments to an arbitrary position,
+将参数绑定到任意位置，
 
 \item 
-change the order of the arguments,
+改变参数的顺序，
 
 \item 
-introduce placeholders for arguments,
+为参数引入占位符，
 
 \item 
-partially evaluate functions,
+对函数部分求值，
 
 \item 
-invoke the newly created function objects, use them in the STL algorithm, or store them in std::function.
+调用新创建的函数对象，在STL算法中使用它们，或者将其存储在std::function中。
 \end{itemize}
 
 \mySamllsection{std::bind\_front (C++20)}
 
-\href{https://en.cppreference.com/w/cpp/utility/functional/bind_front}{std::bind\_front} creates a callable wrapper from a callable. A call std::bind\_front(func, arg ...) binds all arguments arg to the front of func and returns a callable wrapper.
+\href{https://en.cppreference.com/w/cpp/utility/functional/bind_front}{std::bind\_front} 从可调用对象创建可调用包装器。调用std::bind\_front(func, arg…)将所有参数arg绑定到func的前端，并返回一个可调用的包装器。
 
 
 \mySamllsection{std::bind\_back (C++23)}
 
-\href{https://en.cppreference.com/w/cpp/utility/functional/bind_front}{std::bind\_back} creates a callable wrapper from a callable. A call std::bind\_back(func, arg ...) binds all arguments arg to the back of func and returns a callable wrapper.
+\href{https://en.cppreference.com/w/cpp/utility/functional/bind_front}{std::bind\_back} 从可调用对象创建可调用包装器。调用std::bind\_back(func, arg…)将所有参数arg绑定到func的后面，并返回一个可调用的包装器。
 
 \mySamllsection{std::function}
 
-\href{http://en.cppreference.com/w/cpp/utility/functional/function}{std::function} can store arbitrary callables in variables. It’s a polymorphic function wrapper. A callable may be a lambda function, a function object, or a function. std::function is always necessary and can’t be replaced by auto, if you have to specify the type of the callable explicitly.
+\href{http://en.cppreference.com/w/cpp/utility/functional/function}{std::function} 可以在变量中存储可调用对象，是一个多态函数包装器。可调用对象可以是Lambda函数、函数对象或函数。若必须显式指定可调用对象的类型，则std::function是必需的，不能用auto取代。
 
-\filename{A dispatch table with std::function}
+\filename{使用std::function的调度表}
 
 \begin{cpp}
 // dispatchTable.cpp
@@ -88,10 +88,10 @@ std::cout << tab['*'](3.5, 4.5); // 15.75
 std::cout << tab['/'](3.5, 4.5); // 0.777778
 \end{cpp}
 
-The type parameter of std::function defines the type of callables std::function will accept.
+函数的类型形参定义了std::function接受的可调用对象的类型。
 
 \begin{center}
-Return type and type of the arguments
+返回类型和参数类型
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -99,7 +99,7 @@ Return type and type of the arguments
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|l|}
 \hline
-Function type          & Return type & Type of the arguments \\ \hline
+函数类型          & 返回类型 & 参数类型 \\ \hline
 \endfirsthead
 %
 \endhead

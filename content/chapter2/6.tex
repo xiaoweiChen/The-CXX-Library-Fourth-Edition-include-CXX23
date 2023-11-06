@@ -1,17 +1,17 @@
-Smart pointers are essential to C++ because they empower you to implement explicit memory management in C++. Besides the deprecated std::auto\_ptr, C++ offers three smart pointers. They are defined in the header <memory>.
+智能指针对于C++来说是必不可少的，它们能够在C++中实现显式的内存管理。除了已弃用的std::auto\_ptr之外，C++还提供了三个智能指针，在头文件<memory>中定义。
 
-First, the std::unique\_ptr models the concept of exclusive ownership. Second, the std::shared\_ptr models the concept of shared ownership. Finally, the std::weak\_ptr. std::weak\_ptr isn’t smart because it has a limited interface. Its job is to break cycles of std::shared\_ptr. It models the concept of temporary ownership.
+首先，std::unique\_ptr对独占所有权的概念进行了建模。其次，std::shared\_ptr对共享所有权的概念进行了建模。std::weak\_ptr不是智能的，因为它有一个有限的接口，其作用是打破std::shared\_ptr的循环引用。它模拟了临时所有权的概念。
 
-The smart pointers manage their resource according to the RAII idiom. Therefore, the resource is automatically freed if the smart pointer goes out of scope.
+智能指针根据RAII习惯用法管理它们的资源，若智能指针超出作用域，资源将自动释放。
 
-\begin{myNotic}{Resource Acquisition Is Initialization}
+\begin{myNotic}{资源获取即初始化}
 
-Resource Acquisition Is Initialization, short RAII, stands for a popular technique in C++, in which the resource acquisition and release are bound to the lifetime of an object. For the smart pointer, the memory is allocated in the constructor and deallocated in the destructor. In C++, the destructor is automatically called when the object goes out of scope.
+资源获取即初始化(Resource Acquisition Is Initialization，简称RAII)是C++中的一种流行技术，其中资源获取和释放与对象的生命周期绑定在一起。对于智能指针，内存在构造函数中分配，在析构函数中释放。在C++中，当对象超出作用域时自动调用析构函数。
 
 \end{myNotic}
 
 \begin{center}
-Overview smart pointers
+智能指针概述
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -19,35 +19,35 @@ Overview smart pointers
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|l|}
 \hline
-\textbf{Name} &
-\textbf{Standard} &
-\textbf{Description} \\ \hline
+\textbf{名称} &
+\textbf{标准} &
+\textbf{描述} \\ \hline
 \endfirsthead
 %
 \endhead
 %
-\begin{tabular}[c]{@{}l@{}}std::auto\_ptr\\ (deprecated)\end{tabular} &
+\begin{tabular}[c]{@{}l@{}}std::auto\_ptr\\ (已废弃)\end{tabular} &
 C++98 &
-Owns exclusively the resource. Moves the resource then copying. \\ \hline
+独占资源。移动资源，然后复制。 \\ \hline
 std::unique\_ptr &
 C++11 &
-Owns exclusively the resource. Cannot be copied. \\ \hline
+独占资源。不能复制. \\ \hline
 std::shared\_ptr &
 C++11 &
-\begin{tabular}[c]{@{}l@{}}Has a reference counter for the shared variable.\\ Manages the reference counter automatically.\\ Deletes the resource if the reference counter is 0.\end{tabular} \\ \hline
+\begin{tabular}[c]{@{}l@{}}具有共享变量的引用计数器，自动管理引用计数器。\\ 若引用计数器为0，则删除资源。\end{tabular} \\ \hline
 std::weak\_ptr &
 C++11 &
-\begin{tabular}[c]{@{}l@{}}Helps to break cycles of std::shared\_ptr.\\ Doesn't modify the reference counter.\end{tabular} \\ \hline
+\begin{tabular}[c]{@{}l@{}}帮助打破std::shared\_ptr的循环引用。\\ 不修改引用计数器。\end{tabular} \\ \hline
 \end{longtable}
 
 
 \mySamllsection{std::unique\_ptr}
 
-\href{http://en.cppreference.com/w/cpp/memory/unique_ptr}{std::unique\_ptr} exclusively takes care of its resource. It automatically releases the resource if it goes out of scope. If no copy semantics are used, you can use a std::unique\_ptr in containers and algorithms of the Standard Template Library. std::unique\_ptr is as cheap and fast as a raw pointer if you use no special deleter.
+\href{http://en.cppreference.com/w/cpp/memory/unique_ptr}{std::unique\_ptr} 专门负责其资源。若超出作用域，会自动释放资源。若没有使用复制语义，可以在标准模板库的容器和算法中使用std::unique\_ptr。若不使用特殊的删除器，std::unique\_ptr会与原始指针一样廉价和快速。
 
-\begin{myWarning}{Don’t use std::auto\_ptr}
+\begin{myWarning}{不要使用std::auto\_ptr}
 
-Classical C++03 has a smart pointer std::auto\_ptr, which exclusively takes care of the lifetime of a resource. But std::auto\_ptr has a conceptual issue. If you implicitly or explicitly copy a std::auto\_ptr, the resource is probably moved. So instead of copy semantics, you have hidden move semantics, and therefore, you often have undefined behavior. So std::auto\_ptr is deprecated in C++11, and you should use instead std::unique\_ptr. You can neither implicitly nor explicitly copy a std::unique\_ptr. You can only move it:
+经典的C++03有一个智能指针std::auto\_ptr，专门负责资源的生命周期。但是std::auto\_ptr有一个概念问题。若隐式或显式复制std::auto\_ptr，则可能会移动资源。没有复制语义，你有隐藏的移动语义，经常会有未定义行为。因此std::auto\_ptr在C++11中已弃用，所以应该使用std::unique\_ptr。既不能隐式地也不能显式地复制std::unique\_ptr，只能移动它:
 
 \begin{cpp}
 #include <memory>
@@ -62,10 +62,10 @@ std::unique_ptr<int> up3 = std::move(up1); // OK
 
 \end{myWarning}
 
-These are the member functions of std::unique\_ptr.
+这些是std::unique\_ptr的成员函数。
 
 \begin{center}
-Member Functions of std::unique\_ptr
+std::unique\_ptr的成员函数
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -73,19 +73,19 @@ Member Functions of std::unique\_ptr
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-Name         & Description                                       \\ \hline
+名称         & 描述                                       \\ \hline
 \endfirsthead
 %
 \endhead
 %
-get          & Returns a pointer to the resource                 \\ \hline
-get\_deleter & Returns the delete function.                      \\ \hline
-release      & Returns a pointer to the resource and release it. \\ \hline
-reset        & Resets the resource.                              \\ \hline
-swap         & Swap the resource.                                \\ \hline
+get          & 返回指向资源的指针                 \\ \hline
+get\_deleter & 返回delete函数。                      \\ \hline
+release      & 返回指向资源的指针并释放它。 \\ \hline
+reset        & 重置资源。                              \\ \hline
+swap         & 交换资源。                                \\ \hline
 \end{longtable}
 
-In the following code snippet, you can see the application of these member functions:
+在下面的代码片段中，可以看到这些成员函数的具体使用:
 
 \filename{The std::unique\_ptr}
 
@@ -127,7 +127,7 @@ cout << uniquePtr3.get() << endl; // 0x15b5010
 cout << uniquePtr4.get() << endl; // 0x15b5030
 \end{cpp}
 
-std::unique\_ptr has a specialization for arrays:
+std::unique\_ptr对数组有一个特化:
 
 \filename{std::unique\_ptr array}
 
@@ -167,25 +167,25 @@ int MyStruct::count= 0;
 // 0x1200018 GoodBye: 0
 \end{cpp}
 
-\mySamllsection{Special Deleters}
+\mySamllsection{特殊的删除器}
 
-std::unique\_ptr can be parametrized with special deleters: std::unique\_ptr<int, MyIntDeleter> up(new int(2011), myIntDeleter()). std::unique\_ptr uses by default the deleter of the resource.
+std::unique\_ptr可以用特殊的删除器:std::unique\_ptr<int, MyIntDeleter> up(new int(2011)， MyIntDeleter()))。默认情况下，std::unique\_ptr使用相应资源的删除器。
 
 
 \mySamllsection{std::make\_unique}
 
 
-The helper function \href{http://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique}{std::make\_unique} was unlike its sibling std::make\_shared forgotten in the C++11 standard. std::make\_unique was, therefore, added with the C++14 standard. std::make\_unique enables it to create a std::unique\_ptr in a single step: std::unique\_ptr<int> up= std::make\_unique<int>(2014).
+辅助函数\href{http://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique}{std::make\_unique}与C++11标准中被遗忘的同级std::make\_shared不同。因此，std::make\_unique添加到C++14标准中。std::make\_unique能够在一个步骤中创建std::unique\_ptr: std::unique\_ptr<int> up= std::make\_unique<int>(2014)。
 
 
 \mySamllsection{std::shared\_ptr}
 
-\href{http://en.cppreference.com/w/cpp/memory/shared_ptr}{std::shared\_ptr} shares the ownership of the resource. They have two handles. One for the resource and one for the reference counter. By copying a std::shared\_ptr, the reference count is increased by one. It is decreased by one if the std::shared\_ptr goes out of scope. If the reference counter becomes the value 0 and there is no std::shared\_ptr referencing the resource anymore, the C++ runtime automatically releases the resource. The release of the resource occurs precisely when the last std::shared\_ptr goes out of scope. The C++ runtime guarantees that the call of the reference counter is an atomic operation. Because of this administration overhead, std::shared\_ptr requires more time and memory than a raw pointer or std::unique\_ptr.
+\href{http://en.cppreference.com/w/cpp/memory/shared_ptr}{std::shared\_ptr} 共享资源的所有权。它们有两个句柄：一个用于资源，一个用于引用计数器。通过复制std::shared\_ptr，引用计数增加1。若std::shared\_ptr超出作用域，则减少1。若引用计数器的值变为0，并且不再有std::shared\_ptr引用该资源，则C++运行时自动释放该资源。资源的释放恰好发生在最后一个std::shared\_ptr超出作用域的时候。C++运行时保证引用计数器的调用是一个原子操作。由于这种管理开销，std::shared\_ptr比原始指针或std::unique\_ptr需要更多的时间和内存。
 
-In the following table are the member functions of std::shared\_ptr.
+下表是std::shared\_ptr的成员函数。
 
 \begin{center}
-Member Functions of std::shared\_ptr
+std::shared\_ptr的成员函数
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -193,24 +193,24 @@ Member Functions of std::shared\_ptr
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-\textbf{Name} & \textbf{Description}                                             \\ \hline
+\textbf{名称} & \textbf{描述}                                             \\ \hline
 \endfirsthead
 %
 \endhead
 %
-get           & Returns a pointer to the resource                                \\ \hline
-get\_deleter  & Returns the delete function                                      \\ \hline
-reset         & Resets the resource                                              \\ \hline
-swap          & Swaps the resource                                               \\ \hline
-unique        & Checks if the std::shared\_ptr is exclsive owner of the resource \\ \hline
-use\_count    & Returns the value of the reference counter.                      \\ \hline
+get           & 返回指向资源的指针                                \\ \hline
+get\_deleter  & 返回delete函数。                                      \\ \hline
+reset         & 重置资源                                              \\ \hline
+swap          & 交换资源                                               \\ \hline
+unique        & 检查std::shared\_ptr是否是资源的独占所有者 \\ \hline
+use\_count    & 返回引用计数器的值。                      \\ \hline
 \end{longtable}
 
 \mySamllsection{std::make\_shared}
 
-The helper function \href{http://en.cppreference.com/w/cpp/memory/shared_ptr/make_shared}{std::make\_shared} creates the resource, and returns it in a std::shared\_ptr. You should prefer std::make\_shared instead of the direct creation of a std::shared\_ptr, because std::make\_shared is faster.
+辅助函数\href{http://en.cppreference.com/w/cpp/memory/shared_ptr/make_shared}{std::make\_shared}创建资源，并在std::shared\_ptr中返回它。应该选择std::make\_shared，而非直接创建std::shared\_ptr，因为std::make\_shared更快。
 
-The following code sample shows a typical use case of a std::shared\_ptr.
+下面的代码示例显示了std::shared\_ptr的典型用例。
 
 \filename{std::shared\_ptr}
 
@@ -251,11 +251,11 @@ sharPtr= std::shared_ptr<MyInt>(new MyInt(2011)); // Hello:2011
 // Good Bye: 2011
 \end{cpp}
 
-The callable is, in this example, a function object. Therefore you can easily count how many instances of a class are created. The result is in the static variable count.
+本例中，可调用对象是一个函数对象，可以很容易地计算创建了多少个类的实例。结果在静态变量count中。
 
 \mySamllsection{std::shared\_ptr from this}
 
-You have to derive the class public from std::enable\_shared\_from\_this. You can create with the class \href{http://en.cppreference.com/w/cpp/memory/enable_shared_from_this}{std::enable\_shared\_from\_this} objects, which return a std::shared\_ptr on itself. The class supports the member function shared\_from\_this to return std::shared\_ptr to this:
+必须从std::enable\_shared\_from\_this派生类public，可以使用类\href{http://en.cppreference.com/w/cpp/memory/enable_shared_from_this}{std::enable\_shared\_from\_this}对象进行创建，该类返回自身的std::shared\_ptr。类支持成员函数shared\_from\_this返回std::shared＿ptr到this:
 
 \filename{std::shared\_ptr from this}
 
@@ -278,11 +278,11 @@ std::cout << (void*)shareMe1.get() << '\n'; // 0x152d010
 std::cout << shareMe.use_count() << '\n'; // 2
 \end{cpp}
 
-You can see in the code sample that the get member functions reference the same object.
+从代码示例中可以看到，get成员函数引用同一个对象。
 
 \mySamllsection{std::weak\_ptr}
 
-\href{http://en.cppreference.com/w/cpp/memory/weak_ptr}{std::weak\_ptr} is not a smart pointer. std::weak\_ptr supports no transparent access to the resource because it only borrows the ressource from a std::shared\_ptr. std::weak\_ptr does not change the reference counter:
+\href{http://en.cppreference.com/w/cpp/memory/weak_ptr}{std::weak\_ptr} 不是一个智能指针。std::weak\_ptr不支持对资源的透明访问，因为它只从std::shared\_ptr中借用资源。std::weak\_ptr并不改变引用计数器:
 
 \filename{std::weak\_ptr}
 
@@ -315,41 +315,40 @@ else{
 }
 \end{cpp}
 
-The table provides an overview of the member functions of std::weak\_ptr.
+该表概述了std::weak\_ptr的成员函数。
 
 \begin{center}
-Member Functions of std::weak\_ptr
+std::weak\_ptr的成员函数。
 \end{center}
 
 % Please add the following required packages to your document preamble:
 % \usepackage{longtable}
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
-\begin{longtable}[c]{ll}
-\textbf{Name} & \textbf{Description}                        \\
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{名称} & \textbf{描述}                        \\ \hline
 \endfirsthead
 %
 \endhead
 %
-expired       & Checks if the resource was deleted.         \\
-lock          & Creates a std::shared\_ptr on the resource  \\
-reset         & Resets the resource                         \\
-swap          & Swaps the resource                          \\
-use\_count    & Returns the value of the reference counter.
+expired       & 检查资源是否删除。         \\ \hline
+lock          & 在资源上创建一个std::shared\_ptr  \\ \hline
+reset         & 重置资源                         \\ \hline
+swap          & 交换资源                          \\ \hline
+use\_count    & 返回引用计数器的值。\\ \hline
 \end{longtable}
 
-There is one reason for the existence of std::weak\_ptr. It breaks the cycle of std::shared\_ptr.
+std::weak\_ptr存在有一个原因，打破了std::shared\_ptr的循环引用。
 
-\mySamllsection{Cyclic References}
+\mySamllsection{循环引用}
 
-You get cyclic references of std::shared\_ptr if they refer to each other. So, the resource counter never becomes 0, and the resource is not automatically released. You can break this cycle if you embed a std::weak\_ptr into the cycle. std::weak\_ptr does not modify the reference counter.
+若std::shared\_ptr相互引用，则得到它们的循环引用。因此，资源计数器永远不会变为0，资源也不会自动释放。若在循环中嵌入一个std::weak\_ptr，就可以打破这个循环，因为std::weak\_ptr不修改引用计数器。
 
-The code sample result is that the daughter is automatically released, but neither the son nor the mother. The mother refers to her son via a std::shared\_ptr, and her daughter via a std::weak\_ptr. Maybe it helps to see the structure of the code in an image.
+代码示例的结果是，daughter自动释放，但son和mother都没有被释放。mother通过std::shared\_ptr指代son，通过std::weak\_ptr指代daughter。图中看到代码的结构会帮助读者对此关系进行理解。
 
-\myGraphic{0.9}{content/chapter2/images/3.jpg}{Cyclic references}
+\myGraphic{0.7}{content/chapter2/images/3.jpg}{循环引用}
 
-Finally, here is the source code.
-
-\filename{Cyclic references}
+\filename{循环引用}
 
 \begin{cpp}
 // cyclicReference.cpp
