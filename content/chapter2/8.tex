@@ -1,52 +1,53 @@
-The \href{http://en.cppreference.com/w/cpp/header/chrono}{time library} consists of the three main components, time point, time duration, and clock. Additionally, the library provides the time of day functionality, calendar support, time zone support, and support for in- and output.
+\href{http://en.cppreference.com/w/cpp/header/chrono}{时间库}主要由时间点、时间段和时钟三个部分组成。此外，该库还提供了时间功能、日历支持、时区支持，以及输入和输出支持。
 
 \noindent
-Time point 
+\textbf{时间点}
 
-Time point is defined by a starting point, the so-called epoch, and additional time duration.
-
-\noindent
-Time duration 
-
-Time duration is the difference between two time-points. The number of ticks gives it.
+时间点由起始点、所谓的历元和附加的时间段来定义。
 
 \noindent
-Clock 
-A clock consists of a starting point (epoch) and a tick so that the current time point can be calculated.
+\textbf{时间段}
+
+时间持续时间是两个时间点之间的差值，时钟滴答数定义了这个值。
 
 \noindent
-Time of day
-
-The duration since midnight split into hours:minutes:seconds.
-
-\noindent
-Calendar 
-
-Calendar stands for various calendar days such as year, a month, a weekday, or the n-th day of a week.
+\textbf{时钟}
+ 
+时钟由起始点(历元)和刻度组成，这样就可以计算出当前的时间点。
 
 \noindent
-Time zone 
+\textbf{日期}
 
-Represents time specific to a geographic area.
+从午夜开始的时间分为小时:分钟:秒。
 
-\begin{myNotic}{The time library is a key component for multithreading}
+\noindent
+\textbf{日历}
+
+Calendar表示各种日历日期，如年、月、工作日或一周的第n天。
+
+\noindent
+\textbf{时区}
+
+表示特定于某个地理区域的时间。
+
+\begin{myNotic}{时间库是多线程的关键组件}
 	
-The time library is a key component of the new multithreading capabilities of C++. You can put the current thread by std::this\_thread::sleep\_for(std::chrono::milliseconds(15) for 15 milliseconds to sleep, or you try to acquire a lock for 2 minutes: lock.try\_lock\_until(now + std::chrono::minutes(2)).
+时间库是C++新多线程功能的关键组件，可以将当前线程通过std::this\_thread::sleep\_for(std::chrono::milliseconds(15)设置为15毫秒的睡眠状态，或者尝试获取2分钟的锁:lock。try\_lock\_until(now + std::chrono::minutes(2))。
 	
 \end{myNotic}
 
 
-\mySamllsection{Time Point}
+\mySamllsection{时间点}
 
-A duration consists of a period of time, defined as some number of ticks of some time unit. A time point consists of a clock and a time duration. This time duration can be positive or negative.
+时间段是由一段时间组成，定义为某个时间单位的时钟滴答数。时间点由时钟和持续时间组成。这个持续时间可以是正的，也可以是负的。
 
 \begin{cpp}
 template <class Clock, class Duration= typename Clock::duration> class time_point;
 \end{cpp}
 
-The epoch is not defined for the clocks std::chrono::steady\_clock, std::chrono::high\_resolution\_clock and std::chrono::system. But on the popular platform, the epoch of std::chrono::system is usually defined as 1.1.1970. You can calculate the time since 1.1.1970 in the resolutions nanoseconds, seconds and minutes.
+时钟std::chrono::steady\_clock、std::chrono::high\_resolution\_clock和std::chrono::system没有定义epoch。但是在主流平台上，std::chrono::system的epoch通常定义为1.1.1970。可以计算自1970年1月1日以来的时间，其分辨率为纳秒、秒和分钟。
 
-\filename{Time since epoch}
+\filename{自纪元以来的时间}
 
 \begin{cpp}
 // epoch.cpp
@@ -67,11 +68,11 @@ MyMinuteTick myMinute(duration);
 std::cout << myMinute.count() << "m"; // 23550324.920572m
 \end{cpp}
 
-Thanks to the function std::chrono::clock\_cast, you can cast time points between various clocks.
+由于函数std::chrono::clock\_cast，可以在不同的时钟之间转换时间点。
 
-\begin{myTip}{Easy performance tests with the time library}
+\begin{myTip}{使用时间库进行简单的性能测试}
 	
-\filename{Performance measurement}
+\filename{性能测试}
 
 \begin{cpp}
 // performanceMeasurement.cpp
@@ -92,15 +93,15 @@ std::cout << timeInSeconds << '\n'; // 0.0150688800
 \end{myTip}
 
 
-\mySamllsection{Time Duration}
+\mySamllsection{时间段}
 
-Time duration is the difference between the two time-points. Time duration is measured in the number of ticks.
+时间段是两个时间点之间的差值，时间段以时钟滴答数来衡量。
 
 \begin{cpp}
 template <class Rep, class Period = ratio<1>> class duration;
 \end{cpp}
 
-If Rep is a floating-point number, the time duration supports fractions of ticks. The most important time durations are predefined in the chrono library:
+若Rep是浮点数，则时间持续时间支持小数。最重要的时间段在chrono库中定义:
 
 
 \begin{cpp}
@@ -112,9 +113,9 @@ typedef duration<signed int, ratio< 60>> minutes;
 typedef duration<signed int, ratio<3600>> hours;
 \end{cpp}
 
-How long can a time duration be? The C++ standard guarantees that the predefined time durations can store +/- 292 years. You can easily define your time duration like a German school hour: typedef std::chrono::duration<double, std::ratio<2700>> MyLessonTick. Time durations in natural numbers must be explicitly converted to time durations in floating pointer numbers. The value will be truncated:
+一个时间段可以有多长?C++标准保证预定义的时间长度可以存储+/- 292年。可以很容易地定义你的时间长度，就像一个德国学校的小时:typedef std::chrono::duration<double, std::ratio<2700>{}> MyLessonTick。以自然数表示的时间持续时间必须显式地转换为以浮点数表示的时间持续时间，该值将截断:
 
-\filename{Durations}
+\filename{时间段}
 
 \begin{cpp}
 // duration.cpp
@@ -143,7 +144,7 @@ std::cout << myLesson.count() << " less"; // 0.00037037 less
 
 \begin{myNotic}{std::ratio}
 	
-std::ratio supports arithmetic at compile time with rational numbers. A rational number has two template arguments: the nominator and the denominator. C++11 predefines lots of rational numbers.
+std::ratio支持在编译时使用有理数进行算术运算。有理数有两个模板参数:分母和分母。C++11预先定义了许多有理数。
 	
 \begin{cpp}
 typedef ratio<1, 1000000000000000000> atto;
@@ -166,58 +167,59 @@ typedef ratio< 1000000000000000000, 1> exa;
 	
 \end{myNotic}
 
-C++14 has built-in literals for the most used time durations.
+C++14为最常用的时间段提供了内置字面符。
 
 \begin{center}
-Built-in literals for time durations
+用于时间持续时间的内置字面符
 \end{center}
 
 % Please add the following required packages to your document preamble:
 % \usepackage{longtable}
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
-\begin{longtable}[c]{lll}
-\textbf{Type}             & \textbf{Suffix} & \textbf{Example} \\
+\begin{longtable}[c]{|l|l|l|}
+\hline
+\textbf{类型}             & \textbf{后缀} & \textbf{举例} \\ \hline
 \endfirsthead
 %
 \endhead
 %
-std::chrono::hours        & h               & 5h               \\
-std::chrono::minutes      & min             & 5min             \\
-std::chrono::seconds      & s               & 5s               \\
-std::chrono::milliseconds & ms              & 5ms              \\
-std::chrono::microseconds & us              & 5us              \\
-std::chrono::nanoseconds  & ns              & 5ns             
+std::chrono::hours        & h               & 5h               \\ \hline
+std::chrono::minutes      & min             & 5min             \\ \hline
+std::chrono::seconds      & s               & 5s               \\ \hline
+std::chrono::milliseconds & ms              & 5ms              \\ \hline
+std::chrono::microseconds & us              & 5us              \\ \hline
+std::chrono::nanoseconds  & ns              & 5ns             \\ \hline
 \end{longtable}
 
-\mySamllsection{Clock}
+\mySamllsection{时钟}
 
-The clock consists of a starting point and a tick. You can get the current time with the member function now.
-
-\noindent
-std::chrono::system\_clock 
-
-System time, which you can synchronize with the external clock.
+时钟由起点和刻度组成，可以通过成员函数获得当前时间。
 
 \noindent
-std::chrono::steady\_clock 
+\textbf{std::chrono::system\_clock }
 
-Clock, which can not be adjusted.
+系统时间，可与外部时钟同步。
 
 \noindent
-std::chrono::high\_resolution\_clock 
+\textbf{std::chrono::steady\_clock }
 
-System time with the greatest accuracy.
+时钟，无法调整。
 
-std::chrono::system\_clock refers typically to the 1.1.1970. You can not adjust std::steady\_clock forward or backward opposite to two other clocks. The member functions to\_time\_t and from\_time\_t can be used to convert between std::chrono::system\_clock and std::time\_t objects.
+\noindent
+\textbf{std::chrono::high\_resolution\_clock }
 
-\mySamllsection{Time of Day}
+最精确的系统时间。
 
-std::chrono::time\_of\_day splits the duration since midnight into hours:minutes:seconds. The functions std::chrono::is\_am and std::chrono::is\_pm checks if the time is before midday (ante meridiem) or after midday (post meridiem).
+std::chrono::system\_clock通常指1.1.1970，不能将std::steady\_clock向前或向后调整为与其他两个时钟相反。成员函数to\_time\_t和from\_time\_t可用于在std::chrono::system\_clock和std::time\_t对象之间进行转换。
 
-A std::chrono::time\_of\_day object tOfDay supports various member functions.
+\mySamllsection{日期}
+
+std::chrono::time\_of\_day将从午夜开始的持续时间分成小时:分钟:秒。函数std::chrono::is\_am和std::chrono::is\_pm检查时间是在正午之前(子午线之前)还是之后(子午线之后)。
+
+std::chrono::time\_of\_day对象tOfDay支持各种成员函数。
 
 \begin{center}
-Member functions of std::chrono::time\_of\_day
+std::chrono::time\_of\_day的成员函数
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -225,25 +227,25 @@ Member functions of std::chrono::time\_of\_day
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-\textbf{Member function} & \textbf{Description}                                    \\ \hline
+\textbf{成员函数} & \textbf{描述}                                    \\ \hline
 \endfirsthead
 %
 \endhead
 %
-tOfDay.hours()           & Returns the hour component since midnight.              \\ \hline
-tOfDay.minutes()         & Returns the minute component since midnight.            \\ \hline
-tOfDay.seconds()         & Returns the second component since midnight.            \\ \hline
-tOfDay.subseconds()      & Returns the fractional second component since midnight. \\ \hline
-tOfDay.to\_duration()    & Returns the time duration since midnight.               \\ \hline
-\begin{tabular}[c]{@{}l@{}}std::chrono::make12(hr)\\ std::chrono::make24(hr)\end{tabular} & Returns the 12-hour(24-hour) equivalent of a 24-hour(12-hour) format time. \\ \hline
-\begin{tabular}[c]{@{}l@{}}std::chrono::is\_am(hr)\\ std::chrono::is\_pm(hr)\end{tabular} & Detects wether the 24-hour format time is a.m. or p.m. .                   \\ \hline
+tOfDay.hours()           & 返回自午夜开始的小时数。              \\ \hline
+tOfDay.minutes()         & 返回自午夜开始的分钟数。            \\ \hline
+tOfDay.seconds()         & 返回午夜之后的第二个分量。            \\ \hline
+tOfDay.subseconds()      & 返回从午夜开始的秒数(小数)。 \\ \hline
+tOfDay.to\_duration()    & 返回从午夜开始的时间。               \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::chrono::make12(hr)\\ std::chrono::make24(hr)\end{tabular} & 返回相当于24小时(12小时)格式时间的12小时(24小时)。 \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::chrono::is\_am(hr)\\ std::chrono::is\_pm(hr)\end{tabular} & 检测24小时格式时间是上午还是下午。                   \\ \hline
 \end{longtable}
 
-\mySamllsection{Calendar}
+\mySamllsection{日历}
 
-Calendar stands for various calendar dates such as year, a month, a weekday, or the n-th day of a week.
+日历表示各种日期，例如年、月、工作日或一周的第n天。
 
-\filename{The current time}
+\filename{当前时间}
 
 \begin{cpp}
 // currentTime.cpp
@@ -266,14 +268,14 @@ auto birthOfChrist = year_month_weekday(sys_days(January/01/0000));
 std::cout << "Weekday: " << birthOfChrist.weekday() << '\n';
 \end{cpp}
 
-The output of the program shows information referring to the current time.
+程序的输出显示了与当前时间相关的信息。
 
-\myGraphic{0.9}{content/chapter2/images/4.jpg}{Cyclic references}
+\myGraphic{0.9}{content/chapter2/images/4.jpg}{}
 
-The following table gives an overview of the calendar types.
+下表给出了日历类型的概述。
 
 \begin{center}
-Various calendar types
+各种日历类型
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -281,35 +283,35 @@ Various calendar types
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-\textbf{Class}   & \textbf{Decription}                                     \\ \hline
+\textbf{类型}   & \textbf{描述}                                     \\ \hline
 \endfirsthead
 %
 \endhead
 %
-last\_spec       & Indicates the last day or weekday in a month.           \\ \hline
-day              & Represents a day of a month.                            \\ \hline
-month            & Represents a month of a year.                           \\ \hline
-year             & Represents a year in the Gregorian calendar.            \\ \hline
-weekday          & Represents a day of the week in the Gregorian calendar. \\ \hline
-weekday\_indexed & Represents the n-th weekday of a month                  \\ \hline
-weekday\_last    & Represents the last weekday of a month                  \\ \hline
-month\_day       & Represents a specific day of a specific month.          \\ \hline
-month\_day\_last & Represents the last day of a specific month.            \\ \hline
-month\_weekday   & Represents the n-th weekday of a specific month.        \\ \hline
-month\_weekday\_last       & Represents the last weekday of a specific month.          \\ \hline
-year\_month      & Represents a specific month of a specific year.         \\ \hline
-year\_month\_day & Represents a spefific year, month, and day.             \\ \hline
-year\_month\_day\_last     & Represents the last day of a specific year and month      \\ \hline
-year\_month\_weekday       & Represents the last day of a specific year and month      \\ \hline
-year\_month\_weekday\_last & Represents the last weekday of a specific year and month. \\ \hline
+last\_spec       & 表示一个月内的最后一天或最后一个工作日。           \\ \hline
+day              & 表示一个月中的一天。                            \\ \hline
+month            & 表示一年中的一个月。                           \\ \hline
+year             & 表示公历中的一年。            \\ \hline
+weekday          & 表示公历中一周中的一天。 \\ \hline
+weekday\_indexed & 表示一个月的第n个工作日                  \\ \hline
+weekday\_last    & 表示一个月的最后一个工作日                  \\ \hline
+month\_day       & 表示特定月份的特定日期。          \\ \hline
+month\_day\_last & 表示特定月份的最后一天。            \\ \hline
+month\_weekday   & 表示指定月份的第n个工作日。        \\ \hline
+month\_weekday\_last       & 表示特定月份的最后一个工作日。          \\ \hline
+year\_month      & 表示特定年份的特定月份。         \\ \hline
+year\_month\_day & 表示特定的年、月和日。             \\ \hline
+year\_month\_day\_last     & 表示特定年份和月份的最后一天      \\ \hline
+year\_month\_weekday       & 表示特定的年、月和工作日      \\ \hline
+year\_month\_weekday\_last & 表示特定年份和月份的最后一个工作日。 \\ \hline
 \end{longtable}
 
 
-\mySamllsection{Time Zone}
+\mySamllsection{时区}
 
-Time zones represent time specific to a geographic area. The following program snippet displays the local time in various time zones.
+时区表示特定于一个地理区域的时间，下面的代码段显示了不同时区的本地时间。
 
-\filename{Local time is displayed in various time zones}
+\filename{显示不同时区的本地时间}
 
 \begin{cpp}
 // timezone.cpp
@@ -330,12 +332,12 @@ std::cout << newYorkTime << '\n';
 std::cout << tokyoTime << '\n';
 \end{cpp}
 
-The time zone functionality supports the access of the \href{https://www.iana.org/time-zones}{IANA time zone database}, enables the operation with various time zones, and provides information about leap seconds.
+时区功能支持访问\href{https://www.iana.org/time-zones}{IANA时区数据库}，支持不同时区的操作，并提供有关闰秒的信息。
 
-The following table gives an overview of the time zone functionality. For more detailed information, refer to \href{https://en.cppreference.com/w/cpp/chrono}{cpprefere.com}.
+下表给出了时区功能的概述。欲了解更多详细信息，请参阅\href{https://en.cppreference.com/w/cpp/chrono}{cpprefere.com}。
 
 \begin{center}
-Time zone information
+时区信息
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -343,26 +345,26 @@ Time zone information
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-\textbf{Type} & \textbf{Description}                     \\ \hline
+\textbf{类型} & \textbf{描述}                     \\ \hline
 \endfirsthead
 %
 \endhead
 %
-tzdb          & Describes the IANA time zone database.   \\ \hline
-locate\_zone  & Locates a time\_zone bases on its name.  \\ \hline
-current\_zone & Returns the current time\_zone.          \\ \hline
-time\_zone    & Represents a time zone.                  \\ \hline
-sys\_info    & Returns information about a time zone at a specific time point.       \\ \hline
-local\_info  & Represents information about the local time to UNIX time conventions. \\ \hline
-zoned\_time   & Represents a time zone and a time point. \\ \hline
-leap\_second & Contains information about a leap second insertion.                   \\ \hline
+tzdb          & 描述IANA时区数据库。   \\ \hline
+locate\_zone  & 根据time\_zone的名称定位时间。  \\ \hline
+current\_zone & 返回当前time\_zone。          \\ \hline
+time\_zone    & 表示一个时区。                  \\ \hline
+sys\_info    & 返回特定时间点的时区信息。       \\ \hline
+local\_info  & 表示从本地时间到UNIX时间的信息。 \\ \hline
+zoned\_time   & 表示时区和时间点。 \\ \hline
+leap\_second & 包含有关插入闰秒的信息。                   \\ \hline
 \end{longtable}
 
-\mySamllsection{Chrono I/O}
+\mySamllsection{时间的I/O}
 
-The function std::chrono::parse parses a chrono object from a stream.
+函数std::chrono::parse解析流中的chrono对象。
 
-\filename{Parsing a time point and a time zone}
+\filename{解析时间点和时区}
 
 \begin{cpp}
 std::istringstream inputStream{"1999-10-31 01:30:00 -08:00 US/Pacific"};
@@ -372,7 +374,7 @@ std::string timeZone;
 inputStream >> std::chrono::parse("%F %T %Ez %Z", timePoint, timeZone);
 \end{cpp}
 
-The parsing functionality provides various format specifiers to deal with the time of day and calendar dates such as year, month, week, and day. \href{https://en.cppreference.com/w/cpp/chrono/parse}{cppreference.com} provides detailed information to the format specifiers.
+解析功能提供了各种格式说明符来处理一天中的时间和日历日期，如年、月、周和日。\href{https://en.cppreference.com/w/cpp/chrono/parse}{cppreference.com}为格式说明符提供详细信息。
 
 
 

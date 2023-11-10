@@ -1,8 +1,8 @@
-The \href{http://en.cppreference.com/w/cpp/header/type_traits}{type traits library} enables you to check, compare, and modify types at compile time. Consequentially, there is no overhead on the runtime of your program. There are two reasons for using the type traits library: Optimization and Correctness. Optimization because the type traits library’s introspection capabilities make it possible to choose the faster code automatically. Correctness because you can specify requirements for your code to be checked at compile time.
+\href{http://en.cppreference.com/w/cpp/header/type_traits}{类型特征库}能够在编译时检查、比较和修改类型，所以在运行时上没有开销。使用类型特征库有两个原因:优化和正确性。优化是因为类型特征库的自省功能，可使自动选择更快的代码成为可能。正确性，可以指定在编译时检查代码的要求。
 
-\begin{myTip}{The type traits library and static\_assert are a powerful pair}
+\begin{myTip}{类型特征库和static\_assert是一对强大的组合}
 	
-The type traits library and the function static\_assert are a powerful pair. On one side, the type traits library’s functions provide the type information at compile time; on the other, the static\_assert function checks the given information at compile time. These checks cause no run ttime overhead.
+类型特征库和函数static\_assert是一对强大的组合。一方面，类型特征库的函数在编译时提供类型信息;另一方面，static\_assert函数在编译时检查给定的信息。这些检查在运行时造成开销。
 
 \begin{cpp}
 #include <type_traits>
@@ -15,17 +15,17 @@ fac(10);
 fac(10.1); // with T= double; T not integral
 \end{cpp}
 
-The GCC compiler quits the function invocation fac(10.1). The message at compile is that T is of type double and, therefore, no integral type.
+GCC编译器退出函数调用fac(10.1)。编译时的消息是，T是double类型，因此不是整型。
 	
 \end{myTip}
 
-\mySamllsection{Check Type Information}
+\mySamllsection{检查类型信息}
 
-With the type traits library, you can check primary and composite type categories. The attribute value gives you the result.
+使用类型特征库，可以检查基本类型和复合类型类别。属性值可提供结果。
 
-\mySamllsection{Primary Type Categories}
+\mySamllsection{主要类型类别}
 
-There are 14 different type categories. They are complete and don’t overlap. So each type is only a member of one type category. If you check a type category for your type, the request is independent of the const or volatile qualifiers.
+有14种不同的类型类别，是完全且不重叠的。所以每个类型只是一个类型类别的成员。若为类型检查类型类别，则请求独立于const或volatile限定符。
 
 \begin{cpp}
 template <class T> struct is_void;
@@ -44,9 +44,9 @@ template <class T> struct is_lvalue_reference;
 template <class T> struct is_rvalue_reference;
 \end{cpp}
 
-The following code samples show all primary type categories.
+下面的代码示例显示了所有主要类型类别。
 
-\filename{All primary type categories}
+\filename{所有主要类型类别}
 
 \begin{cpp}
 // typeCategories.cpp
@@ -85,12 +85,12 @@ cout << std::is_lvalue_reference<int&>::value; // true
 cout << std::is_rvalue_reference<int&&>::value; // true
 \end{cpp}
 
-\mySamllsection{Composite Type Categories}
+\mySamllsection{复合类型类别}
 
-There are seven composite type categories based on the 14 primary type categories.
+在14个主要类型类别的基础上，有7个复合类型类别。
 
 \begin{center}
-Composite type categories
+复合类型类别
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -98,7 +98,7 @@ Composite type categories
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-\textbf{Composite type categories} & \textbf{Primary type category}                 \\ \hline
+\textbf{复合类型类别} & \textbf{主要类型类别}                 \\ \hline
 \endfirsthead
 %
 \endhead
@@ -112,9 +112,9 @@ is\_member\_pointer & is\_member\_object\_pointer or is\_member\_function\_point
 is\_scalar          & is\_arithmetic or is\_enum or is\_pointer or is\_member\_pointer or is\_null\_pointer \\ \hline
 \end{longtable}
 
-\mySamllsection{Type Properties}
+\mySamllsection{类型属性}
 
-In addition to the primary and composite type categories, there are many type properties.
+除了主要和复合类型类别之外，还有许多类型属性。
 
 \begin{cpp}
 template <class T> struct is_const;
@@ -175,12 +175,12 @@ template <class T> struct is_nothrow_swappable_with;
 template <class T> struct is_nothrow_swappable;
 \end{cpp}
 
-\mySamllsection{Type Relationships}
+\mySamllsection{类型关系}
 
-The library supports various kinds of type relationships
+该库支持各种类型关系
 
 \begin{center}
-Type relationships
+类型关系
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -188,31 +188,31 @@ Type relationships
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-\textbf{Function} &
-\textbf{Description} \\ \hline
+\textbf{函数} &
+\textbf{描述} \\ \hline
 \endfirsthead
 %
 \endhead
 %
 \begin{tabular}[c]{@{}l@{}}template \textless{}class Base, class Derived\textgreater\\ struct is\_base\_of\end{tabular} &
-Checks if Derived is derived form Base. \\ \hline
+检查Derived是否从Base派生。 \\ \hline
 \begin{tabular}[c]{@{}l@{}}template \textless{}class From, class To\textgreater\\ struct is\_convertible\\ struct is\_nothrow\_convertible\end{tabular} &
-Checks if From can be converted to To. \\ \hline
+检查From是否可以转换为To。 \\ \hline
 \begin{tabular}[c]{@{}l@{}}template \textless{}class T, class U\textgreater\\ struct is\_same\end{tabular} &
-Checks if the types T and U are the same \\ \hline
+检查类型T和U是否相同 \\ \hline
 \begin{tabular}[c]{@{}l@{}}template \textless{}class T, class U\textgreater\\ struct is\_layout\_compatible\end{tabular} &
-Checks if the types T and U are \href{https://en.cppreference.com/w/cpp/language/data_members#Standard_layout}{layout compatible}. \\ \hline
+检查类型T和U是否为\href{https://en.cppreference.com/w/cpp/language/data_members#Standard_layout}{布局兼容}。 \\ \hline
 \begin{tabular}[c]{@{}l@{}}template \textless{}class Base, class Derived\textgreater\\ struct is\_pointer\_interconvertible\_base\_of\end{tabular} &
-Checks if a type is pointer-interconvertible base of another type. \\ \hline
+检查一个类型是否是另一个类型的指针可互换的基型。 \\ \hline
 \begin{tabular}[c]{@{}l@{}}template \textless{}class Fn, class ...ArgTypes\textgreater\\ struct is\_invocable\\ struct is\_invocable\_r\\ struct is\_nothrow\_invocable\\ struct is\_nothrow\_invocable\_r\end{tabular} &
-Checks if a type can be invoked with the given types. \\ \hline
+检查是否可以使用给定类型调用类型。 \\ \hline
 \end{longtable}
 
-\mySamllsection{Type Modifications}
+\mySamllsection{类型修改}
 
-The type traits library enables you to change types during compile time. You can modify the constness of a type:
+类型特征库允许您在编译期间更改类型。可以修改类型的常量:
 
-\filename{Type modifications}
+\filename{类型修改}
 
 \begin{cpp}
 // typeTraitsModifications.cpp
@@ -235,9 +235,9 @@ cout << is_same<int, remove_const<add_const<int>::type>::type>::value; // true
 cout << is_same<const int, add_const<add_const<int>::type>::type>::value; // true
 \end{cpp}
 
-The function std::add\_const adds the constness to a type, while std::remove\_const removes it.
+函数std::add\_const将constness添加到类型中，而std::remove\_const则删除它。
 
-There are a lot more functions available in the type traits library. You can modify the const-volatile properties of a type.
+类型特征库中还有更多可用的函数，可以修改类型的const-volatile属性。
 
 \begin{cpp}
 template <class T> struct remove_const;
@@ -249,14 +249,14 @@ template <class T> struct add_volatile;
 template <class T> struct add_cv;
 \end{cpp}
 
-You can change at compile time the sign,
+可以在编译时更改符号，
 
 \begin{cpp}
 template <class T> struct make_signed;
 template <class T> struct make_unsigned;
 \end{cpp}
 
-or the reference or pointer properties of a type.
+或类型的引用或指针属性。
 
 \begin{cpp}
 template <class T> struct remove_reference;
@@ -268,7 +268,7 @@ template <class T> struct remove_pointer;
 template <class T> struct add_pointer;
 \end{cpp}
 
-The following following functions are precious for the writing of generic libraries.
+以下函数对于编写泛型库非常重要。
 
 \begin{cpp}
 template <class B> struct enable_if;
@@ -280,29 +280,29 @@ template <class... T> void_t;
 template <class... T> type_identity;
 \end{cpp}
 
-You can conditionally hide with std::enable\_if a function overload or template specialization from overload resolution. std::conditional provides you with the ternary operator at compile time, and std::common\_type gives you the common type of all types. std::common\_type, std::common\_reference, std::basic\_common\_reference, std::void\_t, and std::type\_identity are a \href{http://en.cppreference.com/w/cpp/language/parameter_pack}{variadic template}. Therefore the number of type parameters can be arbitrary.
+可以使用std::enable\_if有条件地隐藏函数重载或模板特化，以避免重载解析。条件std::condition在编译时为您提供了三元操作符，而std::common\_type提供了所有类型中的公共类型。std::common\_type、std::common\_reference、std::basic\_common\_reference、std::void\_t、std::type\_identity为\href{http://en.cppreference.com/w/cpp/language/parameter_pack}{可变参数模板}，所以类型参数的数量可是任意的。
 
-\mySamllsection{Operations on Traits}
+\mySamllsection{操作特征}
 
-The functions std::conjunction, std::disjunction, and std::negation enable the logical combinations of the type traits functions. They are variadic templates.
+函数std:: connection、std::disjunction和std::negation支持类型特征函数的逻辑组合。它们是可变参数模板。
 
-\begin{myTip}{C++ has a shorthand for ::type and has a shorthand for ::value}
+\begin{myTip}{C++有::type和::value的简写}
 	
-If you want to get a const int from an int you have to ask for the type: std::add\_const<int>::type. With the C++14 standard use simply std::add\_const\_t<int> instead of the verbose form: std::add\_const<int>::type. This rule works for all type traits functions.
+若想从int类型得到const int类型，必须要求类型为std::add\_const<int>::type。对于C++14标准，可使用std::add\_const\_t<int>，而不是冗长的形式:std::add\_const<int>::type。此规则适用于所有类型特征函数。
 
-Accordingly, with C++17 you can use the shorthand std::is\_integral\_v<T> for the predicate std::is\_integral<T>::value.
+因此，C++17中，可以使用简写std::is\_integral\_v<T>来表示谓词std::is\_integral<T>::value。
 	
 \end{myTip}
 
-\mySamllsection{Member Relationships}
+\mySamllsection{成员关系}
 
-The function std::is\_pointer\_interconvertible\_with\_class checks if objects of a type are pointerinterconvertible with the specified subobject of that type, and the function std::is\_corresponding\_member checks if two specified members correspond to each other in the common initial subsequence of two specified types.
+函数std::is\_pointer\_interconvertible\_with\_class检查一个类型的对象是否与该类型的指定子对象进行了指针互转换，函数std::is\_corresponding\_member检查两个指定成员在两个指定类型的公共初始子序列中是否相互对应。
 
-\mySamllsection{Const evaluated Context}
+\mySamllsection{Const求值上下文}
 
-The call std::is\_constant\_evaluated allows you to detect if a function call occurs at compile time.
+std::is\_constant\_evaluate可以检测函数调用是否在编译时发生。
 
-\filename{Detect if a function call occurs at compile time}
+\filename{检测在编译时是否发生了函数调用}
 
 \begin{cpp}
 // constantEvaluated.cpp
