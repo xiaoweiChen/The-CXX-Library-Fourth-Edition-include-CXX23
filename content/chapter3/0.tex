@@ -1,13 +1,13 @@
 
-\myGraphic{0.3}{content/chapter3/images/1.jpg}{Cippi prepares the packages}
+\myGraphic{0.5}{content/chapter3/images/1.jpg}{Cippi正在打包}
 
-The sequence and associative containers of the Standard Template library have a lot in common. For example, the operations to create or delete a container, determine its size, access its elements, and assign or swap, are all independent of the type of elements of a container. Each container has at least one type parameter and an allocator for this type. The allocator works in the background most of the time. std::vector exemplifies this. The call std::vector<int> results in a call std::vector<int, std::allocator<int>{}>. Because of the std::allocator, you can adjust except for std::array the size of all containers dynamically. However, they have more in common. You can access the elements of a container with an iterator.
+标准模板库的序列容器和关联容器有很多共同之处。例如，创建或删除容器、确定其大小、访问其元素、赋值或交换等操作都与容器的元素类型无关。每个容器至少有一个类型参数和一个此类型的分配器。分配器大部分时间在后台工作。vector就是一个例子。std::vector<int>会导致调用std::vector<int, std::allocator<int>{}>。由于使用了std::allocator，可以动态调整除std::array之外的所有容器的大小。然而，他们有更多的共同点。可以使用迭代器访问容器的元素。
 
-Despite the high similarity, the containers differ in details. The chapters Sequence Container and Associative Container provide the details.
+尽管高度相似，但容器在细节上有所不同。顺序容器和关联容器章节提供了详细信息。
 
-With the sequence containers std::array, std::vector, std::deque, std::list, and std::forward\_list C++ has an expert on each domain.
+对于序列容器std::array、std::vector、std::deque、std::list和std::forward\_list, C++在每个领域都有相应的专家。
 
-The associative containers can be classified into ordered and unordered ones.
+关联容器可以分为有序容器和无序容器。
 
 
 

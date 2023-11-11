@@ -1,10 +1,10 @@
-std::expected<T, E> provides a way to store either of two values. An instance of std::expected always holds a value: either the expected value of type T, or the unexpected value of type E. This vocabulary type requires the header <expected>. Thanks to std::expected, you can implement functions that either return a value or an error. The stored value is allocated directly within the storage occupied by the expected object. No dynamic memory allocation takes place.
+std::expected<T, E>提供了一种存储两个值中的任意一个的方法。std::expected的实例总是保存一个值:要么是类型T的期望值，要么是类型E的非期望值，使用该类型需要头文件<expected>。std::expected可以实现返回值或返回错误的函数，存储值直接在预期对象占用的存储空间中分配，从而不进行动态内存分配。
 
-std::expected has a similar interface such as std::optional. In contrast to std::optional, std::exptected can return an error message.
+std::expected有一个类似的接口，比如std::optional。与std::optional相反，std:: expected会返回错误消息。
 
-The various constructors let you define an expected object exp with an expected value. exp.emplace will construct the contained value in-place. You can explicitly ask a std::expected container if it has a value, or you can check it in a logical expression. exp.value returns the expected value, and exp.value\_or returns the expected value, or a default value. If exp has an unexpected value, the call exp.value will throw a std::bad\_expected\_access exception.
+各种构造函数允许定义具有期望值的预期对象exp。exp.emplace将就地构造包含的值，可以显式地询问std::expected容器是否有值，或者以在逻辑表达式中进行检查。exp.value返回预期值，exp.value\_or返回预期值或默认值。若exp有一个意外值，调用exp.value将抛出std::bad\_expected\_access异常。
 
-std::unexpected represents the unexpected value stored in std::expected.
+std::unexpected表示存储在std::expected中的非预期值。
 
 \filename{std::expected}
 
@@ -49,13 +49,13 @@ int main() {
 }
 \end{cpp}
 
-The function getInt converts each string to an integer and returns a std::expected<int, std::string>. int represents the expected, and std::string the unexpected value. The two range-based for-loops (lines 22 and 34) iterate through the std::vector<std::string>. In the first range-based for-loop (line 22), either the expected (line 25) or the unexpected value (line 28) is displayed. In the second rangebased for-loop (line 34), either the expected or the default value 2023 (line 36) is displayed.
+getInt函数将每个字符串转换为整数，并返回std::expected<int, std::string>。Int表示预期值，std::string表示意外值。两个基于范围的for循环(第22行和第34行)遍历std::vector<std::string>。第一个基于范围的for循环(第22行)中，显示预期值(第25行)或意外值(第28行)。第二个基于范围的for循环(第34行)中，显示预期值或默认值2023(第36行)。
 
-std::exptected supports monadic operations for convenient function composition: exp.and\_then, exp.transform, exp.or\_else, and exp.transform\_error. exp.and\_then returns the result of the given function call if it exists, or an empty std::expected. exp.transform returns a std::exptected containing is tranformed value, or an empty std::exptected. Additionally, exp.or\_else returns the std::exptected if it contains a value or the result of the given function otherwise.
+std::expected支持单进操作以方便函数组合:exp.and\_then、exp.transform、exp.or\_else和exp.transform\_error。exp.and\_then返回给定函数调用的结果(若存在)，或者返回一个空std::expected。exp.transform返回一个std::expected，其中包含转换后的值，或者一个空std::expected。此外，若exp.or\_else包含值或给定函数的结果，则返回std:: expected。
 
-The following program is based on the previous program optionalMonadic.cpp. Essentially, the type std::optional is replaced with std::exptected.
+下面的程序基于前面的程序optionalMonadic.cpp。本质上，std::optional类型可用std:: expected替换。
 
-\filename{Monadic operations on std::expected}
+\filename{对std::expected的一元操作}
 
 \begin{cpp}
 // expectedMonadic.cpp
@@ -81,7 +81,7 @@ for (auto s: strings) {
 }
 \end{cpp}
 
-The range-based for-loop (line 23) iterates through the std::vector<std::string>. First, the function getInt converts each string to an integer (line 24), adds 100 to it (line 25), converts it back to a string (line 26), and finally displays the string (line 27). If the initial conversion to int fails, the string arg + ": Error" is returned (line 14) and displayed.
+基于范围的for循环(第23行)遍历std::vector<std::string>。首先，getInt函数将每个字符串转换为整数(第24行)，为其添加100(第25行)，将其转换回字符串(第26行)，最后显示字符串(第27行)。若初始转换为int失败，则返回string arg + ": Error"(第14行)并显示。
 
 
 

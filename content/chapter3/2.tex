@@ -1,6 +1,6 @@
-For a container cont, you can check with cont.empty() if the container is empty. cont.size() returns the current number of elements, and cont.max\_size() returns the maximum number of elements cont can have. The maximum number of elements is implementation-defined.
+对于容器cont，可以使用cont.empty()检查容器是否为空。cont.size()返回当前元素数，而cont.max\_size()返回cont可以拥有的最大元素数。元素的最大数量由实现定义。
 
-\filename{Size of a container}
+\filename{容器的大小}
 
 \begin{cpp}
 // containerSize.cpp
@@ -31,8 +31,8 @@ cout << douSet.max_size() << endl; // 461168601842738790
 \end{cpp}
 
 
-\begin{myTip}{Use cont.empty() instead of cont.size()}
-For a container cont, use the member function cont.empty() instead of (cont.size() == 0) to determine if the container is empty. First, cont.empty() is in general faster than (const.size() == 0); second, std::forward\_list has no member function size().	
+\begin{myTip}{使用cont.empty()代替cont.size()}
+对于容器cont，使用成员函数cont.empty()而非(cont.size() == 0)来确定容器是否为空。首先，cont.empty()通常比(const.size() == 0)更快;第二，std::forward\_list没有成员函数size()。	
 \end{myTip}
 
 

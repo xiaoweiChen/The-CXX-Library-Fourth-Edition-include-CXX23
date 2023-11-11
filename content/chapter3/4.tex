@@ -1,6 +1,6 @@
-You can assign new elements to existing containers or swap two containers. For the assignment of a container cont2 to a container cont, there exists the copy assignment cont = cont2 and the move assignment cont = std::move(cont2). A special form of assignment is the one with an initializer list: cont= {1, 2, 3, 4, 5}. That’s not possible for std::array. The function swap exists in two forms. You have it as a member function cont(swap(cont2)) or as a function template std::swap(cont, cont2).
+可以将新元素分配给现有容器或交换两个容器。将容器cont2赋值给容器cont2，存在复制赋值cont = cont2和移动赋值cont = std::move(cont2)。一种特殊形式的赋值是带有初始化列表的赋值:cont={1,2,3,4,5}。这在std::array中是不可能的。函数swap有两种形式，可以将其作为成员函数cont(swap(cont2))或函数模板std::swap(cont, cont2)。
 
-\filename{Assignment and swap}
+\filename{赋值和交换}
 
 \begin{cpp}
 // containerAssignmentAndSwap.cpp

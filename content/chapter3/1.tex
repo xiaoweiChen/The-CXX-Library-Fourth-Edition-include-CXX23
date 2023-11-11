@@ -1,9 +1,9 @@
-Each container provides various constructors. To delete all container elements cont, you can use cont.clear(). It makes no difference whether you create a container, you delete them, or you add or remove elements. Each time the container takes care of the memory management.
+每个容器提供不同的构造函数。要删除所有容器元素cont，可以使用cont.clear()。创建容器、删除容器、添加或删除元素都没有区别。每次容器自行都负责内存的管理。
 
-The table shows you the constructors and destructors of a container. In the following table, std:vector often stands for the rest of them.
+下表显示了容器的构造函数和析构函数。下面的表中，std:vector通常代表其余的部分。
 
 \begin{center}
-Creation and deletion of a container
+创建和删除容器
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -11,29 +11,29 @@ Creation and deletion of a container
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-\textbf{Type}   & \textbf{Example}                                            \\ \hline
+\textbf{类型}   & \textbf{示例}                                            \\ \hline
 \endfirsthead
 %
 \endhead
 %
-Default         & std::vector\textless{}int\textgreater vec1                  \\ \hline
-Range                      & std::vector\textless{}int\textgreater vec2(vec1.begin(), vec1.end()) \\ \hline
-Copy            & std::vector\textless{}int\textgreater vec3(vec2)            \\ \hline
-Copy            & std::vector\textless{}int\textgreater vec3=vec2             \\ \hline
-Move            & std::vector\textless{}int\textgreater vec4(std::move(vec3)) \\ \hline
-Move            & std::vector\textless{}int\textgreater vec4=std::move(vec3)  \\ \hline
-Sequence(initializer list) & std::vector\textless{}int\textgreater vec5\{1,2,3,4,5\}              \\ \hline
-Sequence(intitalizer list) & std::vector\textless{}int\textgreater vec5=\{1,2,3,4,5\}             \\ \hline
-Destructor      & vec5.$\sim$vector()                                         \\ \hline
-Delete elements & vec5.clear()                                                \\ \hline
+默认构造         & std::vector\textless{}int\textgreater vec1                  \\ \hline
+范围构造                      & std::vector\textless{}int\textgreater vec2(vec1.begin(), vec1.end()) \\ \hline
+复制构造            & std::vector\textless{}int\textgreater vec3(vec2)            \\ \hline
+复制构造            & std::vector\textless{}int\textgreater vec3=vec2             \\ \hline
+移动构造            & std::vector\textless{}int\textgreater vec4(std::move(vec3)) \\ \hline
+移动构造            & std::vector\textless{}int\textgreater vec4=std::move(vec3)  \\ \hline
+序列(初始化器列表) & std::vector\textless{}int\textgreater vec5\{1,2,3,4,5\}              \\ \hline
+序列(初始化器列表) & std::vector\textless{}int\textgreater vec5=\{1,2,3,4,5\}             \\ \hline
+析构      & vec5.$\sim$vector()                                         \\ \hline
+删除所有元素 & vec5.clear()                                                \\ \hline
 \end{longtable}
 
-You have to specify the size of a std::array at compile time and use \href{https://en.cppreference.com/w/cpp/language/aggregate_initialization}{aggregate initialization} for initialization. std::array has no member functions for removing its elements.
+必须在编译时指定std::array的大小，并使用\href{https://en.cppreference.com/w/cpp/language/aggregate_initialization}{聚合初始化}进行初始化。array没有用于删除其元素的成员函数。
 
-I use the different constructors on the various containers in the following example.
+下面的例子中，我对不同的容器使用了不同的构造函数。
 
 
-\filename{Various constructors}
+\filename{不同的构造函数}
 
 \begin{cpp}
 // containerConstructor.cpp

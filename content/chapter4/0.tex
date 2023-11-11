@@ -1,59 +1,56 @@
-\myGraphic{0.5}{content/chapter4/images/1.jpg}{Cippi builds a stack}
+\myGraphic{0.5}{content/chapter4/images/1.jpg}{Cippi建造堆栈}
 
-The \href{http://en.cppreference.com/w/cpp/container}{sequence containers} have a lot in common, but each container has its particular domain. Before I dive into the details, I provide an overview of all five sequence containers of the std namespace.
+\href{http://en.cppreference.com/w/cpp/container}{顺序容器}有很多共同之处，但每个容器都有其特定的域。深入讨论细节之前，先概述一下std名称空间的所有五个序列容器。
 
 \begin{center}
-The sequence containers
+顺序容器
 \end{center}
-
 
 % Please add the following required packages to your document preamble:
 % \usepackage{longtable}
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|l|l|l|l|}
 \hline
-\textbf{Criteria}  & \textbf{array} & \textbf{vector} & \textbf{deque}     & \textbf{list}        & \textbf{forward\_list} \\ \hline
+\textbf{标准}  & \textbf{array} & \textbf{vector} & \textbf{deque}     & \textbf{list}        & \textbf{forward\_list} \\ \hline
 \endfirsthead
 %
 \endhead
 %
-Size               & static         & dynamic         & dynamic            & dynamic              & dynamic                \\ \hline
-Implementation     & static array   & dynamic array   & sequence of arrays & doubled linked list  & single linked list     \\ \hline
-Access             & random         & random          & random             & forward and backward & forward                \\ \hline
-Optimized for insert and delete at &
+大小               & 静态         & 静态         & 动态            & 动态              & 动态                \\ \hline
+实现     & 静态数组   & 动态数组   & 数组序列 & 双链表  & 单链表     \\ \hline
+访问             & 随机         & 随机          & 随机             & 前向/后向 & 前向                \\ \hline
+插入和删除 &
 &
-end: O(1) &
-begin and end: O(1) &
-\begin{tabular}[c]{@{}l@{}}begin and end:O(1)\\ arbitrary:O(1)\end{tabular} &
-\begin{tabular}[c]{@{}l@{}}begin(1)\\ arbitrary:O(1)\end{tabular} \\ \hline
-Memory reservation &                & yes             & no                 & no                   & no                     \\ \hline
-Release of memory  &                & shrink\_to\_fit & shrink\_to\_fit    & always               & always                 \\ \hline
-Strength &
-\begin{tabular}[c]{@{}l@{}}no memory allocation;\\ minimal memory requirements\end{tabular} &
-95\% solution &
-insertion and delettion at the begin and end &
-insertion and deletion at an arbitrary position &
-\begin{tabular}[c]{@{}l@{}}fast insertion and deletion;\\ minimal memory requirements\end{tabular} \\ \hline
-Weakness &
-no dynamic memory allocation &
-Insertion and deletion at an arbitrary position:O(n) &
-Insertion and deletion at an arbitrary position:O(n) &
-no random access &
-no random access \\ \hline
+末尾: O(1) &
+开始和末尾: O(1) &
+\begin{tabular}[c]{@{}l@{}}开始和末尾:O(1)\\ 任意位置:O(1)\end{tabular} &
+\begin{tabular}[c]{@{}l@{}}开始位置:O(1)\\ 任意位置:O(1)\end{tabular} \\ \hline
+内存预留 &                & 是             & 否                 & 否                   & 否                     \\ \hline
+内存释放  &                & shrink\_to\_fit & shrink\_to\_fit    & 总是               & 总是                 \\ \hline
+优势 &
+\begin{tabular}[c]{@{}l@{}}无内存分配;\\ 最低内存要求\end{tabular} &
+95\%的方案适用 &
+\begin{tabular}[c]{@{}l@{}}开头和结尾\\插入和删除 \end{tabular} &
+\begin{tabular}[c]{@{}l@{}}任意位置\\ 插入和删除 \end{tabular} &
+\begin{tabular}[c]{@{}l@{}}快速插入和删除;\\ 最低内存要求\end{tabular} \\ \hline
+缺点 &
+无动态内存分配 &
+\begin{tabular}[c]{@{}l@{}}任意位置插入\\ 和删除:O(n) \end{tabular} &
+\begin{tabular}[c]{@{}l@{}}任意位置插入\\ 和删除:O(n) \end{tabular} &
+无随机访问 &
+无随机访问 \\ \hline
 \end{longtable}
 
+对于这个表，我还想补充几句。
 
-I want to make a few additional remarks to the table.
+O(i)表示操作的复杂度(运行时)。O(1)表示容器上操作的运行时间恒定，并且与容器的大小无关。相反，O(n)意味着运行时线性依赖于容器元素的数量。对于std::vector意味着什么?元素的访问时间与std::vector的大小无关，但是插入或删除具有k倍以上元素的任意元素会慢k倍。
 
-O(i) stands for an operation’s complexity (runtime). O(1) means that the runtime of an operation on a container is constant and independent of the container’s size. Conversely, O(n) means that the runtime depends linearly on the number of container elements. What does that mean for a std::vector? The access time on an element is independent of the size of the std::vector, but the insertion or deletion of an arbitrary element with k-times more elements is k-times slower.
+尽管对std::vector元素的随机访问与对std::deque元素的随机访问具有相同的复杂度O(1)，但并不意味着这两种操作都一样快。
 
-Although the random access on the elements of a std::vector has the same complexity O(1) as the random access on the elements of a std::deque, that doesn’t mean that both operations are equally fast.
+对于双链表(std::list)或单链表(std::forward\_list)的插入或删除操作，只有在迭代器指向正确的元素时才能保证复杂度为0(1)。
 
-The complexity guarantee O(1) for the insertion or deletion into a double (std::list) or single linked list (std::forward\_list) is only guaranteed if the iterator points to the correct element.
-
-
-\begin{myNotic}{std::string is like std::vector<char>}
-Of course, std::string is no container of the standard template library. From a behavioral perspective, it is like a sequence container, especially like a std::vector<char>. Therefore I will treat std::string as a std::vector<char>.
+\begin{myNotic}{std::string就像是std::vector<char>}
+当然，std::string不是标准模板库的容器。从行为的角度来看，类似于序列容器，尤其是std::vector<char>，所以我将把std::string视为std::vector<char>。
 \end{myNotic}
 
 
