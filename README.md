@@ -1,6 +1,6 @@
 # The C++ Standard Library
 
-*What every professional C++ programmer should know about the C++ standard library.  *
+*What every professional C++ programmer should know about the C++ standard library.*
 
  <a href=""><img src="cover.jpg" height="256px" align="right"></a>
 
