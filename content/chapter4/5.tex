@@ -1,38 +1,36 @@
 
 \myGraphic{0.8}{content/chapter4/images/6.jpg}{}
 
-\href{http://en.cppreference.com/w/cpp/container/forward_list}{std::forward\_list} is a singly linked list, which needs the header <forward\_list>. std::forward\_list has a drastically reduced interface and is optimized for minimal memory requirements.
+\href{http://en.cppreference.com/w/cpp/container/forward_list}{std::forward\_list}是一个单链表，它需要头文件<forward\_list>。std::forward\_list没有太多的接口，并针对最小的内存需求进行了优化。
 
-std::forward\_list has a lot in common with std::list:
+std::forward\_list与std::list有很多共同之处:
 
 
 \begin{itemize}
 \item 
-It supports no random access.
+不支持随机访问。
 
 \item 
-Access to an arbitrary element is slow because you have to iterate forward through the whole list in the worst case.
+访问任意元素的速度很慢，因为在最坏的情况下，必须向前遍历整个列表。
 
 \item 
-To add or remove an element is fast if the iterator points to the right place.
+若迭代器指向正确的位置，添加或删除元素很快。
 
 \item 
-If you add or remove an element, the iterator keeps valid.
+若添加或删除元素，迭代器持续有效。
 
 \item 
-Operations always refer to the beginning of the std::forward\_list or the position past the current element.
+操作总是引用std::forward\_list的开头或当前元素之后的位置。
 \end{itemize}
 
-The characteristic that you can iterator a std::forward\_list forward has a significant impact. So the iterators cannot be decremented, so operations like It-- on iterators are not supported. For the same reason, std::forward\_list has no backward iterator. std::forward\_list is the only sequence container that doesn’t know its size.
+可以向前迭代std::forward\_list的特性具有重要的影响。因此，迭代器不能自减，因此不支持在迭代器上进行It--之类的操作。出于同样的原因，std::forward\_list没有向后迭代器，并且是唯一不知道其大小的序列容器。
 
-\begin{myTip}{std::forward\_list has an exceptional domain}
-std::forward\_list is the replacement for singly-linked lists. It’s optimized for minimal memory management and performance if insertion, extraction, or movement of elements only affects adjacent elements. This is typical for the sort algorithm.
+\begin{myTip}{std::forward\_list有一个异常域}
+std::forward\_list是单链表的替代品。若元素的插入、提取或移动只影响相邻的元素，则它针对最小的内存管理和性能进行了优化。这是典型的排序算法。
 \end{myTip}
 
-The special member functions of std::forward\_list.
-
 \begin{center}
-Special member functions of std::forward\_list
+std::forward\_list的特殊成员函数
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -40,24 +38,24 @@ Special member functions of std::forward\_list
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-\textbf{Member functions}         & \textbf{Description}                                                                           \\ \hline
+\textbf{成员函数}         & \textbf{描述}                                                                           \\ \hline
 \endfirsthead
 %
 \endhead
 %
-forw.before\_begin()              & Returns an iterator before the first element.                                                  \\ \hline
-forw.emplace\_after(pos, args...) & Creates an element after pos with the arguments args...                                        \\ \hline
-forw.emplace\_front(args...)      & Creates an element at the beginning of forw with the arguments args...                         \\ \hline
-forw.erase\_after(pos, ...)       & Removes from forw the element pos or a range of elements, starting with pos.                   \\ \hline
-forw.insert\_after(pos, ...) & Inserts after pos new elements. There elements can be single elements, ranges, or initializer lists.                        \\ \hline
-forw.merge(c)                     & Merges the sorted forward list c into the sorted forward list forw, so that forw keeps sorted. \\ \hline
-forw.merge(c, op)            & Merges the forward sorted list c into the forward sorted list forw, so that forw keeps sorted. Uses op as sorting criteria. \\ \hline
-forw.splice\_after(pos, ...) & Splits the elements in forw before pos. The elements can be single elements, ranges or lists.                               \\ \hline
-forw.unique()                     & Removes adjacent elements with the same value.                                                 \\ \hline
-forw.unique(pre)                  & Removes adjacent elements, fulfilling the predicate pre.                                       \\ \hline
+forw.before\_begin()              & 返回第一个元素之前的迭代器。                                                  \\ \hline
+forw.emplace\_after(pos, args...) & 在pos之后创建一个带有参数args…的元素                                        \\ \hline
+forw.emplace\_front(args...)      & 在forw开头创建一个参数为args…的元素                         \\ \hline
+forw.erase\_after(pos, ...)       & 从forw中移除元素pos或从pos开始的元素范围。                   \\ \hline
+forw.insert\_after(pos, ...) & 在两个新元素之后插入。这些元素可以是单个元素、范围或初始化列表。                        \\ \hline
+forw.merge(c)                     & 将列表c合并到排序的列表forw中。 \\ \hline
+forw.merge(c, op)            & 将forw有序列表c合并到前向排序列表forw中，使用op进行排序。 \\ \hline
+forw.splice\_after(pos, ...) & forw拆分pos之前的元素。元素可以是单个元素、范围或列表。                               \\ \hline
+forw.unique()                     & 移除具有相同值的相邻元素。                                                 \\ \hline
+forw.unique(pre)                  & 移除满足谓词pre的相邻元素。                                       \\ \hline
 \end{longtable}
 
-Let’s look at the unique member functions of std::forward\_list.
+让我们来使用一下std::forward\_list的成员函数。
 
 \filename{std::forward\_list}
 

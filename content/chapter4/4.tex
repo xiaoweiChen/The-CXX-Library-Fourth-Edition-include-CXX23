@@ -1,31 +1,30 @@
 
 \myGraphic{0.8}{content/chapter4/images/5.jpg}{}
 
-\href{http://en.cppreference.com/w/cpp/container/list}{std::list} is a doubly linked list. std::list needs the header <list>.
+\href{http://en.cppreference.com/w/cpp/container/list}{std::list}是一个双链表。std::list需要包含头文件<list>。
 
-Although it has a similar interface to std::vector or std::deque, std::list is quite different from both. That’s due to its structure.
+尽管std::list与std::vector或std::deque有类似的接口，但std::list由于它的结构，所以两者有很大的不同。
 
-std::list makes the following points unique:
+std::list有以下几个特点:
 
 \begin{itemize}
 \item
-It supports no random access.
+不支持随机访问。
 
 \item
-Access to an arbitrary element is slow because you have to iterate in the worst case through the whole list.
+访问元素的速度很慢，因为在最坏的情况下，必须遍历整个列表。
 
 \item
-To add or remove an element is fast if the iterator points to the right place.
+若迭代器指向正确的位置，添加或删除元素很快。
 
 \item
- If you add or remove an element, the iterator keeps valid.
+若添加或删除元素，迭代器持续有效。
 \end{itemize}
 
-Because of its unique structure, std::list has a few special member functions.
-
+由于其独特的结构，std::list有一些特殊的成员函数。
 
 \begin{center}
-Special member functions of std::list
+std::list的特殊成员函数
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -33,21 +32,21 @@ Special member functions of std::list
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-\textbf{Member Functions} & \textbf{Description}                                                         \\ \hline
+\textbf{成员函数} & \textbf{描述}                                                         \\ \hline
 \endfirsthead
 %
 \endhead
 %
-lis.merge(c)              & Merges the sorted list c into the sorted list lis, so that lis keeps sorted. \\ \hline
-lis.merge(c, op)     & Merges the sorted list c into the sorted list lis, so that lis keeps sorted. It uses op as sorting criterion. \\ \hline
-lis.remove(val)           & Removes all elements from lis with value val.                                \\ \hline
-lis.remove\_if(pre)       & Removes all elements from lis, fulfilling the predicate pre.                 \\ \hline
-lis.splice(pos, ...) & Splits the elements in lis before pos. The elements can be single elements, ranges, or lists.                 \\ \hline
-lis.unique()              & Removes adjacent element with the same value.                                \\ \hline
-lis.unique(pre)           & Removes adjacent elements, fulfilling the predicate pre.                     \\ \hline
+lis.merge(c)              & 将有序列表c合并到有序列表list中，使list保持有序。 \\ \hline
+lis.merge(c, op)     & 将有序列表c合并到有序列表list中，使list保持有序。其使用op作为排序标准。 \\ \hline
+lis.remove(val)           & 从列表中删除值为val的所有元素。                                \\ \hline
+lis.remove\_if(pre)       & 从列表中删除所有满足谓词pre的元素。                 \\ \hline
+lis.splice(pos, ...) & 拆分pos之前list中的元素。元素可以是单个元素、范围或列表。                 \\ \hline
+lis.unique()              & 移除相同值的相邻元素。                                \\ \hline
+lis.unique(pre)           & 移除满足谓词pre的相邻的元素。                     \\ \hline
 \end{longtable}
 
-Here are a few of the member functions in a code snippet.
+下面是代码段中展示如何使用其成员函数。
 
 \filename{std::list}
 
