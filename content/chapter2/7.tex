@@ -210,7 +210,7 @@ template <class T> struct is_nothrow_swappable;
 
 \mySamllsection{类型修改}
 
-类型特征库允许您在编译期间更改类型。可以修改类型的常量:
+类型特征库允许在编译期间更改类型，可以修改类型的常量:
 
 \filename{类型修改}
 
@@ -235,7 +235,7 @@ cout << is_same<int, remove_const<add_const<int>::type>::type>::value; // true
 cout << is_same<const int, add_const<add_const<int>::type>::type>::value; // true
 \end{cpp}
 
-函数std::add\_const将constness添加到类型中，而std::remove\_const则删除它。
+函数std::add\_const会将const添加到类型中，而std::remove\_const用来删除const。
 
 类型特征库中还有更多可用的函数，可以修改类型的const-volatile属性。
 
