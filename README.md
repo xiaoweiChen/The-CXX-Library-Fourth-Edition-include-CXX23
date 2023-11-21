@@ -14,17 +14,18 @@
 
 ## 本书概述
 
-The C++ Standard Library is a quick reference to the standard library of the current C++23 standard ISO/IEC 14882:2023¹. C++23 has more than 2100 pages and follows the big C++20 standard. In contrast, C++23 and C++17 are neither a big nor small C++ standards. C++14 is a small addition to C++11.
-C++11 had more than 1,300 pages and was published in 2011. That was 13 years after the first and only C++ standard, C++98. Of course, there is also C++03, published in 2003. But C++03 is considered a bug-fix release.
+本书是对当前C++23标准ISO/IEC 14882:2023标准库的快速参考。C++23有2100多页，遵循C++20标准。相比之下，C++23和C++17既是不大不小的C++标准更新，而C++14是对C++11的一个补充。
 
-This quick reference aims is to provide a concise reference to the C++ standard library. This book assumes that you are familiar with C++. If so, you will get the most benefit out of this book. If C++ is new to you, you should start with a textbook about core C++. Once you have mastered a book about the core language, you can make your next big step by reading this book. To make your job easier, I have provided many short code snippets to connect theory and practice.
+2011年发布的C++11有1300多页。这距离第一个(也是唯一一个C++标准)C++98已经过去了13年。当然，还有2003年发布的C++03，但C++03更多的是作为一个bug修复的C++版本。
+
+这个快速参考的目的是提供C++标准库的简明参考。本书假定读者熟悉C++。若是这样，你会从这本书中得到最大的好处。如对C++很陌生，应该从关于C++核心的教科书开始学习。当掌握了一本关于核心语言的书，就可以通过阅读这本书迈出下一步。为了更便于理解，我提供了许多简短的代码片段将理论和实践进行串联。
 
 
 ## 作者简介
 
-I’ve worked as a software architect, team lead, and instructor since 1999. In 2002, I created companyintern meetings for further education. I have given training courses since 2002. My first tutorials were about proprietary management software, but I began teaching Python and C++ soon after. I like to write articles about C++, Python, and Haskell in my spare time. I also like to speak at conferences. I publish weekly on my English blog Modernes Cpp⁵, and the German blog⁶, hosted by Heise Developer.
+自1999年以来，我一直担任软件架构师、团队领导和讲师。2002年，我创建了公司实习生进修会议。自2002年以来，我一直在教授培训课程。我的第一个教程是关于专有管理软件的，但不久之后我开始教授Python和C++。我喜欢在业余时间写一些关于C++、Python和Haskell的文章，也喜欢在会议上发言。我每周都会在我的英文博客[Modernes Cpp](https://www.modernescpp.com/)和由Heise Developer托管的[German blog](https://www.grimm-jaud.de/index.php/blog)上发表文章。
 
-Since 2016, I have been an independent instructor giving seminars about modern C++ and Python. I have published several books in various languages about modern C++ and, in particular, about concurrency. Due to my profession, I always search for the best way to teach modern C++.
+自2016年以来，我一直是一名独立讲师，讲授有关现代C++和Python的研讨会。我已经用各种语言出版了几本关于现代C++的书，特别是关于并发性的书。由于我的职业，我一直在寻找教授现代C++的最佳方法。
 
 
 
