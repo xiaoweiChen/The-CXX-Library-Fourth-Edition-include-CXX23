@@ -1,10 +1,10 @@
-A std::mdspan is a non-owning multidimensional view of a contiguous sequence of objects. Often, this multidimensional view is called a multidimensional array. The contiguous sequence of objects can be a plain C-array, a pointer with a size, a std::array, a std::vector, or a std::string.
+std::mdspan是一个连续对象序列的非拥有多维视图。通常，这种多维视图称为多维数组。对象的连续序列可以是C数组、带大小的指针、std::array、std::vector或std::string。
 
-The number of dimensions and the size of each dimension determine the shape of the multidimensional array. The number of dimensions is called rank, and the size of each dimension extension. The size of the std::mdspan is the product of all dimensions that are not 0. You can access the elements of a std::mdspan using the multidimensional index operator [].
+维度的数量和每个维度的大小决定了多维数组的形状。维度的数量称为秩，每个维度的大小扩展。std::mdspan的大小,是所有不为0的维度的乘积，所以可以使用多维索引操作符[]访问std::mdspan的元素。
 
-Each dimension of a std::mdspan can have a static extent or a dynamic extent. static extent means that its length is specified at compile time; dynamic extent means that its length is specified at run time.
+std::mdspan的每个维度可以有一个静态区段或一个动态区段。静态范围意味着其长度在编译时指定;动态区段意味着其长度是在运行时指定的。
 
-\filename{Definition of std::mdspan}
+\filename{std::mdspan的定义}
 
 \begin{cpp}
 template<
@@ -17,21 +17,21 @@ template<
 
 \begin{itemize}
 \item 
-T: the contiguous sequence of objects
+T: 连续的对象序列
 
 \item 
-Extents: specifies the number of dimensions as their size; each dimension can have a static extent or a dynamic extent
+Extents: 指定维度的数量作为它们的大小;每个维度可以有一个静态范围或一个动态范围
 
 \item 
-LayoutPolicy: specifies the layout policy to access the underlying memory
+LayoutPolicy: 指定访问底层内存的布局策略
 
 \item 
-AccessorPolicy: specifies how the underlying elements are referenced
+AccessorPolicy: 指定如何引用基础元素
 \end{itemize}
 
-Thanks to \href{https://en.cppreference.com/w/cpp/language/class_template_argument_deduction}{class template argument deduction (CTAG)} in C++17, the compiler can often automatically deduce the template arguments.
+由于C++17中的\href{https://en.cppreference.com/w/cpp/language/class_template_argument_deduction}{类模板参数推演，class template argument deduction (CTAG)}，编译器通常可以自动推断模板参数。
 
-\filename{Two 2-dimensional arrays}
+\filename{两个二维数组}
 
 \begin{cpp}
 // mdspan.cpp
@@ -68,13 +68,13 @@ int main() {
 }
 \end{cpp}
 
-I apply class template argument deduction three times in this example. Line 9 uses it for a std::vector, and lines 11 and 23 for a std::mdspan. The first 2-dimensional array m has a shape of (2, 4), the second one m2 a shape of (4, 2). Lines 12 and 24 display the ranks of both std::mdspan. Thanks to the extent of each dimension (lines 14 and 15), and the index operator in line 16, it is straightforward to iterate through multidimensional arrays.
+这个例子中，我应用了三次类模板参数推导。第9行将其用于std::vector，第11行和第23行将其用于std::mdspan。第一个二维数组m的形状为(2,4)，第二个二维数组m2的形状为(4,2)。第12行和第24行显示了两个std::mdspan的秩。由于每个维度的范围(第14行和第15行)以及第16行中的索引操作符，可以直接遍历多维数组。
 
-\myGraphic{0.4}{content/chapter7/images/4.jpg}{Two 2-dimensional arrays}
+\myGraphic{0.3}{content/chapter7/images/4.jpg}{两个二维数组}
 
-If your multidimensional array should have a static extent, you have to specify the template arguments.
+若多维数组应该具有静态范围，则必须指定模板参数。
 
-\filename{Explicitly specifying the template arguments of a std::mdspan}
+\filename{显式指定std::mdspan的模板参数}
 
 \begin{cpp}
 // staticDynamicExtent.cpp
@@ -104,15 +104,15 @@ for (std::size_t i = 0; i < m2.extent(0); ++i) {
 }
 \end{cpp}
 
-he program staticDynamicExtent.cpp is based on the previous program mdspan.cpp, and produces the same output. The difference is, that the std::mdspan m (1) has a static extent. For completeness, std::mdspan m2 (2) has a dynamic extent. Consequentially, the shape of m is specified with template arguments, but the shape of m2 is with function arguments.
+staticDynamicExtent.cpp基于前面的程序mdspan.cpp，并产生相同的输出。不同之处在于，std::mdspan m(1)具有静态区段。为了完整起见，std::mdspan m2(2)具有动态范围。因此，m的形状是用模板参数指定的，而m2的形状是用函数参数指定的。
 
-A std::mdspan allows you to specify the layout policy to access the underlying memory. By default, std::layout\_right (C, C++ or \href{https://en.wikipedia.org/wiki/Python_(programming_language)}{Python} style) is used, but you can also specify std::layout\_left (\href{https://en.wikipedia.org/wiki/Fortran}{Fortran} or \href{https://en.wikipedia.org/wiki/MATLAB}{MATLAB} style). The following graphic exemplifies, in which sequence the elements of the std::mdspan are accessed.
+std::mdspan允许您指定访问底层内存的布局策略。默认情况下，使用std::layout\_right(C, C++或\href{https://en.wikipedia.org/wiki/Python_(programming_language)}{Python}风格)，但也可以指定std::layout\_eft (\href{https://en.wikipedia.org/wiki/Fortran}{Fortran}或\href{https://en.wikipedia.org/wiki/MATLAB}{MATLAB}风格)。下面的图举例说明了访问std::mdspan的元素的顺序。
 
-\myGraphic{0.6}{content/chapter7/images/5.jpg}{std::layout\_right and std::layout\_left}
+\myGraphic{0.6}{content/chapter7/images/5.jpg}{std::layout\_right 和 std::layout\_left}
 
-Traversing two std::mdspan with the layout policy std::layout\_right and std::layout\_left shows the difference.
+使用布局策略std::layout\_right和std::layout\_left遍历两个std::mdspan，展示了其差异。
 
-\filename{Using a std::mdspan with std::layout\_right and std::layout\_left}
+\filename{使用std::mdspan：std::layout\_right和std::layout\_left}
 
 \begin{cpp}
 // mdspanLayout.cpp
@@ -149,16 +149,16 @@ for (std::size_t i = 0; i < m2.extent(0); ++i) {
 }
 \end{cpp}
 
-The std::mdspan m uses std::layout\_right (1), the other std::mdspan std::layout\_left (1). Thanks to class template argument deduction, the constructor call of std::mdspan (1) needs no explicit template arguments and is equivalent to the following expression: std::mdspan m2\{myVec.data(), 4, 2\}.
+std::mdspan m使用std::layout\_right(1)，另一个std::mdspan std::layout\_left(1)。通过类模板参数推导，std::mdspan(1)的构造函数调用不需要显式的模板参数，相当于以下表达式:std::mdspan m2\{myVec.data(), 4, 2\}。
 
-The output of the program shows the two different layout strategies.
+程序的输出显示了两种不同的布局策略。
 
-\myGraphic{0.4}{content/chapter7/images/6.jpg}{std::mdspan with std::layout\_left}
+\myGraphic{0.3}{content/chapter7/images/6.jpg}{std::mdspan和std::layout\_left}
 
-The following table presents an overview of std::mdspan’s interface.
+下表给出了std::mdspan接口的概述。
 
 \begin{center}
-Functions of a std::mdspan md
+std::mdspan md的成员函数
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -166,16 +166,16 @@ Functions of a std::mdspan md
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-\textbf{Function} & \textbf{Descrption}                                       \\ \hline
+\textbf{函数} & \textbf{描述}                                       \\ \hline
 \endfirsthead
 %
 \endhead
 %
-md{[}ind{]}       & Access the ind-th element.                                \\ \hline
-md.size           & Returns the size of the mltidimensional array.            \\ \hline
-md.rank           & Returns the dimension of the multidimensional array.      \\ \hline
-md.extents(i)     & Returns the size of the i-th dimension.                   \\ \hline
-md.data\_handle   & Returns a pointer to the contiguous sequence of elements. \\ \hline
+md{[}ind{]}       & 访问第ind个元素。                                \\ \hline
+md.size           & 返回多维数组的大小。            \\ \hline
+md.rank           & 返回多维数组的维度。      \\ \hline
+md.extents(i)     & 返回第i维的大小。                   \\ \hline
+md.data\_handle   & 返回一个指向连续元素序列的指针。 \\ \hline
 \end{longtable}
 
 

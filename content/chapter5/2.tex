@@ -1,10 +1,10 @@
 
 
-\mySamllsection{Overview}
+\mySamllsection{概述}
 
-The ordered associative containers std::map and std::multimap associate their key with a value. Both are defined in the header <map>. std::set and std::multiset need the header <set>. This Table gives you the details.
+有序关联容器std::map和std::multimap将它们的键与一个值关联起来，两者都在头文件<map>中定义。std::set和std::multiset需要头文件<set>。
 
-All four ordered containers are parametrized by their type, their allocator, and their comparison function. Depending on the type, the containers have default values for the allocator and the comparison function. The declaration of std::map and std::set shows this very nicely.
+四个有序容器都由它们的类型、分配器和比较函数参数化。根据类型的不同，容器具有分配器和比较函数的默认值。std::map和std::set的声明很好地说明了这一点。
 
 
 \begin{cpp}
@@ -18,33 +18,33 @@ class set;
 \end{cpp}
 
 
-The declaration of both associative containers shows that std::map has an associated value. The key and the value are used for the default allocator: allocator<pair<const key, val>{}>. With a little more imagination, you can derive more from the allocator. std::map has pairs of the type std::pair< const key, val>. The associated value val does not matter for the sort criteria: less<key>. All observations also hold for std::multimap and std::multiset.
+两个关联容器的声明表明std::map有一个关联值。键和值用于默认的分配器:allocator<pair<const key, val>{}>。再多一点想象力，就可以从分配器派生出更多东西。std::map具有std::pair<const key, val>类型的对子。关联值val对于排序条件不重要:less<key>，观察结果对于std::multimap和std::multiset也成立。
 
-\mySamllsection{Keys and Values}
+\mySamllsection{键和值}
 
-There are special rules for the key and the value of an ordered associative container.
+对于有序关联容器的键和值有特殊的规则。
 
-The key has to be
-
-\begin{itemize}
-\item 
-sortable (by default <),
-
-\item 
-copyable and moveable.
-\end{itemize}
-
-The value has to be
+键必须是
 
 \begin{itemize}
 \item 
-default constructible,
+可排序(默认<)，
 
 \item 
-copyable and moveable.
+可复制和可移动。
 \end{itemize}
 
-The key associated value builds a pair p to get with the member p.first the value p.second.
+值必须是
+
+\begin{itemize}
+\item 
+默认可构造,
+
+\item 
+可复制和可移动。
+\end{itemize}
+
+键关联值构建一个对子p，首先与成员键p.first，值p.second。
 
 \begin{cpp}
 #include <map>
@@ -54,31 +54,31 @@ for (auto p: multiMap) std::cout << "{" << p.first << "," << p.second << "} ";
 				// {a,10} {a,20} {b,30}
 \end{cpp}
 
-\mySamllsection{The Comparison Criterion}
+\mySamllsection{比较标准}
 
-The default comparison criterion of the ordered associative containers is std::less. If you want to use a user-defined type as the key, you must overload the operator <. It’s sufficient to overload the operator < for your data type because the C++ runtime compares, with the help of the relation (! (elem1<elem2 || elem2<elem1)), two elements for equality.
+顺序关联容器的默认比较条件是std::less。若要使用用户定义类型作为键，则必须重载操作符<。为数据类型重载操作符<就足够了，因为C++运行时在关系符(!)的帮助下进行比较。(!(elem1<elem2 || elem2<elem1))，两个元素相等。
 
-You can specify the sorting criterion as a template argument. This sorting criterion must implement a strict weak ordering.
+可以将排序条件指定为模板参数。这个排序标准必须实现严格的弱序。
 
-\begin{myNotic}{Strict weak ordering}
-Strict weak ordering for a sorting criterion on a set S is given if the following requirements are met.
+\begin{myNotic}{严格弱序}
+若满足下列条件，则给出集合S上排序准则的严格弱序。
 
 \begin{itemize}
 \item 
-For s from S has to hold, that’s < s‘ is impossible.
+若s来自S，则‘s < s’不成立。
 
 \item 
-For all s1 and s2 from S must hold: If s1 < s2, then s2 < s1 is impossible.
+S中的所有s1和s2必须成立:若s1 < s2，则s2 < s1不成立。
 
 \item 
-For all s1, s2 and s3 with s1 < s2 and s2 < s3 must hold: s1 < s3.
+对于所有s1、s2和s3，其中s1 < s2和s2 < s3必须满足:s1 < s3。
 
 \item 
-For all s1, s2 and s3 with s1 not comparable with s2 and s2 not comparable with s3 must hold: s1 is not comparable with s3.
+对于所有s1、s2和s3，其中s1与s2不可比较，s2与s3不可比较，必须成立:s1与s3不可比较。
 \end{itemize}
 \end{myNotic}
 
-In contrast to the definition of strict weak ordering, using a comparison criterion with strict weak ordering is much simpler for a std::map.
+与严格弱序的定义相反，对std::map使用带有严格弱序的比较条件要简单得多。
 
 \begin{cpp}
 #include <map>
@@ -90,12 +90,12 @@ for (auto p: int2Str) std::cout << "{" << p.first << "," << p.second << "} ";
 	// {7,seven} {6,six} {5,five} {4,four} {3,three} {2,two} {1,one}
 \end{cpp}
 
-\mySamllsection{Special Search Functions}
+\mySamllsection{特定的搜索函数}
 
-Ordered associative containers are optimized for search. So they offer unique search functions.
+有序关联容器针对搜索进行了优化，所以会提供了特定的搜索函数。
 
 \begin{center}
-Special search functions of the ordered associative containers
+有序关联容器的特殊搜索函数
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -103,21 +103,19 @@ Special search functions of the ordered associative containers
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-\textbf{Search function} & \textbf{Description}                       \\ \hline
+\textbf{搜索函数} & \textbf{描述}                       \\ \hline
 \endfirsthead
 %
 \endhead
 %
-ordAssCont.count(key)    & Returns the number of values with the key. \\ \hline
-ordAssCont.find(key)         & Returns the iterator of key in ordAssCont. If there is no key in ordAssCont, it returns ordAssCont.end(). \\ \hline
-ordAssCont.lower\_bound(key) & Returns the iterator to the first key in ordAssCont in which key would be inserted.                       \\ \hline
-ordAssCont.upper\_bound(key) & Returns the last position of key in ordAssCont where key would be inserted.                               \\ \hline
-ordAssCont.equal\_range(key) & Returns the range ordAssCont.lower\_bound(key) and ordAssCont.upper\_bound(key) in a std::pair.           \\ \hline
+ordAssCont.count(key)    & 返回带有键的值的个数。 \\ \hline
+ordAssCont.find(key)         & \begin{tabular}[c]{@{}l@{}}返回ordAssCont中key的迭代器。若在ordAssCont中 \\ 没有键，返回orordAssCont.end()。\end{tabular} \\ \hline
+ordAssCont.lower\_bound(key) & 返回ordAssCont第一个插入键迭代器的位置。                       \\ \hline
+ordAssCont.upper\_bound(key) & 返回ordAssCont最后插入键迭代器的位置。                               \\ \hline
+ordAssCont.equal\_range(key) & \begin{tabular}[c]{@{}l@{}}返回std::pair中的范围ordAssCont.lower\_bound(key)和 \\ ordAssCont.upper\_bound(key)。\end{tabular}          \\ \hline
 \end{longtable}
 
-Now, the application of the particular search functions.
-
-\filename{Search in an associative container}
+\filename{在关联容器中进行搜索}
 
 \begin{cpp}
 // associativeContainerSearch.cpp
@@ -143,17 +141,17 @@ std::cout << "(" << *pair.first << "," << *pair.second << ")"; // (3,5)
 
 \mySamllsection{std::map}
 
-\myGraphic{0.8}{content/chapter5/images/2.jpg}{}
+\myGraphic{0.6}{content/chapter5/images/2.jpg}{}
 
-\href{http://en.cppreference.com/w/cpp/container/map}{std::map} is the most frequently used associative container. The reason is simple. It combines an often sufficient enough performance with a very convenient interface. You can access its elements via the index operator. If the key doesn’t exist, std:map creates a key/value pair. For the value, the default constructor is used.
+\href{http://en.cppreference.com/w/cpp/container/map}{std::map}是最常用的关联容器，它结合了通常足够的性能和非常方便的接口，可以通过索引操作符访问它的元素。若键不存在，std:map创建一个键/值对。对于该值，使用默认构造函数。
 
-\begin{myTip}{Consider std::map as a generalization of std::vector}
-Often, std::map is called an associative array, because std::map supports the index operator like a sequence container. The subtle difference is that its index is not restricted to a number like in the case of std::vector. Its index can be almost any arbitrary type.
+\begin{myTip}{将std::map看作为std::vector的泛化}
+通常，std::map称为关联数组，因为std::map像序列容器一样支持索引操作符。区别在于，其索引不像std::vector那样局限于数字。std::map的索引几乎可以是任意类型。
 
-The same observations hold for its namesake std::unordered\_map.
+同样的观察结果也适用于std::unordered\_map。
 \end{myTip}
 
-In addition to the index operator, std::map supports the at member function. The access via at is checked. So if the request key doesn’t exist in the std::map, a std::out\_of\_range exception is thrown.
+除了索引操作符之外，std::map还支持at成员函数。检查通过at的访问。若请求键在std::map中不存在，则抛出std::out\_of\_range异常。
 
 
 

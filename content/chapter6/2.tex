@@ -1,8 +1,8 @@
-The four associative containers std::flat\_map, std::flat\_multimap, std::flat\_set, and std::set\_multiset in C++23 are a drop-in replacement for the ordered associative containers std::map, std::multimap, std::set, and std::multiset. To be more precise, a std::flat\_map is a drop-in replacement for a std::map, a std::flat\_multimap is a drop-in replacement for a std::multimap, and so forth.
+C++23中的四个关联容器std::flat\_map、std::flat\_multimap、std::flat\_set和std::set\_multiset是对有序关联容器std::map、std::multimap、std::set和std::multiset的临时替换。更准确地说，std::flat\_map是std::map的临时替代，std::flat\_multimap是std::multimap的临时替代，依此类推。
 
-The flat-ordered associative containers require separate sequence containers for their keys and values. This sequence container must support a random access iterator. By default, a std::vector is used, but a std::array, or a std::deque is also valid.
+平序关联容器的键和值需要单独的序列容器。该序列容器必须支持随机访问迭代器。默认情况下，会使用std::vector，但对于std::array或std::deque也是有效的。
 
-The following code snippet shows the declaration of std::flat\_map, and std::flat\_set.
+下面的代码段显示了std::flat\_map和std::flat\_set的声明。
 
 
 \begin{cpp}
@@ -17,28 +17,28 @@ template<class Key,
 class flat_set;
 \end{cpp}
 
-The flat-ordered associative containers provide different time and space complexities than the ordered associative containers. The flat variants require less memory and are faster to read than their nonflat-ordered pendants. The following comparison goes more into the details about the flat and the non-flat-ordered associative containers.
+平序关联容器提供了与有序关联容器不同的时间和空间复杂性。与非平序关联容器相比，平序关联容器需要更少的内存，并且读取速度更快。下面的比较更详细地介绍了平序和非平序关联容器。
 
 
-\begin{myTip}{Comparison of the Flat Ordered Associative Container and their Non-Flat Pendants}
+\begin{myTip}{平序关联容器与非平序关联容器的比较}
 
-The flat variants provide better reading performance, such as iterating through the container, and require less memory. They also need that the elements must either be copyable or moveable. The flat variants support a random access iterator.
+平序提供了更好的读取性能，例如遍历容器，并且需要更少的内存。它们还需要元素必须是可复制的或可移动的。并且平序支持随机访问迭代器。
 
-The non-flat variants improve writing performance if you insert or delete elements. Additionally, the non-flat variants guarantee that the iterators stay valid after inserting or deleting elements. The non-flat variants support a bidirectional iterator.
+若插入或删除元素，非平序可以提高写入性能。此外，非平序保证迭代器在插入或删除元素后仍然有效。并且非平序支持双向迭代器。
 \end{myTip}
 
 
 \mySamllsection{std::sorted\_unique}
 
-You can use the constant std::sorted\_unique in a constructor call or in the member functions insert to specify that the elements are already sorted. This improves the performance of creating a flat-ordered associative container or inserting elements.
+可以在构造函数调用或成员函数insert中，使用常量std::sorted\_unique来指定元素已经排序。这提高了创建平序关联容器或插入元素的性能。
 
-The following code snippet creates a std::flat\_map from a sorted initializer list \{1, 2, 3, 4, 5\}.
+下面的代码片段从一个排序的初始化列表\{1,2,3,4,5 \}创建一个std::flat\_map。
 
 \begin{cpp}
 std::flat_map myFlatMap = { std::sorted_unique, {1, 2, 3, 4, 5}, {10, 11, 1, 5, -4} };
 \end{cpp}
 
-Using the constant std::sorted\_unique with non-sorted elements is undefined behavior.
+对非排序元素使用常量std::sorted\_unique会产生未定义行为。
 
 
 

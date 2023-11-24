@@ -1,14 +1,14 @@
 
 
 
-\myGraphic{0.8}{content/chapter5/images/3.jpg}{}
+\myGraphic{0.6}{content/chapter5/images/3.jpg}{}
 
 
-\mySamllsection{Overview}
+\mySamllsection{概述}
 
-With the new C++11 standard, C++ has four unordered associative containers: std::unordered\_map, std::unordered\_multimap, std::unordered\_set, and std::unordered\_multiset. They have a lot in common with their namesakes, the ordered associative containers. The difference is that the unordered ones have a richer interface, and their keys are not sorted.
+新的C++11标准中，有四个无序关联容器:std::unordered\_map、std::unordered\_multimap、std::unordered\_set和std::unordered\_multiset。它们与有序关联容器有很多共同之处。不同之处在于，无序的具有更丰富的接口，并且键不排序。
 
-This shows the declaration of a std::unordered\_map.
+这里展示了std::unordered\_map的声明。
 
 \begin{cpp}
 template< class key, class val, class Hash= std::hash<key>,
@@ -17,40 +17,40 @@ template< class key, class val, class Hash= std::hash<key>,
 class unordered_map;
 \end{cpp}
 
-Like std::map, std::unordered\_map has an allocator, but std::unordered\_map needs no comparison function. Instead, std::unordered\_map needs two additional functions: One, to determine the hash value of its key: std::has<key> and second, to compare the keys for equality: std::equal\_to<key>. Because of the three default template parameters, you only have to provide the key type and the value of the std::unordered\_map: std::unordered\_map<char,int> unordMap.
+和std::map一样，std::unordered\_map有一个分配器，但是std::unordered\_map不需要比较函数。相反，std::unordered\_map需要两个额外的函数:一个用于确定其键的哈希值:std::has<key>;第二个用于比较键是否相等:std::equal\_to<key>。由于有三个默认模板参数，只需要提供键类型和值给std::unordered\_map: std::unordered\_map<char,int> unordMap。
 
-\mySamllsection{Keys and Values}
+\mySamllsection{键和值}
 
-There are special rules for the key and the value of an unordered associative container.
+无序关联容器的键和值有特殊的规则。
 
-The key has to be
-
-\begin{itemize}
-\item
-equal comparable,
-
-\item
-available as hash value,
-
-\item
-copyable or moveable.
-\end{itemize}
-
-The value has to be
+键必须是
 
 \begin{itemize}
 \item
-default constructible,
+相等可比，
 
 \item
-copyable or moveable.
+可作为哈希值，
+
+\item
+可复制或可移动。
 \end{itemize}
 
-\mySamllsection{Performance}
+值必须是
 
-Performance - that’s the simple reason - why the unordered associative containers were so long missed in C++. In the example below, one million randomly created values are read from a 10 million big std::map and std::unordered\_map. The impressive result is that the linear access time of an unordered associative container is 20 times faster than an ordered associative container’s access time. That is just the difference between these operations’ constant and logarithmic complexity O(log n).
+\begin{itemize}
+\item
+可默认构造，
 
-\filename{Performance comparison}
+\item
+可复制或可移动。
+\end{itemize}
+
+\mySamllsection{性能}
+
+性能，这是很重要的原因——为什么无序关联容器在C++中被忽略了这么久。在下面的例子中，从1000万个大的std::map和std::unordered\_map中读取100万个随机创建的值。令人印象深刻的结果是，无序关联容器的线性访问时间比有序关联容器的访问时间快20倍，这就是这些运算的常数和对数复杂度O(log n)之间的区别。
+
+\filename{比较性能}
 
 \begin{cpp}
 // associativeContainerPerformance.cpp
@@ -77,29 +77,29 @@ std::cout << dur2.count() << " sec"; // 0.411334 sec
 \end{cpp}
 
 
-\mySamllsection{The Hash Function}
+\mySamllsection{哈希函数}
 
-The reason for the constant access time of the unordered associative container is the hash function, which is schematically shown here. The hash function maps the key to its value, the so-called hash value. A hash function is good if it produces as few collisions as possible and equally distributes the keys onto the buckets. Because the execution of the hash function takes a constant amount of time, the access of the elements is, in the base case, also constant.
+无序关联容器访问时间恒定的原因是哈希函数。哈希函数将键映射到它的值，即所谓的哈希值。若哈希函数产生尽可能少的冲突，并将键均匀地分配到桶上，那就是好的。因为哈希函数的执行花费的时间是恒定的，所以在基本情况下，元素的访问性能也恒定。
 
-The hash function
+哈希函数的特点
 
 \begin{itemize}
 \item
-is already defined for the built-in types like boolean, natural numbers, and floating-point numbers,
+已经为布尔型、自然数和浮点数等内置类型定义，
 
 \item
-is available for std::string and std::wstring,
+可用于std::string和std::wstring，
 
 \item
-generates for a C string const char a hash value of the pointer address,
+为C字符串const char生成指针地址的哈希值，
 
 \item
-can be defined for user-defined data types.
+可以为用户定义的数据类型定义。
 \end{itemize}
 
-For user-defined types used as a key for an unordered associative container, you must keep two requirements in mind. They need a hash function and have to be comparable to equal.
+对于用作无序关联容器的键的用户定义类型，必须牢记两个要求。需要一个哈希函数，并且必须相等。
 
-\filename{A custom hash function}
+\filename{自定义哈希函数}
 
 \begin{cpp}
 // unorderedMapHash.cpp
@@ -135,13 +135,13 @@ for(auto m : myMap) std::cout << "{" << m.first << "," << m.second << "} ";
 std::cout << myMap[MyInt(-2)] << '\n'; // -2
 \end{cpp}
 
-\mySamllsection{The Details}
+\mySamllsection{更多细节}
 
-The unordered associative containers store their indices in buckets. Which bucket the index goes to is due to the hash function, which maps the key to the index. If different keys are mapped to the same index, it’s called a collision. The hash function tries to avoid this.
+无序关联容器将其索引存储在桶中。索引到哪个桶是由哈希函数决定的，哈希函数将键映射到索引。若不同的键映射到相同的索引，则称为冲突。哈希函数试图避免这种情况的出现。
 
-Indices are typically stored in the bucket as a linked list. The access to the bucket is constant; the access in the bucket is linear. The number of buckets is called capacity. The average number of elements for each bucket is called the load factor. In general, the C++ runtime generates new buckets if the load factor exceeds 1. This process is called rehashing and can also explicitly be triggered:
+索引通常以链表的形式存储在桶中。对桶的访问是恒定的;桶中的访问是线性的。桶的数量称为容量。每个桶的平均元素数称为负载因子。通常，如果负载因子超过1，C++运行时将生成新的桶。这个过程被称为“重哈希”，也可以显式触发:
 
-\filename{Details to the hash function}
+\filename{哈希函数的更多细节}
 
 \begin{cpp}
 // hashInfo.cpp
@@ -180,7 +180,7 @@ getInfo(hash);
 cout << hash.bucket(500); // 500
 \end{cpp}
 
-With the member function max\_load\_factor, you can read and set the load factor. So you can influence the probability of collisions and rehashing. I emphasize one point in the short example above. The key 500 is first in the 5th bucket, but after rehashing is in the 500th bucket.
+通过成员函数max\_load\_factor，可以读取和设置负载因子。所以可以控制碰撞和重哈希的概率。我在上面的简短例子中强调了一点。键500首先在第5个桶中，但在重哈希之后在第500个桶中。
 
 
 

@@ -1,21 +1,21 @@
-All eight ordered and unordered containers have in common that they associate a key with a value. You can use the key to get the value. To classify the associative containers, you have to answer three simple questions:
+八个有序和无序容器都有一个共同点，其将键与值关联起来，可以使用键来获取值。要对关联容器进行分类，必须了解三个问题:
 
 \begin{itemize}
 \item 
-Are the keys sorted?
+键是否已排序?
 
 \item 
-Does the key have an associated value?
+键是否有关联的值?
 
 \item 
-Can a key appear more than once?
+一个键可以出现多次吗?
 \end{itemize}
 
-The following table with $2^3= 8$ rows gives the answers to the three questions. I answer a fourth question in the table. How fast is the access time of a key in the best case?
+下表$2^3= 8$行给出了这三个问题的答案。我回答表格中的第四个问题。最好的情况下，键的访问时间有多快?
 
 
 \begin{center}
-Characteristics for associative containers
+关联容器的特征
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -23,26 +23,26 @@ Characteristics for associative containers
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|l|l|l|}
 \hline
-\textbf{Associative Container} & \textbf{Sorted} & \textbf{Associated Value} & \textbf{More Identical Keys} & \textbf{Access Time} \\ \hline
+\textbf{关联容器} & \textbf{排序} & \textbf{关联值} & \textbf{相同的键} & \textbf{访问时间} \\ \hline
 \endfirsthead
 %
 \endhead
 %
-std::set                 & yes & no  & no  & logarithmic \\ \hline
-std::unordered\_set      & no  & no  & no  & constant    \\ \hline
-std::map                 & yes & yes & no  & logarithmic \\ \hline
-std::unordered\_map      & no  & yes & no  & constant    \\ \hline
-std::multiset            & yes & no  & yes & logarithmic \\ \hline
-std::unordered\_multiset & no  & no  & yes & constant    \\ \hline
-std::multimap            & yes & yes & yes & logarithmic \\ \hline
-std::unordered\_multimap & no  & yes & yes & constant    \\ \hline
+std::set                 & yes & no  & no  & 对数 \\ \hline
+std::unordered\_set      & no  & no  & no  & 常数    \\ \hline
+std::map                 & yes & yes & no  & 对数 \\ \hline
+std::unordered\_map      & no  & yes & no  & 常数    \\ \hline
+std::multiset            & yes & no  & yes & 对数 \\ \hline
+std::unordered\_multiset & no  & no  & yes & 常数    \\ \hline
+std::multimap            & yes & yes & yes & 对数 \\ \hline
+std::unordered\_multimap & no  & yes & yes & 常数    \\ \hline
 \end{longtable}
 
-Since C++98, C++ has ordered associative containers; with C++11, C++ has, in addition, unordered associative containers. Both classes have a very similar interface. That’s why the following code sample is identical for std::map and std::unordered\_map. To be more precise, the interface of std::unordered\_map is a superset of the interface of std::map. The same holds for the remaining three unordered associative containers. So, porting your code from the ordered to unordered containers is relatively easy.
+自C++98起，就有了顺序关联容器，C++11还增加了无序关联容器。这两个类都有非常相似的接口。这就是为什么下面的代码示例对于std::map和std::unordered\_map是相同的。更准确地说，std::unordered\_map的接口是std::map接口的超集。其余三个无序关联容器也是如此，将代码从有序容器移植到无序容器很容易。
 
-You can initialize the containers with an initializer list and add new elements with the index operator. To access the first element of the key/value pair p, you have p.first, and for the second element, you have p.second. p.first is the key, and p.second is the associated value of the pair.
+可以使用初始化列表初始化容器，并使用索引操作符添加新元素。要访问键/值对p的第一个元素，首先使用p，对于第二个元素，使用p.second。p.first是键，p.second是对子的关联值。
 
-\filename{std::map versus std::unordered\_map}
+\filename{std::map 与 std::unordered\_map}
 
 \begin{cpp}
 // orderedUnorderedComparison.cpp
@@ -77,13 +77,13 @@ um.clear();
 std::cout << um.size() << '\n'; // 0
 \end{cpp}
 
-There is a subtle difference between the two program executions: The keys of the std::map are ordered, and the keys of the std::unordered\_map are unordered. The question is: Why do we have such similar containers in C++? I already pointed it out in the table. The answer is typically for C++: performance. The access time to the keys of an unordered associative container is constant and, therefore, independent of the container’s size. If the containers are big enough, the performance difference is significant. Look at the section about the performance.
+这两个程序执行之间有一个微妙的区别:std::map的键是有序的，而std::unordered\_map的键是无序的。问题是:为什么在C++中有这样类似的容器?我已经在表格中指出，对于C++来说，答案通常是:性能。对无序关联容器的键的访问时间是常量，因此与容器的大小无关。若容器足够大，性能差异是显著的。
 
 \mySamllsection{Contains}
 
-The member function associativeContainer.contains(ele) checks if associativeContainer has the element ele.
+成员函数associativeContainer.contains(ele)检查associativeContainer是否有元素ele。
 
-\filename{Check if an associative container has an element}
+\filename{检查关联容器是否有元素}
 
 \begin{cpp}
 // containsElement.cpp
@@ -112,11 +112,11 @@ std::cout << "containsElement5(myUnordMap): "
 \end{cpp}
 
 
-\mySamllsection{Insertion and Deletion}
+\mySamllsection{插入和删除}
 
-The insertion (insert and emplace) and deletion (erase) of elements in associative containers are similar to the rules of a std::vector. For an associative container that can have a key only once, the insertion fails if the key is already in the container. Additionally, ordered associative containers support a particular function ordAssCont.erase(key), which removes all pairs with the key and returns their number.
+关联容器中元素的插入(插入和放置)和删除(擦除)操作类似于std::vector的规则。对于一个键只能有一次的关联容器，若键已经在容器中，则插入失败。此外，有序关联容器支持一个特殊的函数ordAssCont.erase(key)，会删除所有具有键的对子，并返回其数量。
 
-\filename{Insertion and Deletion}
+\filename{插入和删除}
 
 \begin{cpp}
 // associativeContainerModify.cpp
