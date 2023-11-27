@@ -1,7 +1,7 @@
-The global functions std::begin, std::end, std::prev, std::next, std::distance, and std::advance make your handling of the iterators a lot easier. Only the function std::prev requires a bidirectional iterator. All functions need the header <iterator>. The table gives you an overview.
+全局函数std::begin、std::end、std::prev、std::next、std::distance和std::advance使处理迭代器变得容易得多。只有std::prev函数需要双向迭代器。所有函数都需要头文件<iterator>，下面表格是一个简单的概述。
 
 \begin{center}
-Useful functions for iterators
+迭代器的辅助函数
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -9,29 +9,29 @@ Useful functions for iterators
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-\textbf{Global function} & \textbf{Description}                                      \\ \hline
+\textbf{辅助函数} & \textbf{描述}                                      \\ \hline
 \endfirsthead
 %
 \endhead
 %
-std::begin(cont)         & Returns a begin iterator to the container cont.           \\ \hline
-std::end(cont)           & Returns an end iterator to the container cont.            \\ \hline
-std::rbegin(cont)        & Returns a reverse begin iterator to the container cont.   \\ \hline
-std::rend(cont)          & Returns a reverse end iterator to the container cont.     \\ \hline
-std::cbegin(cont)        & Returns a constant begin iterator to the container cont.  \\ \hline
-std::cend(cont)          & Returns a constant end iterator to the containter cont.   \\ \hline
-std::crbegin(cont)      & Returns a reverse constant begin iterator to the container cont. \\ \hline
-std::crend(cont)        & Returns a reverse constant end iterator to the container cont.   \\ \hline
-std::prev(it)            & Returns an iterator, which points to a position before it \\ \hline
-std::next(it)            & Returns an iterator, which points to a position after it. \\ \hline
-std::distance(fir, sec) & Returns the number of elements between fir and sec.              \\ \hline
-std::advance(it, n)      & Puts the iterator it n positions further.                 \\ \hline
+std::begin(cont)         & 向容器cont返回一个起始迭代器。           \\ \hline
+std::end(cont)           & 向容器cont返回一个结束迭代器。            \\ \hline
+std::rbegin(cont)        & 向容器cont返回一个反向起始迭代器。   \\ \hline
+std::rend(cont)          & 向容器cont返回一个反向结束迭代器。     \\ \hline
+std::cbegin(cont)        & 向容器cont返回一个常量起始迭代器。  \\ \hline
+std::cend(cont)          & 向容器cont返回一个常量结束迭代器。   \\ \hline
+std::crbegin(cont)      & 向容器cont返回一个反向常量起始迭代器。 \\ \hline
+std::crend(cont)        & 向容器cont返回一个反向常量结束迭代器。   \\ \hline
+std::prev(it)            & 返回一个迭代器，该迭代器指向它之前的位置。 \\ \hline
+std::next(it)            & 返回一个迭代器，该迭代器指向它之后的位置。 \\ \hline
+std::distance(fir, sec) & 返回fir和sec之间的元素个数。              \\ \hline
+std::advance(it, n)      & 将迭代器前进或后退n个位置。                 \\ \hline
 \end{longtable}
 
-Now, here is the application of the valuable functions.
+下面是辅助函数的应用。
 
 
-\filename{Helper functions for iterators}
+\filename{迭代器的辅助函数}
 
 \begin{cpp}
 // iteratorUtilities.cpp

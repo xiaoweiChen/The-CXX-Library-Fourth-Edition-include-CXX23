@@ -1,9 +1,9 @@
-Their capabilities can categorize iterators. The category of an iterator depends on the type of container used. C++ has forward, bidirectional, random access, and contiguous iterators. With the forward iterator, you can iterate the container forward, with the bidirectional iterator, in both directions. The random access iterator allows it to directly access an arbitrary element. In particular, the random iterator enables iterator arithmetic and ordering comparisons (e.g.: <). A contiguous iterator is a random access iterator and requires that the elements of the container are stored contiguously in memory.
+根据功能可以对迭代器进行分类。迭代器的类别取决于所使用的容器类型。C++有前向、双向、随机访问和连续迭代器。使用前向迭代器，可以使用双向迭代器在两个方向上向前迭代容器。随机访问迭代器允许它直接访问任意元素。特别是，随机迭代器支持迭代器算术和排序比较(例如:<)。连续迭代器是一种随机访问迭代器，并要求容器的元素连续地存储在内存中。
 
-The table below is a representation of containers and their iterator categories. The bidirectional iterator includes the forward iterator functionalities. The random access iterator includes the forward and the bidirectional iterator functionalities. It and It2 are iterators, n is a natural number.
+下表是容器及其迭代器类别的表示。双向迭代器包括正向迭代器的功能。随机访问迭代器包括前向和双向迭代器的功能。It和It2是迭代器，n是自然数。
 
 \begin{center}
-The iterator categories of the container
+容器迭代器的类别
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -11,28 +11,28 @@ The iterator categories of the container
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|l|}
 \hline
-\textbf{Iterator category} &
-\textbf{Properties} &
-\textbf{Containers} \\ \hline
+\textbf{迭代器类别} &
+\textbf{属性} &
+\textbf{容器} \\ \hline
 \endfirsthead
 %
 \endhead
 %
-Forward iterator &
+前向迭代器 &
 \begin{tabular}[c]{@{}l@{}}++It, It++, *It\\ It == It2, It != It2\end{tabular} &
 \begin{tabular}[c]{@{}l@{}}std::unordered\_set\\ std::unordered\_map\\ std::unordered\_multiset\\ std::unordered\_multimap\\ std::forward\_list\end{tabular} \\ \hline
-Bidirectional iterator &
+双向迭代器 &
 --It, It-- &
 \begin{tabular}[c]{@{}l@{}}std::set\\ std::map\\ std::multiset\\ std::multimap\\ std::list\end{tabular} \\ \hline
-Random access iterator &
+随机访问迭代器 &
 \begin{tabular}[c]{@{}l@{}}It{[}i{]}\\ It += n, It -= n\\ It+n, It-n\\ n+It\\ It-It2\end{tabular} &
 std::deque \\ \hline
-Contiguous iterator &
+连续迭代器 &
 \begin{tabular}[c]{@{}l@{}}It \textless It2, It \textless{}= It2, It \textgreater It2\\ It \textgreater{}= It2\end{tabular} &
 \begin{tabular}[c]{@{}l@{}}std::array\\ std::vector\\ std::string\end{tabular} \\ \hline
 \end{longtable}
 
-The input iterator and the output iterator are special forward iterators: they can read and write their pointed element only once.
+输入迭代器和输出迭代器是特殊的前向迭代器:只能对所指向的元素读写一次。
 
 
 

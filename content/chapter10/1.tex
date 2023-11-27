@@ -1,28 +1,28 @@
-You must keep a few rules in your head to use the algorithms.
+使用算法时，你必须牢记一些规则。
 
-The algorithms are defined in various headers.
+算法在不同的头文件中定义。
 
-<algorithm>: Contains the general algorithms.
-<numeric> : Contains the numeric algorithms.
+<algorithm>: 包含通用算法。
+<numeric> : 包含数值算法。
 
-Many algorithms have the name suffix \_if and \_copy.
+许多算法的名称后缀都是\_if和\_copy。
 
-\_if: The algorithm can be parametrized by a predicate.
-\_copy: The algorithm copies its elements in another range.
+\_if: 该算法可以通过谓词参数化。
+\_copy: 该算法将其元素复制到另一个范围。
 
-Algorithms like auto num= std::count(InpIt first, InpIt last, const T\& val) return the number of elements equal to val. num is of type iterator\_traits<InpIt>::difference\_type. You have the guarantee that num is sufficient to hold the result. Because of the automatic return type deduction with auto, the compiler will give you the right types.
+像auto num= std::count(InpIt first, InpIt last, const T\& val)这样的算法返回与val相等的元素数量。num类型为iterator\_traits<InpIt>::difference\_type，可以保证num足以保存结果。由于auto的自动返回类型推导，编译器将提供正确的类型。
 
-\begin{myTip}{If the container uses an additional range, it has to be valid}
+\begin{myTip}{若容器使用了额外的范围，则其必须是有效的}
 
-The algorithm std::copy\_if uses an iterator to the beginning of its destination range. This destination range has to be valid.
+算法std::copy\_if使用迭代器到目标范围的开始。此目标范围必须有效。
 \end{myTip}
 
-\begin{myNotic}{Naming conventions for the algorithms}
+\begin{myNotic}{算法的命名约定}
 
-I use a few naming conventions for the type of arguments and the algorithms’ return type to make them easier to read.
+我对参数的类型和算法的返回类型使用了一些命名约定，以使它们更容易阅读。
 
 \begin{center}
-Signature of the algorithms
+算法的签名
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -30,31 +30,27 @@ Signature of the algorithms
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-\textbf{Name} & \textbf{Description}   \\ \hline
+\textbf{名称} & \textbf{描述}   \\ \hline
 \endfirsthead
 %
 \endhead
 %
-InIt          & Input iterator         \\ \hline
-FedIt         & Forward iterator       \\ \hline
-BiIt          & Bidirectional iterator \\ \hline
-UnFunc        & Unary callable         \\ \hline
-BiFunc        & Binary callable        \\ \hline
-UnPre         & Unary predicate        \\ \hline
-BiPre         & Binary predicate       \\ \hline
-Search  & The \href{https://en.cppreference.com/w/cpp/algorithm/search}{searcher} encapsulates the search algorithm.                                    \\ \hline
-ValType & From the input range, automatically deduced value type.                            \\ \hline
+InIt          & 输入迭代器         \\ \hline
+FedIt         & 前向迭代器       \\ \hline
+BiIt          & 双向迭代器 \\ \hline
+UnFunc        & 一元可调用         \\ \hline
+BiFunc        & 二元可调用        \\ \hline
+UnPre         & 一元谓词        \\ \hline
+BiPre         & 二元谓词      \\ \hline
+Search  & \href{https://en.cppreference.com/w/cpp/algorithm/search}{searcher}封装了搜索算法。                                    \\ \hline
+ValType & 从输入范围，自动推导出值类型。                            \\ \hline
 Num     & \href{https://en.cppreference.com/w/cpp/iterator/iterator_traits}{typename std::iterator\_traits\textless{}ForwardIt\textgreater{}::difference\_type} \\ \hline
-ExePol        & Execution policy       \\ \hline
+ExePol        & 执行策略       \\ \hline
 \end{longtable}
 
 \end{myNotic}
 
-\mySamllsection{Iterators are the Glue}
 
-Iterators define the range of the container on which the algorithms work. They describe a half-open range. In a half-open range, the begin iterator points to the beginning, and the end iterator points to one position after the range.
-
-The iterators can be categorized based on their capabilities. See the Categories section of the Iterators chapter. The algorithms provide conditions to the iterators. Like in the case of std::rotate, most of the time, a forward iterator is sufficient. But that doesn’t hold for std::reverse. std::reverse requires a bidirectional iterator.
 
 
 

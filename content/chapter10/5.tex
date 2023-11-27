@@ -1,10 +1,10 @@
-Non-modifying algorithms are algorithms for searching and counting elements. However, you can also check properties on ranges, compare ranges, or search for ranges within ranges.
+不可修改算法是用于搜索和计数元素的算法，也可以检查范围上的属性、比较范围或在范围内搜索范围。
 
-\mySamllsection{Search Elements}
+\mySamllsection{搜索元素}
 
-You can search for elements in three different ways.
+可以用三种不同的方式搜索元素。
 
-Returns an element in a range:
+返回一个范围内的元素:
 
 \begin{cpp}
 InpIt find(InpIt first, InpI last, const T& val)
@@ -17,7 +17,7 @@ InpIt find_if_not(InpIt first, InpIt last, UnPred pre)
 InpIt find_if_not(ExePol pol, FwdIt first, FwdIt last, UnPred pre)
 \end{cpp}
 
-Returns the first element of a range in a range:
+返回一个范围的第一个元素:
 
 \begin{cpp}
 FwdIt1 find_first_of(InpIt1 first1, InpIt1 last1,
@@ -31,7 +31,7 @@ FwdIt1 find_first_of(ExePol pol, FwdIt1 first1, FwdIt1 last1,
 					 FwdIt2 first2, FwdIt2 last2, BiPre pre)
 \end{cpp}
 
-Returns identical, adjacent elements in a range:
+返回范围内相同的相邻元素:
 
 \begin{cpp}
 FwdIt adjacent_find(FwdIt first, FwdIt last)
@@ -41,9 +41,9 @@ FwdIt adjacent_find(FwdIt first, FwdI last, BiPre pre)
 FwdIt adjacent_find(ExePol pol, FwdIt first, FwdI last, BiPre pre)
 \end{cpp}
 
-The algorithms require input or forward iterators as arguments and return an iterator on the element when successfully found. If the search is not successful, they return an end iterator.
+这些算法需要输入或前向迭代器作为参数，并在成功找到元素时返回一个迭代器。若搜索不成功，则返回结束迭代器。
 
-\filename{std::find, std::find\_if, std::find\_if\_not, std::find\_of, and std::adjacent\_fint}
+\filename{std::find, std::find\_if, std::find\_if\_not, std::find\_of 和 std::adjacent\_fint}
 
 \begin{cpp}
 // find.cpp
@@ -80,11 +80,11 @@ auto iter4= adjacent_find(myCha.begin(), myCha.end(),
 if (iter4 != myCha.end()) cout << *iter4; // b
 \end{cpp}
 
-\mySamllsection{Count Elements}
+\mySamllsection{元素计数}
 
-You can count elements with the STL with and without a predicate.
+可以使用STL对元素进行计数，无论是否使用谓词。
 
-Returns the number of elements:
+返回元素的个数:
 
 \begin{cpp}
 Num count(InpIt first, InpIt last, const T& val)
@@ -94,9 +94,9 @@ Num count_if(InpIt first, InpIt last, UnPred pre)
 Num count_if(ExePol pol, FwdIt first, FwdIt last, UnPred pre)
 \end{cpp}
 
-Count algorithms take input iterators as arguments and return the number of elements matching val or the predicate.
+计数算法接受输入迭代器作为参数，并返回与val或谓词匹配的元素个数。
 
-\filename{std::count, and std::count\_if}
+\filename{std::count 和 std::count\_if}
 
 \begin{cpp}
 // count.cpp
@@ -110,34 +110,34 @@ std::cout << std::count_if(str.begin(), str.end(),
 \end{cpp}
 
 
-\mySamllsection{Check Conditions on Ranges}
+\mySamllsection{范围的检查条件}
 
-The three functions std::all\_of, std::any\_of, and std::none\_of answer the question if all, at least one, or no element of a range satisfies the condition. The functions need as arguments input iterators and a unary predicate and return a boolean.
+三个函数std::all\_of、std::any\_of和std::none\_of可回答这个问题，若一个范围的所有、至少一个或没有元素满足条件。这些函数需要作为参数输入迭代器和一元谓词，并返回一个布尔值。
 
-Checks if all elements of the range satisfy the condition:
+检查范围内的所有元素是否满足条件:
 
 \begin{cpp}
 bool all_of(InpIt first, InpIt last, UnPre pre)
 bool all_of(ExePol pol, FwdIt first, FwdIt last, UnPre pre)
 \end{cpp}
 
-Checks if at least one element of the range satisfies the condition:
+检查范围中是否至少有一个元素满足条件:
 
 \begin{cpp}
 bool any_of(InpIt first, InpIt last, UnPre pre)
 bool any_of(ExePol pol, FwdIt first, FwdIt last, UnPre pre)
 \end{cpp}
 
-Checks if no element of the range satisfies the condition:
+检查范围内是否没有元素满足条件:
 
 \begin{cpp}
 bool none_of(InpIt first, InpIt last, UnPre pre)
 bool none_of(ExePol pol, FwdIt first, FwdIt last, UnPre pre)
 \end{cpp}
 
-As promised, the example:
+如前所述，示例如下:
 
-\filename{std::all\_of, std::any\_of, and std::none\_of}
+\filename{std::all\_of, std::any\_of 和 std::none\_of}
 
 \begin{cpp}
 // allAnyNone.cpp
@@ -151,11 +151,11 @@ std::cout << std::all_of(myVec.begin(), myVec.end(), even); // false
 std::cout << std::none_of(myVec.begin(), myVec.end(), even); // false
 \end{cpp}
 
-\mySamllsection{Compare Ranges}
+\mySamllsection{范围比较}
 
-With std::equal, you can compare ranges on equality. With std::lexicographical\_compare, std:: lexicographical\_compare\_three\_way, and std::mismatch, you discover the smaller range.
+使用std::equal，可以比较相等的范围。使用std::lexicographical\_compare、std::lexicographical\_compare\_three\_way和std::mismatch，可以用于较小的范围。
 
-Checks if both ranges are equal:
+检查两个范围是否相等:
 
 \begin{cpp}
 bool equal(InpIt first1, InpIt last1, InpIt first2)
@@ -175,7 +175,7 @@ bool equal(ExePol pol, FwdIt first1, FwdIt last1,
 		   FwdIt first2, FwdIt last2, BiPre pred)
 \end{cpp}
 
-Checks if the first range is smaller than the second:
+检查第一个范围是否小于第二个范围:
 
 \begin{cpp}
 bool lexicographical_compare(InpIt first1, InpIt last1,
@@ -189,7 +189,7 @@ bool lexicographical_compare(ExePol pol, FwdIt first1, FwdIt last1,
 							 FwdIt first2, FwdIt last2, BiPre pred)
 \end{cpp}
 
-Checks if the first range is smaller than the second. Applies \href{https://en.cppreference.com/w/cpp/language/operator_comparison}{three-way comparison}. It returns the strongest applicable comparison category type.
+检查第一个范围是否小于第二个范围。应用\href{https://en.cppreference.com/w/cpp/language/operator_comparison}{三路比较}，可返回最适用比较类别的类型。
 
 \begin{cpp}
 bool lexicographical_compare_three_way(InpIt first1, InpIt last1,
@@ -199,7 +199,7 @@ bool lexicographical_compare_three_way(InpIt first1, InpIt last1,
 									   BiPre pre)
 \end{cpp}
 
-Finds the first position at which both ranges are not equal:
+查找两个范围不相等的第一个位置:
 
 \begin{cpp}
 pair<InpIt, InpIt> mismatch(InpIt first1, InpIt last1,
@@ -223,9 +223,9 @@ pair<InpIt, InpIt> mismatch(ExePol pol, FwdIt first1, FwdIt last1,
 							FwdIt first2, FwdIt last2, BiPre pred)
 \end{cpp}
 
-The algorithms take input iterators and eventually a binary predicate. std::mismatch returns as its result a pair pa of input iterators. pa.first holds an input iterator for the first element that is not equal. pa.second holds the corresponding input iterator for the second range. If both ranges are identical, you get two end iterators.
+这些算法接受输入迭代器和最终的二元谓词。std::mismatch返回一对输入迭代器。pa.first保存第一个不相等元素的输入迭代器。pa.second保存第二个范围对应的输入迭代器。若两个范围相同，则得到两个end迭代器。
 
-\filename{std::equal, std::lexicographical\_compare, and std::mismatch}
+\filename{std::equal, std::lexicographical\_compare 和 std::mismatch}
 
 \begin{cpp}
 // equalLexicographicalMismatch.cpp
@@ -256,13 +256,13 @@ if (pair2.first == str1.end()){
 }
 \end{cpp}
 
-\mySamllsection{Search for Ranges within Ranges}
+\mySamllsection{在范围中搜索范围}
 
-std::search searches for a range in another range from the beginning, std::find\_end from the end. std::search\_n searches for n consecutive elements in the range.
+std::search从开头搜索另一个范围，std::find\_end从结尾搜索sStd::search\_n搜索范围内连续的n个元素。
 
-All algorithms take a forward iterator, can be parametrized by a binary predicate, and return an end iterator for the first range, if the search is unsuccessful.
+所有算法都采用前向迭代器，可以用二进制谓词参数化，若搜索不成功，则返回第一个范围的结束迭代器。
 
-Searches the second range in the first one and returns the position. It starts at the beginning:
+在第一个区域中搜索第二个区域并返回位置，从开头开始:
 
 \begin{cpp}
 FwdIt1 search(FwdIt1 first1, FwdIt1 last1, FwdIt2 first2, FwdIt2 last2)
@@ -277,7 +277,7 @@ FwdIt1 search(ExePol pol, FwdIt1 first1, FwdIt1 last1,
 FwdIt1 search(FwdIt1 first, FwdIt last1, Search search)
 \end{cpp}
 
-Searches the second range in the first one and returns the positions. It starts at the end:
+在第一个范围中搜索第二个范围并返回位置，从结尾开始:
 
 \begin{cpp}
 FwdIt1 find_end(FwdIt1 first1, FwdIt1 last1, FwdIt2 first2 FwdIt2 last2)
@@ -290,7 +290,7 @@ FwdIt1 find_end(ExePol pol, FwdIt1 first1, FwdIt1 last1,
 				FwdIt2 first2, FwdIt2 last2, BiPre pre)
 \end{cpp}
 
-Searches count consecutive values in the first range:
+搜索计算第一个范围内的连续值:
 
 \begin{cpp}
 FwdIt search_n(FwdIt first, FwdIt last, Size count, const T& value)
@@ -301,12 +301,12 @@ FwdIt search_n(ExePol pol, FwdIt first,
 			   FwdIt last, Size count, const T& value, BiPre pre)
 \end{cpp}
 
-\begin{myWarning}{The algorithm search\_n is very special}
+\begin{myWarning}{特殊算法search\_n}
 	
-The algorithm FwdIt search\_n(FwdIt first, FwdIt last, Size count, const T\& value, BiPre pre) is very special. The binary predicate BiPre uses as the first argument the values of the range and as the second argument the value value.
+算法FwdIt search\_n(FwdIt first, FwdIt last, Size count, const T\& value, BiPre pre)非常特殊。二进制谓词BiPre将范围的值用作第一个参数，将value用作第二个参数。
 \end{myWarning}
 
-\filename{std::find, std::find\_end, and std::search\_n}
+\filename{std::find, std::find\_end 和 std::search\_n}
 
 \begin{cpp}
 // search.cpp

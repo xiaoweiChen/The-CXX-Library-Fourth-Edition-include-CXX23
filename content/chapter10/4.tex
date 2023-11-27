@@ -1,17 +1,17 @@
-std::for\_each applies a unary callable to each element of its range. The input iterators provide the range.
+std::for\_each对其范围内的每个元素应用一元可调用对象，输入迭代器可提供范围。
 
 \begin{cpp}
 UnFunc std::for_each(InpIt first, InpIt second, UnFunc func)
 void std::for_each(ExePol pol, FwdIt first, FwdIt second, UnFunc func)
 \end{cpp}
 
-std::for\_each, when used without an explicit execution policy, is a special algorithm because it returns its callable argument. If you invoke std::for\_each with a function object, you can store the result of the function call directly in the function object.
+在没有显式执行策略的情况下使用std::for\_each是一个特殊的算法，因为它返回其可调用的参数。若使用函数对象调用std::for\_each，则可以将函数调用的结果直接存储在函数对象中。
 
 \begin{cpp}
 InpIt std::for_each_n(InpIt first, Size n, UnFunc func) FwdIt std::for_each_n(ExePol pol, FwdIt first, Size n, UnFunc func)
 \end{cpp}
 
-std::for\_each\_n is new with C++17 and applies a unary callable to its range’s first n elements. An input iterator and a size provide the range.
+std::for\_each\_n是C++17的新特性，并对其范围的前n个元素应用一元可调用对象，输入迭代器和大小提供了范围。
 
 \filename{std::for\_each}
 

@@ -1,13 +1,13 @@
-Iterator adaptors enable the use of iterators in insert mode or with streams. They need the header <iterator>.
+迭代器适配器允许在插入模式或流中使用迭代器，其需要头文件<iterator>。
 
-\mySamllsection{Insert iterators}
+\mySamllsection{插入迭代器}
 
-With the three insert iterators std::front\_inserter, std::back\_inserter and std::inserter, you can insert an element into a container at the beginning, at the end, or an arbitrary position, respectively. The three map their functionality on the container cont underlying member functions. The memory for the elements will automatically be provided.
+使用三个插入迭代器std::front\_inserter、std::back\_inserter和std::inserter，可以分别在容器的开头、结尾或任意位置插入元素。这三个辅助函数，会将它们的功能映射到容器内容的底层成员函数上，元素的内存将自动提供。
 
-The table below gives you two pieces of information: Which member function of the containers are internally used and which iterators can be used depends on the container’s type.
+下表提供了两条信息:容器的哪些成员函数是内部使用的，哪些迭代器可以使用，这取决于容器的类型。
 
 \begin{center}
-The three insert iterators
+三个插入迭代器
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -15,7 +15,7 @@ The three insert iterators
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|l|}
 \hline
-\textbf{Name}             & \textbf{internally used member function} & \textbf{Container}                                             \\ \hline
+\textbf{名称}             & \textbf{内部使用的成员函数} & \textbf{容器}                                             \\ \hline
 \endfirsthead
 %
 \endhead
@@ -25,8 +25,7 @@ std::back\_inserter(val) & cont.push\_back(val) & \begin{tabular}[c]{@{}l@{}}std
 std::inserter(val, pos)  & con.insert(pos, val) & \begin{tabular}[c]{@{}l@{}}std::vector\\ std::deque\\ std::list\\ std::string\\ std::map\\ std::set\end{tabular} \\ \hline
 \end{longtable}
 
-
-You can combine the algorithms in the STL with the three insert iterators.
+可以将STL中的算法与三个插入迭代器结合使用。
 
 \begin{cpp}
 #include <iterator>
@@ -53,13 +52,13 @@ for (auto d: deq) std::cout << d << " ";
 		// 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
 \end{cpp}
 
-\mySamllsection{Stream iterators}
+\mySamllsection{流迭代器}
 
 
-Stream iterator adaptors can use streams as a data source or data sink. C++ offers two functions to create istream iterators and two to create ostream iterators. The created istream iterators behave like input iterators, the ostream iterators act like insert iterators.
+流迭代器适配器可以使用流作为数据源或数据接收器。C++提供了两个函数来创建istream迭代器和两个函数来创建ostream迭代器。创建的istream迭代器的行为类似于输入迭代器，ostream迭代器的行为类似于插入迭代器。
 
 \begin{center}
-The four stream iterators
+四个流迭代器
 \end{center}
 
 
@@ -68,21 +67,21 @@ The four stream iterators
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-\textbf{Function}                                         & \textbf{Description}                     \\ \hline
+\textbf{功能}                                         & \textbf{描述}                     \\ \hline
 \endfirsthead
 %
 \endhead
 %
-std::istream\_iterator\textless{}T\textgreater{}          & Creates an end-if-stream iterator.       \\ \hline
-std::istream\_iterator\textless{}T\textgreater{}(istream) & Creates an istream iterator for istream. \\ \hline
-std::ostream\_iterator\textless{}T\textgreater{}(ostream) & Creates an ostream iterator for ostream. \\ \hline
-std::ostream\_iterator\textless{}T\textgreater{}(ostream, delim) & Creates an ostream iterator for ostream with the delimiter delim. \\ \hline
+std::istream\_iterator\textless{}T\textgreater{}          & 创建一个end-if-stream迭代器。       \\ \hline
+std::istream\_iterator\textless{}T\textgreater{}(istream) & 为istream创建一个istream迭代器。 \\ \hline
+std::ostream\_iterator\textless{}T\textgreater{}(ostream) & 为ostream创建ostream迭代器。 \\ \hline
+std::ostream\_iterator\textless{}T\textgreater{}(ostream, delim) & 用分隔符delim为ostream创建ostream迭代器。 \\ \hline
 \end{longtable}
 
 
-Thanks to the stream iterator adapter, you can directly read from or write to a stream.
+有了流迭代器适配器，就可以直接从流中读取或写入流。
 
-The following interactive program fragment reads natural numbers from std::cin in an endless loop and pushes them onto the vector myIntVec. If the input is not a natural number, an error in the input stream will occur. All numbers in myIntVec are copied to std::cout, separated by :. Now you can see the result on the console.
+下面的交互式程序段在一个无限循环中从std::cin中读取自然数，并将它们压入vector myIntVec。若输入不是自然数，则会在输入流中出现错误。myIntVec中的所有数字都复制到std::cout中，中间用:分隔。
 
 \begin{cpp}
 #include <iterator>

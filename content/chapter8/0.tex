@@ -1,25 +1,25 @@
-\myGraphic{0.6}{content/chapter8/images/1.jpg}{Cippi makes giant steps}
+\myGraphic{0.6}{content/chapter8/images/1.jpg}{Cippi正在大迈步}
 
-On the one hand, \href{http://en.cppreference.com/w/cpp/header/iterator}{iterators} are generalizations of pointers representing positions in a container. On the other hand, they provide powerful iteration and random access in a container.
+一方面，\href{http://en.cppreference.com/w/cpp/header/iterator}{迭代器}是表示容器中位置的指针的泛化。另一方面，它们在容器中提供了强大的迭代和随机访问功能。
 
-Iterators are the glue between the generic containers and the generic algorithms of the Standard Template Library.
+迭代器是泛型容器和标准模板库的泛型算法之间的粘合剂。
 
-Iterators support the following operations:
+迭代器支持以下操作:
 
 \begin{itemize}
 \item 
-*: returns the element at the current position
+*: 返回当前位置的元素
 
 \item 
-==, !=: compares two positions
+==, !=: 比较两个位置
 
 \item 
-=: assigns a new value to an iterator
+=: 给迭代器赋值
 \end{itemize}
 
-The range-based for-loop uses the iterators implicitly.
+基于范围的for循环会隐式地使用迭代器。
 
-Because iterators are not checked, they have the same issues as pointers.
+因为不检查迭代器，所以它们有和指针一样的问题。
 
 \begin{cpp}
 std::vector<int> verc{1, 23, 3, 3, 3, 4, 5};

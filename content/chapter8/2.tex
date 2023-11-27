@@ -1,4 +1,4 @@
-Each container generates its suitable iterator on request. For example, an std::unordered\_map generates constant and non-constant forward iterators.
+每个容器根据请求生成合适的迭代器。例如，std::unordered\_map会生成常量和非常量前向迭代器。
 
 \begin{cpp}
 std::unordered_map<std::string, int>::iterator unMapIt= unordMap.begin();
@@ -8,7 +8,7 @@ std::unordered_map<std::string, int>::const_iterator unMapIt= unordMap.cbegin();
 std::unordered_map<std::string, int>::const_iterator unMapIt= unordMap.cend();
 \end{cpp}
 
-In addition, std::map supports the backward iterators:
+此外，std::map还支持后向迭代器:
 
 \begin{cpp}
 std::map<std::string, int>::reverse_iterator mapIt= map.rbegin();
@@ -18,8 +18,8 @@ std::map<std::string, int>::const_reverse_iterator mapIt= map.crbegin();
 std::map<std::string, int>::const_reverse_iterator mapIt= map.crend();
 \end{cpp}
 
-\begin{myTip}{Use auto for iterator definition}
-Iterator definition is very labor intensive. The automatic type deduction with auto reduces the writing to the bare minimum.
+\begin{myTip}{使用auto定义迭代器}
+迭代器的定义有些麻烦，使用自动类型推断可将减少所需的代码量。
 
 \begin{cpp}
 std::map<std::string, int>::const_reverse_iterator
@@ -28,7 +28,7 @@ auto mapIt2= map.crbegin();
 \end{cpp}
 \end{myTip}
 
-\filename{Iterator creation}
+\filename{创建迭代器}
 
 \begin{cpp}
 // iteratorCreation.cpp
