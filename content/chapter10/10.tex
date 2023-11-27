@@ -1,8 +1,8 @@
-Merge operations empower you to merge sorted ranges in a new sorted range. The algorithm requires that the ranges and the algorithm use the same sorting criterion. If not, the program has undefined behavior. Per default, the predefined sorting criterion std::less is used. If you use your sorting criterion, it has to obey the strict weak ordering. If not, the program is undefined.
+合并操作使您能够将已排序的范围合并到新的已排序范围中。该算法要求范围和算法使用相同的排序标准。若不是，则程序具有未定义行为。默认情况下，使用预定义的排序条件std::less。若使用排序标准，则必须遵守严格的弱排序。若不是，则程序未定义。
 
-You can merge two sorted ranges with std::inplace\_merge and std::merge. You can check with std::includes if one sorted range is in another sorted range. You can merge with std::set\_difference, std::set\_intersection, std::set\_symmetric\_difference and std::set\_union two sorted ranges in a new sorted range.
+可以使用std::inplace\_merge和std::merge合并两个排序的范围。可以使用std::includes检查一个排序范围是否在另一个排序范围中。可以将std::set\_difference, std::set\_intersection, std::set\_symmetric\_difference和std::set\_union这两个排序范围合并为一个新的排序范围。
 
-Merges in place two sorted sub-ranges [first, mid) and [mid, last):
+将两个排序好的子范围[first, mid)和[mid, last)合并:
 
 \begin{cpp}
 void inplace_merge(BiIt first, BiIt mid, BiIt last)
@@ -12,7 +12,7 @@ void inplace_merge(BiIt first, BiIt mid, BiIt last, BiPre pre)
 void inplace_merge(ExePol pol, BiIt first, BiIt mid, BiIt last, BiPre pre)
 \end{cpp}
 
-Merges two sorted ranges and copies the result to result:
+合并两个排序范围并将结果复制到result:
 
 \begin{cpp}
 OutIt merge(InpIt first1, InpIt last1, InpIt first2, InpIt last2, OutIt result)
@@ -25,7 +25,7 @@ FwdIt3 merge(ExePol pol, FwdIt1 first1, FwdIt1 last1,
 			 FwdpIt2 first2, FwdIt2 last2, FwdIt3 result, BiPre pre)
 \end{cpp}
 
-Checks if all elements of the second range are in the first range:
+检查第二个范围的所有元素是否都在第一个范围内:
 
 \begin{cpp}
 bool includes(InpIt first1, InpIt last1, InpIt1 first2, InpIt1 last2)
@@ -36,7 +36,7 @@ bool includes(ExePol pol, FwdIt first1, FwdIt last1,
 			  FwdIt1 first2, FwdIt1 last2, BinPre pre)
 \end{cpp}
 
-Copies these elements of the first range to result, being not in the second range:
+将不属于第二个范围的第一个范围的元素复制到result:
 
 \begin{cpp}
 OutIt set_difference(InpIt first1, InpIt last1, InpIt1 first2, InpIt2 last2,
@@ -50,7 +50,7 @@ FwdIt2 set_difference(ExePol pol, FwdIt first1, FwdIt last1,
 					  FwdIt1 first2, FwdIt1 last2, FwdIt2 result, BiPre pre)
 \end{cpp}
 
-Determines the intersection of the first with the second range and copies the result to result:
+确定第一个范围与第二个范围的交集，并将结果复制到result:
 
 \begin{cpp}
 OutIt set_intersection(InpIt first1, InpIt last1, InpIt1 first2, InpIt2 last2,
@@ -64,7 +64,7 @@ FwdIt2 set_intersection(ExePol pol, FwdIt first1, FwdIt last1,
 						FwdIt1 first2, FwdIt1 last2, FwdIt2 result, BiPre pre)
 \end{cpp}
 
-Determines the symmetric difference of the first with the second range and copies the result to result:
+确定第一个范围与第二个范围的对称差，并将结果复制到result:
 
 \begin{cpp}
 OutIt set_symmetric_difference(InpIt first1, InpIt last1,
@@ -80,7 +80,7 @@ FwdIt2 set_symmetric_difference(ExePol pol, FwdIt first1, FwdIt last1,
 								BiPre pre)
 \end{cpp}
 
-Determines the union of the first with the second range and copies the result to result:
+确定第一个范围与第二个范围的并集，并将结果复制到result:
 
 \begin{cpp}
 OutIt set_union(InpIt first1, InpIt last1,
@@ -94,9 +94,9 @@ FwdIt2 set_union(ExePol pol, FwdIt first1, FwdIt last1,
 				 FwdIt1 first2, FwdIt1 last2, FwdIt2 result, BiPre pre)
 \end{cpp}
 
-The returned iterator is an end iterator for the destination range. The destination range of std::set\_difference has all the elements in the first but not the second range. On the contrary, the destination range of std::symmetric\_difference has only the elements that are elements of one range but not both. std::union determines the union of both sorted ranges.
+返回的迭代器是目标范围的end迭代器。std::set\_difference的目标范围包含第一个范围中的所有元素，但不包含第二个范围中的元素。相反，std::symmetric\_difference的目标范围只有属于一个范围的元素，而不是同时属于两个范围的元素。std::union决定了这两个已排序范围的并集。
 
-\filename{Merge algorithms}
+\filename{合并算法}
 
 \begin{cpp}
 // merge.cpp

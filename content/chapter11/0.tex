@@ -1,8 +1,8 @@
-\myGraphic{0.6}{content/chapter11/images/1.jpg}{Cippi starts the pipeline job}
+\myGraphic{0.6}{content/chapter11/images/1.jpg}{Cippi启动流水线作业}
 
-The ranges library was added with C++20, but has powerful extensions with C++23. The algorithms of the ranges library are lazy, operate directly on the container, and can be composed. Furthermore, most of the classical STL algorithms have ranges pendants, which support projections and provide additional safety guarantees.
+范围库是在C++20中添加的，但在C++23中有强大的扩展。范围库具有惰性算法，直接在容器上操作，并且可以组合。此外，大多数经典STL算法都具有范围挂坠，支持投影并提供额外的安全保证。
 
-\filename{Composing of ranges}
+\filename{范围的组成}
 
 \begin{cpp}
 // rangesFilterTransform.cpp
@@ -17,7 +17,7 @@ auto results = numbers | std::views::filter([](int n){ return n % 2 == 0; })
 for (auto v: results) std::cout << v << " "; // 4 8 12
 \end{cpp}
 
-You have to read the expression from left to right. The pipe symbol | stands for function composition: First, all numbers can pass which are even (std::views::filter([](int n)\{ return n \% 2 == 0;\})). Afterward, each remaining number is mapped to its double (std::views::transform([](int n)\{return n * 2; \})).
+必须从左到右读这个表达式。管道符号|代表函数组合:首先，所有偶数都可以通过(std::views::filter([](int n)\{return n \% 2 == 0;\}))。之后，每个剩余的数字映射到双倍结果(std::views::transform([](int n)\{return n * 2;\}))。
 
 
 

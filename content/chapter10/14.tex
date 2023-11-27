@@ -1,13 +1,13 @@
-The numeric algorithms std::accumulate, std::adjacent\_difference, std::partial\_sum, std::inner\_product and std::iota and the six additional C++17 algorithms std::exclusive\_scan, std::inclusive\_scan, std::transform\_exclusive\_scan, std::transform\_inclusive\_scan, std::reduce, and std::transform\_reduce are special. All of them are defined in the header <numeric>. They are widely applicable because they can invoked with a callable.
+数值算法std::accumulate、std:: nearby \_difference、std::partial\_sum、std::inner\_product和std::iota，以及另外六个C++17算法std::exclusive\_scan、std::inclusive\_scan、std::transform\_exclusive\_scan、std::transform\_inclusive\_scan、std::reduce和std::transform\_reduce是特殊的，都在头文件<numeric>中定义。其广泛适用，可用可调用对象调用。
 
-Accumulates the elements of the range. init is the start value:
+累加范围的元素。Init是起始值:
 
 \begin{cpp}
 T accumulate(InpIt first, InpIt last, T init)
 T accumulate(InpIt first, InpIt last, T init, BiFun fun)
 \end{cpp}
 
-Calculates the difference between adjacent elements of the range and stores the result in result:
+计算范围内相邻元素之间的差，并将结果存储在result中:
 
 \begin{cpp}
 OutIt adjacent_difference(InpIt first, InpIt last, OutIt result)
@@ -18,14 +18,14 @@ FwdIt2 adjacent_difference(ExePol pol, FwdIt first, FwdIt last,
 						   FwdIt2 result, BiFun fun)
 \end{cpp}
 
-Calculates the partial sum of the range:
+计算范围的部分和:
 
 \begin{cpp}
 OutIt partial_sum(InpIt first, InpIt last, OutIt result)
 OutIt partial_sum(InpIt first, InpIt last, OutIt result, BiFun fun)
 \end{cpp}
 
-Calculates the inner product (scalar product) of the two ranges and returns the result:
+计算两个范围的内积(标量积)并返回结果:
 
 \begin{cpp}
 T inner_product(InpIt first1, InpIt last1, OutIt first2, T init)
@@ -33,15 +33,15 @@ T inner_product(InpIt first1, InpIt last1, OutIt first2, T init,
 				BiFun fun1, BiFun fun2)
 \end{cpp}
 
-Assigns each element of the range a by one sequentially increasing value. The start value is val:
+为范围中的每个元素赋一个依次递增的值。初始值为val:
 
 \begin{cpp}
 void iota(FwdIt first, FwdIt last, T val)
 \end{cpp}
 
-The algorithms are more challenging to get.
+算法很难得到这样的结果。
 
-std::accumulate without callable uses the following strategy:
+不带可调用的std::accumulate可以使用以下策略:
 
 \begin{cpp}
 result = init;
@@ -50,7 +50,7 @@ result += *(first+1);
 ...
 \end{cpp}
 
-std::adjacent\_difference without callable uses the following strategy:
+不带可调用的std::adjacent\_difference可使用以下策略:
 
 \begin{cpp}
 *(result) = *first;
@@ -59,7 +59,7 @@ std::adjacent\_difference without callable uses the following strategy:
 ...
 \end{cpp}
 
-std::partial\_sum without callable uses the following strategy:
+不带可调用的Std::partial\_sum可使用以下策略:
 
 \begin{cpp}
 *(result) = *first;
@@ -68,9 +68,9 @@ std::partial\_sum without callable uses the following strategy:
 ...
 \end{cpp}
 
-The challenging algorithm variation inner\_product(InpIt, InpIt, OutIt, T, BiFun fun1, BiFun fun2) with two binary callables uses the following strategy: The second callable fun2 is applied to each pair of the ranges to generate the temporary destination range tmp, and the first callable is applied to each element of the destination range tmp for accumulating them and therefore generating the final result.
+具有挑战性的算法变化inner\_product(InpIt, InpIt, OutIt, T, BiFun fun1, BiFun fun2)具有两个二进制可调用对象，使用以下策略:第二个可调用对象fun2应用于每一对范围，以生成临时目标范围tmp，第一个可调用对象应用于目标范围tmp的每个元素，以累积它们，从而生成最终结果。
 
-\filename{Numeric algorithms}
+\filename{数值算法}
 
 \begin{cpp}
 // numeric.cpp
@@ -100,15 +100,15 @@ for (auto v: myLongVec) std::cout << v << " ";
 						// 2000 2001 2002 2003 2004 2005 2006 2007 2008 2009
 \end{cpp}
 
-\mySamllsection{New Parallel Algorithms with C++17}
+\mySamllsection{新并行算法与C++17}
 
-The six new algorithms typically used for parallel execution are known as \href{https://en.wikipedia.org/wiki/Prefix_sum}{prefix sum}. The behavior of the algorithms is undefined if the given binary callables are not associative and commutative.
+通常用于并行执行的六种新算法称为\href{https://en.wikipedia.org/wiki/Prefix_sum}{前追求和}。若给定的二元可调用对象不可关联和交换，则算法的行为未定义。
 
-reduce: reduces the elements of the range. init is the start value.
+reduce: 减少范围内的元素。init是初始值。
 
 \begin{itemize}
 \item
-Behaves the same as std::accumulate, but the range may be rearranged.
+其行为与std::accumulate相同，但范围可能会重新排列。
 \end{itemize}
 
 \begin{cpp}
@@ -122,27 +122,27 @@ T reduce(InpIt first, InpIt last, T init, BiFun fun)
 T reduce(ExePol pol, InpIt first, InpIt last, T init, BiFun fun)
 \end{cpp}
 
-transform\_reduce: transforms and reduces the elements of one or two ranges. init is the start value.
+transform\_reduce: 转换和归约一个或两个范围的元素。Init是起始值。
 
 \begin{itemize}
 \item
-Behaves similar to std::inner\_product, but the range may be rearranged.
+行为类似于std::inner\_product，但范围可能会重新排列。
 
 \item
-If applied to two ranges
+若应用于两个范围
 \begin{itemize}
 \item
-if not provided, multiplication is used for transforming the ranges into one range, and addition is used to reduce the intermediate range into the result
+若没有提供，则使用乘法将范围转换为一个范围，使用加法将中间范围归约为结果
 
 \item
-if provided, fun1 is used for the transforming step, and fun2 is used for the reducing step
+若有提供，fun1用于变换步骤，fun2用于归约步骤
 \end{itemize}
 
 \item
-If applied to a single range
+若应用于单个范围
 \begin{itemize}
 \item
-fun2 is used for transforming the given range
+fun2用于转换给定的范围
 \end{itemize}
 \end{itemize}
 
@@ -160,11 +160,11 @@ T transform_reduce(ExePol pol, FwdIt first, FwdIt last,
 				   T init, BiFun fun1, UnFun fun2)
 \end{cpp}
 
-\begin{myTip}{MapReduce in C++17}
+\begin{myTip}{C++17中的MapReduce}
 
-The \href{https://www.haskell.org/}{Haskell} function map is called std::transform in C++. When you substitute transform with map in the name std::transform\_reduce, you will get std::map\_reduce. \href{https://en.wikipedia.org/wiki/MapReduce}{MapReduce} is the well-known parallel framework that first maps each value to a new value then reduces in the second phase all values to the result.
+\href{https://www.haskell.org/}{Haskell}函数映射在C++中称为std::transform。当用std::transform\_reduce名称中的map替换transform时，将获得std::map\_reduce。\href{https://en.wikipedia.org/wiki/MapReduce}{MapReduce}是一个著名的并行框架，它首先将每个值映射到一个新值，然后在第二阶段将所有值归约到结果。
 
-The algorithm is directly applicable in C++17. Each word is mapped to its length in the map phase, and the lengths of all words are then reduced to their sum during the reduce phase. The result is the sum of the length of all words.
+该算法直接适用于C++17。在映射阶段，每个单词会映射到它的长度，然后在归约阶段，所有单词的长度会缩减为它们的和。结果是所有单词的长度之和。
 
 \begin{cpp}
 std::vector<std::string> str{"Only", "for", "testing", "purpose"};
@@ -179,14 +179,14 @@ std::cout << result << '\n'; // 21
 
 \end{myTip}
 
-exclusive\_scan: computes the exclusive prefix sum using a binary operation.
+exclusive\_scan: 使用二进制操作计算互斥前缀和。
 
 \begin{itemize}
 \item
-Behaves similar to std::reduce, but provides a range of all prefix sums
+行为类似于std::reduce，但提供了所有前缀和的范围
 
 \item
-excludes the last element in each iteration
+排除每次迭代中的最后一个元素
 \end{itemize}
 
 \begin{cpp}
@@ -199,14 +199,14 @@ FwdIt2 exclusive_scan(ExePol pol, FwdIt first, FwdIt last,
 					  FwdIt2 first2, T init, BiFun fun)
 \end{cpp}
 
-inclusive\_scan: computes the inclusive prefix sum using a binary operation.
+inclusive\_scan: 使用二元运算计算包含前缀和。
 
 \begin{itemize}
 \item
-Behaves similar to std::reduce, but provides a range of all prefix sums
+行为类似于std::reduce，但提供了所有前缀和的范围
 
 \item
-includes the last element in each iteration
+包括每次迭代中的最后一个元素
 \end{itemize}
 
 \begin{cpp}
@@ -222,14 +222,14 @@ FwdIt2 inclusive_scan(ExePol pol, FwdIt first, FwdIt last,
 					  FwdIt2 first2, BiFun fun, T init)
 \end{cpp}
 
-transform\_exclusive\_scan: first transforms each element and then computes the exclusive prefix sums.
+transform\_exclusive\_scan: 首先变换每个元素，然后计算互斥前缀和。
 
 \begin{cpp}
 OutIt transform_exclusive_scan(InpIt first, InpIt last, OutIt first2, T init, BiFun fun, UnFun fun2)
 FwdIt2 transform_exclusive_scan(ExePol pol, FwdIt first, FwdIt last, FwdIt2 first2, T init, BiFun fun, UnFun fun2)
 \end{cpp}
 
-transform\_inclusive\_scan: first transforms each element of the input range and then computes the inclusive prefix sums.
+transform\_inclusive\_scan: 首先变换输入范围中的每个元素，然后计算包含前缀和。
 
 \begin{cpp}
 OutIt transform_inclusive_scan(InpIt first, InpIt last, OutIt first2,
@@ -249,9 +249,9 @@ FwdIt2 transform_inclusive_scan(ExePol pol, FwdIt first, FwdIt last,
 								T init)
 \end{cpp}
 
-The following example illustrates the usage of the six algorithms using the parallel execution policy.
+下面的示例说明了使用并行执行策略六种算法的用法。
 
-\filename{The new algorithms}
+\filename{新算法}
 
 \begin{cpp}
 // newAlgorithms.cpp

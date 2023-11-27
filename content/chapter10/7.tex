@@ -1,34 +1,33 @@
 
 
-\begin{myTip}{What is a partition?}
-
-A partition of a set is a decomposition of a set in subsets so that each element of the set is precisely in one subset. A binary predicate defines the subset so that the members of the first subset fulfill the predicate. The remaining elements are in the second subset.
+\begin{myTip}{什么是分区?}
+一个集合的划分是一个集合在子集中的分解，使得集合的每个元素精确地在一个子集中。二元谓词定义子集，以便第一个子集的成员满足谓词。剩下的元素在第二个子集中。
 \end{myTip}
 
-C++ offers a few functions for dealing with partitions. They all need a unary predicate pre. std::partition and std::stable\_partition partition a range and return the partition point. With std::partition\_point, you can get the partition point of a partition. Afterward, you can check the partition with std::is\_partitioned or copy it with std::partition\_copy.
+C++提供了一些处理分区的函数，都需要一个一元谓词。std::partition和std::stable\_partition划分一个范围并返回分区点。使用std::partition\_point，可以获得分区的分区点。之后，可以使用std::is\_partitioned检查分区，或者使用std::partition\_copy复制分区。
 
-Checks if the range is partitioned:
+检查范围是否被分区:
 
 \begin{cpp}
 bool is_partitioned(InpIt first, InpIt last, UnPre pre)
 bool is_partitioned(ExePol pol, FwdIt first, FwdIt last, UnPre pre)
 \end{cpp}
 
-Partitions the range:
+范围分区:
 
 \begin{cpp}
 FwdIt partition(FwdIt first, FwdIt last, UnPre pre)
 FwdIt partition(ExePol pol, FwdIt first, FwdIt last, UnPre pre)
 \end{cpp}
 
-Partitions the range (stable):
+范围分区(稳定):
 
 \begin{cpp}
 BiIt stable_partition(FwdIt first, FwdIt last, UnPre pre)
 BiIt stable_partition(ExePol pol, FwdIt first, FwdIt last, UnPre pre)
 \end{cpp}
 
-Copies a partition in two ranges:
+在两个范围内复制分区:
 
 \begin{cpp}
 pair<OutIt1, OutIt2> partition_copy(InIt first, InIt last,
@@ -37,15 +36,15 @@ pair<FwdIt1, FwdIt2> partition_copy(ExePol pol, FwdIt1 first, FwdIt1 last,
 					 FwdIt2 result_true, FwdIt3 result_false, UnPre pre)
 \end{cpp}
 
-Returns the partition point:
+返回分区点:
 
 \begin{cpp}
 FwdIt partition_point(FwdIt first, FwdIt last, UnPre pre)
 \end{cpp}
 
-A std::stable\_partition guarantees, contrary to a std::partition that the elements preserve their relative order. The returned iterator FwdIt and BiIt point to the second subset of the partition’s initial position. The pair std::pair<OutIt, OutIt> of the algorithm std::partition\_copy contains the end iterator of the subsets result\_true and result\_false. The behavior of std::partition\_point is undefined if the range is not partitioned.
+与std::partition相反，std::stable\_partition保证元素保持它们的相对顺序。返回的迭代器FwdIt和BiIt指向分区初始位置的第二个子集。算法std::partition\_copy的pair std::pair<OutIt, OutIt>包含子集result\_true和result\_false的结束迭代器。若范围未分区，则std::partition\_point的行为未定义。
 
-\filename{Partition algorithms}
+\filename{分区算法}
 
 \begin{cpp}
 // partition.cpp

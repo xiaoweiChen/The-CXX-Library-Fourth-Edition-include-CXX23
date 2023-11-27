@@ -1,40 +1,40 @@
 
-C++ has many algorithms to modify elements and ranges.
+C++有许多修改元素和范围的算法。
 
-\mySamllsection{Copy Elements and Ranges}
+\mySamllsection{复制元素和范围}
 
-You can copy ranges forward with std::copy, backward with std::copy\_backward, and conditionally with std::copy\_if. If you want to copy n elements, you can use std::copy\_n.
+可以使用std::copy向前复制范围，使用std::copy\_backward向后复制范围，使用std::copy\_if有条件地复制范围。若要复制n个元素，可以使用std::copy\_n。
 
-Copies the range:
+复制范围:
 
 \begin{cpp}
 OutIt copy(InpIt first, InpIt last, OutIt result)
 FwdIt2 copy(ExePol pol, FwdIt first, FwdIt last, FowdIt2 result)
 \end{cpp}
 
-Copies n elements:
+复制n个元素:
 
 \begin{cpp}
 OutIt copy_n(InpIt first, Size n, OutIt result)
 FwdIt2 copy_n(ExePol pol, FwdIt first, Size n, FwdIt2 result)
 \end{cpp}
 
-Copies the elements dependent on the predicate pre.
+复制依赖谓词pre的元素。
 
 \begin{cpp}
 OutIt copy_if(InpIt first, InpIt last, OutIt result, UnPre pre)
 FwdIt2 copy_if(ExePol pol, FwdIt first, FwdIt last, FwdIt2 result, UnPre pre)
 \end{cpp}
 
-Copies the range backward:
+向后复制范围:
 
 \begin{cpp}
 BiIt copy_backward(BiIt first, BiIt last, BiIt result)
 \end{cpp}
 
-The algorithms need input iterators and copy their elements to result. They return an end iterator to the destination range.
+算法需要输入迭代器，并将其元素复制到result，返回一个结束迭代器到目标范围内。
 
-\filename{Copy elements and ranges}
+\filename{复制元素和范围}
 
 \begin{cpp}
 // copy.cpp
@@ -62,11 +62,11 @@ std::copy_backward(str.begin(), str.begin() + 5, str.end());
 std::cout << str; // abcdefghijkabcde
 \end{cpp}
 
-\mySamllsection{Replace Elements and Ranges}
+\mySamllsection{替换元素和范围}
 
-You have with std::replace, std::replace\_if, std::replace\_copy, and std::replace\_copy\_if four variations to replace elements in a range. The algorithms differ in two aspects. First, does the algorithm need a predicate? Second, does the algorithm copy the elements in the destination range? 
+可以使用std::replace、std::replace\_if、std::replace\_copy和std::replace\_copy\_if来替换范围中的元素。算法在两个方面有所不同。首先，算法需要谓词吗?其次，算法是否复制目标范围内的元素?
 
-Replaces the old elements in the range with newValue, if the old element has the value old.
+若旧元素的值为old，则用newValue替换范围内的旧元素。
 
 \begin{cpp}
 void replace(FwdIt first, FwdIt last, const T& old, const T& newValue)
@@ -74,7 +74,7 @@ void replace(ExePol pol, FwdIt first, FwdIt last, const T& old,
 			 const T& newValue)
 \end{cpp}
 
-Replaces the old elements of the range with newValue, if the old element fulfills the predicate pred:
+若旧元素满足谓词pred，则用newValue替换该范围的旧元素:
 
 \begin{cpp}
 void replace_if(FwdIt first, FwdIt last, UnPred pred, const T& newValue)
@@ -82,7 +82,7 @@ void replace_if(ExePol pol, FwdIt first, FwdIt last, UnPred pred,
 			    const T& newValue)
 \end{cpp}
 
-Replaces the old elements in the range with newValue if the old element has the value old. Copies the result to result:
+若旧元素的值为old，则用newValue替换范围内的旧元素。将结果复制到result:
 
 \begin{cpp}
 OutIt replace_copy(InpIt first, InpIt last, OutIt result, const T& old,
@@ -91,9 +91,9 @@ FwdIt2 replace_copy(ExePol pol, FwdIt first, FwdIt last,
 					FwdIt2 result, const T& old, const T& newValue)
 \end{cpp}
 
-Replaces the old elements of the range with newValue, if the old element fulfills the predicate pred.
+若旧元素满足谓词pred，则用newValue替换该范围的旧元素。
 
-Copies the result to result:
+将结果复制到result:
 
 \begin{cpp}
 OutIt replace_copy_if(InpIt first, InpIt last, OutIt result, UnPre pred,
@@ -102,9 +102,7 @@ FwdIt2 replace_copy_if(ExePol pol, FwdIt first, FwdIt last,
 					   FwdIt2 result, UnPre pred, const T& newValue)
 \end{cpp}
 
-The algorithms in action.
-
-\filename{Replace elements and ranges}
+\filename{替换元素和范围}
 
 \begin{cpp}
 // replace.cpp
@@ -129,25 +127,25 @@ std::back_inserter(str3), [](char c){ return c == '3'; }, '4');
 std::cout << str3; // Only4for4testing4purpose.
 \end{cpp}
 
-\mySamllsection{Remove Elements and Ranges}
+\mySamllsection{删除元素和范围}
 
-The four variations std::remove, std::remove\_if, std::remove\_copy and std::remove\_copy\_if support two kinds of operations. On the one hand, remove elements with and without a predicate from a range. On the other hand, copy the result of your modification to a new range.
+std::remove、std::remove\_if、std::remove\_copy和std::remove\_copy\_if支持两种操作。一方面，从范围中删除带有或不带有谓词的元素。另一方面，将修改的结果复制到新的范围。
 
-Removes the elements from the range, having the value val:
+从范围中删除值为val的元素:
 
 \begin{cpp}
 FwdIt remove(FwdIt first, FwdIt last, const T& val)
 FwdIt remove(ExePol pol, FwdIt first, FwdIt last, const T& val)
 \end{cpp}
 
-Removes the elements from the range, fulfilling the predicate pred:
+从范围中移除元素，满足谓词pred:
 
 \begin{cpp}
 FwdIt remove_if(FwdIt first, FwdIt last, UnPred pred)
 FwdIt remove_if(ExePol pol, FwdIt first, FwdIt last, UnPred pred)
 \end{cpp}
 
-Removes the elements from the range, having the value val. Copies the result to result:
+从范围中移除值为val的元素。将结果复制到result:
 
 \begin{cpp}
 OutIt remove_copy(InpIt first, InpIt last, OutIt result, const T& val)
@@ -155,7 +153,7 @@ FwdIt2 remove_copy(ExePol pol, FwdIt first, FwdIt last,
 					FwdIt2 result, const T& val)
 \end{cpp}
 
-Removes the elements from the range which fulfill the predicate pred. It copies the result to result.
+从范围中删除满足谓词pred的元素，将结果复制到result。
 
 \begin{cpp}
 OutIt remove_copy_if(InpIt first, InpIt last, OutIt result, UnPre pred)
@@ -163,13 +161,13 @@ FwdIt2 remove_copy_if(ExePol pol, FwdIt first, FwdIt last,
 						FwdIt2 result, UnPre pred)
 \end{cpp}
 
-The algorithms need input iterators for the source range and an output iterator for the destination range. They return, as a result, an end iterator for the destination range.
+算法需要源范围的输入迭代器和目标范围的输出迭代器。作为结果，会返回目标范围的结束迭代器。
 
-\begin{myWarning}{Apply the erase-remove idiom}
+\begin{myWarning}{应用擦除-删除习语}
 	
-The remove variations don’t remove an element from the range. They return the new logical end of the range. You have to adjust the size of the container with the erase-remove idiom.
+移除变量不会从范围中移除元素，值会返回范围的新逻辑结束位置。所以，必须使用擦除-删除习惯用法来调整容器的大小。
 
-\filename{Remove elements and ranges}
+\filename{删除元素和范围}
 
 \begin{cpp}
 // remove.cpp
@@ -193,41 +191,41 @@ std::cout << str << '\n'; // nly for esting urpose.
 \end{cpp}
 \end{myWarning}
 
-\mySamllsection{Fill and Create Ranges}
+\mySamllsection{填充和创建范围}
 
-You can fill a range with std::fill and std::fill\_n; you can generate new elements with std::generate and std::generate\_n.
+可以用std::fill和std::fill\_n，可以使用std::generate和std::generate\_n生成新元素。
 
-Fills a range with elements:
+用元素填充一个范围:
 
 \begin{cpp}
 void fill(FwdIt first, FwdIt last, const T& val)
 void fill(ExePol pol, FwdIt first, FwdIt last, const T& val)
 \end{cpp}
 
-Fills a range with n new elements:
+用n个新元素填充一个范围:
 
 \begin{cpp}
 OutIt fill_n(OutIt first, Size n, const T& val)
 FwdIt fill_n(ExePol pol, FwdIt first, Size n, const T& val)
 \end{cpp}
 
-Generates a range with a generator gen:
+使用生成器gen生成一个范围:
 
 \begin{cpp}
 void generate(FwdIt first, FwdIt last, Generator gen)
 void generate(ExePol pol, FwdIt first, FwdIt last, Generator gen)
 \end{cpp}
 
-Generates n elements of a range with the generator gen:
+使用生成器gen生成一个范围的n个元素:
 
 \begin{cpp}
 OutIt generate_n(OutIt first, Size n, Generator gen)
 FwdIt generate_n(ExePol pol, FwdIt first, Size n, Generator gen)
 \end{cpp}
 
-The algorithms expect the value val or generator gen as an argument. gen has to be a function taking no argument and returning the new value. The return value of the algorithms std::fill\_n and std::generate\_n is an output iterator, pointing to the last created element.
+算法期望值val或Generator gen作为参数，Gen必须是一个不接受参数并返回新值的函数。std::fill\_n和std::generate\_n算法的返回值是一个输出迭代器，指向最后创建的元素。
 
-\filename{Fill and create ranges}
+\filename{填充和创建范围}
 
 \begin{cpp}
 // fillAndCreate.cpp
@@ -250,31 +248,30 @@ for (auto v: vec) std::cout << v << " ";
 						// 1 2 3 4 5 2011 2011 2011 2011 2011
 \end{cpp}
 
-\mySamllsection{Move Ranges}
+\mySamllsection{移动范围}
 
-std::move moves the ranges forward; std::move\_backward moves the ranges backward.
+std::move可向前移动范围;std::move\_backward可向后移动范围。
 
-Moves the range forward:
+向前移动范围:
 
 \begin{cpp}
 OutIt move(InpIt first, InpIt last, OutIt result)
 FwdIt2 move(ExePol pol, FwdIt first, FwdIt last, Fwd2It result)
 \end{cpp}
 
-Moves the range backward:
+向后移动范围：
 
 \begin{cpp}
 BiIt move_backward(BiIt first, BiIt last, BiIt result)
 \end{cpp}
 
-Both algorithms need a destination iterator result, to which the range is moved. In the case of the std::move algorithm, this is an output iterator. In the case of the std::move\_backward algorithm, this is a bidirectional iterator. The algorithms return an output or a bidirectional iterator, pointing to the initial position in the destination range.
+这两种算法都需要一个目标迭代器result，将范围移动到该结果中。对于std::move算法，这是一个输出迭代器。对于std::move\_backward算法，这是一个双向迭代器。这些算法返回一个输出或一个双向迭代器，指向目标范围内的初始位置。
 
-\begin{myWarning}{The source range may be changed}
-	
-std::move and std::move\_backward apply move semantics. Therefore the source range is valid but has not necessarily the same elements afterward.
+\begin{myWarning}{源范围可以修改}	
+std::move和std::move\_backward应用移动语义，所以源范围是有效的，但之后不一定有相同的元素。
 \end{myWarning}
 
-\filename{Move ranges}
+\filename{移动范围}
 
 \begin{cpp}
 // move.cpp
@@ -293,28 +290,28 @@ std::move_backward(str.begin(), str.end(), str2.end());
 std::cout << str2; // -----abcdefghijklmnop
 \end{cpp}
 
-\mySamllsection{Swap Ranges}
+\mySamllsection{交换范围}
 
-std::swap and std::swap\_ranges can swap objects and ranges.
+std::swap和std::swap\_ranges可以交换对象和范围。
 
-Swaps objects:
+互换对象:
 
 \begin{cpp}
 void swap(T& a, T& b)
 \end{cpp}
 
-Swaps ranges:
+交换范围:
 
 \begin{cpp}
 FwdIt swap_ranges(FwdIt1 first1, FwdIt1 last1, FwdIt first2)
 FwdIt swap_ranges(ExePol pol, FwdIt1 first1, FwdIt1 last1, FwdIt first2)
 \end{cpp}
 
-The returned iterator points to the last swapped element in the destination range.
+返回的迭代器指向目标范围内最后交换的元素。
 
-\begin{myWarning}{The ranges must not overlap}
+\begin{myWarning}{范围不能重叠}
 	
-\filename{Swap algorithms}
+\filename{交换算法}
 
 \begin{cpp}
 // swap.cpp
@@ -336,18 +333,18 @@ std::cout << str2 << '\n'; // -----abcde-----------
 \end{cpp}
 \end{myWarning}
 
-\mySamllsection{Transform Ranges}
+\mySamllsection{变换范围}
 
-The std::transform algorithm applies a unary or binary callable to a range and copies the modified elements to the destination range.
+std::transform算法将一元或二进制可调用对象应用于范围，并将修改后的元素复制到目标范围。
 
-Applies the unary callable fun to the elements of the input range and copies the result to result:
+将一元可调用函数fun应用于输入范围的元素，并将结果复制到result:
 
 \begin{cpp}
 OutIt transform(InpIt first1, InpIt last1, OutIt result, UnFun fun)
 FwdIt2 transform(ExePol pol, FwdIt first1, FwdIt last1, FwdIt2 result, UnFun fun)
 \end{cpp}
 
-Applies the binary callable fun to both input ranges and copies the result to result:
+将二进制可调用对象fun应用于两个输入范围，并将结果复制到result:
 
 \begin{cpp}
 OutIt transform(InpIt1 first1, InpIt1 last1, InpIt2 first2, OutIt result,
@@ -356,9 +353,9 @@ FwdIt3 transform(ExePol pol, FwdIt1 first1, FwdIt1 last1,
 				 FwdIt2 first2, FwdIt3 result, BiFun fun)
 \end{cpp}
 
-The difference between the two versions is that the first version applies the callable to each element of the range; the second version applies the callable to pairs of both ranges in parallel. The returned iterator points to one position after the last transformed element.
+两个版本的不同之处在于，第一个版本将可调用单元应用于范围的每个元素;第二个版本并行地将可调用对象应用于两个范围对。返回的迭代器指向最后一个转换元素之后的一个位置。
 
-\filename{Transform algorithms}
+\filename{变换算法}
 
 \begin{cpp}
 // transform.cpp
@@ -381,27 +378,27 @@ for (auto str: vecRes) std::cout << str << " ";
                              // -Only- -for- -testing- -purpose- -.-
 \end{cpp}
 
-\mySamllsection{Reverse Ranges}
+\mySamllsection{反向范围}
 
-std::reverse and std::reverse\_copy invert the order of the elements in their range.
+std::reverse和std::reverse\_copy将其范围内元素的顺序颠倒。
 
-Reverses the order of the elements in the range:
+反转范围内元素的顺序:
 
 \begin{cpp}
 void reverse(BiIt first, BiIt last)
 void reverse(ExePol pol, BiIt first, BiIt last)
 \end{cpp}
 
-Reverses the order of the elements in the range and copies the result to result:
+反转范围内元素的顺序，并将结果复制到result:
 
 \begin{cpp}
 OutIt reverse_copy(BiIt first, BiIt last, OutIt result)
 FwdIt reverse_copy(ExePol pol, BiIt first, BiIt last, FwdIt result)
 \end{cpp}
 
-Both algorithms require bidirectional iterators. The returned iterator points to the output range result position before the elements are copied.
+这两种算法都需要双向迭代器，返回的迭代器指向复制元素之前的输出范围结果位置。
 
-\filename{Reverse range algorithms}
+\filename{反向范围的算法}
 
 \begin{cpp}
 // algorithmen.cpp
@@ -414,18 +411,18 @@ std::reverse(str.begin(), str.begin()+5);
 std::cout << str; // 543216789
 \end{cpp}
 
-\mySamllsection{Rotate Ranges}
+\mySamllsection{旋转范围}
 
-std::rotate and std::rotate\_copy rotate their elements.
+std::rotate和std::rotate\_copy旋转它们的元素。
 
-Rotates the elements in such a way that middle becomes the new first element:
+以这样的方式旋转元素，middle成为新的第一个元素:
 
 \begin{cpp}
 FwdIt rotate(FwdIt first, FwdIt middle, FwdIt last)
 FwdIt rotate(ExePol pol, FwdIt first, FwdIt middle, FwdIt last)
 \end{cpp}
 
-Rotates the elements so that middle becomes the new first element. Copies the result to result:
+旋转元素，使middle成为新的第一个元素。将结果复制到result:
 
 \begin{cpp}
 OutIt rotate_copy(FwdIt first, FwdIt middle, FwdIt last, OutIt result)
@@ -433,9 +430,9 @@ FwdIt2 rotate_copy(ExePol pol, FwdIt first, FwdIt middle, FwdIt last,
 				   FwdIt2 result)
 \end{cpp}
 
-Both algorithms need forward iterators. The returned iterator is an end iterator for the copied range.
+两种算法都需要前向迭代器，返回的迭代器是复制范围的end迭代器。
 
-\filename{Rotate algorithms}
+\filename{旋转算法}
 
 \begin{cpp}
 // rotate.cpp
@@ -451,27 +448,27 @@ for (auto i= 0; i < str.size(); ++i){
 } // 12345 23451 34512 45123 51234
 \end{cpp}
 
-\mySamllsection{Shift Ranges}
+\mySamllsection{移位范围}
 
-The C++20 function std::shift\_left and std::shift\_right shift elements in a range. Both algorithm return a forward iterator.
+C++20函数std::shift\_left和std::shift\_right移动范围中的元素，这两种算法都返回前向迭代器。
 
-Shift the elements of a range towards the beginning of the range by n. Returns the end of the resulting range.
+将范围的元素向范围的开头移动n，返回结果范围的末尾位置。
 
 \begin{cpp}
 FwdIt shift_left(FwdIt first, FwdIt last, Num n)
 FwdIt shift_left(ExePol pol, FwdIt first, FwdIt last, Num n)
 \end{cpp}
 
-Shift the elements of a range towards the end of the range by n. Returns the beginning of the resulting range.
+将范围的元素向范围的末尾移动n，返回结果范围的起始位置。
 
 \begin{cpp}
 FwdIt shift_right(FwdIt first, FwdIt last, Num n)
 FwdIt shift_right(ExePol pol, FwdIt first, FwdIt last, Num n)
 \end{cpp}
 
-The operation on std::shift\_left and std::shift\_right has no effect if n == 0 || n >= last - first. The elements of the range are moved.
+当n == 0 || n >= last - first时，对std::shift\_left和std::shift\_right的操作无效。因为，区域的元素移动了。
 
-\filename{Shift elements of a range}
+\filename{移动范围中的元素}
 
 \begin{cpp}
 // shiftRange.cpp
@@ -491,36 +488,35 @@ myVec.erase(myVec.begin(), newBegin);
 for (auto v: myVec) std::cout << v << " "; // 3 4 5
 \end{cpp}
 
-\mySamllsection{Randomly Shuffle Ranges}
+\mySamllsection{随机混洗范围}
 
-You can randomly shuffle ranges with std::random\_shuffle and std::shuffle.
+可以使用std::random\_shuffle和std::shuffle随机混洗范围。
 
-Randomly shuffles the elements in a range:
+随机混洗范围内的元素:
 
 \begin{cpp}
 void random_shuffle(RanIt first, RanIt last)
 \end{cpp}
 
-Randomly shuffles the elements in the range by using the random number generator gen:
+使用随机数生成器gen随机混洗范围内的元素:
 
 \begin{cpp}
 void random_shuffle(RanIt first, RanIt last, RanNumGen&& gen)
 \end{cpp}
 
-Randomly shuffles the elements in a range, using the uniform random number generator gen:
+随机混洗一个范围内的元素，使用均匀随机数生成器gen:
 
 \begin{cpp}
 void shuffle(RanIt first, RanIt last, URNG&& gen)
 \end{cpp}
 
-The algorithms need random access iterators. RanNumGen\&\& gen has to be a callable, taking an argument and returning a value within its arguments. URNG\&\& gen has to be a uniform random number generator.
+这些算法需要随机访问迭代器。RanNumGen\&\& gen必须是可调用的，接受参数并在其参数内返回值。URNG\&\& gen必须是一个均匀随机数生成器。
 
-\begin{myTip}{Prefer std::shuffle}
-	
-Use std::shuffle instead of std::random\_shuffle. std::random\_shuffle has been deprecated since C++14 and removed in C++17 because it uses the C function rand internally.
+\begin{myTip}{首选std::shuffle}
+使用std::shuffle代替std::random\_shuffle。std::random\_shuffle自C++14以来已弃用，并在C++17中删除，因为其在内部使用C函数rand。
 \end{myTip}
 
-\filename{Randomly shuffle algorithms}
+\filename{随机混洗算法}
 
 \begin{cpp}
 // shuffle.cpp
@@ -541,34 +537,34 @@ std::shuffle(vec2.begin(), vec2.end(), default_random_engine(seed));
 for (auto v: vec2) std::cout << v << " "; // 4 0 2 3 9 6 5 1 8 7
 \end{cpp}
 
-seed initializes the random number generator.
+Seed初始化随机数生成器。
 
-\mySamllsection{Remove Duplicates}
+\mySamllsection{删除重复}
 
-With the algorithms std::unique and std::unique\_copy, you have more opportunities to remove adjacent duplicates. You can do this with and without a binary predicate.
+使用std::unique和std::unique\_copy算法，可删除相邻的重复项。使用或不使用二元谓词都可以做到这一点。
 
-Removes adjacent duplicates:
+删除相邻的重复项:
 
 \begin{cpp}
 FwdIt unique(FwdIt first, FwdIt last)
 FwdIt unique(ExePol pol, FwdIt first, FwdIt last)
 \end{cpp}
 
-Removes adjacent duplicates, satisfying the binary predicate:
+删除相邻的重复项，满足二元谓词:
 
 \begin{cpp}
 FwdIt unique(FwdIt first, FwdIt last, BiPred pre)
 FwdIt unique(ExePol pol, FwdIt first, FwdIt last, BiPred pre)
 \end{cpp}
 
-Removes adjacent duplicates and copies the result to result:
+删除相邻的重复项并将结果复制到result:
 
 \begin{cpp}
 OutIt unique_copy(InpIt first, InpIt last, OutIt result)
 FwdIt2 unique_copy(ExePol pol, FwdIt first, FwdIt last, FwdIt2 result)
 \end{cpp}
 
-Removes adjacent duplicates, satisfying the binary predicate, and copies the result to result:
+删除相邻的重复项，满足二进制谓词，并将结果复制到result:
 
 \begin{cpp}
 OutIt unique_copy(InpIt first, InpIt last, OutIt result, BiPred pre)
@@ -576,12 +572,11 @@ FwdIt2 unique_copy(ExePol pol, FwdIt first, FwdIt last,
 				   FwdIt2 result, BiPred pre)
 \end{cpp}
 
-\begin{myWarning}{The unique algorithms return the new logical end iterator}
-	
-The unique algorithms return the logical end iterator of the range. The elements must be be removed with the erase-remove idiom.
+\begin{myWarning}{唯一算法返回新的逻辑结束迭代器}
+唯一算法返回范围的逻辑结束迭代器。必须使用擦除-删除习惯用法删除元素。
 \end{myWarning}
 
-\filename{Remove duplicates algorithms}
+\filename{删除重复算法}
 
 \begin{cpp}
 // removeDuplicates.cpp

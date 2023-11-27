@@ -1,27 +1,27 @@
-The following functions in the header <memory> operate on uninitialized memory.
+头文件<memory>中的下列函数对未初始化的内存进行操作。
 
-Copy a range of objects to an unitialized area of memory.
+将一个对象范围复制到一个统一的单元化内存中。
 
 \begin{cpp}
 FwdIt uninitialized_copy(InIt first, InIt last, FwdIt out)
 FwdIt uninitialized_copy(ExePol pol, FwdIt first, FwdIt last, FwdIt out)
 \end{cpp}
 
-Copy count objects to an unitialized area of memory.
+将count对象复制到一个单元化内存中。
 
 \begin{cpp}
 FwdIt uninitialized_copy_n(InIt first, Size count, FwdIt out)
 FwdIt uninitialized_copy_n(ExePol pol, FwdIt first, Size count, FwdIt out)
 \end{cpp}
 
-Copy an object value to an unitialized area of memory.
+将对象值复制到内存的单元化内存中。
 
 \begin{cpp}
 void uninitialized_fill(FwdIt first, FwdIt last, const T& value)
 void uninitialized_fill(ExePol pol, FwdIt first, FwdIt last, const T& value)
 \end{cpp}
 
-Copy count object to an unitialized area of memory, starting with first.
+从first开始，将计数对象复制到一个单元化内存中。
 
 \begin{cpp}
 void uninitialized_fill_n(FwdIt first, Size count, const T& value)
@@ -29,14 +29,14 @@ FwdIt uninitialized_fill_n(FwdIt first, Size count, const T& value)
 FwdIt uninitialized_fill_n(ExePol pol, FwdIt first, Size count, const T& value)
 \end{cpp}
 
-Move a range of objects to an unitialized area of memory.
+将一个对象范围移动到一个统一的内存区域。
 
 \begin{cpp}
 FwdIt uninitialized_move(InIt first, InIt last, FwItout)
 FwdIt uninitialized_move(ExePol pol, FwdIt first, FwdIt last, FwIt out)
 \end{cpp}
 
-Move count objects to an unitialized area of memory.
+将count对象移动到一个单元化内存。
 
 \begin{cpp}
 std::pair<InIt, FwdIt> uninitialized_move_n(InIt first, Size count, FwIt out)
@@ -44,55 +44,55 @@ std::pair<FwdIt, FwdIt> uninitialized_move_n(ExePol pol, FwdIt first, Size count
 											 FwIt out)
 \end{cpp}
 
-Construct objects by \href{https://en.cppreference.com/w/cpp/language/default_initialization}{default initialization} an unitialized area of memory.
+通过\href{https://en.cppreference.com/w/cpp/language/default_initialization}{默认初始化}(一个单元化内存)构造对象。
 
 \begin{cpp}
 void uninitialized_default_construct(FwdIt first, FwdIt last)
 void uninitialized_default_construct(ExePol pol, FwdIt first, FwdIt last)
 \end{cpp}
 
-Construct nobjects by \href{https://en.cppreference.com/w/cpp/language/default_initialization}{default initialization} an unitialized area of memory.
+通过\href{https://en.cppreference.com/w/cpp/language/default_initialization}{默认初始化}(一个单元化内存)构造对象。
 
 \begin{cpp}
 FwdIt uninitialized_default_construct_n(FwdIt first, Size n)
 FwdIt uninitialized_default_construct_n(ExePol pol, FwdIt first, Size n)
 \end{cpp}
 
-Construct objects by \href{https://en.cppreference.com/w/cpp/language/value_initialization}{value initialization} an unitialized area of memory.
+通过\href{https://en.cppreference.com/w/cpp/language/value_initialization}{值初始化}(一个单元化内存)构造对象。
 
 \begin{cpp}
 void uninitialized_value_construct(FwdIt first, FwdIt last)
 void uninitialized_value_construct(ExePol pol, FwdIt first, FwdIt last)
 \end{cpp}
 
-Construct n objects by \href{https://en.cppreference.com/w/cpp/language/value_initialization}{value initialization} an unitialized area of memory.
+通过\href{https://en.cppreference.com/w/cpp/language/value_initialization}{值初始化}(一个单元化内存)构造n个对象。
 
 \begin{cpp}
 FwdIt uninitialized_value_construct_n(FwdIt first, Size n)
 FwdIt uninitialized_value_construct_n(ExePol pol, FwdIt first, Size n)
 \end{cpp}
 
-Destroy objects.
+销毁对象。
 
 \begin{cpp}
 constexpr void destroy(FwdIt first, FwdIt last)
 void destroy(ExePol pol, FwdIt first, FwdIt last)
 \end{cpp}
 
-Destroy n objects.
+销毁n个对象。
 
 \begin{cpp}
 constexpr void destroy_n(FwdIt first, Size n)
 void destroy_n(ExePol pol, FwdIt first, Size n)
 \end{cpp}
 
-Destroy an object at a given address p.
+销毁给定地址p上的对象。
 
 \begin{cpp}
 constexpr void destroy_at(T* p)
 \end{cpp}
 
-Create an object at a given address p.
+在给定地址p上创建对象。
 
 \begin{cpp}
 constexpr T* construct_at(T* p, Args&& ... args)

@@ -1,8 +1,8 @@
-You can sort a range with std::sort or std::stable\_sort or sort until a position with std::partial\_sort. In addition, std::partial\_sort\_copy copies the partially sorted range. With std::nth\_element, you can assign an element the sorted position in the range. You can check with std::is\_sorted if a range is sorted. If you want to know until which position a range is sorted, use std::is\_sorted\_until.
+可以使用std::sort或std::stable\_sort对范围进行排序，或者使用std::partial\_sort对位置进行排序。此外，std::partial\_sort\_copy复制部分排序的范围。使用std::nth\_element，可以为元素分配在范围中的排序位置，可以使用std::is\_sorted检查是否对范围进行了排序。若想知道一个范围被排序到哪个位置，使用std::is\_sorted\_until。
 
-Per default, the predefined function object std::less is used as a sorting criterion. However, you can use your sorting criterion. This has to obey the strict weak ordering.
+默认情况下，使用预定义的函数对象std::less作为排序标准。但是，可以使用自己的排序标准。这必须服从严格的弱排序。
 
-Sorts the elements in the range:
+对范围内的元素进行排序:
 
 \begin{cpp}
 void sort(RaIt first, RaIt last)
@@ -12,7 +12,7 @@ void sort(RaIt first, RaIt last, BiPre pre)
 void sort(ExePol pol, RaIt first, RaIt last, BiPre pre)
 \end{cpp}
 
-Sorts the elements in the range (stable):
+对范围内的元素进行排序(稳定):
 
 \begin{cpp}
 void stable_sort(RaIt first, RaIt last)
@@ -22,7 +22,7 @@ void stable_sort(RaIt first, RaIt last, BiPre pre)
 void stable_sort(ExePol pol, RaIt first, RaIt last, BiPre pre)
 \end{cpp}
 
-Sorts partially the elements in the range until middle:
+对范围内的元素进行部分排序，直到中间:
 
 \begin{cpp}
 void partial_sort(RaIt first, RaIt middle, RaIt last)
@@ -32,7 +32,7 @@ void partial_sort(RaIt first, RaIt middle, RaIt last, BiPre pre)
 void partial_sort(ExePol pol, RaIt first, RaIt middle, RaIt last, BiPre pre)
 \end{cpp}
 
-Sorts partially the elements in the range and copies them in the destination ranges result\_first and result\_last:
+对范围内的元素进行部分排序，并将其复制到目标范围result\_first和result\_last中:
 
 \begin{cpp}
 RaIt partial_sort_copy(InIt first, InIt last,
@@ -46,7 +46,7 @@ RaIt partial_sort_copy(ExePol pol, FwdIt first, FwdIt last,
 					   RaIt result_first, RaIt result_last, BiPre pre)
 \end{cpp}
 
-Checks if a range is sorted:
+检查一个范围是否已排序:
 
 \begin{cpp}
 bool is_sorted(FwdIt first, FwdIt last)
@@ -56,7 +56,7 @@ bool is_sorted(FwdIt first, FwdIt last, BiPre pre)
 bool is_sorted(ExePol pol, FwdIt first, FwdIt last, BiPre pre)
 \end{cpp}
 
-Returns the position to the first element that doesn’t satisfy the sorting criterion:
+返回第一个不满足排序条件的元素的位置:
 
 \begin{cpp}
 FwdIt is_sorted_until(FwdIt first, FwdIt last)
@@ -66,7 +66,7 @@ FwdIt is_sorted_until(FwdIt first, FwdIt last, BiPre pre)
 FwdIt is_sorted_until(ExePol pol, FwdIt first, FwdIt last, BiPre pre)
 \end{cpp}
 
-Reorders the range so that the n-th element has the right (sorted) position:
+重新排序范围，使第n个元素有正确的(排序)位置:
 
 \begin{cpp}
 void nth_element(RaIt first, RaIt nth, RaIt last)
@@ -76,9 +76,9 @@ void nth_element(RaIt first, RaIt nth, RaIt last, BiPre pre)
 void nth_element(ExePol pol, RaIt first, RaIt nth, RaIt last, BiPre pre)
 \end{cpp}
 
-Here is a code snippet.
+下面是一个代码段。
 
-\filename{Sort algorithms}
+\filename{排序算法}
 
 \begin{cpp}
 // sort.cpp

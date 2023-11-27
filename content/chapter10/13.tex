@@ -1,23 +1,23 @@
 
-std::prev\_permutation and std::next\_permutation return the previous smaller or next greater permutation of the newly ordered range. If a smaller or greater permutation is unavailable, the algorithms return false. Both algorithms need bidirectional iterators. Per default, the predefined sorting criterion std::less is used. If you use your sorting criterion, it has to obey the strict weak ordering. If not, the program has undefined behavior.
+std::prev\_permutation和std::next\_permutation返回新排序范围的前一个较小或下一个较大的排列。若没有更小或更大的排列，则算法返回false。两种算法都需要双向迭代器。默认情况下，使用预定义的排序条件std::less。若使用排序标准，则必须遵守严格的弱排序。若不是，则程序具有未定义行为。
 
-Applies the previous permutation to the range:
+将前面的排列应用于范围:
 
 \begin{cpp}
 bool prev_permutation(BiIt first, BiIt last)
 bool prev_permutation(BiIt first, BiIt last, BiPred pre)
 \end{cpp}
 
-Applies the next permutation to the range:
+将下一个排列应用于范围:
 
 \begin{cpp}
 bool next_permutation(BiIt first, BiIt last)
 bool next_permutation(BiIt first, BiIt last, BiPred pre)
 \end{cpp}
 
-You can generate with both algorithms all permutations of the range.
+可以用这两种算法生成范围的所有排列。
 
-\filename{Permutation algorithms}
+\filename{置换算法}
 
 \begin{cpp}
 // permutation.cpp

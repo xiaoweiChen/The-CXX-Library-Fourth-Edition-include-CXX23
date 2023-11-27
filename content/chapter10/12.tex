@@ -1,6 +1,6 @@
-You can determine the minimum, maximum, minimum, and maximum pair of a range with the algorithms std::min\_element, std::max\_element, and std::minmax\_element. Each algorithm can invoked with a binary predicate. Additionally, C++17 enables it to clamp a value between a pair of boundary values.
+可以使用std::min\_element、std::max\_element和std::minmax\_element算法来确定范围的最小、最大、最小和最大对。每个算法都可以用二进制谓词调用。此外，C++17允许在一对边界值之间夹紧一个值。
 
-Returns the minimum element of the range:
+返回范围的最小元素:
 
 \begin{cpp}
 constexpr FwdIt min_element(FwdIt first, FwdIt last)
@@ -10,7 +10,7 @@ constexpr FwdIt min_element(FwdIt first, FwdIt last, BinPre pre)
 FwdIt min_element(ExePol pol, FwdIt first, FwdIt last, BinPre pre)
 \end{cpp}
 
-Returns the maximum element of the range:
+返回范围的最大元素:
 
 \begin{cpp}
 constexpr FwdIt max_element(FwdIt first, FwdIt last)
@@ -20,7 +20,7 @@ constexpr FwdIt max_element(FwdIt first, FwdIt last, BinPre pre)
 FwdIt max_element(ExePol pol, FwdIt first, FwdIt last, BinPre pre)
 \end{cpp}
 
-Returns the pair std::min\_element and std::max\_element of the range:
+返回范围的std::min\_element和std::max\_element对:
 
 \begin{cpp}
 constexpr pair<FwdIt, FwdIt> minmax_element(FwdIt first, FwdIt last)
@@ -31,9 +31,9 @@ pair<FwdIt, FwdIt> minmax_element(ExePol pol, FwdIt first, FwdIt last,
 								  BinPre pre)
 \end{cpp}
 
-The first one is returned if the range has more than one minimum or maximum element.
+若范围有多个最小或最大元素，则返回第一个。
 
-\filename{Minimum and maximum algorithms}
+\filename{最小和最大算法}
 
 \begin{cpp}
 // minMax.cpp
@@ -61,16 +61,16 @@ auto asInt= std::minmax_element(myStrings.begin(), myStrings.end(),
 std::cout << *asInt.first << ":" << *asInt.second; // -94:1001
 \end{cpp}
 
-std::clamp clamps a value between a pair of boundary values:
+std::clamp在一对边界值之间夹住一个值:
 
 \begin{cpp}
 constexpr const T& clamp(const T& v, const T& lo, const T& hi);
 constexpr const T& clamp(const T& v, const T& lo, const T& hi, BinPre pre);
 \end{cpp}
 
-Returns a reference to v if lo is less than v and v is less than hi. Otherwise, it returns a reference to lo or hi. By default, < is used as the comparison criteria but you can also provide a binary predicate pre.
+若lo小于v且v小于hi，则返回对v的引用。否则，返回对lo或hi的引用。默认情况下，<用作比较标准，也可以提供一个二进制谓词pre。
 
-\filename{Clamp a value}
+\filename{箝位一个值}
 
 \begin{cpp}
 // clamp.cpp

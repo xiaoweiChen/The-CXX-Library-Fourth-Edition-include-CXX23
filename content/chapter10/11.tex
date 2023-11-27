@@ -1,23 +1,23 @@
 
 \myGraphic{0.6}{content/chapter10/images/4.jpg}{}
 
-\begin{myTip}{What is a heap?}
+\begin{myTip}{什么是堆?}
 	
-A heap is a binary search tree in which parent elements are always bigger than their child elements. Heap trees are optimized for the efficient sorting of elements.
+堆是一个二叉搜索树，其中父元素总是比子元素大。堆树针对元素的高效排序进行了优化。
 \end{myTip}
 
-You can create with std::make\_heap a heap. You can push with std::push\_heap new elements on the heap. On the contrary, you can pop the largest element with std::pop\_heap from the heap. Both operations respect the heap characteristics. std::push\_heap moves the last element of the range on the heap; std::pop\_heap moves the biggest element of the heap to the last position in the range. You can check with std::is\_heap if a range is a heap. You can determine with std::is\_heap\_until until which position the range is a heap. std::sort\_heap sorts the heap.
+可以用std::make\_heap创建一个堆，使用std::push\_heap向堆上推送新元素，也可以使用std::pop\_heap从堆中取出最大的元素。这两种操作都尊重堆特征。std::push\_heap移动堆上范围的最后一个元素;std::pop\_heap将堆中最大的元素移动到范围内的最后一个位置。可以使用std::is\_heap检查一个范围是否为堆，也可以使用std::is\_heap\_until来确定该范围在哪个位置是堆。std::sort\_heap可对堆进行排序。
 
-The heap algorithms require that the ranges and the algorithm use the same sorting criterion. If not, the program has undefined behavior. Per default, the predefined sorting criterion std::less is used. If you use your sorting criterion, it has to obey the strict weak ordering. If not, the program has undefined behavior.
+堆算法要求范围和算法使用相同的排序标准。若不是，则程序具有未定义行为。默认情况下，使用预定义的排序条件std::less。若使用排序标准，则必须遵守严格的弱排序。若不是，则程序具有未定义行为。
 
-Creates a heap from the range:
+使用范围创建一个堆:
 
 \begin{cpp}
 void make_heap(RaIt first, RaIt last)
 void make_heap(RaIt first, RaIt last, BiPre pre)
 \end{cpp}
 
-Checks if the range is a heap:
+检查范围是否为堆:
 
 \begin{cpp}
 bool is_heap(RaIt first, RaIt last)
@@ -27,7 +27,7 @@ bool is_heap(RaIt first, RaIt last, BiPre pre)
 bool is_heap(ExePol pol, RaIt first, RaIt last, BiPre pre)
 \end{cpp}
 
-Determines until which position the range is a heap:
+确定在哪个位置之前范围是堆:
 
 \begin{cpp}
 RaIt is_heap_until(RaIt first, RaIt last)
@@ -37,30 +37,30 @@ RaIt is_heap_until(RaIt first, RaIt last, BiPre pre)
 RaIt is_heap_until(ExePol pol, RaIt first, RaIt last, BiPre pre)
 \end{cpp}
 
-Sorts the heap:
+对堆进行排序:
 
 \begin{cpp}
 void sort_heap(RaIt first, RaIt last)
 void sort_heap(RaIt first, RaIt last, BiPre pre)
 \end{cpp}
 
-It pushes the last element of the range onto the heap. [first, last-1) has to be a heap.
+将范围的最后一个元素压入堆中，[first, last-1)必须是堆。
 
 \begin{cpp}
 void push_heap(RaIt first, RaIt last)
 void push_heap(RaIt first, RaIt last, BiPre pre)
 \end{cpp}
 
-Removes the biggest element from the heap and puts it to the end of the range:
+从堆中移除最大的元素，并将其放在范围的末尾:
 
 \begin{cpp}
 void pop_heap(RaIt first, RaIt last)
 void pop_heap(RaIt first, RaIt last, BiPre pre)
 \end{cpp}
 
-With std::pop\_heap, you can remove the greatest element from the heap. Afterward, the greatest element is the last element of the range. To remove the element from the heap h, use h.pop\_back.
+使用std::pop\_heap，可以从堆中删除最大的元素。之后，最大的元素是范围的最后一个元素。要从堆h中删除元素，使用h.pop\_back。
 
-\filename{Heap algorithms}
+\filename{堆算法}
 
 \begin{cpp}
 // heap.cpp

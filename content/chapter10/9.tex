@@ -1,39 +1,40 @@
-The binary search algorithms use the fact that the ranges are already sorted. To search for an element, use std::binary\_search. With std::lower\_bound, you get an iterator for the first element, being no smaller than the given value. With std::upper\_bound, you get an iterator back for the first element, which is bigger than the given value. std:::equal\_range combines both algorithms.
+二分搜索算法利用了范围已经排序的事实。要搜索一个元素，使用std::binary\_search。使用std::lower\_bound，将获得不小于给定值的第一个元素的迭代器。使用std::upper\_bound，将获得第一个元素的迭代器，该元素大于给定值。std:::equal\_range结合了这两种算法。
 
-If the container has n elements, you need on average log2(n) comparisons for the search. The binary search requires you to use the same comparison criterion you used for sorting the container. The default comparison criterion is std::less, but you can adjust it. Your sorting criterion has to obey the strict weak ordering. If not, the program is undefined.
+若容器有n个元素，则平均需要进行log2(n)次比较，二进制搜索要求您使用与对容器排序相同的比较条件。默认的比较条件是std::less，可以调整它。排序标准必须遵守严格的弱排序，若不是，则程序未定义。
 
-The member functions of an unordered associative container are, in general, faster.
-Searches the element val in the range:
+无序关联容器的成员函数通常更快。
+
+在范围内搜索元素val:
 
 \begin{cpp}
 bool binary_search(FwdIt first, FwdIt last, const T& val)
 bool binary_search(FwdIt first, FwdIt last, const T& val, BiPre pre)
 \end{cpp}
 
-Returns the position of the first element of the range, being not smaller than val:
+返回范围中第一个元素的位置，不小于val:
 
 \begin{cpp}
 FwdIt lower_bound(FwdIt first, FwdIt last, const T& val)
 FwdIt lower_bound(FwdIt first, FwdIt last, const T& val, BiPre pre)
 \end{cpp}
 
-Returns the position of the first element of the range, being bigger than val:
+返回范围中第一个元素的位置，大于val:
 
 \begin{cpp}
 FwdIt upper_bound(FwdIt first, FwdIt last, const T& val)
 FwdIt upper_bound(FwdIt first, FwdIt last, const T& val, BiPre pre)
 \end{cpp}
 
-Returns the pair std::lower\_bound and std::upper\_bound for the element val:
+返回元素val的std::lower\_bound和std::upper\_bound对:
 
 \begin{cpp}
 pair<FwdIt, FwdIt> equal_range(FwdIt first, FwdIt last, const T& val)
 pair<FwdIt, FwdIt> equal_range(FwdIt first, FwdIt last, const T& val, BiPre pre)
 \end{cpp}
 
-Finally, here is the code snippet.
+最后，下面是代码段。
 
-\filename{Binary search algorithms}
+\filename{二进制搜索算法}
 
 \begin{cpp}
 // binarySearch.cpp
