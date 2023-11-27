@@ -9,7 +9,7 @@
 策略标签指定算法应该顺序运行、并行运行还是与矢量化并行运行。
 
 \begin{itemize}
-\item 
+\item
 std::execution::seq: 串行运行算法
 
 \item
@@ -42,8 +42,8 @@ std::sort(std::execution::par_unseq, v.begin(), v.end());
 该示例表明，可以在没有执行策略的情况下使用std::sort的重载。此外，在C++17中，可以显式指定应该使用顺序、并行还是并行和向量化版本。
 
 
-\begin{myTip}{并行STL的可用性？？？}
-	
+\begin{myTip}{并行和向量化执行}
+
 算法是否以并行和向量化的方式运行取决于许多因素。例如，这取决于CPU和操作系统是否支持SIMD指令。此外，它还取决于编译器和编译代码的优化级别。
 
 下面的示例展示了一个用于创建新vector的简单循环。
@@ -121,7 +121,7 @@ std::sort                       & std::stable\_partition          & std::stable\
 std::swap\_ranges               & std::transfrom                  & std::transform\_exclusive\_scan \\
 std::transform\_inclusive\_scan & std::transform\_reduce          & std::uninitialized\_copy        \\
 std::uninitialized\_copy\_n     & std::uninitialized\_fill        & std::uninitialized\_fill\_n     \\
-std::unique                     & std::unique\_copy               &                                
+std::unique                     & std::unique\_copy               &
 \end{longtable}
 
 \begin{myTip}{constexpr容器和算法}
