@@ -1,8 +1,8 @@
-\href{http://en.cppreference.com/w/cpp/header/random}{Random numbers} are necessary for many domains, e.g., test software, generate cryptographic keys, or computer games. The random number facility of C++ consists of two components. There is the generation of the random numbers and the distribution of these random numbers. Both parts need the header <random>.
+\href{http://en.cppreference.com/w/cpp/header/random}{随机数}是许多领域所必需的，例如，测试软件，生成加密密钥，或电脑游戏。C++的随机数功能由两个部分组成，是随机数的生成和这些随机数的分布。这两个部分都需要头文件<random>。
 
-\mySamllsection{Random Number Generator}
+\mySamllsection{随机数生成器}
 
-The random number generator generates a random number stream between a minimum and maximum value. This stream is initialized by a “so-called” seed, guaranteeing different random number sequences.
+随机数生成器在最小值和最大值之间生成随机数流，流由“所谓的”种子初始化，保证不同的随机数序列。
 
 \begin{cpp}
 #include <random>
@@ -11,33 +11,33 @@ std::random_device seed;
 std::mt19937 generator(seed());
 \end{cpp}
 
-A random number generator gen of type Generator supports four different requests:
+generator类型的随机数生成器支持四种不同的请求:
 
 \noindent
 \textbf{Generator::result\_type}
 
-Data type of the generated random number.
+生成随机数的数据类型。
 
 \noindent
 \textbf{gen()}
 
-Returns a random number.
+返回一个随机数。
 
 \noindent
 \textbf{gen.min()}
 
-Returns the minimum random number that can be returned by gen().
+返回gen()可以返回的最小随机数。
 
 \noindent
 \textbf{gen.max()}
 
-Returns the maximum random number that can be returned by gen. \\
+返回gen可产生的最大随机数。 \\
 
-The random number library supports several random number generators. The best known are the Mersenne Twister, the std::default\_random\_engine chosen by the implementation, and std::random\_device. std::random\_device is the only true random number generator, but not all platforms offer it.
+随机数库支持几个随机数生成器。最著名的是Mersenne Twister, std::default\_random\_engine和std::random\_device。Std::random\_device是唯一真正的随机数生成器，但并非所有平台都有提供。
 
-\mySamllsection{Random Number Distribution}
+\mySamllsection{随机数分布}
 
-The random number distribution maps the random number with the random number generator gen to the selected distribution.
+随机数分布将具有随机数生成器的随机数映射到所选分布。
 
 \begin{cpp}
 #include <random>
@@ -49,7 +49,7 @@ std::uniform_int_distribution<> unDis(0, 20); // distribution between 0 and 20
 unDis(gen); // generates a random number
 \end{cpp}
 
-C++ has several discrete and continuous random number distributions. The discrete random number distribution generates integers. The continuous random number distribution generates floating-point numbers.
+C++有几个离散的和连续的随机数分布。离散随机数分布生成整数，连续随机数分布生成浮点数。
 
 \begin{cpp}
 class bernoulli_distribution;
@@ -74,11 +74,11 @@ template<class T = double> class piecewise_linear_distribution;
 template<class T = double> class uniform_real_distribution;
 \end{cpp}
 
-Class templates with a default template argument int are discrete. The Bernoulli distribution generates booleans.
+带有默认模板实参int的类模板是离散的。伯努利分布会产生布尔值。
 
-Here is an example using the Mersenne Twister std::mt19937 as the pseudo-random number generator for generating one million random numbers. The random number stream is mapped to the uniform and normal (or Gaussian) distribution.
+下面是一个使用Mersenne Twister std::mt19937作为伪随机数生成器生成一百万个随机数的示例。随机数流映射为均匀和正态(或高斯)分布。
 
-\filename{Random numbers}
+\filename{随机数}
 
 \begin{cpp}
 // random.cpp
@@ -100,7 +100,7 @@ for (int i= 1; i <= NUM; ++i){
 }
 \end{cpp}
 
-The following pictures show the uniform and the normal distribution of the one million random numbers as a plot.
+下图显示了100万个随机数的均匀分布和正态分布。
 
 \myGraphic{0.6}{content/chapter12/images/2.jpg}{}
 

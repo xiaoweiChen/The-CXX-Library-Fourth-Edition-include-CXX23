@@ -1,4 +1,4 @@
-A range adaptor transforms a range into a view.
+范围适配器将范围转换为视图。
 
 \begin{cpp}
 std::vector<int> numbers = {1, 2, 3, 4, 5, 6};
@@ -6,12 +6,12 @@ auto results = numbers | std::views::filter([](int n){ return n % 2 == 0; })
 				       | std::views::transform([](int n){ return n * 2; });
 \end{cpp}
 
-In this code snippet, numbers is the range, and std::views::filter and std::views::transform are the views.
+代码片段中，numbers是范围，std::views::filter和std::views::transform是视图。
 
-The ranges library in C++20 has a rich set of views.
+C++20中的范围库有一组丰富的视图。
 
 \begin{center}
-Views in C++20
+C++20中的视图
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -19,41 +19,41 @@ Views in C++20
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-\textbf{View}                                                                                & \textbf{Description}                                     \\ \hline
+\textbf{视图}                                                                                & \textbf{描述}                                     \\ \hline
 \endfirsthead
 %
 \endhead
 %
-\begin{tabular}[c]{@{}l@{}}std::views::all\_t\\ std::views::all\end{tabular}                 & Takes all elements.                                      \\ \hline
-std::ranges::ref\_view                                                                       & Takes all elements of another range.                     \\ \hline
-\begin{tabular}[c]{@{}l@{}}std::ranges::filter\_view\\ std::views::filter\end{tabular}       & Takes the elements which satisfy the predicate.          \\ \hline
-\begin{tabular}[c]{@{}l@{}}std::ranges::transfrom\_view\\ std::views::transform\end{tabular} & Transfroms each element.                                 \\ \hline
-\begin{tabular}[c]{@{}l@{}}std::ranges::take\_view\\ std::views::take\end{tabular}           & Takes the first n elements of another view.              \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::views::all\_t\\ std::views::all\end{tabular}                 & 获取所有元素。                                      \\ \hline
+std::ranges::ref\_view                                                                       & 获取另一个范围的所有元素。                     \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::ranges::filter\_view\\ std::views::filter\end{tabular}       & 获取满足谓词的元素。          \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::ranges::transfrom\_view\\ std::views::transform\end{tabular} & 转换每个元素。                                 \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::ranges::take\_view\\ std::views::take\end{tabular}           & 取另一个视图的前n个元素。              \\ \hline
 \begin{tabular}[c]{@{}l@{}}std::ranges::take\_while\_view\\ std::views::take\_while\end{tabular} &
-Takes the elements of another view as long as the predicate returns true. \\ \hline
-\begin{tabular}[c]{@{}l@{}}std::ranges::drop\_view\\ std::views::drop\end{tabular}           & Skips the first n elements of another view.              \\ \hline
+只要谓词返回true，就接受另一个视图的元素。 \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::ranges::drop\_view\\ std::views::drop\end{tabular}           & 跳过另一个视图的前n个元素。              \\ \hline
 \begin{tabular}[c]{@{}l@{}}std::ranges::drop\_while\_view\\ std::views::drop\_while\end{tabular} &
-Skips the initial elements of another view until the predicate returns false. \\ \hline
-\begin{tabular}[c]{@{}l@{}}std::ranges::join\_view\\ std::views::join\end{tabular}           & Join a view of ranges.                                   \\ \hline
-\begin{tabular}[c]{@{}l@{}}std::ranges::split\_view\\ std::views::split\end{tabular}         & Splits a view by using a delimiter.                      \\ \hline
-\begin{tabular}[c]{@{}l@{}}std::ranges::common\_view\\ std::views::common\end{tabular}       & Converts a view into a std::ranges::common\_range.       \\ \hline
-\begin{tabular}[c]{@{}l@{}}std::ranges::reverse\_view\\ std::views::reverse\end{tabular}     & Iterates in reverse order.                               \\ \hline
+跳过另一个视图的初始元素，直到谓词返回false。 \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::ranges::join\_view\\ std::views::join\end{tabular}           & 加入范围视图。                                   \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::ranges::split\_view\\ std::views::split\end{tabular}         & 使用分隔符拆分视图。                      \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::ranges::common\_view\\ std::views::common\end{tabular}       & 将视图转换为std::ranges::common\_range。       \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::ranges::reverse\_view\\ std::views::reverse\end{tabular}     & 以反向顺序迭代。                               \\ \hline
 \begin{tabular}[c]{@{}l@{}}std::ranges::basic\_istream\_view\\ std::views::istream\_view\end{tabular} &
-Appplies operator\textgreater{}\textgreater pn the view. \\ \hline
-\begin{tabular}[c]{@{}l@{}}std::ranges::elements\_view\\ std::views::elements\end{tabular}   & Creates a view on the n-th element of tuples.            \\ \hline
-\begin{tabular}[c]{@{}l@{}}std::ranges::keys\_views\\ std::views::keys\end{tabular}          & Creates a view on the first element of pair-like values. \\ \hline
+可对相应视图使用操作符>{}>。 \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::ranges::elements\_view\\ std::views::elements\end{tabular}   & 在元组的第n个元素上创建视图。            \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::ranges::keys\_views\\ std::views::keys\end{tabular}          & 在类似对值的第一个元素上创建视图。 \\ \hline
 \begin{tabular}[c]{@{}l@{}}std::ranges::values\_views\\ std::views::values\end{tabular} &
-Creates a view on the second element of pair-like values. \\ \hline
+在类似对值的第二个元素上创建视图。 \\ \hline
 \end{longtable}
 
-In general, you can use a view such as std::views::transform with the alternative name std::ranges:: transform\_view.
+通常，可以使用std::views::transform这样的视图，并将其替换为std::ranges::transform\_view。
 
-Thanks to the ranges library, algorithms can be directly applied to the containers, can be composed, and are lazy.
+有了范围库，算法可以直接应用于容器，可以组合，并且是惰性的。
 
-C++23 supports additional views:
+C++23支持更多的视图:
 
 \begin{center}
-Views in C++23
+C++23中的视图
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -61,30 +61,30 @@ Views in C++23
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-\textbf{View}                                                                                  & \textbf{Description}                                 \\ \hline
+\textbf{视图}                                                                                  & \textbf{描述}                                 \\ \hline
 \endfirsthead
 %
 \endhead
 %
-\begin{tabular}[c]{@{}l@{}}std::ranges::zip\_view\\ std::views::zip\end{tabular}               & Creates a view of tuples.                            \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::ranges::zip\_view\\ std::views::zip\end{tabular}               & 创建元组的视图。                            \\ \hline
 \begin{tabular}[c]{@{}l@{}}std::ranges::zip\_transform\_view\\ std::views::zip\_transform\end{tabular} &
-Creates a view of tuples by applying the transformation function. \\ \hline
-\begin{tabular}[c]{@{}l@{}}std::ranges::adjacent\_view\\ std::views::adjacent\end{tabular}     & Creates a view of adjacent elements.                 \\ \hline
+通过转换函数创建元组的视图。 \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::ranges::adjacent\_view\\ std::views::adjacent\end{tabular}     & 创建相邻元素的视图。                 \\ \hline
 \begin{tabular}[c]{@{}l@{}}std::ranges::adjacent\_transform\_view\\ std::views::adjacent\_transform\end{tabular} &
-Creates a view of adjacent elements by applying the transformation function. \\ \hline
+通过转换函数创建相邻元素的视图。 \\ \hline
 \begin{tabular}[c]{@{}l@{}}std::ranges::join\_with\_view\\ std::views::join\_with\end{tabular} &
-Joins existing ranges into a view by applying a delimiter. \\ \hline
-\begin{tabular}[c]{@{}l@{}}std::ranges::slide\_view\\ std::views::slide\end{tabular}           & Creates N-tuples by taking a view and a number N.    \\ \hline
-\begin{tabular}[c]{@{}l@{}}std::ranges::chunk\_view\\ std::views::chunk\end{tabular}           & Creates N-chunks of a view and a number N.           \\ \hline
-\begin{tabular}[c]{@{}l@{}}std::ranges::chunk\_by\_view\\ std::views::chunk\_by\end{tabular}   & Creates chunks of a view based on a predicate.       \\ \hline
-\begin{tabular}[c]{@{}l@{}}std::ranges::as\_const\_view\\ std::views::as\_const\end{tabular}   & Converts a view into a constant range.               \\ \hline
-\begin{tabular}[c]{@{}l@{}}std::ranges::as\_rvalue\_view\\ std::views::as\_rvalue\end{tabular} & Casts each element into an rvalue.                   \\ \hline
-\begin{tabular}[c]{@{}l@{}}std::ranges::stride\_view\\ std::views::stride\end{tabular}         & Creates a view of the N-th elements of another view. \\ \hline
+通过分隔符将现有范围连接到视图中。 \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::ranges::slide\_view\\ std::views::slide\end{tabular}           & 通过获取一个视图和一个数字N来创建N个元组。    \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::ranges::chunk\_view\\ std::views::chunk\end{tabular}           & 创建N个视图块和一个数字N。           \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::ranges::chunk\_by\_view\\ std::views::chunk\_by\end{tabular}   & 基于谓词创建视图块。       \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::ranges::as\_const\_view\\ std::views::as\_const\end{tabular}   & 将视图转换为常量范围。               \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::ranges::as\_rvalue\_view\\ std::views::as\_rvalue\end{tabular} & 将每个元素强制转换为右值。                   \\ \hline
+\begin{tabular}[c]{@{}l@{}}std::ranges::stride\_view\\ std::views::stride\end{tabular}         & 创建另一个视图第n个元素的视图。 \\ \hline
 \end{longtable}
 
-The following code snippet applies the C++23 views.
+下面的代码段中使用了C++23视图。
 
-\filename{New views in C++23}
+\filename{C++23中的新视图}
 
 \begin{cpp}
 // cpp23Ranges.cpp
@@ -117,11 +117,11 @@ for (auto i : vec | std::views::slide(2)) {
 }
 \end{cpp}
 
-\mySamllsection{generator}
+\mySamllsection{生成器}
 
-std::generator in C++23 is the first concrete coroutine generator. A std::generator generates a sequence of elements by repeatedly resuming the coroutine from which is was paused.
+C++23中的std::generator是第一个具体的协程生成器，生成器通过反复恢复暂停的协程来生成元素序列。
 
-\filename{The coroutine generator std::generator}
+\filename{协程生成器std::generator}
 
 \begin{cpp}
 // generator.cpp
@@ -150,7 +150,7 @@ for (auto f : fib() | std::views::take(10)) { // 3
 }
 \end{cpp}
 
-The function fib return a coroutine. This coroutine creates an infinite stream of Fibonacci numbers. The stream of numbers starts with 0 (1) and continues with the following Fibonacci number (2). The ranges-based for-loop requests explicitly the first 10 Fibonacci numbers (3).
+函数fib返回一个协程，协程创建了一个无限的斐波那契数流。数字流从0(1)开始，继续到后面的斐波那契数(2)。基于范围的for循环显式地请求前10个斐波那契数(3)。
 
 
 

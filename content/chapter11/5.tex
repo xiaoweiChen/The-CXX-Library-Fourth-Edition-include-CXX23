@@ -1,6 +1,6 @@
-The ranges library supports function composition using the | symbol.
+范围库支持使用|符号组合函数。
 
-\filename{Ranges work directly on the container}
+\filename{范围组合}
 
 \begin{cpp}
 // rangesComposition.cpp
@@ -29,9 +29,9 @@ for (const auto& name : std::views::keys(freqWord) | std::views::filter(firstw))
 }
 \end{cpp}
 
-In this case, I’m only interested in the keys. I display all of them (1), all of them reversed (2), the first four (3), and the keys starting with the letter ‘w’ (4).
+这种情况下，我只对键值感兴趣。显示了所有键(1)，所有键的反转(2)，前四个键(3)，以及以字母“w”开头的键(4)。
 
-The pipe symbol | is syntactic sugar for function composition. Instead of C(R), you can write R | C. Consequentially, the next three lines are equivalent.
+管道符号|是函数组成的语法糖。而不是C(R)，也可以写R | C。因此，接下来的三行是等价的。
 
 \begin{cpp}
 auto rev1 = std::views::reverse(std::views::keys(freqWord));
@@ -39,7 +39,7 @@ auto rev2 = std::views::keys(freqWord) | std::views::reverse;
 auto rev3 = freqWord | std::views::keys | std::views::reverse;
 \end{cpp}
 
-Finally, here is the output of the program:
+最后，程序的输出为:
 
 \myGraphic{0.6}{content/chapter11/images/3.jpg}{}
 

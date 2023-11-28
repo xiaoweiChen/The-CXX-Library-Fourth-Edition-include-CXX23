@@ -1,4 +1,4 @@
-The algorithms of the \href{https://en.cppreference.com/w/cpp/header/algorithm}{algorithm library} and the \href{https://en.cppreference.com/w/cpp/header/memory}{memory libray} have \href{https://en.cppreference.com/w/cpp/algorithm/ranges}{ranges pendants}. They start with the namespace std::ranges. The \href{https://en.cppreference.com/w/cpp/header/numeric}{numeric library} does not have a ranges pendant. In the following listing, I display one of the five overloads of the std::sort algorithm and one of the two overloads of the new std::ranges::sort algorithm.
+\href{https://en.cppreference.com/w/cpp/header/algorithm}{算法库}和\href{https://en.cppreference.com/w/cpp/header/memory}{内存库}的算法有\href{https://en.cppreference.com/w/cpp/algorithm/ranges}{范围挂件}，其以命名空间std::ranges开头。\href{https://en.cppreference.com/w/cpp/header/numeric}{数值库}没有范围挂件。在下面的清单中，我展示了std::sort算法的五个重载中的一个，以及新的std::ranges::sort算法的两个重载中的一个。
 
 \begin{cpp}
 template< class ExecutionPolicy, class RandomIt, class Compare >
@@ -11,9 +11,9 @@ requires std::sortable<I, Comp, Proj>
 constexpr I sort(I first, S last, Comp comp = {}, Proj proj = {});
 \end{cpp}
 
-First, std::sort takes a range given by a begin and end iterator. The iterators must be a random access iterator. It requires an execution policy. Compare lets you specify the sorting strategy of std::sort.
+首先，std::sort接受begin和end迭代器给出的范围，迭代器必须是随机访问迭代器，并需要一个执行策略。Compare允许指定std::sort的排序策略。
 
-Furthermore, when you study the overload of std::ranges::sort, you notice that it takes a range defined by a random-access begin iterator and a sentinel. Additionally, this overload takes a predicate Comp, and a projection Proj. The predicate Comp uses for default less, and the projection Proj the identity \href{https://en.cppreference.com/w/cpp/utility/functional/identity}{std::identity}. A projection is a mapping of a set into a subset:
+此外，当研究std::ranges::sort的重载时，会注意到它接受一个由随机访问begin迭代器和哨兵定义的范围。此外，这个重载接受一个谓词Comp和一个投影Proj。Comp使用谓词表示default less，而投影表示identity \href{https://en.cppreference.com/w/cpp/utility/functional/identity}{std::identity}。投影是一个集合到一个子集的映射:
 
 \begin{cpp}
 struct PhoneBookEntry{
@@ -27,11 +27,11 @@ std::vector<PhoneBookEntry> phoneBook{ {"Brown", 111}, {"Smith", 444}, {"Grimm",
 std::ranges::sort(phoneBook, std::ranges::greater(), &PhoneBookEntry::name);
 \end{cpp}
 
-The phoneBook is sorted in a descending order based on the projection \&PhoneBookEntry::name.
+phoneBook根据投影\&PhoneBookEntry::name降序排序。
 
-The std::random\_access\_iterator, std::sortable, and std::sentinel\_for are \href{https://www.modernescpp.com/index.php/tag/concepts}{concepts}.
+The std::random\_access\_iterator, std::sortable和 std::sentinel\_for都是\href{https://www.modernescpp.com/index.php/tag/concepts}{概念}。
 
-std::ranges::sort does not support execution policies.
+std::ranges::sort不支持执行策略。
 
 
 

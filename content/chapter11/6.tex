@@ -1,6 +1,6 @@
-\href{https://en.cppreference.com/w/cpp/ranges/iota_view}{std::views::iota} is a range factory for creating a sequence of elements by successively incrementing an initial value. This sequence can be finite or infinite. Thanks to the function, I can find the first 20 prime numbers starting with 1000000.
+\href{https://en.cppreference.com/w/cpp/ranges/iota_view}{std::views::iota} 是一个范围工厂，用于通过连续递增初始值来创建元素序列。这个序列可以是有限的，也可以是无限的。有了这个函数，就可以找到以1000000开头的前20个质数。
 
-\filename{Finding 20 prime numbers starting with 1000000}
+\filename{找出20个以1000000开头的质数}
 
 \begin{cpp}
 // rangesLazy.cpp
@@ -40,20 +40,20 @@ for (int i: std::views::iota(1000000) | std::views::filter(odd)
 }
 \end{cpp}
 
-Here is my iterative strategy:
+以下是我的迭代策略:
 
 \begin{enumerate}
 \item 
-I don’t know when I have 20 primes greater than 1000000. To be on the safe side, I create 1000 numbers. I displayed only each 100th.
+我不知道什么时候有20个大于1000000的质数。为了安全起见，我创建了1000个数字，只显示每100个。
 
 \item 
-A prime is an odd number; therefore, I remove the even numbers.
+素数是奇数;因此，去掉了偶数。
 
 \item 
-The predicate isPrime returns if a number is a prime. I get 75 primes, but I only want to have 20.
+谓词isPrime返回一个数字是否为质数。我得到75个质数，但我只想要20个。
 
 \item 
-I use std::iota as an infinite number factory, starting with 1000000, and ask precisely for 20 primes.
+我使用std::iota作为无限数字工厂，从1000000开始，并精确地要求20个质数。
 \end{enumerate}
 
 \myGraphic{0.6}{content/chapter11/images/4.jpg}{}

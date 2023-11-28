@@ -1,14 +1,15 @@
-Ranges and views are \href{https://en.cppreference.com/w/cpp/language/constraint}{concepts}. C++20 supports various kinds of ranges: 
+范围和视图为\href{https://en.cppreference.com/w/cpp/language/constraint}{概念}。C++20支持多种范围:
 
+\hspace*{\fill} \\
 \noindent
-\textbf{std::range }
+\textbf{std::range}
 
-A range is a group of items that you can iterator over. It provides a begin iterator and an end sentinel. End iterators are special sentinels.
+范围是一组可以迭代的项，提供了开始迭代器和结束迭代器，结束迭代器是个特殊的哨兵。
 
-There are further refinements of std::range:
+std::range还有进一步的改进:
 
 \begin{center}
-Refinements of std::range
+std::range的改进
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -16,27 +17,27 @@ Refinements of std::range
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-\textbf{Range(namespace std omitted)} & \textbf{Description}                                              \\ \hline
+\textbf{范围(省略命名空间std)} & \textbf{描述}                                              \\ \hline
 \endfirsthead
 %
 \endhead
 %
-ranges::input\_range                  & Specifies a range whose iterator type satisfies input\_iterator   \\ \hline
-ranges::output\_range                 & Specifies a range whose iterator type satisfies output\_iterator  \\ \hline
-ranges::forward\_range                & Specifies a range whose iterator type satisfies forward\_iterator \\ \hline
-ranges::bidirectional\_range  & Specifies a range whose iterator type satisfies bidirectional\_iterator  \\ \hline
-ranges::random\_access\_range & Specifies a range whose iterator type satisfies random\_access\_iterator \\ \hline
-ranges::contiguous\_range     & Specifies a range whose iterator tye satisfies contiguous\_iterator      \\ \hline
+ranges::input\_range                  & 指定一个迭代器类型满足input\_iterator的范围   \\ \hline
+ranges::output\_range                 & 指定一个迭代器类型满足output\_iterator的范围  \\ \hline
+ranges::forward\_range                & 指定一个迭代器类型满足forward\_iterator的范围 \\ \hline
+ranges::bidirectional\_range  & 指定一个迭代器类型满足双向\_iterator的范围  \\ \hline
+ranges::random\_access\_range & 指定一个迭代器类型满足random\_access\_iterator的范围 \\ \hline
+ranges::contiguous\_range     & 指定一个迭代器类型满足continuous \_iterator的范围      \\ \hline
 \end{longtable}
 
 
-A random\_access\_iterator provides random access to its elements and is implicit a bidirectional\_iterator; a bidirection\_iterator enables iterating in both directions and is implicit a forward\_iterator; a forward\_iterator iteration in one direction. The interface of a contigiuous\_iterator is the same, such as a bidirectional\_iterator interface. The contiguous\_iterator guarantees that the iterator refers to contiguous storage.
+random\_access\_iterator提供对其元素的随机访问，是隐式bidirectional\_iterator;bidirectional\_iterator允许在两个方向上迭代，并且是隐式forward\_iterator;一个方向上的forward\_iterator。contigiuous\_iterator的接口都相同，例如bidirectional\_iterator接口。contiguous\_iterator保证迭代器指向连续存储的元素。
 
-\mySamllsection{Sentinel}
+\mySamllsection{哨兵}
 
-The sentinel specifies the end of a range. For the containers of the STL, the end iterator is the sentinel. With C++20, the type of the sentinel can be different from the type of the begin iterator. The following example uses a space as a sentinel.
+哨兵指定一个范围的结束。对于STL的容器，结束迭代器是哨兵。C++20中，哨兵的类型可以不同于起始迭代器的类型。下面的示例使用空格作为哨兵。
 
-\filename{Composing of ranges}
+\filename{范围的组成}
 
 \begin{cpp}
 // sentinelSpace.cpp
@@ -56,11 +57,11 @@ const char* rainerGrimm = "Rainer Grimm";
 std::ranges::for_each(rainerGrimm, Space{}, [] (char c) { std::cout << c; }); // Rainer
 \end{cpp}
 
-Due to the space as sentinel, only Rainer is displayed in the last line.
+由于空格作为哨兵，最后一行只显示Rainer。
 
 \mySamllsection{ranges::to}
 
-std::ranges::to is a convenient way in C++23 to construct a container from a range:
+std::ranges::to是C++23中使用范围构造容器的一种简单方法:
 
 \begin{cpp}
 std::vector<int> range(int begin, int end, int stepsize = 1) {
@@ -73,7 +74,7 @@ std::vector<int> range(int begin, int end, int stepsize = 1) {
 }
 \end{cpp}
 
-The function range creates a std::vector<int> consisting of all elements for begin to end with the stepsize stepsize. begin must be smaller than end.
+函数range创建一个std::vector<int>，由从开始到结束的所有元素组成。begin必须小于end。
 
 
 

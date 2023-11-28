@@ -1,9 +1,9 @@
-C++ offers many member functions to create strings from C or C++-strings. Under the hood, a C string is always involved for creating a C++-string. That changes with C++14, because the new C++ standard support C++-string literals: std::string str{"string"s}. The C string literals "string literal" becomes with the suffix s a C++-string literal: "string literal"s.
+C++提供了许多成员函数来从C或C++字符串中创建字符串。底层C字符串总是用于创建C++字符串，这在C++14中有所改变，因为新的C++标准支持C++字符串字面值:std::string str\{"string"s\}。C字符串字面值"string literal"加上后缀s就变成了C++字符串字面值"string literal"s。
 
-The table gives an overview of the member functions to create and delete a C++-string.
+该表概述了用于创建和删除C++字符串的成员函数。
 
 \begin{center}
-Member Functions to create and delete a string
+用于创建和删除字符串的函数
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -11,26 +11,26 @@ Member Functions to create and delete a string
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-\textbf{Member Functions}        & \textbf{Example}                        \\ \hline
+\textbf{成员函数}        & \textbf{示例}                        \\ \hline
 \endfirsthead
 %
 \endhead
 %
-Default                          & std::string str                         \\ \hline
-Copies from a C++-string         & std::string str(oth)                    \\ \hline
-Moves from a C++-string          & std::string str(std::move(oth))         \\ \hline
-From the range of a C++-string   & std::string(oth.begin(), oth.end())     \\ \hline
-From a substring of a C++-string & std::string(oth, otherIndex)            \\ \hline
-From a substring of a C++-string & std::string(oth, otherIndex, strlen)    \\ \hline
-From a C string                  & std::string str("c-string")             \\ \hline
-From a C array                   & std::string str("c-array", len)         \\ \hline
-From characters                  & std::string str(num, 'c')               \\ \hline
-From an initializer list         & std::string str(\{'a', 'b', 'c', 'd'\}) \\ \hline
-From a substring                 & str = other.substring(3, 10)            \\ \hline
-Destructor                       & str.$\sim$string()                      \\ \hline
+默认构造                          & std::string str                         \\ \hline
+从C++字符串复制         & std::string str(oth)                    \\ \hline
+从C++字符串移动          & std::string str(std::move(oth))         \\ \hline
+使用C++字符串的范围   & std::string(oth.begin(), oth.end())     \\ \hline
+使用C++字符串的子字符串 & std::string(oth, otherIndex)            \\ \hline
+使用C++字符串的子字符串 & std::string(oth, otherIndex, strlen)    \\ \hline
+使用C字符串                  & std::string str("c-string")             \\ \hline
+使用C数组                  & std::string str("c-array", len)         \\ \hline
+使用字符                  & std::string str(num, 'c')               \\ \hline
+使用初始化列表         & std::string str(\{'a', 'b', 'c', 'd'\}) \\ \hline
+使用子字符串                 & str = other.substring(3, 10)            \\ \hline
+析构                       & str.$\sim$string()                      \\ \hline
 \end{longtable}
 
-\filename{Creation of a string}
+\filename{创建一个字符串}
 
 \begin{cpp}
 // stringConstructor.cpp

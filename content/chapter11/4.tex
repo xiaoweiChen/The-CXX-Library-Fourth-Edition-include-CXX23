@@ -1,4 +1,4 @@
-The algorithms of the Standard Template Library need a begin iterator and an end iterator.
+标准模板库的算法需要一个开始迭代器和一个结束迭代器。
 
 \begin{cpp}
 std::vector<int> myVec{1, 2, 3, 4, 5, 6, 7, 8, 9};
@@ -6,9 +6,9 @@ auto res = std::accumulate(std::begin(myVec), std::end(myVec), 0);
 std::cout << res << '\n'; // 45
 \end{cpp}
 
-The ranges library allows it to directly create a view on the keys (1) or values (3) of a std::unordered\_map.
+范围库允许它直接在std::unordered\_map的键(1)或值(3)上创建视图。
 
-\filename{Ranges work directly on the container}
+\filename{范围直接作用于容器}
 
 \begin{cpp}
 // rangesEntireContainer.cpp
@@ -33,9 +33,9 @@ for (const auto& value : std::views::values(freqWord)){ // (4)
 }
 \end{cpp}
 
-Of course, the keys and values can be displayed directly ((2) and (4)). The output is identical.
+当然，键和值可以直接显示((2)和(4))。输出是相同的。
 
-\myGraphic{0.6}{content/chapter11/images/2.jpg}{}
+\myGraphic{0.5}{content/chapter11/images/2.jpg}{}
 
 
 

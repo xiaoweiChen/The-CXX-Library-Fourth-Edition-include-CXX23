@@ -1,16 +1,16 @@
-\myGraphic{0.6}{content/chapter13/images/1.jpg}{Cippi plays with a snake}
+\myGraphic{0.6}{content/chapter13/images/1.jpg}{Cippi正在玩蛇型玩具}
 
-A \href{http://en.cppreference.com/w/cpp/string/basic_string}{string} is a sequence of characters. C++ has many member functions to analyze or change a string. C++-strings are the safe replacement for C Strings: const char*. Strings need the header <string>.
+\href{http://en.cppreference.com/w/cpp/string/basic_string}{string}是一个字符序列。C++有许多成员函数来分析或修改字符串，C++字符串是C字符串的安全替代品:const char*。std::string需要头文件<string>。
 
 \myGraphic{0.6}{content/chapter13/images/2.jpg}{}
 
 
-\begin{myTip}{A string is similar to a std::vector}
-A string feels like a std::vector containing characters. It supports a very similar interface. This means that you have the algorithms of the Standard Template Library to operate on a string.
+\begin{myTip}{字符串类似于std::vector}
+字符串感觉像是包含字符的std::vector，支持一个相似的接口。所以，可使用标准模板库的算法来操作字符串。
 
-The following code snippet has the std::string name with the value RainerGrimm. I use the STL algorithm std::find\_if to get the upper letter and then extract my first and last name into the variables firstName and lastName. The expression name.begin()+1 shows, that strings support random access iterators:
+下面的代码段使用std::string命名，值为RainerGrimm。我使用STL算法std::find\_if来获取大写字母，然后将我的名字和姓氏提取到变量firstName和lastName中。表达式name.begin()+1表明，字符串支持随机访问迭代器:
 
-\filename{string versus vector}
+\filename{string和vector}
 
 \begin{cpp}
 // string.cpp
@@ -28,7 +28,7 @@ if (strIt != name.end()){
 \end{cpp}
 \end{myTip}
 
-Strings are class templates parametrized by their character, character trait, and allocator. The character trait and the allocator have defaults.
+字符串是由其字符、字符特征和分配器参数化的类模板。字符特征和分配器都有默认值。
 
 \begin{cpp}
 template <typename charT,
@@ -37,7 +37,7 @@ template <typename charT,
 class basic_string;
 \end{cpp}
 
-C++ has synonyms for the character types char, wchar\_t, char16\_t and char32\_t
+C++有字符类型char、wchar\_t、char16\_t和char32\_t的同义词
 
 \begin{cpp}
 typedef basic_string<char> string;
@@ -46,8 +46,8 @@ typedef basic_string<char16_t> u16string;
 typedef basic_string<char32_t> u32string;
 \end{cpp}
 
-\begin{myTip}{std::string is the string}
-If we speak in C++ about a string, we refer with 99 \% probability to the specialization std::basic\_string for the character type char. This statement is also true for this book.
+\begin{myTip}{std::string是字符串}
+若在C++中谈论字符串，有99\%的概率引用字符类型char的特化std::basic\_string。这也适用于本书。
 \end{myTip}
 
 
