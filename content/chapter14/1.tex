@@ -1,9 +1,9 @@
-You can create an empty string view. You can also create a string view from an existing string, character array, or string view.
+可以创建一个空字符串视图。还可以从现有字符串、字符数组或字符串视图创建字符串视图。
 
-The table below gives you an overview of the various ways of creating a string view.
+下表概述了创建字符串视图的各种方法。
 
 \begin{center}
-Member Functions to create and set a string view
+用于创建和设置字符串视图的函数
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -11,17 +11,17 @@ Member Functions to create and set a string view
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-\textbf{Member Functions} & \textbf{Example}                              \\ \hline
+\textbf{功能} & \textbf{示例}                              \\ \hline
 \endfirsthead
 %
 \endhead
 %
-Empty string view         & std::string\_view str\_view                   \\ \hline
-From a C-String           & std::string\_view str\_view2("C-string")      \\ \hline
-From a string view        & std::string\_view str\_view3(str\_view2)      \\ \hline
-From a C array            & std::string\_view str\_view4(arr, sizeof arr) \\ \hline
-From a string\_view       & str\_view4 = str\_view3.substring(2, 3)       \\ \hline
-From a string view        & std::string\_view str\_view5 = str\_view4     \\ \hline
+空字符串视图        & std::string\_view str\_view                   \\ \hline
+来自C字符串           & std::string\_view str\_view2("C-string")      \\ \hline
+来自字符串视图        & std::string\_view str\_view3(str\_view2)      \\ \hline
+来自C数组            & std::string\_view str\_view4(arr, sizeof arr) \\ \hline
+来自string\_view       & str\_view4 = str\_view3.substring(2, 3)       \\ \hline
+来自字符串视        & std::string\_view str\_view5 = str\_view4     \\ \hline
 \end{longtable}
 
 

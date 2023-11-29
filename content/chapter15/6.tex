@@ -1,5 +1,5 @@
 
-std::regex\_replace replaces sequences in a text matching a text pattern. It returns in the simple form std::regex\_replace(text, regex, replString) its result as string. The function replaces an occurrence of regex in text with replString.
+std::regex\_replace替换与文本模式匹配的文本中的序列，以简单的形式std::regex\_replace(text, regex, replString)返回其结果为字符串。函数用replString替换文本中出现的regex。
 
 \filename{std::replace}
 
@@ -25,7 +25,7 @@ cout << officialName << endl;
 							// The official name of the new C++ standard is C++11.
 \end{cpp}
 
-In addition to the simple version, C++ has a version of std::regex\_replace working on ranges. It enables you to push the modified string directly into another string:
+除了简单的版本之外，C++还有一个版本的std::regex\_replace可以处理范围，可将修改后的字符串直接推入另一个字符串:
 
 \begin{cpp}
 typedef basic_regex<char> regex;
@@ -34,7 +34,7 @@ std::regex_replace(std::back_inserter(str2),
 				   text.begin(), text.end(), regex,replString);
 \end{cpp}
 
-All variants of std::regex\_replace have an additional optional parameter. If you set the parameter to std::regex\_constants::format\_no\_copy, you will get the part of the text matching the regular expression. The unmatched text is not copied. If you set the parameter to std::regex\_constants::format\_first\_only std::regex\_replace will only be applied once.
+std::regex\_replace的所有版本都有一个额外的可选参数。若将参数设置为std::regex\_constants::format\_no\_copy，将获得与正则表达式匹配的文本部分，只复制匹配的文本。若将参数设置为std::regex\_constants::format\_first\_only，则std::regex\_replace将只应用一次。
 
 
 

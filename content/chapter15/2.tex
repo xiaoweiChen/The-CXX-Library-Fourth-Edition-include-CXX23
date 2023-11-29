@@ -1,15 +1,15 @@
 
 
-Objects of type regular expression are instances of the class template template <class charT, class traits= regex\_traits <charT>{}> class basic\_regex parametrized by their character type and traits class. The traits class defines the interpretation of the properties of regular grammar. There are two type synonyms in C++:
+正则表达式类型的对象是类模板template <class charT，class traits= regex\_traits <charT>{}>类basic\_regex的实例，由字符类型和特征类参数化，特征类定义了正则语法属性的解释。C++中有两种同义类型:
 
 \begin{cpp}
 typedef basic_regex<char> regex;
 typedef basic_regex<wchar_t> wregex;
 \end{cpp}
 
-You can further customize the object of type regular expression. Therefore you can specify the grammar used or adapt the syntax. As mentioned, C++ supports the basic, extended, awk, grep, and egrep grammars. A regular expression qualified by the std::regex\_constants::icase flag is case insensitive. If you want to adopt the syntax, you have to specify the grammar explicitly.
+可以进一步自定义正则表达式类型的对象，可以指定所使用的语法或调整语法。如前所述，C++支持基本、扩展、awk、grep和egrep语法。由std::regex\_constants::icase标志限定的正则表达式不区分大小写。若要采用该语法，则必须显式指定语法。
 
-\filename{Specify the grammar}
+\filename{指定语法}
 
 \begin{cpp}
 // regexGrammar.cpp
@@ -35,7 +35,7 @@ if (std::regex_search(theQuestion, smatch, rgxIn)){
 }
 \end{cpp}
 
-If you use the case-sensitive regular expression rgx, the result of the search in the text theQuestion is c++. That’s not the case if your case-insensitive regular expression rgxIn is applied. Now you get the match string C++.
+若使用区分大小写的正则表达式rgx，则在文本theQuestion中搜索的结果是“c++”。若使用不区分大小写的正则表达式rgxIn，则不是这种情况。现在，得到了匹配的字符串是“C++”。
 
 
 

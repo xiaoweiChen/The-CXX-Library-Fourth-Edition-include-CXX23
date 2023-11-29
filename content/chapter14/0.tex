@@ -1,12 +1,12 @@
-\myGraphic{0.6}{content/chapter14/images/1.jpg}{Cippi ovserves a Snake}
+\myGraphic{0.6}{content/chapter14/images/1.jpg}{Cippi在观察蛇}
 
-A \href{http://en.cppreference.com/w/cpp/string/basic_string_view}{string view} is a non-owning reference to a string. It represents a view of a sequence of characters. This sequence of characters can be a C++-string or a C-string. A string view needs the header <string\_view>.
+\href{http://en.cppreference.com/w/cpp/string/basic_string_view}{string view}是对字符串的非所属引用，表示一个字符序列的视图。这个字符序列可以是C++字符串或C字符串，这需要头文件<string\_view>。
 
-\begin{myTip}{A string view is a for copying optimized string}
-From a birds-eye perspective, the purpose of std::string\_view is to avoid copying data that is already owned by someone else and to allow immutable access to a std::string like object. The string view is a restricted string that supports only immutable operations. Additionally, a string view sv has two additional mutating operations: sv.remove\_prefix and sv.remove\_suffix.
+\begin{myTip}{字符串视图是对复制优化字符串的优化}
+从鸟瞰的角度来看，std::string\_view的目的是避免复制已经由其他人拥有的数据，并允许对类似std::string的对象进行不可变访问。字符串视图是受限制的字符串，仅支持不可变操作。此外，字符串视图还有两个额外的变异操作:sv.remove\_prefix和sv.remove\_suffix。
 \end{myTip}
 
-String views are class templates parameterized by their character and their character trait. The character trait has a default. In contrast to a string, a string view is non-owner and, therefore, needs no allocator.
+字符串视图是由字符和字符特征参数化的类模板，字符特性有一个默认值。与字符串相反，字符串视图是非所有者，因此不需要分配器。
 
 \begin{cpp}
 template<
@@ -15,7 +15,7 @@ template<
 > class basic_string_view;
 \end{cpp}
 
-According to strings, string views exist four synonyms for the underlying character types char, wchar\_t, char16\_t, and char32\_t.
+根据字符串，字符串视图存在底层字符类型char、wchar\_t、char16\_t和char32\_t的四个同义词。
 
 \begin{cpp}
 typedef std::string_view std::basic_string_view<char>
@@ -24,8 +24,8 @@ typedef std::u16string_view std::basic_string_view<char16_t>
 typedef std::u32string_view std::basic_string_view<char32_t>
 \end{cpp}
 
-\begin{myNotic}{std::string\_view is the string view}
-If we speak in C++ about a string view, we refer with 99\% probability to the specialization std::basic\_string\_view for the character type char. This statement is also true for this book.
+\begin{myNotic}{std::string\_view 是字符串视图}
+若谈论字符串视图，有99\%的概率引用字符类型char的特化std::basic\_string\_view。这也适用于本书。
 \end{myNotic}
 
 

@@ -1,15 +1,15 @@
 
-The stream classes std::istream and std::ostream are often used for the reading and writing of data. Use of std::istream classes requires the <istream> header; use of std::ostream classes requires the <ostream> header. You can have both with the header <iostream>. std::istream is a typedef for the class basic\_istream and the character type char, std::ostream for the class basic\_ostream respectively:
+流类std::istream和std::ostream通常用于数据的读写。使用std::istream类需要<istream>头文件;使用std::ostream类需要<ostream>头文件。你可以同时使用<iostream>头文件。std::istream分别是类basic\_istream和类basic\_ostream的字符类型char, std::ostream的类型定义:
 
 \begin{cpp}
 typedef basic_istream<char> istream;
 typedef basic_ostream<char> ostream;
 \end{cpp}
 
-C++ has four predefined stream objects for the convenience of dealing with the keyboard and the monitor.
+为了方便处理键盘和显示器，C++有四个预定义的流对象。
 
 \begin{center}
-The four predefined stream objects
+四个预定义的流对象
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -17,7 +17,7 @@ The four predefined stream objects
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|l|l|}
 \hline
-\textbf{Stream object} & \textbf{C pendant} & \textbf{Device} & \textbf{Buffered} \\ \hline
+\textbf{流对象} & \textbf{C} & \textbf{设备} & \textbf{是否缓冲} \\ \hline
 \endfirsthead
 %
 \endhead
@@ -29,13 +29,13 @@ std::clog              &                    & monitor         & yes             
 \end{longtable}
 
 
-\begin{myNotic}{The stream objects are also available for wchar\_t}
-The four stream objects for wchar\_t, std::wcin, std::wcout, std::wcerr, and std::wclog are by far not so heavily used as their char pendants. Therefore I treat them only marginally.
+\begin{myNotic}{流对象也可用于wchar\_t}
+到目前为止，wchar\_t、std::wcin、std::wcout、std::wcerr和std::wclog的四个流对象并没有像它们的字符那样大量使用。这里，只是稍微提一下。
 \end{myNotic}
 
-The stream objects are sufficient to write a program that reads from the command line and returns the sum.
+流对象足以编写从命令行读取并返回总和的程序。
 
-\filename{The stream objects}
+\filename{流对象}
 
 \begin{cpp}
 // IOStreams.cpp
@@ -53,16 +53,16 @@ int main(){
 }
 \end{cpp}
 
-The minor program above uses the stream operators <{}< and >{}> and the stream manipulator std::endl.
+上面的小程序使用了流操作符<{}<和>{}>，以及流操纵符std::endl。
 
-The insert operator <{}< pushes characters onto the output stream std::cout; the extract operator >{}> pulls the characters from the input stream std::cin. You can build chains of insert or extract operators because both operators return a reference to themselves.
+插入操作符<{}<将字符压入输出流std::cout;提取操作符>{}>从输入流std::cin中提取字符。可以构建插入或提取操作符链，这两个操作符都返回对自己的引用。
 
-std::endl is a stream manipulator because it puts a ‘\verb|\|n’ character onto std::cout and flushes the output buffer.
+std::endl是一个流操纵符，因为它将一个'\verb|\|n'字符放到std::cout上，并刷新输出缓冲区。
 
-Here are the most frequently used stream manipulators.
+下面是最常用的流操纵符。
 
 \begin{center}
-The most frequently used stream manipulators
+最常用的流操纵符
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -70,36 +70,36 @@ The most frequently used stream manipulators
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|l|}
 \hline
-\textbf{Manipulator} & \textbf{Stream type} & \textbf{Description}                                 \\ \hline
+\textbf{操纵符} & \textbf{流类型} & \textbf{描述}                                 \\ \hline
 \endfirsthead
 %
 \endhead
 %
-std::endl            & output               & Inserts a new-line character and flushes the stream. \\ \hline
-std::flush           & output               & Flushes the stream.                                  \\ \hline
-std::ws              & input                & Discards leading whitespace.                         \\ \hline
+std::endl            & output               & 插入新行字符并刷新流。 \\ \hline
+std::flush           & output               & 刷新流。                                  \\ \hline
+std::ws              & input                & 丢弃前置空格。                         \\ \hline
 \end{longtable}
 
-\mySamllsection{Input}
+\mySamllsection{输入}
 
-You can read in C++ in two ways from the input stream: Formatted with the extractor >> and unformatted with explicit member functions.
+C++中，从输入流中读取数据有两种方式:用提取器>{}>格式化和用显式成员函数不格式化。
 
-\mySamllsection{Formatted Input}
+\mySamllsection{格式化输入}
 
-The extraction operator >{}>
+提取操作符>{}>
 
 \begin{itemize}
 \item 
-is predefined for all built-in types and strings,
+为所有内置类型和字符串预定义，
 
 \item 
-can be implemented for user-defined data types,
+可为用户定义的数据类型进行实现，
 
 \item 
-can be configured by format specifiers.
+可以通过格式说明符进行配置。
 \end{itemize}
 
-\begin{myTip}{std::cin ignores by default leading whitespace}
+\begin{myTip}{默认情况下，std::cin会忽略前置空格}
 \begin{cpp}
 #include <iostream>
 ...
@@ -110,12 +110,12 @@ std::cout << "a: " << a << " b: " << b;
 \end{cpp}
 \end{myTip}
 
-\mySamllsection{Unformatted Input}
+\mySamllsection{非格式化输入}
 
-There are many member functions for the unformatted input from an input stream is.
+对于来自输入流的未格式化输入，有许多成员函数。
 
 \begin{center}
-Unformatted input from an input stream
+来自输入流的未格式化输入
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -123,24 +123,24 @@ Unformatted input from an input stream
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-\textbf{Member Function}                          & \textbf{Description}                                                                 \\ \hline
+\textbf{成员函数}                          & \textbf{描述}                                                                 \\ \hline
 \endfirsthead
 %
 \endhead
 %
-is.get(ch)                                        & Reads one character into ch.                                                         \\ \hline
-is.get(buf, num)                                  & Reads at most num characters into the buffer buf.                                    \\ \hline
+is.get(ch)                                        & 将一个字符读入ch。                                                         \\ \hline
+is.get(buf, num)                                  & 在缓冲区中最多读取num个字符。                                    \\ \hline
 is.getline(buf, num{[}, delim{]}) &
-\begin{tabular}[c]{@{}l@{}}Reads at most num characters into the buffer buf.\\ Uses the line-delimiter delim(default \textbackslash{}n) optionally.\end{tabular} \\ \hline
-is.gcount()                                       & Returns the number of last extracted characters from is by an unformatted operation. \\ \hline
-is.ignore(streamsize sz=1, int delim=end-of-file) & Ignores sz characters until delim.                                                   \\ \hline
-is.peek()                                         & Gets one character from is without consuming it.                                     \\ \hline
-is.unget()                                        & Pushes the last read character back to is.                                           \\ \hline
-is.putback(ch)                                    & Pushes the character ch onto the stream is.                                          \\ \hline
+\begin{tabular}[c]{@{}l@{}}在缓冲区中最多读取num个字符。\\ 可选地使用行分隔符delim(默认\textbackslash{}n)。\end{tabular} \\ \hline
+is.gcount()                                       & 返回通过未格式化操作从数组中提取的最后字符数。 \\ \hline
+is.ignore(streamsize sz=1, int delim=end-of-file) & 忽略sz字符直到delim。                                                   \\ \hline
+is.peek()                                         & 从is中获取一个字符，但不使用它。                                     \\ \hline
+is.unget()                                        & 将最后一个读取的字符回推到is。                                           \\ \hline
+is.putback(ch)                                    & 将字符ch引入流is。                                          \\ \hline
 \end{longtable}
 
-\begin{myTip}{std::string has a getline function}
-The getline function of std::string has a big advantage above the getline function of the istream. The std::string automatically takes care of its memory. On the contrary, you must reserve the memory for the buffer buf in the is.get(buf, num) function.
+\begin{myTip}{std::string有一个getline函数}
+std::string的getline函数比istream的getline函数有一个很大的优势,字符串会自动处理它的内存，但必须为is.get(buf, num)所使用的缓冲区保留内存。
 \end{myTip}
 
 \begin{cpp}
@@ -162,7 +162,7 @@ while (std::getline(std::cin, line, ';') ) {
 \end{cpp}
 
 
-\mySamllsection{Output}
+\mySamllsection{输出}
 
 You can push characters with the insert operator <{}< onto the output stream.
 

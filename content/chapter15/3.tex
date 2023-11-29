@@ -1,12 +1,12 @@
 
 
-The object of type std::match\_results is the result of a std::regex\_match or std::regex\_search. std::match\_results is a sequence container having at least one capture group of a std::sub\_match object. The std::sub\_match objects are sequences of characters.
+std::match\_results类型的对象是std::regex\_match或std::regex\_search的结果。Std::match\_results是一个序列容器，至少有一个std::sub\_match对象的捕获组，std::sub\_match对象是字符序列。
 
-\begin{myNotic}{What is a capture group?}
-Capture groups allow it to further analyze the search result in a regular expression. They are defined by a pair of parentheses ( ). The regular expression ((a+)(b+)(c+)) has four capture groups: ((a+)(b+)(c+)), (a+), (b+) and (c+) The total result is the 0-th capture group.
+\begin{myNotic}{什么是捕获组?}
+捕获组允许它进一步分析正则表达式中的搜索结果，由一对括号()定义。正则表达式((a+)(b+)(c+))有四个捕获组:((a+)(b+)(c+))、(a+)、(b+)和(c+)，总结果是第0个捕获组。
 \end{myNotic}
 
-C++ has four types of synonyms of type std::match\_results:
+C++有四种类型的std::match\_results类型的同义词:
 
 \begin{cpp}
 typedef match_results<const char*> cmatch;
@@ -15,10 +15,10 @@ typedef match_results<string::const_iterator> smatch;
 typedef match_results<wstring::const_iterator> wsmatch;
 \end{cpp}
 
-The search result std::smatch smatch has a powerful interface.
+搜索结果std::smatch smatch具有强大的接口。
 
 \begin{center}
-Interface of std::smatch
+std::smatch的接口
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -26,25 +26,25 @@ Interface of std::smatch
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-\textbf{Member Function}            & \textbf{Description}                                       \\ \hline
+\textbf{成员函数}            & \textbf{描述}                                       \\ \hline
 \endfirsthead
 %
 \endhead
 %
-smatch.size()                       & Returns the number of capture groups.                      \\ \hline
-smatch.empty()                      & Returns if the search result has a capture group.          \\ \hline
-smatch{[}i{]}                       & Returns the i-th capture group.                            \\ \hline
-smatch.length(i)                    & Returns the length of the i-th capture group.              \\ \hline
-smatch.position(i)                  & Returns the position of the i-th capture group.            \\ \hline
-smatch.str(i)                       & Returns the i-th capture group as string.                  \\ \hline
-smatch.prefix() and smatch.suffix() & Returns the string before and after the capture group.     \\ \hline
-smatch.begin() and smatch.end()     & Returns the begin and end iterator for the capture groups. \\ \hline
-smatch.format(...)                  & Formats std::smatch objects for the output.                \\ \hline
+smatch.size()                       & 返回捕获组的数目。                      \\ \hline
+smatch.empty()                      & 若搜索结果有捕获组，则返回。          \\ \hline
+smatch{[}i{]}                       & 返回第i个捕获组。                            \\ \hline
+smatch.length(i)                    & 返回第i个捕获组的长度。              \\ \hline
+smatch.position(i)                  & 返回第i个捕获组的位置。            \\ \hline
+smatch.str(i)                       & 以字符串形式返回第i个捕获组。                  \\ \hline
+smatch.prefix() and smatch.suffix() & 返回捕获组前后的字符串。     \\ \hline
+smatch.begin() and smatch.end()     & 返回捕获组的开始和结束迭代器。 \\ \hline
+smatch.format(...)                  & 为输出格式化std::smatch对象。                \\ \hline
 \end{longtable}
 
-The following program shows the output of the first four capture groups for different regular expressions.
+下面的代码展示了针对不同正则表达式，前四个捕获组的输出。
 
-\filename{Capture groups}
+\filename{捕获组}
 
 \begin{cpp}
 // captureGroups.cpp
@@ -72,22 +72,23 @@ showCaptureGroups("(ab)(abc)+", "ababcabc");
 % Please add the following required packages to your document preamble:
 % \usepackage{longtable}
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
-\begin{longtable}[c]{llllll}
-reg Expr       & text     & smatch{[}0{]} & smatch{[}1{]} & smatch{[}2{]} & smatch{[}3{]} \\
+\begin{longtable}[c]{|l|l|l|l|l|l|}
+\hline
+正则表达式       & 文本     & smatch{[}0{]} & smatch{[}1{]} & smatch{[}2{]} & smatch{[}3{]} \\ \hline
 \endfirsthead
 %
 \endhead
 %
-abc+           & abccccc  & abccccc       &               &               &               \\
-(a+)(b+)(c+)   & aaabccc  & aaabccc       & aaa           & b             & ccc           \\
-((a+)(b+)(c+)) & aaabccc  & aaabccc       & aaabccc       & aaa           & b             \\
-(ab)(abc)+     & ababcabc & ababcabc      & ab            & abc           &              
+abc+           & abccccc  & abccccc       &               &               &               \\ \hline
+(a+)(b+)(c+)   & aaabccc  & aaabccc       & aaa           & b             & ccc           \\ \hline
+((a+)(b+)(c+)) & aaabccc  & aaabccc       & aaabccc       & aaa           & b             \\ \hline
+(ab)(abc)+     & ababcabc & ababcabc      & ab            & abc           &              \\ \hline
 \end{longtable}
 
 
 \mySamllsection{std::sub\_match}
 
-The capture groups are of type std::sub\_match. As with std::match\_results C++ defines the following four type synonyms.
+捕获组的类型为std::sub\_match。与std::match\_results一样，C++定义了以下四个同义类型。
 
 \begin{cpp}
 typedef sub_match<const char*> csub_match;
@@ -96,10 +97,10 @@ typedef sub_match<string::const_iterator> ssub_match;
 typedef sub_match<wstring::const_iterator> wssub_match;
 \end{cpp}
 
-You can further analyze the capture group cap
+可以进一步分析捕获组的内容
 
 \begin{center}
-The std::sub\_match object
+std::sub\_match
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -107,19 +108,19 @@ The std::sub\_match object
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-\textbf{Member Function} & \textbf{Description}                     \\ \hline
+\textbf{成员函数} & \textbf{描述}                     \\ \hline
 \endfirsthead
 %
 \endhead
 %
-cap.matched()            & Indicates if this match was successful.  \\ \hline
-cap.first() and cap.end() & Returns the begin and end iterator of the character sequence.    \\ \hline
-cap.length()             & Returns the length of the capture group. \\ \hline
-cap.str()                & Returns the capture group as string.     \\ \hline
-cap.compare(other)        & Compares the current capture group with the other capture group. \\ \hline
+cap.matched()            & 指示匹配是否成功。  \\ \hline
+cap.first() and cap.end() & 返回字符序列的开始和结束迭代器。    \\ \hline
+cap.length()             & 返回捕获组的长度。 \\ \hline
+cap.str()                & 以字符串形式返回捕获组。     \\ \hline
+cap.compare(other)        & 将当前捕获组与其他捕获组进行比较。 \\ \hline
 \end{longtable}
 
-Here is a code snippet showing the interplay between the search result std::match\_results and its capture groups std::sub\_match.
+下面的代码片段显示了搜索结果std::match\_results和其捕获组std::sub\_match之间的影响。
 
 \filename{std::sub\_match}
 
@@ -163,7 +164,7 @@ capture group: 21
 32 31
 \end{shell}
 
-The regular expression regEx stands for an IPv4 address. regEx extracts the address’s components using capture groups. Finally, the capture groups and the characters in ASCII are displayed in hexadecimal values.
+正则表达式regEx表示IPv4地址，regEx使用捕获组提取地址的组件。最后，捕获组和ASCII字符以十六进制值显示。
 
 
 

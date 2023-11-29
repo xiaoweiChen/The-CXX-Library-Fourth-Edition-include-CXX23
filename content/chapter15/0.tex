@@ -1,27 +1,27 @@
-\myGraphic{0.6}{content/chapter15/images/1.jpg}{Cippi analysis tracks in the Snow}
+\myGraphic{0.6}{content/chapter15/images/1.jpg}{Cippi正在分析雪地里的脚印}
 
-\href{http://en.cppreference.com/w/cpp/regex}{Regular expression} is a language for describing text patterns. They need the header <regex>.
+\href{http://en.cppreference.com/w/cpp/regex}{正则表达式}是描述文本模式的语言，其需要头文件<regex>。
 
-Regular expressions are a powerful tool for the following tasks:
+正则表达式是执行以下任务的强大工具:
 
 \begin{itemize}
 \item 
-Check if a text matches a text pattern: std::regex\_match
+检查文本是否与文本模式匹配: std::regex\_match
 
 \item 
-Search for a text pattern in a text: std::regex\_search
+在文本中搜索文本模式: std::regex\_search
 
 \item 
-Replace a text pattern with a text: std::regex\_replace
+将文本模式替换为文本: std::regex\_replace
 
 \item 
-Iterate through all text patterns in a text: std::regex\_iterator and std::regex\_token\_iterator
+遍历文本中的所有文本模式: std::regex\_iterator 和 std::regex\_token\_iterator
 \end{itemize}
 
-C++ supports six different grammar for regular expressions. By default, the ECMAScript grammar is used. This one is the most powerful grammar of the six grammars and is quite similar to the grammar used in Perl 5. The other five grammars are the basic, extended, awk, grep, and egrep grammars.
+C++支持六种不同的正则表达式语法。默认情况下，使用ECMAScript语法。这是六种语法中最强大的语法，与Perl 5中使用的语法非常相似。其他五种语法是基本语法、扩展语法、awk语法、grep语法和egrep语法。
 
-\begin{myTip}{Use raw strings}
-Use raw string literals in regular expressions. The regular expression for the text C++ is quite ugly: C\verb|\\|+\verb|\\|+. You have to use two backslashes for each + sign. First, the + sign is a unique character in a regular expression. Second, the backslash is a special character in a string. Therefore one backslash escapes the + sign; the other backslash escapes the backslash. By using a raw string literal, the second backslash is not necessary anymore because the backslash is not interpreted in the string.
+\begin{myTip}{使用原始字符串}
+正则表达式中使用原始字符串文字。C++文本的正则表达式非常难懂:C\verb|\\|+\verb|\\|+。每个+号必须使用两个反斜杠。首先，+号是正则表达式中的唯一字符。其次，反斜杠是字符串中的一个特殊字符。因此，一个反斜杠转义+号，另一个反斜杠转义反斜杠。通过使用原始字符串字面值，第二个反斜杠不再是必要的，因为反斜杠在字符串中不会转义。
 
 \begin{cpp}
 #include <regex>
@@ -32,11 +32,11 @@ std::string regExprRaw(R"(C\+\+)");
 
 \end{myTip}
 
-Dealing with regular expressions is typically done in three steps:
+处理正则表达式通常分三步完成:
 
 \begin{enumerate}[label=\Roman*.]
 \item 
-Define the regular expression:
+定义正则表达式:
 
 \begin{cpp}
 std::string text="C++ or c++.";
@@ -45,7 +45,7 @@ std::regex rgx(regExpr);
 \end{cpp}
 
 \item 
-Store the result of the search:
+存储搜索结果:
 
 \begin{cpp}
 std::smatch result;
@@ -53,7 +53,7 @@ std::regex_search(text, result, rgx);
 \end{cpp}
 
 \item 
-Process the result:
+处理结果:
 
 \begin{cpp}
 std::cout << result[0] << '\n';

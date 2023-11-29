@@ -1,10 +1,10 @@
 
 
-It’s pretty convenient to iterate with std::regex\_iterator and std::regex\_token\_iterator through the matched texts. std::regex\_iterator supports the matches and their capture groups. std::regex\_token\_iterator supports more. You can address the components of each capture. Using a negative index enables it to access the text between the matches.
+使用std::regex\_iterator和std::regex\_token\_iterator遍历匹配的文本非常方便。std::regex\_iterator支持匹配及其捕获组。std::regex\_token\_iterator支持更多。可以处理每个捕获的组件，使用负索引使它能够访问匹配之间的文本。
 
 \mySamllsection{std::regex\_iterator}
 
-C++ defines the following four type synonyms for std::regex\_iterator.
+C++为std::regex\_iterator定义了以下四个同义类型。
 
 \begin{cpp}
 typedef cregex_iterator regex_iterator<const char*>
@@ -13,7 +13,7 @@ typedef sregex_iterator regex_iterator<std::string::const_iterator>
 typedef wsregex_iterator regex_iterator<std::wstring::const_iterator>
 \end{cpp}
 
-You can use std::regex\_iterator to count the occurrences of the words in a text:
+可以使用std::regex\_iterator来计算文本中单词的出现次数:
 
 \filename{std::regex\_iterator}
 
@@ -41,11 +41,11 @@ for (auto wordIt: allWords) cout << "(" << wordIt.first << ":"
 					// (as:2)(of:1)(level:1)(find:1)(ever:1)(and:2)(natural:1) ...
 \end{cpp}
 
-A word consists of a least one character (\verb|\|w+). This regular expression is used to define the begin iterator wordItBegin and the end iterator wordItEnd. The iteration through the matches happens in the for loop. Each word increments the counter: ++allWords[wordItBegin]->str()]. A word with counter equals to 1 is created if it is not already in allWords.
+一个单词至少包含一个字符(\verb|\|w+)，这个正则表达式用于定义开始迭代器wordItBegin和结束迭代器wordItEnd。匹配项的迭代发生在for循环中，每个单词增加计数器:++allWords[wordItBegin]->str()]。若有单词不存在于allWords中，则创建一个计数器等于1的单词。
 
 \mySamllsection{std::regex\_token\_iterator}
 
-C++ defines the following four type synonyms for std::regex\_token\_iterator.
+C++为std::regex\_token\_iterator定义了以下四个同义类型。
 
 \begin{cpp}
 typedef cregex_iterator regex_iterator<const char*>
@@ -54,7 +54,7 @@ typedef sregex_iterator regex_iterator<std::string::const_iterator>
 typedef wsregex_iterator regex_iterator<std::wstring::const_iterator>
 \end{cpp}
 
-std::regex\_token\_iterator enables you to use indexes to explicitly specify which capture groups you are interested in. If you don’t specify the index, you will get all capture groups, but you can also request specific capture groups using their respective index. The -1 index is particular: You can use -1 to address the text between the matches:
+std::regex\_token\_iterator能够使用索引显式地指定感兴趣的捕获组。若不指定索引，将获得所有捕获组，也可以使用它们各自的索引请求特定的捕获组。-1索引是特殊的:可以使用-1来定位匹配之间的文本:
 
 \filename{std::regex\_token\_iterator}
 

@@ -1,6 +1,6 @@
-The call stringView.swap(stringView2) swaps the content of the two string views. The member functions remove\_prefix and remove\_suffix are unique to a string view because a string supports neither. remove\_prefix shrinks its start forward; remove\_suffix shrinks its end backward.
+stringView.swap(stringView2)交换两个字符串视图的内容。对于字符串视图来说，成员函数remove\_prefix和remove\_suffix是唯一的，因为字符串不支持这两种方法。remove\_prefix向前对其起始进行收缩，remove\_suffix向后对其结尾进行收缩。
 
-\filename{Non-modifying operations}
+\filename{无修改操作}
 
 \begin{cpp}
 // string_view.cpp
@@ -25,10 +25,10 @@ cout << arr << ": " << sizeof arr << endl // A lot of space: 17
 	 << strView2 << ": " << strView2.size() << endl; // A lot of space: 14
 \end{cpp}
 
-\begin{myTip}{No memory allocation with a string view}
-If you create a string view or copy a string view, no memory allocation is necessary. This contrasts with a string; creating or copying a string requires memory allocation.
+\begin{myTip}{使用字符串视图不分配内存}
+若创建字符串视图或复制字符串视图，则不需要分配内存。这与字符串形成对比，创建或复制字符串需要分配内存。
 
-\filename{Memory allocation}
+\filename{分配内存}
 
 \begin{cpp}
 // stringView.cpp
@@ -65,7 +65,7 @@ getStringView("012345678901234567890"
 getStringView(message); // 0 bytes allocated
 \end{cpp}
 
-Thanks to the global overload operator new, I can observe each memory allocation.
+有了全局重载操作符new，就可以观察到每个内存分配操作。
 
 \end{myTip}
 
