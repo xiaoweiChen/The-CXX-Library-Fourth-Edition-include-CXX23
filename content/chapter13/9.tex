@@ -1,11 +1,10 @@
-The C++20 member function str.starts\_with(prefix) and str.end\_with(suffix) check for a string str if it begins with a prefix or ends with a suffix. Additionally, in C++23 you can check with str.contains if a string has a substring.
+C++20成员函数str.starts\_with(prefix)和str.end\_with(suffix)检查字符串str是否以前缀开始或以后缀结束。此外，在C++23中，可以使用str.contains检查字符串是否有子字符串。
 
+\mySamllsection{检查是否有前缀或后缀}
 
-\mySamllsection{Check for a Prefix or a Suffix}
+成员函数str.starts\_with(prefix)和str.end\_with(suffix)检查给定字符串str是否以前缀开始或以后缀结束。子字符串可以是std::string\_view、单个字符或字符串。
 
-The member function str.starts\_with(prefix) and str.end\_with(suffix) check for a given string str if it begins with a prefix or ends with a suffix. The substring can be a std::string\_view, a single character, or a string.
-
-\filename{Check if the string starts with or ends with a prefix or suffix}
+\filename{检查字符串是否以前缀开始或后缀结束}
 
 \begin{cpp}
 // startWithEndsWith.cpp
@@ -21,11 +20,11 @@ std::cout << helloWorld.ends_with("world") << '\n'; // true
 std::cout << helloWorld.ends_with("wo") << '\n'; // false
 \end{cpp}
 
-\mySamllsection{Check for a Containing Substring}
+\mySamllsection{检查是否包含子字符串}
 
-str.contains checks with if a string has a substring. The substring can be a std::string\_view, a single character, or a string.
+str.contains检查字符串是否有子字符串。子字符串可以是std::string\_view、单个字符或字符串。
 
-\filename{Check if the string contains a substring}
+\filename{检查字符串是否包含子字符串}
 
 \begin{cpp}
 // containsString.cpp

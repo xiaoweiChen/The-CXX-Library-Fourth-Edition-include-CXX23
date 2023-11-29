@@ -1,35 +1,35 @@
 
-C++ offers the ability to search in a string in many variations. Each variation exists in various overloaded forms.
+C++提供了多种形式的字符串搜索功能，每一种都以各种重载的形式存在。
 
-\begin{myTip}{Search is called find}
-Odd enough, the algorithms for searching in a string start with the name find. If the search was successful, you get the index of type std::string::size\_type. If not, you get the constant std::string::npos. The first character has index 0.
+\begin{myTip}{搜索功能叫"find"}
+奇怪的是，搜索字符串的算法以名称find开头。若搜索成功，将获得std::string::size\_type类型的索引。若不是，则得到常数std::string::npos。第一个字符的索引为0。
 \end{myTip}
 
-The find algorithms support:
+find算法支持:
 
 \begin{itemize}
 \item 
-search for a character, a C String, or a C++-string,
+搜索一个字符，一个C字符串，或者一个C++字符串，
 
 \item 
-search for a character from a C or C++-string,
+从C或C++字符串中搜索一个字符，
 
 \item 
-search forward and backward,
+前向与后向搜索，
 
 \item 
-search positive (does contain) or negative(does not contain) for characters from a C or C++- string,
+从C或C++字符串中的字符进行正(包含)或负(不包含)搜索，
 
 \item 
-start the search at an arbitrary position in the string.
+从字符串中的任意位置开始搜索。
 \end{itemize}
 
-The arguments of all six variations of the find functions follow a similar pattern. The first argument is the text you are searching for. The second argument holds the start position of the search, and the third the number of characters starting from the second argument.
+find函数的所有六个重载的参数都遵循类似的模式。第一个参数是要搜索的文本。第二个参数保存搜索的起始位置，第三个参数保存从第二个参数开始的字符数。
 
-Here are the six variations.
+以下是六种重载。
 
 \begin{center}
-Find variations of the string
+查找字符串的重载
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -37,20 +37,20 @@ Find variations of the string
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-\textbf{Member Functions} & \textbf{Description}                                                      \\ \hline
+\textbf{成员函数} & \textbf{描述}                                                      \\ \hline
 \endfirsthead
 %
 \endhead
 %
-str.find(...)             & Returns the first position of a character, a C or C++-string in str.      \\ \hline
-str.rfind(...)            & Returns the last position of a character, a C or C++-string in str.       \\ \hline
-str.find\_first\_of(...)  & Returns the first position of a char acter from a C or C++-string in str. \\ \hline
-str.find\_last\_of(...)   & Returns the last position of a character from a C or C++-string in str.   \\ \hline
-str.find\_first\_not\_of(...) & Returns the first position of a character in str, which is not from a C or C++-string. \\ \hline
-std.find\_last\_not\_of(...)  & Returns the last position of a character in str, which is not from a C or C++-string.  \\ \hline
+str.find(...)             & 返回字符在str中为C或C++字符串的第一个位置。      \\ \hline
+str.rfind(...)            & 返回字符在str中为C或C++字符串的最后位置。       \\ \hline
+str.find\_first\_of(...)  & 返回C或C++字符串中字符的第一个位置。 \\ \hline
+str.find\_last\_of(...)   & 返回C或C++字符串中给定字符的最后一个位置。   \\ \hline
+str.find\_first\_not\_of(...) & 返回C或C++字符串字符串中非给定字符的第一个位置。 \\ \hline
+std.find\_last\_not\_of(...)  & 返回C或C++字符串中非给定字符的最后一个位置。  \\ \hline
 \end{longtable}
 
-\filename{Find(search) in a string}
+\filename{在字符串中查找(搜索)}
 
 \begin{cpp}
 // stringFind.cpp
@@ -83,7 +83,7 @@ std::cout << str.find_last_not_of(str2); // 26
 std::cout << str.find_first_not_of(str2, 10); // 12
 \end{cpp}
 
-The call std::find(str2, 10) returns std::string::npos. If I display that value, I get on my platform 18446744073709551615.
+std::find(str2, 10)返回std::string::npos。若我显示这个值，在我的平台上会得到18446744073709551615。
 
 
 

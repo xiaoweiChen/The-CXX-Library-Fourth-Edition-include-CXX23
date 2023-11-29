@@ -1,10 +1,10 @@
-A string can read from an input stream via >> and write to an output stream via <{}<.
+字符串可以通过>{}>从输入流中读取，并通过<{}<向输出流写入。
 
-The global function getline empowers you to read from an input stream line by line until the end-offile character.
+全局函数getline能够从输入流中逐行读取，直到文件结束字符。
 
-There are four variations of the getline function available. The first two arguments are the input stream is and the string line holding the line read. Optionally you can specify a special line separator.
+getline函数有四种重载。前两个参数是输入流is和保存行read的字符串line，还可以指定一个特殊的行分隔符。
 
-The function returns by reference to the input stream.
+该函数通过对输入流的引用返回。
 
 \begin{cpp}
 istream& getline (istream& is, string& line, char delim);
@@ -13,9 +13,9 @@ istream& getline (istream& is, string& line);
 istream& getline (istream&& is, string& line);
 \end{cpp}
 
-getline consumes the whole line, including empty spaces. Only the line separator is ignored. The function needs the header <string>.
+getline表示获取整行，包括空格，只有行分隔符会忽略。该函数需要头文件<string>。
 
-\filename{Input and output with strings}
+\filename{使用字符串输入和输出}
 
 \begin{cpp}
 // stringInputOutput.cpp
@@ -43,7 +43,7 @@ int num{0};
 for (auto line: lines) std::cout << ++num << ": " << line << '\n';
 \end{cpp}
 
-The program displays the lines of an arbitrary file, including their line number. The expression std::cin >{}> fileName reads the file name. The function readFromFile reads with getline all file lines and pushes them onto the vector.
+该程序显示任意文件的行，包括行号。表达式std::cin >{}> fileName读取文件名。readFromFile函数使用getline读取所有文件行，并将其压入vector对象。
 
 
 

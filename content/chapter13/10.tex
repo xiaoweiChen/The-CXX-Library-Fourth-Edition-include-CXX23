@@ -1,9 +1,8 @@
 
-Strings have many operations to modify them. str.assign assigns a new string to the string str. With str.swap you can swap two strings. To remove a character from a string, use str.pop\_back or str.erase. On contrary, str.clear or str.erase deletes the whole string. To append new characters to a string, use +=, std.append or str.push\_back. You can use str.insert to insert new characters or str.replace to replace characters.
-
+字符串有很多可以修改的操作。str.assign将一个新字符串赋给字符串str，使用str.swap可以交换两个字符串。要从字符串中删除一个字符，请使用str.pop\_back或str.erase。相反，str.clear或str.erase删除整个字符串。要在字符串中添加新字符，请使用+=、std.append或str.push\_back，可以使用str.insert插入新字符或使用str.replace替换字符。
 
 \begin{center}
-Member Functions for modifying a string
+用于修改字符串的函数
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -11,28 +10,28 @@ Member Functions for modifying a string
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-\textbf{Member Functions}  & \textbf{Description}                                 \\ \hline
+\textbf{成员函数}  & \textbf{描述}                                 \\ \hline
 \endfirsthead
 %
 \endhead
 %
-str=str2                   & Assigns str2 to str.                                 \\ \hline
-str.assign(...)            & Assigns to str a new string.                         \\ \hline
-str.swap(str2)             & Swaps str and str2.                                  \\ \hline
-str.pop\_back()            & Removes the last character from str.                 \\ \hline
-str.erase(...)             & Removes characters from str.                         \\ \hline
-str.clear()                & Clears the str.                                      \\ \hline
-str.append(...)            & Appends characters to str.                           \\ \hline
-str.push\_back(s)          & Appends the charactoer s to str.                     \\ \hline
-str.insert(pos, ...)       & Inserts characters in str starting at pos.           \\ \hline
-str.replace(pos, len, ...) & Replaces the len characters from str starting at pos \\ \hline
+str=str2                   & 将str2赋值给str。                                 \\ \hline
+str.assign(...)            & 将一个新字符串赋给str。                         \\ \hline
+str.swap(str2)             & 交换str和str2。                                  \\ \hline
+str.pop\_back()            & 从str中移除最后一个字符。                 \\ \hline
+str.erase(...)             & 从str中删除字符。                         \\ \hline
+str.clear()                & 清除str中的字符。                                      \\ \hline
+str.append(...)            & 向str追加字符。                           \\ \hline
+str.push\_back(s)          & 将字符s追加到str。                     \\ \hline
+str.insert(pos, ...)       & 在str中插入从pos开始的字符。           \\ \hline
+str.replace(pos, len, ...) & 替换str中从pos开始的len字符 \\ \hline
 \end{longtable}
 
-The operations are available in many overloaded versions. The member functions str.assign, str.append, str.insert, and str.replace are very similar. All four can be invoked with C++-strings and substrings, characters, C strings, C string arrays, ranges, and initializer lists. str.erase can erase a single character, ranges, and many characters starting at a given position.
+这些操作在许多重载版本中都是可用的，成员函数str.assign、str.append、str.insert和str.replace非常相似。这四个函数都可以用——字符串和子字符串、字符、C字符串、C字符串数组、范围和初始化列表。str.erase可以擦除单个字符、范围和从给定位置开始的多个字符。
 
-The following code snippet shows many of the variations. For simplicity reasons, only the effects of the strings modifications are displayed:
+下面的代码片段显示了许多变体。简单起见，只显示字符串修改的效果:
 
-\filename{Modifying strings}
+\filename{修改字符串}
 
 \begin{cpp}
 // stringModification.cpp

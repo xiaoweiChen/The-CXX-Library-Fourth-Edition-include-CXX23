@@ -1,11 +1,11 @@
 \myGraphic{0.6}{content/chapter13/images/3.jpg}{}
 
-While the conversion of a C string into a C++-string id done implicitly, you must explicitly request the conversion from a C++-string into a C string. str.copy() copies the content of a C++-string without the terminating $ \verb|\|$0 character. str.data() and str.c\_str() includes the terminating null character.
+虽然将C字符串隐式地转换为C++字符串，但必须显式地请求从C++字符串转换为C字符串。str.copy()复制C++字符串的内容，但不包含终止符$ \verb|\|$0。str.data()和str.c\_str()包含终止字符。
 
-\begin{myWarning}{Be careful with str.data() and str.c\_str()}
-The return value of the two member functions str.data() and std.c\_str() is invalid, if you modify the str.
+\begin{myWarning}{注意str.data()和str.c\_str()}
+若修改了str，则两个成员函数str.data()和str.c\_str()的返回值无效。
 
-\filename{C versus C++-strings}
+\filename{C 和 C++字符串}
 
 \begin{cpp}
 // stringCversusC++.cpp

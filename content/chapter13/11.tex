@@ -1,24 +1,24 @@
 
 \myGraphic{0.6}{content/chapter13/images/4.jpg}{}
 
-You can convert with std::to\_string(val) and std::to\_wstring(val) numbers or floating-point numbers to the corresponding std::string or std::wstring. You have the function family of the sto* functions for the opposite direction for converting numbers or floating-point numbers to strings. All functions need the header <string>.
+可以使用std::to\_string(val)和std::to\_wstring(val)数字或浮点数转换为相应的std::string或std::wstring。可使用sto*函数族，用于将数字或浮点数转换为字符串，所有函数都需要头文件<string>。
 
-\begin{myTip}{Read sto* as string to}
-The seven ways to convert a string into a natural or floating-point number follow a simple pattern. All functions start with sto and add other characters, denoting the type to which the strings should be converted to. E.g. stol stands for a string to long or stod for a string to double.
+\begin{myTip}{sto*可看作为string to}
+将字符串转换为自然数或浮点数的七种方法遵循一个简单的模式。所有函数都以sto开头，并添加其他字符，表示字符串应转换为的类型。例如，stol将字符串转换为长整型值，而stod将字符串转换为双精度浮点型值。
 \end{myTip}
 
-The sto functions all have the same interface. The example shows it for the type long.
+sto函数都有相同的接口。下面的示例显示了long类型的示例。
 
 \begin{cpp}
 std::stol(str, idx= nullptr, base= 10)
 \end{cpp}
 
-The function takes a string and determines the long representation to the base base. stol ignores leading spaces and optionally returns the index of the first invalid character in idx. By default, the base is 10. Valid values for the base are 0 and 2 until 36. If you use base 0 the compiler automatically determines the type based on the format of the string. If the base is greater than ten, the compiler encodes them in the characters a until z. The representation is analogous to the representation of hexadecimal numbers.
+该函数接受一个字符串，并确定基基的长表示形式。stol忽略前置空格，并可选择返回idx中第一个无效字符的索引。默认情况下，基数为10。基数的有效值为0和2，直到36。若使用基数0，编译器将根据字符串的格式自动确定类型。若基数大于10，编译器将其编码为字符a到z，类似于十六进制数的表示。
 
-The table gives an overview of all functions.
+该表给出了所有函数的概述。
 
 \begin{center}
-Numeric conversion of strings
+字符串的数值转换
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -26,31 +26,31 @@ Numeric conversion of strings
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-\textbf{Member Function} & \textbf{Descrption}                  \\ \hline
+\textbf{相应函数} & \textbf{描述}                  \\ \hline
 \endfirsthead
 %
 \endhead
 %
-std::to\_string(val)     & Converts val into a std::string.     \\ \hline
-std::to\_wstring(val)    & Converts val into a std::wstring.    \\ \hline
-std::stoi(str)           & Returns an int value.                \\ \hline
-std::stol(str)           & Returns a long value.                \\ \hline
-std::stoll(str)          & Returns a long long value.           \\ \hline
-std::stoul(str)          & Returns an unsigned long value.      \\ \hline
-std::stoull(str)         & Returns an unsigned long long value. \\ \hline
-std::stof(str)           & Returns a float value.               \\ \hline
-std::stod(str)           & Returns a double value.              \\ \hline
-std::stold(str)          & Returns an long double value.        \\ \hline
+std::to\_string(val)     & 将val转换为std::string。     \\ \hline
+std::to\_wstring(val)    & 将val转换为std::wstring。    \\ \hline
+std::stoi(str)           & 返回int值。                \\ \hline
+std::stol(str)           & 返回一个long型值。                \\ \hline
+std::stoll(str)          & 返回一个long long型值。           \\ \hline
+std::stoul(str)          & 返回一个unsigned long型值。      \\ \hline
+std::stoull(str)         & 返回一个unsigned long long型值。 \\ \hline
+std::stof(str)           & 返回一个float型值。               \\ \hline
+std::stod(str)           & 返回一个double型值。              \\ \hline
+std::stold(str)          & 返回一个long double型值。        \\ \hline
 \end{longtable}
 
 
-\begin{myNotic}{Where is the stou function?}
-In case you’re curious, the C++ sto functions are thin wrappers around the C strto* functions, but there is no strtou function in C. Therefore, C++ has no stou function.
+\begin{myNotic}{有stou函数吗?}
+若对此很好奇，C++的sto函数是C的strto*函数的简单包装，但是C中没有strto*函数。因此，C++没有stou函数。
 \end{myNotic}
 
-The functions throw a std::invalid\_argument exception if the conversion is impossible. If the determined value is too big for the destination type you get a std::out\_of\_range exception.
+若不能转换，函数会抛出std::invalid\_argument异常。若确定的值对于目标类型来说太大，则会得到std::out\_of\_range异常。
 
-\filename{Numeric conversion}
+\filename{数值转换}
 
 \begin{cpp}
 // stringNumericConversion.cpp

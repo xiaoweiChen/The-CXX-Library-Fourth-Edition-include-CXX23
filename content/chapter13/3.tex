@@ -1,9 +1,9 @@
-The number of elements a string has (str.size()) is in general, smaller than the number of elements for which space is reserved: str.capacity(). Therefore if you add elements to a string, there will not automatically be new memory allocated. std:max\_size() return how many elements a string can maximal have. For the three member functions the following relation holds: str.size() <= str.capacity() <= str.max\_size().
+字符串拥有的元素数量(str.size())通常小于保留空间的元素数量:str.capacity()。因此，若向字符串中添加元素，将不会自动分配新的内存。std::max\_size()返回一个字符串最大可以包含多少个元素。对于这三个成员函数，下列关系成立:str.size() <= str.capacity() <= str.max\_size()。
 
-The following table shows the member functions for dealing with the memory management of the string.
+下表展示了处理字符串的内存管理的成员函数。
 
 \begin{center}
-Member Functions to create and delete a string
+用于创建和删除字符串的函数
 \end{center}
 
 
@@ -12,24 +12,24 @@ Member Functions to create and delete a string
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-\textbf{Member Functions} & \textbf{Description}                                  \\ \hline
+\textbf{成员函数} & \textbf{描述}                                  \\ \hline
 \endfirsthead
 %
 \endhead
 %
-str.empty()               & Checks if str has elements.                           \\ \hline
-str.size(), str.length()  & Number of elements of the str.                        \\ \hline
-str.capacity()            & Number of elements str can have without reallocation. \\ \hline
-str.max\_size()           & Number of elements str can maximal have.              \\ \hline
-std.resize(n)             & Resize str to n elements.                             \\ \hline
-str.resize\_and\_overwrite(n, op) & Resize str to n elements and applies the operation op to its elements. \\ \hline
-str.reserve(n)            & Reserve memory for a least n elements.                \\ \hline
-std.shrink\_to\_fit()     & Adjusts the capacity of the string to it's size.      \\ \hline
+str.empty()               & 检查str是否有元素。                           \\ \hline
+str.size(), str.length()  & 字符串的元素个数。                        \\ \hline
+str.capacity()            & 无需重新分配的str可以拥有的元素数。 \\ \hline
+str.max\_size()           & str可以包含的最大元素数。              \\ \hline
+std.resize(n)             & 将str调整为n个元素。                             \\ \hline
+str.resize\_and\_overwrite(n, op) & 将str的大小调整为n个元素，并对其元素应用op操作。 \\ \hline
+str.reserve(n)            & 至少保留n个元素的内存。                \\ \hline
+std.shrink\_to\_fit()     & 将字符串的容量调整为其大小。      \\ \hline
 \end{longtable}
 
-The request str.shrink\_to\_fit() is, as in the case of std::vector, non-binding.
+请求str.shrink\_to\_fit()与std::vector的情况一样，非绑定。
 
-\filename{Size versus capacity}
+\filename{大小与容量}
 
 \begin{cpp}
 // stringSizeCapacity.cpp

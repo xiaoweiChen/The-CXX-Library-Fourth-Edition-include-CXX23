@@ -1,9 +1,9 @@
-The + operator is overloaded for strings, so you can add strings.
+字符串重载了+操作符，可以使用该操作符添加字符串。
 
-\begin{myWarning}{The + operator is only overloaded for C++-strings}
-The C++ type system permits it to concatenate C++ and C strings to C++-strings, but not to concatenate C++ and C strings to C strings. The reason is that the + operator is overloaded for C++-strings. Therefore only the second line is valid C++ because the C is implicitly converted to a C++-string:
+\begin{myWarning}{+操作符仅对C++字符串重载}
+C++类型系统允许将C++和C字符串连接到C++字符串，但不允许将C++和C字符串连接到C字符串。原因是+操作符仅对C++字符串重载。因此，只有第二行是有效的C++代码，因为C字符串会隐式转换为C++字符串:
 	
-\filename{String Concatenation}
+\filename{连接字符串}
 
 \begin{cpp}
 // stringComparisonAndConcatenation.cpp

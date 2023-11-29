@@ -1,9 +1,9 @@
-Access to the elements of a string str is very convenient because the string supports random access iterators. You can access with str.front() the first character, and with str.back() the last character of the string. With str[n] and str.at(n), you get the n-th element by index.
+访问字符串str的元素非常方便，字符串支持随机访问迭代器。可以使用str.front()访问字符串的第一个字符，并使用str.back()访问字符串的最后一个字符。使用str[n]和str.at(n)，可以根据索引获得第n个元素。
 
-The following table provides an overview.
+下表提供了一个概述。
 
 \begin{center}
-Access the elements of the string
+访问字符串的元素
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -11,18 +11,18 @@ Access the elements of the string
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-\textbf{Member Functions} & \textbf{Example}                                                              \\ \hline
+\textbf{成员函数} & \textbf{示例}                                                              \\ \hline
 \endfirsthead
 %
 \endhead
 %
-str.front()               & Returns the first character of str.                                           \\ \hline
-str.back()                & Returns the last character of str.                                            \\ \hline
-std{[}n{]}                & Returns the n-th character of str. The string boundaries will not be checked. \\ \hline
-std.at(n) & Returns the n-th character of str. The string boundaries will be checked. If the boundaries are violated, a std::out\_of\_range exception is thrown. \\ \hline
+str.front()               & 返回str的第一个字符。                                           \\ \hline
+str.back()                & 返回str的最后一个字符。                                            \\ \hline
+std{[}n{]}                & 返回str的第n个字符，不检查边界。 \\ \hline
+std.at(n) & 返回str的第n个字符，检查边界。若超出边界，则抛出std::out\_of\_range异常。 \\ \hline
 \end{longtable}
 
-\filename{Element access}
+\filename{访问元素}
 
 \begin{cpp}
 // stringAccess.cpp
@@ -50,7 +50,7 @@ std::cout << *(&str[5]) << '\n'; // 5
 std::cout << str[5] << '\n'; // 5
 \end{cpp}
 
-It is exciting to see in the example that the compiler performs the invocation str[10]. The access outside the string boundaries is undefined behavior. On the contrary, the compiler complains about the call str.at(10).
+示例中看到编译器执行str[10]是令人惊讶的行为，因为对于字符串边界之外的访问是未定义行为。相反，当调用str.at(10)时编译器会报错。
 
 
 
