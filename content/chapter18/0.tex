@@ -1,48 +1,48 @@
-\myGraphic{0.6}{content/chapter18/images/1.jpg}{Cippi sorts here painting stuff}
+\myGraphic{0.6}{content/chapter18/images/1.jpg}{Cippi在整理绘画的东西}
 
-The \href{http://en.cppreference.com/w/cpp/filesystem}{filesystem} is based on \href{http://www.boost.org/doc/libs/1_65_1/libs/filesystem/doc/index.htm}{boost::filesystem}. Some of its components are optional. This means not all functionality of std::filesytem is available on each implementation of the filesystem library. For example, FAT-32 does not support symbolic links.
+\href{http://en.cppreference.com/w/cpp/filesystem}{filesystem}是基于\href{http://www.boost.org/doc/libs/1_65_1/libs/filesystem/doc/index.htm}{boost::filesystem}的，一些组件是可选的。所以，并非在文件系统库的每个实现上都可以使用std::filessystem的所有功能。例如，FAT-32上就不支持符号链接。
 
-The library is based on three concepts: file, file name, and path.
-
-\begin{itemize}
-\item 
-A file is an object that holds data that you can write to or read from. A file has a name and a file type. A file type can be a directory, hard link, symbolic link, or regular file.
+该库基于三个概念:文件、文件名和路径。
 
 \begin{itemize}
 \item 
-A directory is a container for holding other files. The current directory is represented by a dot "."; two dots represent the parent directory"..".
-
-\item 
-A hard link associates a name with an existing file.
-
-\item 
-A symbolic link associates a name with a path that may exist.
-
-\item 
-A regular file is a directory entry that is neither a directory, a hard link, nor a symbolic link.
-\end{itemize}
-
-\item 
-A file name is a string that represents a file. It is implementation-defined which characters are allowed, how long the name could be, or if the name is case sensitive.
-
-\item 
-A path is a sequence of entries that identifies the location of a file. It has an optional root-name such a “C:” on Windows, followed by a root-directory such a “/” on Unix. Additional parts can be directories, hard links, symbolic links, or regular files. A path can be absolute, canonical, or relative.
+文件是一个对象，它包含可以写入或读取的数据。文件有名称和文件类型。文件类型包括目录、硬链接、符号链接和普通文件。
 
 \begin{itemize}
 \item 
-An absolute path is a path that identifies a file.
+目录是存放其他文件的容器。当前目录由点"."表示;两个点表示父目录".."。
 
 \item 
-A canonical path is a path that includes neither a symbolic link nor the relative paths "." (current directory) or ".."(parent directory).
+硬链接将名称与现有文件关联起来。
 
 \item 
-A relative path specifies a path relative to a location in the file system. Paths such as "." (current directory), ".."(parent directory), or "home/rainer" are relative paths. On Unix, they do not start at the root-directory "/".
+符号链接将名称与可能存在的路径关联起来。
+
+\item 
+常规文件是一个目录条目，既不是目录，也不是硬链接，也不是符号链接。
+\end{itemize}
+
+\item 
+文件名是一个表示文件的字符串，由实现定义的，允许使用哪些字符，名称可以有多长，或者名称是否区分大小写。
+
+\item 
+路径是标识文件位置的条目序列，有一个可选的根名称，如Windows上的“C:”，后面跟着一个根目录，如Unix上的“/”。附加部分可以是目录、硬链接、符号链接或常规文件。路径可以是绝对的、规范的或相对的。
+
+\begin{itemize}
+\item 
+绝对路径是用来标识文件的路径。
+
+\item 
+规范路径是既不包含符号链接，也不包含相对路径的路径。"."(当前目录)或".."(父目录)。
+
+\item 
+相对路径指定相对于文件系统中某个位置的路径。路径，如“.”(当前目录)，“.."(父目录)或"home/rainer"是相对路径。在Unix上，不是从根目录“/”开始的。
 \end{itemize}
 \end{itemize}
 
-Here is an introductory example of the filesystem.
+下面是文件系统的一个介绍性示例。
 
-\filename{Overview to the filesystem library}
+\filename{文件系统库的概述}
 
 \begin{cpp}
 // filesystem.cpp
@@ -73,7 +73,7 @@ for(auto& p: fs::recursive_directory_iterator("sandbox")){ // (5)
 fs::remove_all("sandbox");
 \end{cpp}
 
-fs::current\_path() (1) returns the current path. You can create a directory hierarchy (2) with std::filesystem::create\_directories. The /= operator is overloaded for a path (3). Therefore, I can directly create a symbolic link (4) or check a file’s properties. The call recursive\_directory\_iterator (5) allows you to traverse directories recursively.
+ss::current\_path()(1)返回当前路径，可以使用std::filesystem::create\_directories创建目录层次结构(2)。/=运算符对于路径(3)是重载的，可以直接创建符号链接(4)或检查文件的属性。调用recursive\_directory\_iterator(5)允许递归遍历目录。
 
 \myGraphic{0.6}{content/chapter18/images/2.jpg}{}
 

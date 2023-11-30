@@ -1,5 +1,5 @@
 
-To format a user-defined type, I have to specialize the class \href{https://en.cppreference.com/w/cpp/utility/format/formatter}{std::formatter} for my user-defined type. This means, in particular, I have to implement the member functions parse and format.
+要格式化用户定义类型，我必须为用户定义类型专门化\href{https://en.cppreference.com/w/cpp/utility/format/formatter}{std::formatter}类。所以，必须实现成员函数parse和format。
 
 \begin{itemize}
 \item 
@@ -7,16 +7,16 @@ parse:
 
 \begin{itemize}
 \item 
-Accepts the parse context
+接受解析上下文。
 
 \item 
-Parses the parse context
+解析解析后的上下文
 
 \item 
-Returns an iterator to the end of the format specification
+返回一个迭代器到格式规范的末尾
 
 \item 
-Throws a std::format\_error in case of an error
+出现错误时抛出std::format\_error
 \end{itemize}
 
 \item 
@@ -24,25 +24,25 @@ format:
 
 \begin{itemize}
 \item 
-Gets the value t, which should be formatted, and the format context fc
+获取应进行格式化的值t和格式上下文fc
 
 \item 
-Formats t according to the format context
+根据格式上下文进行格式化
 
 \item 
-Writes the output to fc.out()
+将输出写入fc.out()
 
 \item 
-Returns an iterator that represents the end of the output
+返回一个表示输出结束的迭代器
 \end{itemize}
 
 \end{itemize}
 
-Let me put the theory into practice and format a std::vector.
+把理论付诸实践，格式化一个std::vector。
 
-\mySamllsection{Formatting a std::vector}
+\mySamllsection{格式化一个std::vector}
 
-The specialization of the class std::formatter is as straightforward as possible. I specify a format specification which is applied to each element of the container.
+类std::formatter的特化尽可能简单，指定了应用于容器的每个元素的格式规范。
 
 \begin{cpp}
 // formatVector.cpp
@@ -88,9 +88,9 @@ std::cout << std::format("{:}", myStrings); // [Only, for, testing]
 std::cout << std::format("{:.3}", myStrings); // [Onl, for, tes]
 \end{cpp}
 
-The specialization for std::vector has the member functions parse and format. parse essentially creates the formatString applied to each element of the std::vector (1 and 2). The parse context ctx (3) contains the characters between the colon (:) and the closing curly braces (\}). The function returns an iterator to the closing curly braces (\}). The job of the member function format is more interesting. The format context returns the output iterator. Thanks to the output iterator and the function \href{https://en.cppreference.com/w/cpp/utility/format/format_to}{std::format\_to}, the elements of a std::vector are nicely displayed.
+std::vector的特化具有成员函数parse和format。parse实际上创建了一个formatString，应用于std::vector(1和2)的每个元素。解析上下文ctx(3)包含冒号(:)和右花括号(\})之间的字符。该函数返回一个指向右花括号(\})的迭代器。成员函数格式的工作更有趣。format上下文返回输出迭代器。因为使用了输出迭代器和\href{https://en.cppreference.com/w/cpp/utility/format/format_to}{std::format\_to}函数，std::vector的元素可以很好地显示出来。
 
-The elements of the std::vector are formatted in a few ways. The first line (4) displays the numbers. The following line writes a sign before each number, aligns them to 3 characters, and uses the 0 as a fill character. Line (5) displays them in binary format. The remaining two lines output each string of the std::vector. The last line truncates each string to three characters.
+std::vector的元素有几种格式化方式。第一行(4)显示数字。下面一行在每个数字前写一个符号，将它们对齐为3个字符，并使用0作为填充字符，第(5)行以二进制格式显示。剩下的两行输出std::vector的每个字符串，最后一行将每个字符串截断为三个字符。
 
 
 

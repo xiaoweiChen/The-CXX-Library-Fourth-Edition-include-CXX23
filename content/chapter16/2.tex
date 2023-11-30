@@ -164,30 +164,30 @@ while (std::getline(std::cin, line, ';') ) {
 
 \mySamllsection{输出}
 
-You can push characters with the insert operator <{}< onto the output stream.
+可以使用插入操作符<{}<将字符推入输出流。
 
-The insert operator <{}<
+插入操作符<{}<
 
 \begin{itemize}
 \item 
-is predefined for all built-in types and strings,
+为所有内置类型和字符串预定义，
 
 \item 
-can be implemented for user-defined data types,
+可以为用户定义的数据类型实现，
 
 \item 
-can be adjusted by format specifiers.
+可以通过格式说明符进行调整。
 \end{itemize}
 
 
-\mySamllsection{Format Specifier}
+\mySamllsection{格式说明符}
 
-Format specifiers enable you to adjust the input and output data explicitly.
+格式说明符能够显式地调整输入和输出数据。
 
-\begin{myNotic}{I use manipulators as format specifiers}
-The format specifiers are available as manipulators and flags. I only present manipulators in this book because their functionality is quite similar, and manipulators are more comfortable to use.
+\begin{myNotic}{操纵符作为格式说明符}
+格式说明符可用作操纵符和标志。本书中只介绍操纵符，因为它们的功能非常相似，而且操纵符使用起来更顺手。
 
-\filename{Manipulators as format specifiers}
+\filename{操纵符作为格式说明符}
 
 \begin{cpp}
 // formatSpecifier.cpp
@@ -207,12 +207,12 @@ std::cout << std::dec << num << '\n'; // 2011
 
 \end{myNotic}
 
-The following tables present the important format specifiers. The format specifiers are sticky except for the field width, which is reset after each application.
+下表给出了重要的格式说明符。除了字段宽度之外，格式说明符是固定的，在每个程序结束后重置。
 
-The manipulators without arguments require the header <iostream>; the manipulators with arguments require the header <iomanip>.
+没有实参的操作符需要头文件<iostream>，带参数的操作符需要头文件<iomanip>。
 
 \begin{center}
-Displaying of boolean values
+布尔值的显示
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -220,17 +220,17 @@ Displaying of boolean values
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|l|}
 \hline
-\textbf{Manipulator} & \textbf{Stream type} & \textbf{Description}                       \\ \hline
+\textbf{操纵符} & \textbf{流类型} & \textbf{描述}                       \\ \hline
 \endfirsthead
 %
 \endhead
 %
-std::boolalpha       & input and output     & Displays the boolean as a word.            \\ \hline
-std::noboolalpha     & input and output     & Displays the boolean as a number(default). \\ \hline
+std::boolalpha       & 输入和输出     & 将布尔值显示为字符。            \\ \hline
+std::noboolalpha     & 输入和输出     & 将布尔值显示为数字(默认)。 \\ \hline
 \end{longtable}
 
 \begin{center}
-Set the field width and the fill character
+设置字段宽度和填充字符
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -238,19 +238,17 @@ Set the field width and the fill character
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|l|}
 \hline
-\textbf{Manipulator} & \textbf{Stream type} & \textbf{Description}                            \\ \hline
+\textbf{操纵符} & \textbf{流类型} & \textbf{描述}                            \\ \hline
 \endfirsthead
 %
 \endhead
 %
-std::setw(val)       & input and output     & Sets the field width to val.                    \\ \hline
-std::setfill(c)      & output stream        & Sets the fill character to c (default: spaces). \\ \hline
+std::setw(val)       & 输入和输出     & 将字段宽度设置为val。                    \\ \hline
+std::setfill(c)      & 输出流        & 将填充字符设置为c字符(默认为空格)。 \\ \hline
 \end{longtable}
 
-
-
 \begin{center}
-Alignment of the text
+文本对齐
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -258,40 +256,18 @@ Alignment of the text
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|l|}
 \hline
-\textbf{Manipulator} & \textbf{Stream type} & \textbf{Description}                                \\ \hline
+\textbf{操纵符} & \textbf{流类型} & \textbf{描述}                                \\ \hline
 \endfirsthead
 %
 \endhead
 %
-std::left            & output               & Aligns the output left.                             \\ \hline
-std::right           & output               & Aligns the output right.                            \\ \hline
-std::internal        & output               & Aligns the signs of numbers left, the values right. \\ \hline
+std::left            & 输出               & 向左对齐输出。                             \\ \hline
+std::right           & 输出               & 向右对齐输出。                            \\ \hline
+std::internal        & 输出               & 左对齐数字符号，右对齐数值符号。 \\ \hline
 \end{longtable}
 
 \begin{center}
-Positive signs and upper or lower case
-\end{center}
-
-
-% Please add the following required packages to your document preamble:
-% \usepackage{longtable}
-% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
-\begin{longtable}[c]{|l|l|l|}
-\hline
-\textbf{Manipulator} & \textbf{Stream type} & \textbf{Description}                                    \\ \hline
-\endfirsthead
-%
-\endhead
-%
-std::showpos         & output               & Displays positive signs.                                \\ \hline
-std::noshowpos       & output               & Doesn't display positive signs(default).                \\ \hline
-std::uppercase       & output               & Uses upper case characters for numeric values(defulat). \\ \hline
-std::lowercase       & output               & Uses lower case characters for numeric values.          \\ \hline
-\end{longtable}
-
-
-\begin{center}
-Display of the numeric base
+正号和大写或小写
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -299,37 +275,58 @@ Display of the numeric base
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|l|}
 \hline
-\textbf{Manipulator} & \textbf{Stream type} & \textbf{Description}                             \\ \hline
+\textbf{操纵符} & \textbf{流类型} & \textbf{描述}                                    \\ \hline
 \endfirsthead
 %
 \endhead
 %
-std::oct             & input and output     & Uses natural numbers in octal format.            \\ \hline
-std::dec             & input and output     & Uses natural numbers in decimal format(default). \\ \hline
-std::hex             & input and output     & Uses natural numbers in hexadecimal format.      \\ \hline
-std::showbase        & output               & Displays the numeric base.                       \\ \hline
-std::noshowbase      & output               & Doesn't display the numeric base(default).       \\ \hline
+std::showpos         & 输出               & 显示正号。                                \\ \hline
+std::noshowpos       & 输出               & 不显示正号(默认)。                \\ \hline
+std::uppercase       & 输出               & 对数值使用大写字符(默认值)。 \\ \hline
+std::lowercase       & 输出               & 对数值使用小写字符。          \\ \hline
 \end{longtable}
 
-There are special rules for floating-point numbers:
+
+\begin{center}
+显示数字基数
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|l|}
+\hline
+\textbf{操纵符} & \textbf{流类型} & \textbf{描述}                             \\ \hline
+\endfirsthead
+%
+\endhead
+%
+std::oct             & 输出和输出     & 使用八进制格式的自然数。            \\ \hline
+std::dec             & 输出和输出     & 使用十进制格式的自然数(默认)。 \\ \hline
+std::hex             & input and output     & 使用十六进制格式的自然数。      \\ \hline
+std::showbase        & 输出               & 显示数字基数。                       \\ \hline
+std::noshowbase      & 输出               & 不显示数字基数(默认)。       \\ \hline
+\end{longtable}
+
+对于浮点数有一些特殊的规则:
 
 \begin{itemize}
 \item 
-The number of significant digits (digits after the comma) is, by default, six.
+默认情况下，有效数字(小数点后面的数字)的个数为6。
 
 \item 
-If the number of significant digits is not big enough, the number is displayed in scientific notation.
+若有效位数不够大，则以科学记数法显示。
  
 \item 
-Leading and trailing zeros are not displayed.
+不显示前导零和尾随零。
 
 \item 
-If possible, the decimal point is not displayed.
+若可能，则不显示小数点。
 \end{itemize}
 
 
 \begin{center}
-Floating point numbers
+浮点数
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -337,21 +334,21 @@ Floating point numbers
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|l|}
 \hline
-\textbf{Manipulator}   & \textbf{Stream type} & \textbf{Description}                                      \\ \hline
+\textbf{操纵符}   & \textbf{流类型} & \textbf{描述}                                      \\ \hline
 \endfirsthead
 %
 \endhead
 %
-std::setprecision(val) & output               & Adjusts the precision of the output to val.               \\ \hline
-std::showpoint         & output               & Displays the decimal point.                               \\ \hline
-std::noshowpoint       & output               & Doesn't display the decimal point(default).               \\ \hline
-std::fixed             & output               & Displays the floating-point number in decimal format.     \\ \hline
-std::scientific        & output               & Displays the floating-point number in scientific format.  \\ \hline
-std::hecfloat          & output               & Displays the floating-point number in hexadecimal format. \\ \hline
-std::defaultfloat & output & Displays the floating-point number in default floating-point notation. \\ \hline
+std::setprecision(val) & 输出               & 将输出精度调整为val。               \\ \hline
+std::showpoint         & 输出               & 显示小数点。                               \\ \hline
+std::noshowpoint       & 输出               & 不显示小数点(默认)。               \\ \hline
+std::fixed             & 输出               & 以十进制格式显示浮点数。     \\ \hline
+std::scientific        & 输出               & 以科学计数法显示浮点数。  \\ \hline
+std::hecfloat          & 输出               & 以十六进制格式显示浮点数。 \\ \hline
+std::defaultfloat & 输出 & 以默认浮点表示法显示浮点数。 \\ \hline
 \end{longtable}
 
-\filename{Format specifier}
+\filename{格式说明符}
 
 \begin{cpp}
 // formatSpecifierOutput.cpp

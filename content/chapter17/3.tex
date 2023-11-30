@@ -1,23 +1,23 @@
-You can specify the fill character and alignment of the text, the sign, the width, the precision of numbers, and the data type.
+可以指定文本的填充字符和对齐方式、符号、宽度、数字精度和数据类型。
 
-\mySamllsection{Fill characters and alignment of text}
+\mySamllsection{填充字符和文本对齐}
 
 \begin{itemize}
 \item 
-Fill character: per default space
+填充字符:默认空格
  
 \item 
-Alignment:
+对齐方式:
 
 \begin{itemize}
 \item 
-<: left
+<: 左
 
 \item 
->: right
+>: 右
 
 \item 
-\^{}: centered
+\^{}: 居中
 \end{itemize}
 
 \end{itemize}
@@ -32,21 +32,21 @@ std::format("{:7d}", c);    // "    120"
 std::format("{:7}", true);  // "true   "
 \end{cpp}
 
-\mySamllsection{Sign, width, and precision of numbers}
+\mySamllsection{数字的符号、宽度和精度}
 
 \begin{itemize}
 \item 
-Sign
+数字符号
 
 \begin{itemize}
 \item 
-+: number gets a sign symbol
++: 数字得到一个正符号
 
 \item 
--: negative numbers get a sign (default)
+-: 数字得到一个负符号(默认)
 
 \item 
-space: positive numbers get a space
+space: 正数有一个空格
 \end{itemize}
 
 \begin{cpp}
@@ -64,26 +64,26 @@ std::format("{0:},{0:+},{0:-},{0: }", nan); // "nan,+nan,nan, nan"
 
 \begin{itemize}
 \item 
-uses the alternative format
+使用替代格式
 
 \item 
-integrals:
+整型:
 
 \begin{itemize}
 \item 
-binary numbers: 0b
+二进制数: 0b
 
 \item 
-octal numbers: 0
+八进制数: 0
 
 \item 
-hexadecimal numbers: 0x
+十六进制数: 0x
 \end{itemize}
 
 \end{itemize}
 
 \item 
-0: fills with leading zeros
+0: 前置使用零填充
 
 \begin{cpp}
 std::format("{:+06d}", 120); // "+00120"
@@ -93,18 +93,18 @@ std::format("{:#06x}", 0xa); // "0x000a"
 \end{cpp}
 
 \item 
-Width: specifies the minimal width
+Width: 指定最小宽度。
 
 
 \item 
-Precision: can be applied to floating-point numbers and strings
+Precision: 可以应用于浮点数和字符串
 
 \begin{itemize}
 \item 
-Floating-point number: place after the decimal point
+浮点数:小数点后的位数
 
 \item 
-Strings: maximal number of characters
+字符串:最大字符数
 \end{itemize}
 
 \begin{cpp}
@@ -118,37 +118,37 @@ std::format("{:.3}", "Only a test."); // " Onl "
 
 \end{itemize}
 
-\mySamllsection{Data types}
+\mySamllsection{数据类型}
 
-The values are copied to the output if not other specified. You can explicitly specify the presentation of a value:
-
-\begin{itemize}
-\item 
-String presentation: s
-
-\item 
-Integer presentation:
+若没有其他指定，则将值复制到输出中。可以显式地指定一个值的表示:
 
 \begin{itemize}
 \item 
-b, B: binary
+字符串的表示: s
+
+\item 
+整数的表示:
+
+\begin{itemize}
+\item 
+b, B: 二进制
 
 \item
-d: decimal 
+d: 十进制 
 
 \item 
-o: octal
+o: 八进制
 
 \item 
-x, X: hexadecimal
+x, X: 十六进制
 \end{itemize}
 
 \item 
-Character presentation:
+字符的表示:
 
 \begin{itemize}
 \item 
-b, B, d, o, x, X: integer
+b, B, d, o, x, X: 整型
 \end{itemize}
 
 \item 
@@ -156,21 +156,21 @@ Bool:
 
 \begin{itemize}
 \item 
-s: true or false
+s: true 或 false
 
 \item 
-b, B, d, o, x, X: integer
+b, B, d, o, x, X: 整型
 \end{itemize}
 
 \item 
-Floating point:
+浮点:
 
 \begin{itemize}
 \item 
-e, E: scientific
+e, E: 科学计数法
 
 \item 
-f, F: decimal
+f, F: 小数方式
 \end{itemize}
 
 \end{itemize}

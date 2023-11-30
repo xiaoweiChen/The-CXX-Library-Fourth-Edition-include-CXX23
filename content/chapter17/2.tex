@@ -1,48 +1,48 @@
-std::formathas the following syntax: std::format(FormatString, Args) 
+std::format的用法: std::format(FormatString, Args) 
 
-The format string FormatString consists of
+格式字符串FormatString由以下几个部分组成
 
 \begin{itemize}
 \item 
-Ordinary characters (except \{ and \})
+普通字符，(除了 \{ 和 \})
 
 \item 
-Escape sequences \{\{ and \}\} that are replaced by \{ and \}
+转义序列，\{\{ 和 \}\} 取而代之的是 \{ 和 \}
 
 \item 
-Replacement fields
+替换字段
 \end{itemize}
 
-A replacement field has the format
+替换字段具有以下格式
 
 \begin{itemize}
 \item 
-Beginning character \{
+起始字符 \{
 \begin{itemize}
 \item 
-Argument-ID (optional)
+argument-id(可选)
 
 \item 
-Colon : followed by a format specification (optional)
+Colon : 格式规范(可选)
 \end{itemize}
 
 \item 
-Closing character \}
+关闭字符 \}
 \end{itemize}
 
-The argument-id allows you to specify the index of the arguments in Args. The id’s start with 0. When you don’t provide the argument-id, the arguments are used as given. Either all replacement fields have to use an argument-id or none.
+argument-id允许指定Args中参数的索引，id从0开始。当不提供参数id时，将按照给定的方式使用参数。所有替换字段要么必须使用参数id，要么不使用。
 
-std::formatter and its specializations define the format specification for the arguments.
+std::formatter及其特化定义了参数的格式规范。
 
 \begin{itemize}
 \item 
-basic types and string types: \href{https://en.cppreference.com/w/cpp/utility/format/formatter#Standard_format_specification}{standard format specification} based on \href{https://docs.python.org/3/library/string.html#formatspec}{Python’s format specification}.
+基本类型和字符串类型:基于\href{https://docs.python.org/3/library/string.html#formatspec}{Python的格式规范}的\href{https://en.cppreference.com/w/cpp/utility/format/formatter#Standard_format_specification}{标准格式规范}。
 
 \item 
-chrono types: \href{https://en.cppreference.com/w/cpp/chrono/system_clock/formatter#Format_specification}{chrono format specification}
+时间类型: \href{https://en.cppreference.com/w/cpp/chrono/system_clock/formatter#Format_specification}{Chrono格式规范}
 
 \item 
-other types: user-defined format specification
+其他类型:用户自定义格式规范
 \end{itemize}
 
 

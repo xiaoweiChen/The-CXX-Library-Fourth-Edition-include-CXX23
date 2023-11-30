@@ -1,21 +1,21 @@
-C++ supports various formatting functions. The elementary compile-time formatting functions std::format, std::format\_to, and std::format\_to\_n. The run-time formatting functions std::vformat and std::vformat\_to in combination with the function std::make\_format\_args. Finally, the convenience functions std::print and std::println.
+C++支持各种格式化函数。基本编译时格式化函数std::format、std::format\_to和std::format\_to\_n。运行时格式化函数std::vformat和std::vformat\_to与函数std::make\_format\_args结合使用。最后是，std::print和std::println。
 
-The formatting library has three elementary formatting functions.
+格式化库有三个基本的格式化功能。
 
 \noindent
 \\\textbf{std::format}
 
-Returns the formatted string
+返回格式化字符串。
 
 \noindent
 \textbf{std::format\_to}
 
-Writes the formatted string via an output iterator
+通过输出迭代器写入格式化字符串
 
 \noindent
 \textbf{std::format\_to\_n}
 
-Writes the formatted string via an output iterator but not more than n characters \\
+通过输出迭代器写入格式化字符串，但不超过n个字符 \\
 
 \begin{cpp}
 #include <format>
@@ -27,11 +27,11 @@ std::format_to(std::back_inserter(buffer),
 	"Hello, C++{}!\n", "20"); // Hello, C++20!
 \end{cpp}
 
-\mySamllsection{std::vformat, std::vformat\_to, and std::make\_format\_args}
+\mySamllsection{std::vformat, std::vformat\_to 和 std::make\_format\_args}
 
-The three formatting functions std::format, std::format\_to, and std::format\_to\_n use a format string to create a formatted string. This format string must be a compile-time value. Consequentially, an invalid format string causes a compile-time error.
+三个格式化函数std::format、std::format\_to和std::format\_to\_n使用格式字符串创建格式化字符串。此格式字符串必须是编译时值，所以无效的格式字符串会导致编译时错误。
 
-For run-time format strings, there are the alternative functions std::vformat and std:: vformat\_to, which you have to use in combination with std::make\_format\_args.
+对于运行时格式字符串，有两个可选函数std::vformat和std::vformat\_to，必须与std::make\_format\_args结合使用。
 
 \begin{cpp}
 #include <format>
@@ -40,9 +40,9 @@ std::string formatString = "{1} {0}!";
 std::vformat(formatString, std::make_format_args("world", "Hello")); // Hello world
 \end{cpp}
 
-\mySamllsection{std::print, and std::println}
+\mySamllsection{std::print 和 std::println}
 
-The convenience functions std::print and std::println write to the output console. std::println adds a newline character to the output. Additionally, both functions enable it to write to an output file stream and support \href{https://en.wikipedia.org/wiki/Unicode}{Unicode}. You have to include the header <print>.
+函数std::print和std::println写入输出控制台。println在输出中添加一个换行符。此外，这两个函数都使它能够写入输出文件流并支持\href{https://en.wikipedia.org/wiki/Unicode}{Unicode}，必须包含头文件<print>。
 
 \begin{cpp}
 #include <print>
@@ -54,8 +54,8 @@ std::print(outFile, "{1} {0}!", "world", "Hello"); // writes "Hello world!" into
 File
 \end{cpp}
 
-\begin{myNotic}{I use std::format for the rest of this chapter}
-The compile-time formatting functions std::format, std::format\_to, and std::format\_to\_n, the run-time formatting functions std::vformat, and std::vformat\_n, and the convenience functions std::print, and std::println apply the same syntax for the format string. For simplicity, I use std::format for the rest of this chapter.
+\begin{myNotic}{本章剩下的部分使用std::format}
+编译时格式化函数std::format、std::format\_to和std::format\_to\_n，运行时格式化函数std::vformat和std::vformat\_n，以及函数std::print和std::println对格式字符串应用相同的语法。为简单起见，本章剩下的部分将使用std::format。
 \end{myNotic}
 
 

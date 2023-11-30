@@ -1,34 +1,31 @@
-A stream is an infinite data stream on which you can push or pull data. String streams and file streams enable strings and files to interact with the stream directly.
+流是一个无限的数据流，可以在其上推或拉数据。字符串流和文件流允许字符串和文件直接与流交互。
 
-\mySamllsection{String Streams}
+\mySamllsection{字符串流}
 
-String streams need the header <sstream>. They are not connected to an input or output stream and store their data in a string.
+字符串流需要头文件<sstream>。不连接到输入或输出流，并将其数据存储在字符串中。
 
-Whether you use a string stream for input or output or with the character type char or wchar\_t, there are various string stream classes:
-
-\noindent
-\\\textbf{std::istringstream and std::wistringstream}
-
-String stream for the input data of type char and wchar
-\_t.
+无论是使用字符串流作为输入或输出，还是使用字符类型char或wchar\_t，都有各种字符串流类:
 
 \noindent
-\textbf{std::ostringstream and std::wostringstream}
+\\\textbf{std::istringstream 和 std::wistringstream}
 
-String stream for the output data of type char and wchar
-\_t.
+用于char和wchar\_t类型输入数据的字符串流。
 
 \noindent
-\textbf{std::stringstream and std::wstringstream}
+\textbf{std::ostringstream 和 std::wostringstream}
 
-String stream for the input or output data of type char and wchar
-\_t.\\
+用于char和wchar\_t类型输出数据的字符串流。
 
-Typical operations on a string stream are:
+\noindent
+\textbf{std::stringstream 和 std::wstringstream}
+
+用于char和wchar\_t类型的输入或输出数据的字符串流。\\
+
+对字符串流的操作有:
 
 \begin{itemize}
 \item 
-Write data in a string stream:
+字符串流中写入数据:
 
 \begin{cpp}
 std::stringstream os;
@@ -37,7 +34,7 @@ os.str("Another new String");
 \end{cpp}
 
 \item 
-Read data from a string stream:
+从字符串流中读取数据:
 
 \begin{cpp}
 std::stringstream os;
@@ -47,7 +44,7 @@ str= os.str();
 \end{cpp}
 
 \item 
-Clear a string stream:
+清除字符串流:
 
 \begin{cpp}
 std::stringstream os;
@@ -55,9 +52,9 @@ os.str("");
 \end{cpp}
 \end{itemize}
 
-String streams are often used for the type-safe conversion between strings and numeric values:
+字符串流通常用于字符串和数值之间的类型安全转换:
 
-\filename{String streams}
+\filename{字符串流}
 
 \begin{cpp}
 // stringStreams.cpp
@@ -86,40 +83,40 @@ std::cout << ToString(StringTo<int>("5") + 6 ); // "11"
 std::cout << "5e10: " << std::fixed << StringTo<double>("5e10"); // 50000000000
 \end{cpp}
 
-\mySamllsection{File Streams}
+\mySamllsection{文件流}
 
-File streams enable you to work with files. The file streams automatically manage the lifetime of their file. They need the header <fstream>.
+文件流能够处理文件。文件流自动管理其文件的生命周期，需要头文件<fstream>。
 
-Whether you use a file stream for input or output or with the character type char or wchar\_t, there are various file stream classes:
-
-\noindent
-\\\textbf{std::ifstream and std::wifstream.}
-
-File stream for the input data of type char and wchar\_t.
+无论使用文件流作为输入或输出，还是使用字符类型char或wchar\_t，都有各种文件流类:
 
 \noindent
-\textbf{std::ofstream and std::wofstream}
+\\\textbf{std::ifstream 和 std::wifstream.}
 
-File stream for the output data of type char and wchar\_t.
-
-\noindent
-\textbf{std::fstream and std::wfstream}
-
-File stream for the input and output data of type char and wchar\_t.
+用于char和wchar\_t类型输入数据的文件流。
 
 \noindent
-\textbf{std::filebuf and std::wfilebuf}
+\textbf{std::ofstream 和 std::wofstream}
 
-Data buffer of type char and wchar\_t.\\
+用于char和wchar\_t类型输出数据的文件流。
 
-\begin{myWarning}{Set the file position pointer}
-File streams used for reading and writing must set the file position pointer after the contests change.
+\noindent
+\textbf{std::fstream 和 std::wfstream}
+
+用于char和wchar\_t类型的输入和输出数据的文件流。
+
+\noindent
+\textbf{std::filebuf 和 std::wfilebuf}
+
+类型为char和wchar\_t的数据内存。\\
+
+\begin{myWarning}{设置文件位置指针}
+用于读写的文件流必须在竞赛改变后设置文件位置指针。
 \end{myWarning}
 
-Flags enable you to set the opening mode of a file stream.
+标志能够设置文件流的打开模式。
 
 \begin{center}
-Flags for the opening of a file stream
+打开文件流的标志
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -127,20 +124,20 @@ Flags for the opening of a file stream
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-\textbf{Flag}    & \textbf{Description}                                                             \\ \hline
+\textbf{标志}    & \textbf{描述}                                                             \\ \hline
 \endfirsthead
 %
 \endhead
 %
-std::ios::in     & Opens the file stream for reading(default for std::ifstream and std::wifstream). \\ \hline
-std::ios::out    & Opens the file stream for writing(default for std::ofstream and std::wofstream). \\ \hline
-std::ios::app    & Appends the character to the end of the file stream.                             \\ \hline
-std::ios::ate & Sets the initial position of the file position pointer at the end of the file stream. \\ \hline
-std::ios::trunc  & Deletes the original file.                                                       \\ \hline
-std::ios::binary & Suppresses the interpretation of an escape sequence in the file stream.          \\ \hline
+std::ios::in     & 打开文件流进行读取(默认为std::ifstream和std::wifstream)。 \\ \hline
+std::ios::out    & 打开文件流进行写入(默认为std::ofstream和std::wofstream)。 \\ \hline
+std::ios::app    & 将字符追加到文件流的末尾。                             \\ \hline
+std::ios::ate & 设置文件流末尾的文件位置指针的初始位置。 \\ \hline
+std::ios::trunc  & 删除原始文件。                                                       \\ \hline
+std::ios::binary & 禁止文件流中转义序列的解释。          \\ \hline
 \end{longtable}
 
-It’s pretty easy to copy the file named in to the file named out with the file buffer in.rdbuf(). Error handling needs to be included in this short example.
+将名为in的文件，复制到以文件缓冲区in.rdbuf()命名的文件中非常容易。在这个简短的示例中需要包含错误处理。
 
 \begin{cpp}
 #include <fstream>
@@ -150,20 +147,18 @@ std::ofstream out("outFile.txt");
 out << in.rdbuf();
 \end{cpp}
 
-In the following table, I compare the C++ mode and the C mode to open a file.
+下面的表中，我比较了C++和C打开文件的模式。
 
 \begin{center}
-Opening of a file with C++ and C
+用C++和C打开一个文件
 \end{center}
 
+文件必须以模式“r”和“r+”存在。相反，文件是用“a”和“w+”创建的，该文件将被“w”覆盖。
 
-
-The file must exist with the modes "r" and "r+". On the contrary, the file is created with "a" and "w+". The file is overwritten with "w".
-
-You can explicitly manage the lifetime of a file stream.
+可以显式地管理文件流的生命周期。
 
 \begin{center}
-Managing the lifetime of a file stream
+管理文件流的生命周期
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -171,26 +166,26 @@ Managing the lifetime of a file stream
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|l|}
 \hline
-\textbf{C++ mode}                          & \textbf{Desciption}        & \textbf{C mode} \\ \hline
+\textbf{C++模式}                          & \textbf{描述}        & \textbf{C模式} \\ \hline
 \endfirsthead
 %
 \endhead
 %
-std::ios::in                               & Reads the file.            & "r"             \\ \hline
-std::ios::out                              & Writes the file            & "w"             \\ \hline
-std::ios::out|std::ios::app                & Appends to the file.       & "a"             \\ \hline
-std::ios::in|std::ios::out                 & Raeds and writes the file. & "r+"            \\ \hline
-std::ios::in|std::ios::out|std::ios::trunc & Writes and reads the file. & "w+"            \\ \hline
+std::ios::in                               & 读取文件            & "r"             \\ \hline
+std::ios::out                              & 写入文件            & "w"             \\ \hline
+std::ios::out|std::ios::app                & 追加到文件。       & "a"             \\ \hline
+std::ios::in|std::ios::out                 & 读取并写入文件。 & "r+"            \\ \hline
+std::ios::in|std::ios::out|std::ios::trunc &写入和读取文件。 & "w+"            \\ \hline
 \end{longtable}
 
-\mySamllsection{Random Access}
+\mySamllsection{随机访问}
 
-Random access enables you to set the file position pointer arbitrarily.
+随机访问可以设置文件的位置指针。
 
-When a file stream is constructed, the file’s position pointer points to the beginning of the file. You can adjust the position with the member functions of the file stream file.
+构造文件流时，文件的位置指针指向文件的开头。通过文件流文件的成员函数，可以调整文件流文件的位置。
 
 \begin{center}
-Navigate in a file stream
+导航文件流
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -198,41 +193,41 @@ Navigate in a file stream
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-\textbf{Member Function} & \textbf{Description}                    \\ \hline
+\textbf{成员函数} & \textbf{描述}                    \\ \hline
 \endfirsthead
 %
 \endhead
 %
-file.tellg()             & Returns the read position of file.      \\ \hline
-file.tellp()             & Returns the write position of file.     \\ \hline
-file.seekg(pos)          & Sets the read position of file to pos.  \\ \hline
-file.seekp(pos)          & Sets the write position of file to pos. \\ \hline
-file.seekg(off. rpos) & Sets the read position of file to the offset off relative to rpos.  \\ \hline
-file.seekp(off, rpos) & Sets the write position of file to the offset off relative to rpos. \\ \hline
+file.tellg()             & 返回文件的读取位置。      \\ \hline
+file.tellp()             & 返回文件的写入位置。     \\ \hline
+file.seekg(pos)          & 设置文件的读取位置为pos。  \\ \hline
+file.seekp(pos)          & 设置文件的写位置为pos。 \\ \hline
+file.seekg(off. rpos) & 将文件的读位置设置为相对于rpos的偏移量。  \\ \hline
+file.seekp(off, rpos) & 将文件的写位置设置为相对于rpos的偏移量。 \\ \hline
 \end{longtable}
 
-off has to be a number. rpos can have three values:
+off必须是一个数字。rpos可以是以下三个值:
 
 \noindent
 \\\textbf{std::ios::beg}
 
-Position at the beginning of the file.
+文件开头的位置。
 
 \noindent
 \textbf{std::ios::cur}
 
-Position at the current position.
+当前位置。
 
 \noindent
 \textbf{std::ios::end}
 
-Position at the end of the file.
+位于文件末尾的位置。
 
-\begin{myWarning}{Respect the file boundaries}
-If you randomly access a file, the C++ runtime does not check the file boundaries. Reading or writing data outside the boundaries is undefined behavior.
+\begin{myWarning}{尊重文件边界}
+若随机访问一个文件，C++运行时不会检查文件边界。读取或写入边界之外的数据是未定义行为。
 \end{myWarning}
 
-\filename{Random access}
+\filename{随机访问}
 
 \begin{cpp}
 // randomAccess.cpp
@@ -282,77 +277,77 @@ getline(inFile, line);
 std::cout << line; // 9 0123456789
 \end{cpp}
 
-\mySamllsection{State of the Stream}
+\mySamllsection{流的状态}
 
-Flags represent the state of the stream stream. The member functions for dealing with these flags need the header <iostream>.
+标志表示流的状态，处理这些标志的成员函数需要头文件<iostream>。
 
 \begin{center}
-State of a stream
+流的状态
 \end{center}
 
-Here are examples of conditions causing the different states of a stream:
+下面是导致流的不同状态的条件示例:
 
 
 std::ios::eofbit
 
 \begin{itemize}
 \item 
-Reading beyond the last valid character.
+读取超出最后一个有效字符的内容。
 \end{itemize}
 
 std::ios::failbit
 
 \begin{itemize}
 \item 
-False formatted reading.
+错误的格式化读取。
 
 \item 
-Reading beyond the last valid character.
+读取超出最后一个有效字符的内容。
 
 \item 
-Opening of a file went wrong.
+打开文件出错。
 \end{itemize}
 
 std::ios::badbit
 
 \begin{itemize}
 \item 
-Size of the stream buffer cannot be adjusted.
+无法调整流缓冲区的大小。
 
 \item 
-Code conversion of the stream buffer went wrong.
+流缓冲区的代码转换出错。
 
 \item 
-A part of the stream threw an exception.
+部分流抛出了异常。
 \end{itemize}
 
-stream.fail() returns whether std::ios::failbit or std::ios::badbit is set.
+stream.fail()返回是否设置了std::ios::failbit或std::ios::badbit。
 
-The state of a stream can be read and set.
+流的状态可以读取和设置。
 
 \noindent
 \\\textbf{stream.clear()}
 
-Initializes the flags and sets the stream in the goodbit state.
+初始化标志并将流设置为goodbit状态。
 
 \noindent
 \textbf{stream.clear(sta)}
 
-Initializes the flags and set the stream into sta state.
+初始化标志并将流设置为sta状态。
 
 \noindent
 \textbf{stream.rdstate()}
 
-Returns the current state.
+返回当前状态。
 
 \noindent
 \textbf{stream.setstate(fla})
 
-Sets the additional flag fla.\\
+设置附加标志fla。\\
 
-Operations on a stream only work if the stream is in the goodbit state. If the stream is in the badbit state, you cannot set it back to goodbit state.
+流上的操作只有在流处于好位状态时才有效。若流处于badbit状态，则不能将其设置回goodbit状态。
 
-\filename{State of a stream}
+\filename{流的状态}
 
 \begin{cpp}
 // streamState.cpp
@@ -371,7 +366,7 @@ std::cin.clear();
 std::cout << std::cin.fail() << '\n'; // false
 \end{cpp}
 
-The input of the character a causes the stream std::cin to be in std::ios::failbit state. Therefore a' and std::cin.fail() cannot be displayed. First, you have to initialize the stream std::cin‘.
+字符a的输入导致流std::cin处于std::ios::failbit状态。因此不能显示a和std::cin.fail()，首先，必须初始化流std::cin。
 
 
 

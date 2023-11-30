@@ -1,28 +1,28 @@
 
-If you overload the input and output operators, your data type behaves like a built-in data type.
+若重载输入和输出操作符，则数据类型的行为就像内置数据类型一样。
 
 \begin{cpp}
 friend std::istream& operator>> (std::istream& in, Fraction& frac);
 friend std::ostream& operator<< (std::ostream& out, const Fraction& frac);
 \end{cpp}
 
-For overloading the input and output operators, you have to keep a few rules in mind:
+对于重载输入和输出操作符，必须牢记一些规则:
 
 \begin{itemize}
 \item 
-To support the chaining of input and output operations, you have to get and return the input and output streams by non-constant reference.
+为了支持输入和输出操作的链接，必须通过非常量引用获取和返回输入和输出流。
 
 \item 
-To access the private members of the class, the input and output operators have to be friends of your data type.
+要访问类的私有成员，输入和输出操作符必须是数据类型的友元。
  
 \item 
-The input operator >{}> takes its data type as a non-constant reference.
+输入操作符>{}>将其数据类型作为非常量引用。
 
 \item 
-The output operator <{}< takes its data type as a constant reference.
+输出操作符<{}<将其数据类型作为常量引用。
 \end{itemize}
 
-\filename{Overloading input and output operator}
+\filename{重载输入和输出操作符}
 
 \begin{cpp}
 // overloadingInOutput.cpp
