@@ -1,7 +1,7 @@
-By using the following predicates, you can easily ask for the file type.
+通过使用以下谓词，可以轻松地查询文件类型。
 
 \begin{center}
-The file types of the filesystem
+文件系统的文件类型
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -9,28 +9,28 @@ The file types of the filesystem
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-\textbf{file types} & \textbf{Decription}                                      \\ \hline
+\textbf{文件类型} & \textbf{描述}                                      \\ \hline
 \endfirsthead
 %
 \endhead
 %
-is\_block\_file     & Checks if the path refers to a block file.               \\ \hline
-is\_character\_file & Checks if the path refers to a character file.           \\ \hline
-is\_directory       & CHecks if the path refers to a directory.                \\ \hline
-is\_empty           & Checks if the path refers to an empty file or directory. \\ \hline
-is\_fifo            & Checks if the path refers to a \href{https://en.wikipedia.org/wiki/Named_pipe}{named pipe}.               \\ \hline
-is\_other           & Checks if the path refers to another file.               \\ \hline
-is\_regular\_file   & Checks if the path refers to a regular file.             \\ \hline
-is\_socket          & Checks if the path refers to an IPC socket.              \\ \hline
-is\_symlink         & Checks if the path refers to a symbolic link.            \\ \hline
-status\_known       & Checks if the file status is known.                      \\ \hline
+is\_block\_file     & 检查路径是否指向一个块文件。               \\ \hline
+is\_character\_file & 检查路径是否指向字符文件。           \\ \hline
+is\_directory       & 检查路径是否指向一个目录。                \\ \hline
+is\_empty           & 检查路径是否指向空文件或目录。 \\ \hline
+is\_fifo            & 检查路径是否指向\href{https://en.wikipedia.org/wiki/Named_pipe}{named pipe}。               \\ \hline
+is\_other           & 检查路径是否指向另一个文件。               \\ \hline
+is\_regular\_file   & 检查路径是否指向一个常规文件。             \\ \hline
+is\_socket          & 检查路径是否指向IPC套接字。              \\ \hline
+is\_symlink         & 检查路径是否指向符号链接。            \\ \hline
+status\_known       & 检查文件状态是否已知。                      \\ \hline
 \end{longtable}
 
-\mySamllsection{Getting the type of a file}
+\mySamllsection{获取文件的类型}
 
-The predicates give you information on the file type. More than one predicate may be right for one file. A symbolic link referencing a regular file is both a regular file and a symbolic link.
+谓词提供有关文件类型的信息，一个文件可能有多个谓词。引用普通文件的符号链接既是普通文件又是符号链接。
 
-\filename{Type of a file}
+\filename{文件类型}
 
 \begin{cpp}
 // fileType.cpp

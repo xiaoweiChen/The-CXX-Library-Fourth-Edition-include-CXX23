@@ -1,7 +1,7 @@
-Many non-member functions exist for manipulating the filesystem.
+存在许多非成员函数用于操作文件系统。
 
 \begin{center}
-The non-member functions for manipulating the filesystem
+用于操作文件系统的非成员函数
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -9,43 +9,43 @@ The non-member functions for manipulating the filesystem
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-\textbf{Non-mmeber functions}                 & \textbf{Description}                                            \\ \hline
+\textbf{非成员函数}                 & \textbf{描述}                                            \\ \hline
 \endfirsthead
 %
 \endhead
 %
-absolute                                      & Composes an absolute path.                                      \\ \hline
-canonical and weakly\_canonical               & Composes a canonical path.                                      \\ \hline
-relative and proximate                        & Composes a relative path.                                       \\ \hline
-copy                                          & Copies files or directories.                                    \\ \hline
-copy\_file                                    & Copies file contents.                                           \\ \hline
-copy\_symlink                                 & Copies a synbolic link.                                         \\ \hline
-create\_directory and create\_directories     & Creates a new directory.                                        \\ \hline
-create\_hard\_link                            & Craetes a hard link.                                            \\ \hline
-create\_symlink and create\_directoy\_symlink & Creates a symbolic link.                                        \\ \hline
-current\_path                                 & Returns the current working directory.                          \\ \hline
-exists                                        & Checks if the path refers to an existing file.                  \\ \hline
-equivalent                                    & Checks if two paths refer to the same file.                     \\ \hline
-file\_size                                    & Returns the size of file.                                       \\ \hline
-hard\_link\_count                             & Returns the number of hard links to a file.                     \\ \hline
-last\_write\_time                             & Gets and sets the time of the last file modification.           \\ \hline
-premissions                                   & Modifies the file access premissions.                           \\ \hline
-read\_symlink                                 & Gets the target of the symbolic link.                           \\ \hline
-remove                                        & Removes a file or an empty directory.                           \\ \hline
-remove\_all                                   & Removes a file or a directory with all its content recursively. \\ \hline
-rename                                        & Moves or renames a file or directory.                           \\ \hline
-resize\_file                                  & Changes the size of a file by truncation.                       \\ \hline
-space                                         & Returns the free space on the filesystem.                       \\ \hline
-status                                        & Determines the file attributes.                                 \\ \hline
-symlink\_status                               & Determines the file attributes and checks the symlink target.   \\ \hline
-temp\_directory\_path                         & Returns a directory for temporary files.                        \\ \hline
+absolute                                      & 组成绝对路径。                                      \\ \hline
+canonical 和 weakly\_canonical               & 组成规范路径。                                      \\ \hline
+relative 和 proximate                        & 组成相对路径。                                       \\ \hline
+copy                                          & 复制文件或目录。                                    \\ \hline
+copy\_file                                    & 复制文件内容。                                           \\ \hline
+copy\_symlink                                 & 复制一个符号链接。                                         \\ \hline
+create\_directory and create\_directories     & 创建一个新目录。                                        \\ \hline
+create\_hard\_link                            & 创建一个硬链接。                                            \\ \hline
+create\_symlink 和 create\_directoy\_symlink & 创建符号链接。                                        \\ \hline
+current\_path                                 & 返回当前工作目录。                          \\ \hline
+exists                                        & 检查路径是否引用现有文件。                  \\ \hline
+equivalent                                    & 检查两个路径是否指向同一个文件。                     \\ \hline
+file\_size                                    & 返回文件的大小。                                       \\ \hline
+hard\_link\_count                             & 返回文件的硬链接数。                     \\ \hline
+last\_write\_time                             & 获取并设置最后一次文件修改的时间。           \\ \hline
+premissions                                   & 修改文件访问权限。                           \\ \hline
+read\_symlink                                 & 获取符号链接的目标。                           \\ \hline
+remove                                        & 删除文件或空目录。                           \\ \hline
+remove\_all                                   & 递归地删除文件或目录及其所有内容。 \\ \hline
+rename                                        & 移动或重命名文件或目录。                           \\ \hline
+resize\_file                                  & 通过截断更改文件的大小。                       \\ \hline
+space                                         & 返回文件系统上的可用空间。                       \\ \hline
+status                                        & 确定文件属性。                                 \\ \hline
+symlink\_status                               & 确定文件属性并检查符号链接目标。  \\ \hline
+temp\_directory\_path                         & 返回临时文件的目录。                        \\ \hline
 \end{longtable}
 
-\mySamllsection{Read and set the last write time of a file}
+\mySamllsection{读取和设置文件的最后写入时间}
 
-Thanks to the global function std::filesystem::last\_write\_time, you can read and set the last write time of a file. Here is an example based on the last\_write\_time example from \href{http://en.cppreference.com/w/cpp/experimental/fs/last_write_time}{en.cppreference.com}.
+通过全局函数std::filesystem::last\_write\_time，可以读取和设置文件的最后写入时间。下面是一个基于\href{http://en.cppreference.com/w/cpp/experimental/fs/last_write_time}{en.cppreference.com}中的last\_write\_time示例的示例。
 
-\filename{Write time of a file}
+\filename{文件创建的时间}
 
 \begin{cpp}
 // fileTime.cpp
@@ -78,32 +78,32 @@ std::cout << "Local time on client "
 		  << std::asctime(std::localtime(&cftime2)) << '\n';
 \end{cpp}
 
-Line (1) gives the write time of the newly created file. You can use fTime in (2) to cast it in a real time wall clock sTime. This sTime initializes std::chrono::system\_clock in the following line. cftime is of type std::filesystem::file\_time\_type, which is, in this case, an alias for std::chrono::system\_clock; therefore, you can initialize std::localtime in (3) and present the calendar time in a textual representation. Nothing will change if you use std::gmtime (4) instead of std::localtime. This puzzled me because the Coordinated Universal Time (UTC) differs 2 hours from Germany’s local time. That’s due to the server for the online compiler on en.cppreference.com. UTC and local time are set to the same time on the server.
+第(1)行给出了新创建文件的写时间，可以使用(2)中的fTime将其转换为一个实时挂钟sTime。这个sTime在下面一行初始化std::chrono::system\_clock。cftime的类型为std::filesystem::file\_time\_type，在本例中，它是std::chrono::system\_clock的别名;可以在(3)中初始化std::localtime，并以文本形式表示日历时间。若使用std::gmtime(4)而不是std::localtime，则不会有任何变化。这让我很困惑，因为协调世界时(UTC)与德国当地时间相差2小时。这是由于服务器的在线编译器在en.cppreference.com，服务器将UTC时间与本地时间设置为相同时间。
 
-Here is the output of the program. I moved the write time of the file 2 hours to the future (5) and read it back from the filesystem (6). This adjusts the time, so it corresponds to the local time in Germany.
+下面是程序的输出。我将文件的写入时间移到未来2小时(5)，并从文件系统(6)中读取它。这将调整时间，因此它与德国的当地时间相对应。
 
 \myGraphic{0.6}{content/chapter18/images/4.jpg}{}
 
-\mySamllsection{Space Information on the Filesystem}
+\mySamllsection{文件系统空间信息}
 
-The global function std::filesystem::space returns a std::filesystem::space\_info object with three members: capacity, free, and available.
+全局函数std::filesystem::space返回一个std::filesystem::space\_info对象，该对象有三个成员:capacity、free和available。
 
 \begin{itemize}
 \item 
-capacity: total size of the filesystem
+capacity: 文件系统的总大小
 
 \item 
-free: free space on the filesystem
+free: 文件系统上的空闲空间
 
 \item 
-available: free space to a non-privileged process (equal or less than free)
+available: 给非特权进程的自由空间(等于或小于自由)
 \end{itemize}
 
-All sizes are in bytes.
+所有大小都以字节为单位。
 
-The output of the following program is from cppreference.com. All paths I tried were on the same filesystem; therefore, I always get the same answer.
+下面程序的输出来自于cppreference.com。这里尝试的所有路径都在同一个文件系统上，因此总是得到相同的答案。
 
-\filename{Space information}
+\filename{空间信息}
 
 \begin{cpp}
 // space.cpp

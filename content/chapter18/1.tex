@@ -1,7 +1,7 @@
-Many classes encapsulate a specific aspect of the filesystem.
+许多类封装了文件系统的一个特定脑功能。
 
 \begin{center}
-The various classes the filesystem
+文件系统中的各种类
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -9,34 +9,34 @@ The various classes the filesystem
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-\textbf{Class}                 & \textbf{Description}                                      \\ \hline
+\textbf{类}                 & \textbf{描述}                                      \\ \hline
 \endfirsthead
 %
 \endhead
 %
-path                           & Represents a path.                                        \\ \hline
-filesystem\_error              & Defines an exception object.                              \\ \hline
-directory\_entry               & Represents a directory entry.                             \\ \hline
-directory\_iterator            & Defines a directory iterator.                             \\ \hline
-recursive\_directory\_iterator & Defines a recursive directory iterator.                   \\ \hline
-file\_status                   & Stores information about the file.                        \\ \hline
-space\_info                    & Represents filesystem information.                        \\ \hline
-file\_type                     & Indicates the type of a file.                             \\ \hline
-perms                          & Represents file access premissions.                       \\ \hline
-perm\_options                  & Represents options for the function premissions.          \\ \hline
-copy\_options                  & Represents options for the functions copy and copy\_file. \\ \hline
-directory\_options & Represents options for the functions directory\_iterator and recursive\_directory\_iterator. \\ \hline
-file\_time\_type               & Represents file time.                                     \\ \hline
+path                           & 表示路径。                                        \\ \hline
+filesystem\_error              & 定义异常对象。                              \\ \hline
+directory\_entry               & 表示目录项。                             \\ \hline
+directory\_iterator            & 定义目录迭代器。                             \\ \hline
+recursive\_directory\_iterator & 定义递归目录迭代器。                   \\ \hline
+file\_status                   & 存储有关文件的信息。                        \\ \hline
+space\_info                    & 表示文件系统信息。                        \\ \hline
+file\_type                     & 文件类型。                            \\ \hline
+perms                          & 表示文件访问权限。                       \\ \hline
+perm\_options                  & 代表权限选项功能。          \\ \hline
+copy\_options                  & 表示copy和copy\_file函数的选项。 \\ \hline
+directory\_options & 表示函数directory\_iterator和recursive\_directory\_iterator的选项。 \\ \hline
+file\_time\_type               & 表示文件时间。                                     \\ \hline
 \end{longtable}
 
 
-\mySamllsection{Manipulating the permissions of a file}
+\mySamllsection{操纵文件的权限}
 
-The permissions for a file are represented by the class std::filesystem::perms. It is a \href{http://en.cppreference.com/w/cpp/concept/BitmaskType}{BitmaskType} and can, therefore, be manipulated by bitwise operations. The access permissions are based on \href{https://en.wikipedia.org/wiki/POSIX}{POSIX}.
+文件的权限由类std::filesystem::perms表示，是一个\href{http://en.cppreference.com/w/cpp/concept/BitmaskType}{位掩码类型}，因此可以通过位操作来操作。访问权限基于\href{https://en.wikipedia.org/wiki/POSIX}{POSIX}。
 
-The program from \href{en.cppreference.com/w/cpp/filesystem/perms}{en.cppreference.com} shows how you can read and manipulate the owner, group, and other (world) bits of a file.
+来自\href{en.cppreference.com/w/cpp/filesystem/perms}{en.cppreference.com}的程序展示了如何读取和操作文件的所有者、组和其他(世界)位。
 
-\filename{Permissions of a file}
+\filename{文件权限}
 
 \begin{cpp}
 // perms.cpp
@@ -75,7 +75,7 @@ std::cout << "Removing the write bits for all: ";
 printPerms(fs::status("rainer.txt").permissions());
 \end{cpp}
 
-Thanks to the call fs::status("rainer.txt").permissions(), I get the permissions of the file rainer.txt and can display them in the function printPerms (1). By setting the type std::filesystem::add\_perms, I can add permissions to the owner and the group of the file (2). Alternatively, I can set the constant std::filesystem::remove\_perms for removing permissions (3).
+由于调用fs::status("rainer.txt").permissions()，获得了文件rainer.txt的权限，并可以在函数printPerms(1)中显示它们。通过设置类型std::filesystem::add\_perms，可以向文件的所有者和组添加权限(2)。或者，可以设置常量std::filesystem::remove\_perms来删除权限(3)。
 
 \myGraphic{0.6}{content/chapter18/images/3.jpg}{}
 
