@@ -44,7 +44,7 @@ interruptable.request_stop();
 
 I start in the main program the two threads nonInterruptable and interruptable ((1) and (2)). In contrast to the thread nonInterruptable, the thread interruptable gets a std::stop\_token and uses it in (3) to check if it was interrupted: stoken.stop\_requested(). In case of an interrupt, the lambda function returns, and the thread ends. The call interruptable.request\_stop() (4) triggers the end of the thread. This does not hold for the previous call nonInterruptable.request\_stop(), which does not have an effect.
 
-\myGraphic{0.8}{content/chapter19/images/3.jpg}{}
+\myGraphic{0.6}{content/chapter19/images/3.jpg}{}
 
 
 \mySamllsection{std::stop\_token, std::stop\_source, and std::stop\_callback}

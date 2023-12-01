@@ -1,11 +1,11 @@
-C++ has a set of atomic data types. First, there is std::atomic\_flag, and second the class template std::atomic. Additionally, you can define your atomic datatype using std::atomic.
+C++有一组原子数据类型。首先是std::atomic\_flag，其次是类模板std::atomic，还可以使用std::atomic定义原子数据类型。
 
 \mySamllsection{std::atomic\_flag}
 
-std::atomic\_flag is an atomic boolean. It has a clear and a set state. For simplicity reasons, I call the clear state false and the set state true. Its clear member function enables you to set its value to false. With the test\_and\_set member functions, you can set the value back to true and return the previous value. There is no member functions to ask for the current value. This changes with C++20. With C++20, a std::atomic\_flag has a test member function and can be used for thread synchronization via the member functions notify\_one, notify\_all, and wait.
+std::atomic\_flag是一个原子布尔值，有一个清晰和固定的状态。简单起见，我将clear状态称为false，将set状态称为true。clear成员函数允许将其值设置为false。使用test\_and\_set成员函数，可以将值设置回true，并返回前一个值。没有成员函数可以查询当前值，不过这在C++20中有所改变。C++20中，std::atomic\_flag有一个测试成员函数，可以通过成员函数notify\_one、notify\_all和wait进行线程同步。
 
 \begin{center}
-All operations of std::atomic\_flag atomicFlag
+std::atomic\_flag atomicFlag的所有操作
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -13,105 +13,105 @@ All operations of std::atomic\_flag atomicFlag
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-\textbf{Member functions} & \textbf{Description}                                           \\ \hline
+\textbf{成员函数} & \textbf{描述}                                           \\ \hline
 \endfirsthead
 %
 \endhead
 %
-atomicFlag.clear()        & Clear the atomic flag.                                         \\ \hline
+atomicFlag.clear()        & 清除原子标志。                                         \\ \hline
 \begin{tabular}[c]{@{}l@{}}atomicFlag.test\_and\_set()\\ atomicFlag.test()(C++20)\end{tabular} &
-\begin{tabular}[c]{@{}l@{}}Sets the atomic flag and returns the old value.\\ Returns the value of the flag.\end{tabular} \\ \hline
+\begin{tabular}[c]{@{}l@{}}设置原子标志并返回旧值。\\ 返回标志的值。\end{tabular} \\ \hline
 \begin{tabular}[c]{@{}l@{}}atomicFlag.notify\_one()(C++20)\\ atomicFlag.notify\_all()(C++20)\end{tabular} &
-\begin{tabular}[c]{@{}l@{}}Notifies one thread waiting on the atomic flag.\\ Notifies all threads waiting on the atomic flag.\end{tabular} \\ \hline
-atomicFlag.wait(b)(C++20) & Blocks the thread until notified and the atomic value changes. \\ \hline
+\begin{tabular}[c]{@{}l@{}}通知一个等待原子标志的线程。\\ 通知所有等待原子标志的线程。\end{tabular} \\ \hline
+atomicFlag.wait(b)(C++20) & 阻塞线程，直到收到通知并且原子值发生变化。 \\ \hline
 \end{longtable}
 
-The call atomicFlag.test() returns the atomicFlag value without changing it. Further on, you can use std::atomic\_flag for thread-synchronization: atomicFlag.wait(), atomicFlag.notify\_one(), and atomicFlag.notify\_all(). The member functions notify\_one or notify\_all notify one or all of the waiting atomic flags. atomicFlag.wait(boo) needs a boolean b. The call atomicFlag.wait(b) blocks until notified. It checks if the value of atomicFlag is equal to b and unblocks if not.
+调用atomicFlag.test()返回atomicFlag的值而不改变它，也可以使用std::atomic\_flag进行线程同步:atomicFlag.wait()、atomicFlag.notify\_one()和atomicFlag.notify\_all()。成员函数notify\_one或notify\_all通知一个或所有等待的原子标志。atomicFlag.wait(boo)需要一个布尔值b，atomicFlag.wait(b)会阻塞直到收到通知。它检查atomicFlag的值是否等于b，若不等于b则解除阻塞。
 
-You must initialize a std::atomic\_flag explicitly using ATOMIC\_FLAG\_INIT: std::atomic\_flag flag(ATOMIC\_FLAG\_INIT). In C++20, a default-constructed std::atomic\_flag is in its false‘ state.
+必须使用ATOMIC\_FLAG\_INIT:std::atomic\_flag标志(ATOMIC\_FLAG\_INIT)显式初始化std::atomic\_flag。C++20中，默认构造的std::atomic\_flag处于false状态。
 
-std::atomic\_flag has one outstanding property because it is the only guaranteed \href{https://en.wikipedia.org/wiki/Non-blocking_algorithm}{lock-free} atomic. The remaining powerful atomics can provide their functionality by using a locking mechanism such as std::mutex.
+std::atomic\_flag有一个突出的属性，它是唯一有保证的\href{https://en.wikipedia.org/wiki/Non-blocking_algorithm}{无锁}的原子变量。其他功能强大的原子变量，可以通过std::mutex锁定机制来完成相同的功能。
 
 \mySamllsection{std::atomic}
 
-There are various specializations of the class template std::atomic available. They require the header <atomic>. std::atomic<bool> and std::atomic<user-defined type> use the primary template. Partial specializations are available for pointers std::atomic<T*>, and with C++20 for smart pointers std::atomic<smart T*>, full specializations for integral types std::atomic<integral type>, and with C++20 for floating-point types std::atomic<floating-point>. You can define your atomic data type using std::atomic.
+类模板std::atomic有多种特化可用。它们需要头文件<atomic>。std::atomic<bool>和std::atomic<user-defined type>使用主模板。指针std::atomic<T*>提供部分特化，C++20中智能指针std::atomic<smart T*>提供整型指针std::atomic<整型指针>的完全特化，C++20中浮点类型std::atomic<floating-point针>的全特化。也可以使用std::atomic定义原子数据类型。
 
-\mySamllsection{Fundamental Atomic Interface}
+\mySamllsection{原子变量的基本接口}
 
-The three partial specializations std::atomic<bool>, std::atomic<user-defined type>, and std::atomic<smart T*> support the fundamental atomic interface.
+三个偏特化std::atomic<bool>、std::atomic<user-defined type>和std::atomic<smart T*>都支持基本原子接口。
 
 % Please add the following required packages to your document preamble:
 % \usepackage{longtable}
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-\textbf{Member functions} &
-\textbf{Description} \\ \hline
+\textbf{成员函数} &
+\textbf{描述} \\ \hline
 \endfirsthead
 %
 \endhead
 %
 is\_lock\_free &
-Checks if the atomic object is lock free. \\ \hline
+检查原子对象是否无锁。 \\ \hline
 atomic\_ref\textless{}T\textgreater{}::is\_always\_lock\_free &
-Checks at compile time if the atomic type is always lock free. \\ \hline
+编译时检查原子类型是否总无锁。 \\ \hline
 load &
-Atomically returns the value of the atomic. \\ \hline
+原子地返回值。\\ \hline
 operator T &
-\begin{tabular}[c]{@{}l@{}}Atomically returns the value of the atomic.\\ Equivalent to atom.load().\end{tabular} \\ \hline
+\begin{tabular}[c]{@{}l@{}}原子地返回值。\\ 相当于atom.load()。\end{tabular} \\ \hline
 store &
-Atomically replace the atomic value with the non-atomic. \\ \hline
+用非原子值自动替换原子值。 \\ \hline
 exchange &
-Atomically replace the value with the new value. Returns the old value. \\ \hline
+用新值自动替换该值，返回旧值。 \\ \hline
 \begin{tabular}[c]{@{}l@{}}compare\_exchange\_strong\\ compare\_exchange\_weak\end{tabular} &
-Atomically compares and eventually exchanges the value. \\ \hline
+自动比较，并交换值。 \\ \hline
 \begin{tabular}[c]{@{}l@{}}notify\_one(C++20)\\ notify\_all(C++20)\end{tabular} &
-\begin{tabular}[c]{@{}l@{}}Notifies one atomic wait operation.\\ Notifies all atomic wait operations.\end{tabular} \\ \hline
+\begin{tabular}[c]{@{}l@{}}通知一个原子等待操作。\\ 通知所有原子等待操作。\end{tabular} \\ \hline
 wait(C++20) &
-\begin{tabular}[c]{@{}l@{}}Blocks until it is notified.\\ If the old value compares to unequal returns.\end{tabular} \\ \hline
+\begin{tabular}[c]{@{}l@{}}阻塞，直到收到通知为止。\\ 若与旧值相比不相等则返回\end{tabular} \\ \hline
 \end{longtable}
 
-compare\_exchange\_strong has the following syntax: bool compare\_exchange\_strong(T\& expected, T\& desired). Here is its behavior:
+compare\_exchange\_strong具有如下语法: bool compare\_exchange\_strong(T\& expected, T\& desired)。下面是对其行为的描述:
 
 \begin{itemize}
 \item 
-If the atomic comparison of atomicValue with expected returns true, atomicValue is set in the same atomic operation to desired.
+若atomicValue与期望的原子比较返回true，则atomicValue在相同的原子操作中设置所需的值。
 
 \item 
-If the comparison returns false, expected is set to atomicValue.
+若比较返回false，则expected设置为atomicValue。
 \end{itemize}
 
-\mySamllsection{User Defined Atomics std::atomic<user-defined type>}
+\mySamllsection{自定义原子变量std::atomic<user-defined type>}
 
-Thanks to the class template std::atomic, you can define your user-defined atomic type.
+有了类模板std::atomic，就可以定义用户定义的原子类型。
 
-There are many substantial restrictions on a user-defined type if you use it for an atomic type std::atomic<user-defined type>. The atomic type std::atomic<user-defined type> supports the same interface as std::atomic<bool>.
+若将用户定义类型用于原子类型std::atomic<user-defined type>，则对该类型有许多实质性的限制。原子类型std::atomic<user-defined type>支持与std::atomic<bool>相同的接口。
 
-Here are the restrictions for a user-defined type to become an atomic type:
+以下是用户定义类型成为原子类型的限制:
 
 \begin{itemize}
 \item 
-The copy assignment operator for a user-defined type must be trivial for all its base classes and non-static members. You must not define the copy assignment operator, but you can request it from the compiler using \href{http://en.cppreference.com/w/cpp/keyword/default}{default}.
+用户定义类型的复制赋值操作符对于其所有基类和非静态成员必须是微不足道的。不能定义复制赋值操作符，但可以使用\href{http://en.cppreference.com/w/cpp/keyword/default}{default}从编译器请求它。
 
 \item 
-a user-defined type must not have virtual member functions or virtual base classes
+用户定义类型不能有虚成员函数或虚基类
 
 \item 
-a user-defined type must be bitwise comparable so that the C functions \href{http://en.cppreference.com/w/cpp/string/byte/memcpy}{memcpy} or \href{http://en.cppreference.com/w/cpp/string/byte/memcmp}{memcmp} can be applied
+用户定义的类型必须具有位可比性，这样才能应用C函数\href{http://en.cppreference.com/w/cpp/string/byte/memcpy}{memcpy}或\href{http://en.cppreference.com/w/cpp/string/byte/memcmp}{memcmp}
 \end{itemize}
 
-Most popular platforms can use atomic operations for std::atomic<user-defined type> if the size of the user-defined type is not bigger than an int.
+若用户定义类型的大小不大于int，那么在主流平台上都可以对std::atomic<user-defined type>使用原子操作。
 
-\mySamllsection{Atomic Smart Pointers std::atomic<smart T*> (C++20)}
+\mySamllsection{原子智能指针std::atomic<smart T*> (C++20)}
 
-A std::shared\_ptr consists of a control block and its resource. The control block is thread-safe, but access to the resource is not. This means modifying the reference counter is an atomic operation, and you have the guarantee that the resource is deleted precisely once. These are the guarantees std::shared\_ptr gives you. Using the partial template specialization std::atomic<std::shared\_ptr<T>{}> and std::atomic<std::weak\_ptr<T>{}> gives you the additionally guarantee that the access of the underlying object is thread-safe. In 2022, all operations on atomic smart pointers are not lock free.
+std::shared\_ptr由一个控制块和资源组成。控制块是线程安全的，但对资源的访问不是。所以修改引用计数器是一个原子操作，可以保证资源会精确地删除一次，这些都是std::shared\_ptr提供的保证。使用偏特化模板std::atomic<std::shared\_ptr<T>{}>和std::atomic<std::weak\_ptr<T>{}>可以额外保证底层对象的访问是线程安全的。在2022年，原子智能指针上的所有操作都非无锁的。
 
 \mySamllsection{std::atomic<floating-point type> (C++20)}
 
-Additionally to the fundamental atomic interface, std::atomic<floating-point type> supports addition and subtraction.
+除了基本原子接口之外，std::atomic<floating-point type>还支持加法和减法。
 
 \begin{center}
-Additional operations to the fundamental atomic interface
+基本原子接口的其他操作
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -119,23 +119,23 @@ Additional operations to the fundamental atomic interface
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-\textbf{Member functions} & \textbf{Description}                  \\ \hline
+\textbf{成员函数} & \textbf{描述}                  \\ \hline
 \endfirsthead
 %
 \endhead
 %
-fetch\_add, +=            & Atomically adds(subtracts) the value. \\ \hline
-fetch\_sub, -=            & Returns the old value.                \\ \hline
+fetch\_add, +=            & 自动添加(减去)值。 \\ 
+fetch\_sub, -=            & 返回旧值。                \\ \hline
 \end{longtable}
 
-Full specializations for the types float, double, and long double are available.
+可以使用float、double和long double类型的全特化。
 
 \mySamllsection{std::atomic<T*>}
 
-std::atomic<T*> is a partial specialization of the class template std::atomic. It behaves like a plain pointer T*. Additionally to std::atomic<floating-point type>, std::atomic<T*> supports pre- and post-increment or pre- and post-decrement operations.
+std::atomic<T*>是类模板std::atomic的偏特化。它的行为就像一个普通的指针T*。除了std::atomic<floating-point type>之外，std::atomic<T*>还支持前后自增或前后自减操作。
 
 \begin{center}
-Additional operations to the std::atomic<floating-point type
+std::atomic<floating-point type>的其他操作
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -143,15 +143,15 @@ Additional operations to the std::atomic<floating-point type
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-\textbf{Member functions} & \textbf{Description}                                          \\ \hline
+\textbf{成员函数} & \textbf{描述}                                          \\ \hline
 \endfirsthead
 %
 \endhead
 %
-++, --                    & Increments or decrements(pre- and post-increment) the atomic. \\ \hline
+++, --                    & 递增或递减(递增前和递增后)原子变量。 \\ \hline
 \end{longtable}
 
-Have a look at the short example.
+来看个简短的例子。
 
 \begin{cpp}
 int intArray[5];
@@ -166,10 +166,10 @@ assert(p.load() == &intArray[1]);
 
 \mySamllsection{std::atomic<integral type>}
 
-For each integral type there is a full specialization std::atomic<integral type> of std::atomic. std::atomic<integral type> supports all operations that std::atomic<T*> or std::atomic<floating-point type> supports. Additionally, std::atomic<integral type supports the bitwise logical operators AND, OR, and XOR.
+对于每个整型都有std::atomic的完整特化std::atomic<integral type>。std::atomic< integer type>支持std::atomic<T*>或std::atomic<float -point type>支持的所有操作。此外，std::atomic<integral type>支持与、或和异或的位逻辑操作符。
 
 \begin{center}
-All operations on atomic
+原子变量上的所有操作
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -177,21 +177,21 @@ All operations on atomic
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-\textbf{Member functions} &
-\textbf{Description} \\ \hline
+\textbf{成员函数} &
+\textbf{描述} \\ \hline
 \endfirsthead
 %
 \endhead
 %
 \begin{tabular}[c]{@{}l@{}}fetch\_or, |=\\ fetch\_and, \&=\\ fethc\_xor, \textasciicircum{}=\end{tabular} &
-\begin{tabular}[c]{@{}l@{}}Atomically performs bitwise(AND, OR and XOR) operation with the value.\\ Returns the old value.\end{tabular} \\ \hline
+\begin{tabular}[c]{@{}l@{}}自动对值执行位(与、或、异或)操作。\\ 返回旧值。\end{tabular} \\ \hline
 \end{longtable}
 
-There is a slight difference between the composite bitwise-assignment operation and the fetch version. The composite bitwise-assignment operation returns the new value; the fetch variation returns the old value.
+复合位赋值操作和取操作之间有细微的区别。复合按位赋值操作返回新值，fetch返回旧值。
 
-A more in-depth look provides more insight: no atomic multiplication, atomic division, or atomic shift operation is available. This is not a significant limitation because these operations are seldom needed and can easily be implemented. Here is an example of an atomic fetch\_mult function.
+更深入的观察可以提供更多的见解:没有原子乘法、原子除法或原子移位操作可用。这不是一个重要的限制，因为很少需要这些操作，并且可以很容易地实现。下面是一个原子fetch\_mult函数的示例。
 
-\filename{An atomic multiplication with compare\_exchange\_strong}
+\filename{使用compare\_exchange\_strong的原子乘法}
 
 \begin{cpp}
 // fetch_mult.cpp
@@ -214,15 +214,15 @@ int main(){
 }
 \end{cpp}
 
-One point worth mentioning is that the multiplication in line 9 only happens if the relation oldValue == shared holds. I put the multiplication in a while loop to be sure that the multiplication always takes place because there are two instructions for the reading of oldValue in line 8 and its usage in line 9.
+第9行中的乘法只有在关系oldValue == shared成立时才会发生。我将乘法放入while循环中，以确保乘法总是发生，因为第8行中有两条指令用于读取oldValue，第9行中有两条指令用于使用它。
 
-Here is the result of the atomic multiplication.
+这是原子乘法的结果。
 
 \myGraphic{0.8}{content/chapter19/images/2.jpg}{}
 
 \mySamllsection{std::atomic\_ref}
 
-Additionally, the class template std::atomic\_ref applies atomic operations to the referenced object. Concurrent writing and reading of atomic objects is thread-safe. The lifetime of the referenced object must exceed the lifetime of the atomic\_ref. std::atomic\_ref supports the same types and operations such as std::atomic does it for its underlying type.
+此外，类模板std::atomic\_ref将原子操作应用于被引用的对象，原子对象的并发读写是线程安全的。被引用对象的生存期必须超过atomic\_ref的生存期。std::atomic\_ref支持相同的类型和操作，就像std::atomic支持其底层类型一样。
 
 \begin{cpp}
 struct Counters {
@@ -234,12 +234,12 @@ Counter counter;
 std::atomic_ref<Counters> cnt(counter);
 \end{cpp}
 
-\mySamllsection{All Atomic Operations}
+\mySamllsection{所有原子操作}
 
-The following table shows all atomic operations. To get further information about the operations, refer to the previous chapters on atomic data types.
+下表显示了所有原子操作。要获得有关这些操作的进一步信息，请参阅前面关于原子数据类型的章节。
 
 \begin{center}
-All atomic operations depending on the atomic type
+所有原子操作取决于原子类型
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -247,7 +247,7 @@ All atomic operations depending on the atomic type
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|l|l|l|l|}
 \hline
-\textbf{Member functions} &
+\textbf{成员函数} &
 \textbf{atomic\_flag} &
 \multicolumn{1}{c|}{\textbf{\begin{tabular}[c]{@{}c@{}}atomic\textless{}bool\textgreater\\ atomic\textless{}user\textgreater\\ atomic\textless{}smart T*\textgreater{}\end{tabular}}} &
 \textbf{atomic\textless{}float\textgreater{}} &
@@ -260,7 +260,7 @@ All atomic operations depending on the atomic type
 test\_and\_set                                           & yes &     &     &     &     \\ \hline
 clear                                                    & yes &     &     &     &     \\ \hline
 is\_lock\_free                                           &     & yes & yes & yes & yes \\ \hline
-atomic\textless{}T\textgreater{}::is\_always\_lock\_free &     & yes & yes & yes & yes \\ \hline
+\begin{tabular}[c]{@{}c@{}}atomic\textless{}T\textgreater{}::\\is\_always\_lock\_free\end{tabular} &     & yes & yes & yes & yes \\ \hline
 load                                                     &     & yes & yes & yes & yes \\ \hline
 operator T                                               &     & yes & yes & yes & yes \\ \hline
 store                                                    &     & yes & yes & yes & yes \\ \hline
@@ -278,7 +278,7 @@ notify\_all(C++20)                                       & yes & yes & yes & yes
 wait(C++20)                                              & yes & yes & yes & yes & yes \\ \hline
 \end{longtable}
 
-std::atomic<float> stands for atomic \href{https://en.cppreference.com/w/cpp/types/is_floating_point}{floating point types}, and std::atomic<int> for atomic \href{https://en.cppreference.com/w/cpp/types/is_integral}{integral types}.
+std::atomic<float>表示原子\href{https://en.cppreference.com/w/cpp/types/is_floating_point}{浮点数类型}, Std::atomic<int>表示原子\href{https://en.cppreference.com/w/cpp/types/is_integral}{整数类型}。
 
 
 

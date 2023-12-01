@@ -1,27 +1,28 @@
-The foundation of multithreading is a well-defined memory model. This memory model has to deal with the following points:
+多线程的基础是定义良好的内存模型，内存模型必须处理以下几点:
 
 \begin{itemize}
 \item 
-Atomic operations: Operations that can be performed without interruption.
+原子操作:可以不中断地执行的操作。
 
 \item 
-Partial ordering of operations: Sequence of operations that must not be reordered.
+部分排序操作:不能重新排序的操作序列。
 
 \item 
-Visible effects of operations: Guarantees when operations on shared variables are visible in other threads.
+操作的可见效果:保证对共享变量的操作在其他线程中可见。
 \end{itemize}
 
-The C++ memory model has a lot in common with its predecessor: the Java memory model.
-Additionally, C++ permits the breaking of sequential consistency. Sequential consistency is the default behavior of atomic operations.
+C++内存模型与其前身Java内存模型有很多共同之处。
 
-Sequential consistency provides two guarantees.
+另外，C++允许打破顺序一致性，这是原子操作的默认行为。
+
+顺序一致性提供了两个保证。
 
 \begin{enumerate}
 \item 
-The instructions of a program are executed in source code order.
+程序的指令按源代码顺序执行。
 
 \item 
-There is a global order of all operations on all threads.
+所有线程上的所有操作都有一个全局顺序。
 \end{enumerate}
 
 
