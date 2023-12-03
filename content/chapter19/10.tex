@@ -1,24 +1,24 @@
-In addition to threads, C++ has tasks to perform work asynchronously. Tasks need the header <future>. A task is parameterized with a work package consisting of two associated components: a promise and a future. Both are connected via a data channel. The promise executes the work packages and puts the result in the data channel; the associated future picks up the result. Both communication endpoints can run in separate threads. It is special that the future can pick up the result later. Therefore, the calculation of the result by the promise is independent of the query of the result by the associated future.
+除了线程之外，C++还有异步执行工作的任务，需要头文件<future>。任务是由两个相关组件组成的工作包参数化的:promise和future，两者都通过数据通道连接。promise执行工作包并将结果放入数据通道;相关的future获取结果。两个通信端点都可以在单独的线程中运行。特别的是，future可以在以后获取结果，所以promise对结果的计算独立于相关future对结果的查询。
 
-\begin{myTip}{Regard tasks as data channels}
-Tasks behave like data channels. The promise puts its result in the data channel. The future waits for it and picks it up.
+\begin{myTip}{将任务视为数据通道}
+任务的行为类似于数据通道。promise将其结果放在数据通道中，future等着获取结果。
 
 \myGraphic{0.6}{content/chapter19/images/13.jpg}{}
 \end{myTip}
 
-\mySamllsection{Threads versus Tasks}
+\mySamllsection{线程与任务}
 
-Threads are very different from tasks.
+线程与任务不同。
 
-You have to use a shared variable for the communication between the creator thread and the created thread. The task communicates via its data channel, which is implicitly protected. Therefore a task must not use a protection mechanism like a mutex.
+必须使用共享变量来实现创建线程和被创建线程之间的通信。任务通过其数据通道进行通信，该数据通道受到隐式保护。因此，任务不能使用像互斥锁这样的保护机制。
 
-The creator thread is waiting for its child with the join call. The future fut is using the ‘fut.get() call which is blocking if no result is there.
+创建线程正在用join调用等待它的子线程。若没有结果则阻塞，可使用fut.get()获取结果。
 
-If an exception happens in the created thread, the created thread, the creator, and the whole process terminates. On the contrary, the promise can send exceptions to the future, which has to handle the exception.
+若在创建的线程中发生异常，则创建的线程、创建者和整个进程终止。相反，promise可以向future发送异常，future必须处理该异常。
 
-A promise can serve one or many futures. It can send a value, an exception, or only a notification.
+一个promise可以服务于一个或多个future。它可以发送值、异常或仅发送通知。
 
-You can use a task as a safe replacement for a condition variable.
+可以使用任务作为条件变量的安全替代。
 
 \begin{cpp}
 #include <future>
@@ -34,15 +34,15 @@ auto fut= std::async([]{ return 2000+11; });
 std::cout << fut.get() << '\n'; // 2011
 \end{cpp}
 
-The child thread t and the asynchronous function call std::async calculates the sum of 2000 and 11. The creator thread gets the result from its child thread t via the shared variable res. The call std::async creates the data channel between the sender (promise) and the receiver (future). The future asks the data channel with fut.get() for the calculation result. The fut.get call is blocking.
+子线程t和异步函数调用std::async计算2000和11的和。创建线程通过共享变量res从子线程t获取结果。调用std::async在发送方(promise)和接收方(future)之间创建数据通道。future使用fut.get()向数据通道请求计算结果，fut.get()会阻塞线程。
 
 \mySamllsection{std::async}
 
-std::async behaves like an asynchronous function call. This function call takes a callable and its arguments. std::async is a variadic template and can, therefore, take an arbitrary number of arguments. The call of std::async returns a future object fut. That’s your handle for getting the result via fut.get(). Optionally you can specify a start policy for std::async. You can explicitly determine with the start policy if the asynchronous operation should be executed in the same thread (std::launch::deferred) or another thread (std::launch::async).
+Std::async的行为类似于异步函数调用。这个函数调用接受一个可调用对象及其参数。std::async是一个可变的模板，因此可以接受任意数量的参数。调用std::async返回一个future对象fut，通过fut.get()获取结果的句柄。还可以为std::async指定一个启动策略，可以使用启动策略显式地确定异步操作是应该在同一个线程(std::launch::deferred)中执行，还是应该在另一个线程(std::launch::async)中执行。
 
-The call auto fut= std::async(std::launch::deferred, ... ) will not immediately be executed. The call fut.get() starts the promise lazily.
+调用auto fut= std::async(std::launch::deferred，…)不会立即执行。调用fut.get()会惰性地启动promise。
 
-\filename{Lazy and eager with std::async}
+\filename{使用std::async实现惰性和立即求值}
 
 \begin{cpp}
 // asyncLazyEager.cpp
@@ -69,42 +69,42 @@ std::cout << lazyDuration << " sec"; // 1.00018 sec.
 std::cout << eagerDuration << " sec"; // 0.00015489 sec.
 \end{cpp}
 
-The program’s output shows that the promise associated with the future asyncLazy is executed one second later than the promise associated with the future asyncEager. One second is precisely the time duration the creator is sleeping before the future asyncLazy asks for its result.
+程序的输出显示，与future的asyncLazy相关联的promise比与future的asyncEager相关联的promise晚一秒执行。一秒是创建者在future asynlazy请求其结果之前的休眠时间。
 
-\begin{myTip}{std::async should be your first choice}
-The C++ runtime determines if std::async is executed in a separate thread. The decision of the C++ runtime may depend on the number of your cores, the utilization of your system, or the size of your work package.
+\begin{myTip}{std::async应该是首选}
+C++运行时确定std::async是否在单独的线程中执行。C++运行时的决定可能取决于内核的数量、系统的利用率或工作包的大小。
 \end{myTip}
 
 \mySamllsection{std::packaged\_task}
 
-std::packaged\_task enables you to build a simple wrapper for a callable, which can later be executed on a separate thread.
+std::packaged\_task能够为可调用对象构建一个简单的包装器，稍后可以在单独的线程上执行。
 
-Therefore four steps are necessary.
+因此，四个步骤是必要的。
 
 \begin{enumerate}[label=\Roman*.]
 \item 
-Wrap your work:
+打好工作包:
 
 \begin{cpp}
 std::packaged_task<int(int, int)> sumTask([](int a, int b){ return a+b; });
 \end{cpp}
 
 \item
-Create a future:
+创建future:
 
 \begin{cpp}
 std::future<int> sumResult= sumTask.get_future();
 \end{cpp}
  
 \item 
-Perform the calculation:
+执行计算:
 
 \begin{cpp}
 sumTask(2000, 11);
 \end{cpp}
 
 \item 
-Query the result:
+查询结果:
 
 \begin{cpp}
 sumResult.get();
@@ -112,7 +112,7 @@ sumResult.get();
 
 \end{enumerate}
 
-You can move either the std::package\_task or the std::future in a separate thread.
+可以在单独的线程中移动std::package\_task或std::future。
 
 \filename{std::packaged\_task}
 
@@ -164,14 +164,14 @@ auto sum= sum1.get() + sum2.get();
 cout << sum; // 50005000
 \end{cpp}
 
-The promises (std::packaged\_task) are moved into the std::deque allTasks. The program iterates in the while loop through all promises. Each promise runs in its thread and performs its addition in the background (sumThread.detach()). The result is the sum of all numbers from 1 to 100000.
+promise(std::packaged\_task)移动到std::deque allTasks中。程序在while循环中遍历所有承诺。每个promise在其线程中运行，并在后台执行其添加(sumThread.detach())。结果是1到100000之间所有数字的和。
 
-\mySamllsection{std::promise and std::future}
+\mySamllsection{std::promise 和 std::future}
 
-The pair std::promise and std::future provide the full control over the task.
+std::promise和std::future对提供了对任务的完全控制。
 
 \begin{center}
-The Member Functions of the promise prom
+promise prom的成员函数
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -179,23 +179,23 @@ The Member Functions of the promise prom
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-\textbf{Member Function} & \textbf{Description} \\ \hline
+\textbf{成员函数} & \textbf{描述} \\ \hline
 \endfirsthead
 %
 \endhead
 %
-\begin{tabular}[c]{@{}l@{}}prom.swap(prom2) and\\ std::swap(prom, prom2)\end{tabular} & Swaps the promises.                                           \\ \hline
-prom.get\_future()       & Returns the future.  \\ \hline
-prom.set\_value(val)     & Sets the value.      \\ \hline
-prom.set\_exception(ex)  & Sets the exception.  \\ \hline
-prom.set\_value\_at\_thread\_exit(val)                                                & Stores the value and makes it ready if the promise exits.     \\ \hline
-prom.set\_exception\_at\_thread\_exit(ex)                                             & Stores the exception and makes it ready if the promise exits. \\ \hline
+\begin{tabular}[c]{@{}l@{}}prom.swap(prom2) \\ std::swap(prom, prom2)\end{tabular} & 交换promises。                                           \\ \hline
+prom.get\_future()       & 返回future。  \\ \hline
+prom.set\_value(val)     & 设置值。      \\ \hline
+prom.set\_exception(ex)  & 设置异常。  \\ \hline
+prom.set\_value\_at\_thread\_exit(val)                                                & 存储该值，并使其在promise退出时准备好。     \\ \hline
+prom.set\_exception\_at\_thread\_exit(ex)                                             & 存储异常，并使其在promise退出时准备好。 \\ \hline
 \end{longtable}
 
-If the promise sets the value or the exception more than once a std::future\_error exception is thrown.
+若promise不止一次设置值或异常，则抛出std::future\_error异常。
 
 \begin{center}
-The Member Functions of the future fut
+future fut的成员函数
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -203,40 +203,24 @@ The Member Functions of the future fut
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-\textbf{Member Function} & \textbf{Description}           \\ \hline
+\textbf{成员函数} & \textbf{描述}           \\ \hline
 \endfirsthead
 %
 \endhead
 %
-fut.share()              & Returns a std::shared\_future. \\ \hline
-fut.get()   & Returns the result, which can be a value or an exception.                  \\ \hline
-fut.valid() & Checks if the result is available. Returns after the call fut.get() false. \\ \hline
-fut.wait()               & Waits for the result.          \\ \hline
+fut.share()              & 返回std::shared\_future。 \\ \hline
+fut.get()   & 返回结果，该结果可以是一个值或异常。                  \\ \hline
+fut.valid() & 检查结果是否可用。调用fut.get()后返回false。 \\ \hline
+fut.wait()               & 等待结果。          \\ \hline
+fut.wait\_for(relTime)   & 等待结果的一段时间。 \\ \hline
+fut.wait\_until(absTime) & 等待结果的直到某个绝对时间点。        \\ \hline
 \end{longtable}
 
-\begin{center}
-The Member Functions of the future fut
-\end{center}
+若future fut不止一次请求结果，则抛出std::future\_error异常。future可通过fut.share()创建共享future。共享future与他们的promise相关联，并且可以独立地要求结果。共享future与future具有相同的接口。
 
-% Please add the following required packages to your document preamble:
-% \usepackage{longtable}
-% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
-\begin{longtable}[c]{|l|l|}
-\hline
-\textbf{Member Function} & \textbf{Description}                      \\ \hline
-\endfirsthead
-%
-\endhead
-%
-fut.wait\_for(relTime)   & Waits for a time duration for the result. \\ \hline
-fut.wait\_until(absTime) & Waits until a time for the result.        \\ \hline
-\end{longtable}
+下面是promise和future的用法。
 
-If a future fut asks more than once for the result, a std::future\_error exception is thrown. The future creates a shared future by the call fut.share(). Shared futures are associated with their promise, and can ask for the result independently. A shared future has the same interface as a future.
-
-Here is the usage of promise and future.
-
-\filename{Promise and future}
+\filename{Promise 和 future}
 
 \begin{cpp}
 // promiseFuture.cpp
@@ -258,13 +242,13 @@ std::thread prodThread(product, std::move(prodPromise), a, b);
 std::cout << "20*10= " << prodResult.get(); // 20*10= 200
 \end{cpp}
 
-The promise prodPromise is moved into a separate thread and performs its calculation. The future gets the result by prodResult.get().
+promise prodPromise移动到一个单独的线程中，并执行它的计算。future通过prodResult.get()获取结果。
 
-\mySamllsection{Synchronization}
+\mySamllsection{同步}
 
-A future fut can be synchronized with is associated promise by the call fut.wait(). Contrary to condition variables, you need no locks and mutexes, and spurious and lost wakeups are impossible.
+future fut可以通过调用fut.wait()与它关联的promise同步。与条件变量相反，不需要锁和互斥锁，并且不可能出现伪唤醒和未唤醒。
 
-\filename{Tasks for synchronisation}
+\filename{同步任务}
 
 \begin{cpp}
 // promiseFutureSynchronise.cpp
@@ -297,7 +281,7 @@ std::thread t1(waitingForWork, std::move(fut));
 std::thread t2(setDataReady, std::move(sendReady));
 \end{cpp}
 
-The call of the promise prom.set\_value() wakes up the future, which then can perform its work.
+promise prom.set\_value()的调用唤醒future，然后可以执行其工作。
 
 \myGraphic{0.6}{content/chapter19/images/14.jpg}{}
 

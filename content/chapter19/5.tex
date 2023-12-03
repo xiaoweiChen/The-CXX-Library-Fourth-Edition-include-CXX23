@@ -1,15 +1,15 @@
-If more than one thread shares a variable, you must coordinate the access. That’s the job for mutexes and locks in C++.
+若多个线程共享一个变量，则必须协调访问。这就是C++中互斥锁的工作。
 
-\mySamllsection{Data race}
+\mySamllsection{数据竞争}
 
 \noindent
-\textbf{A data race}
+\textbf{数据竞争}
 
-A data race is a state in which at least two threads access shared data simultaneously, and at least one of the threads is a writer. Therefore the program has undefined behavior.
+数据竞争是指至少有两个线程同时访问共享数据，并且至少有一个线程是写线程的状态。因此程序具有未定义行为。
 
-You can observe very well the interleaving of threads if a few threads write to std::cout. In this case, the output stream std::cout is the shared variable.
+若有几个线程写入std::cout，可以很好地观察到线程的交错。在本例中，输出流std::cout是共享变量。
 
-\filename{Unsychronised writing to std::cout}
+\filename{不同步的写入std::cout}
 
 \begin{cpp}
 // withoutMutex.cpp
@@ -39,14 +39,14 @@ thread bjarne= thread(Worker("       Bjarne"));
 
 \myGraphic{0.8}{content/chapter19/images/4.jpg}{}
 
-The output on std::cout is not coordinated.
+std::cout的输出不协调。
 
-\begin{myTip}{The streams are thread-safe}
-The C++11 standard guarantees that the characters are written atomically. Therefore you don’t need to protect them. You only have to protect the interleaving of the threads on the stream if the entire read operation is not interleaved. That guarantee holds for the input and output streams.
+\begin{myTip}{流是线程安全的}
+C++11标准保证字符是自动写入的，因此不需要保护。只有当整个读操作不交错时，才需要保护流上线程的交错。这种保证适用于输入和输出流。
 
-With C++20, we have synchronized output streams such as std::osyncstream and std::wosyncstream. The guarantee that the writing to one output stream is synchronized. The output is written to an internal buffer and flushed when it goes out of scope. A synchronized output stream can have a name such as synced\_out or be without a name.
+C++20中，已经同步了像std::osyncstream和std::wosyncstream这样的输出流。保证对一个输出流的写入是同步的。输出写入内部缓冲区，并在超出作用域时刷新。同步输出流可以有一个名称，比如synced\_out，也可以没有名称。
 
-\filename{Synchronized outputstreams}
+\filename{同步输出流}
 
 \begin{cpp}
 {
@@ -61,13 +61,13 @@ std::osyncstream(std::cout) << "Hello, " << "World!" << "\n";
 \end{cpp}
 \end{myTip}
 
-std::cout is, in the example, the shared variable, which should have exclusive access to the stream.
+本例中，std::cout是共享变量，应该对流具有独占访问权。
 
-\mySamllsection{Mutexes}
+\mySamllsection{互斥锁}
 
-Mutex (mutual exclusion) m' guarantees that only one thread can access the critical region at one time. They need the header <mutex>. A mutex m’ locks the critical section by the call m.lock() and unlocks it by m.unlock().
+互斥(互斥量)保证一次只有一个线程可以访问临界区域。它们需要头文件<mutex>。互斥锁m 通过调用m.lock()来锁定临界区，并通过m.lock()来解锁。
 
-\filename{Synchronisation with std::mutex}
+\filename{使用std::mutex进行同步}
 
 \begin{cpp}
 // mutex.cpp
@@ -100,14 +100,14 @@ thread scott= thread(Worker ("    Scott"));
 thread bjarne= thread(Worker("      Bjarne"));
 \end{cpp}
 
-Each thread after each other writes coordinated to std::cout because it uses the same mutex mutexCout.
+因为它使用相同的互斥锁mutexCout，所以每个线程在彼此之后协调写入std::cout。
 
 \myGraphic{0.6}{content/chapter19/images/5.jpg}{}
 
-C++ has five different mutexes. They can lock recursively, tentatively with and without time constraints.
+C++有五种不同的互斥量。它们可以递归地锁定，暂时有或没有时间限制。
 
 \begin{center}
-Mutex variations
+C++的互斥量
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -115,7 +115,7 @@ Mutex variations
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|l|l|l|l|}
 \hline
-\textbf{Member Function} & \textbf{mutex} & \textbf{recursive\_mutex} & \textbf{timed\_mutex} & \textbf{recursive\_timed\_mutex} & \textbf{shared\_timed\_mutex} \\ \hline
+\textbf{成员函数} & \textbf{mutex} & \textbf{recursive\_mutex} & \textbf{timed\_mutex} & \textbf{recursive\_timed\_mutex} & \textbf{shared\_timed\_mutex} \\ \hline
 \endfirsthead
 %
 \endhead
@@ -128,14 +128,14 @@ m.try\_lock\_until &     &     & yes & yes & yes \\ \hline
 \end{longtable}
 
 
-The std::shared\_time\_mutex enables it to implement reader-writer locks. The Member Function m.try\_lock\_for(relTime) needs a relative time duration; the Member Function m.try\_lock\_until(absTime) a absolute time point.
+std::shared\_time\_mutex使它能够实现读写锁。成员函数m.t try\_lock\_for(relTime)需要一个相对时间段;成员函数m.t try\_lock\_until(absTime)一个绝对时间点。
 
 
-\mySamllsection{Deadlocks}
+\mySamllsection{死锁}
 
-A deadlock is a state in which two or more threads are blocked because each thread waits for the release of a resource before it releases its resource.
+死锁是两个或多个线程被阻塞的状态，因为每个线程在释放其资源之前等待资源的释放。
 
-You can quickly get a deadlock if you forget to call m.unlock(). That happens, for example, in the case of an exception in the function getVar().
+若忘记调用m.k unlock()，可能很快就会出现死锁。例如，在函数getVar()中出现异常的情况下，就会发生这种情况。
 
 \begin{cpp}
 m.lock();
@@ -143,11 +143,11 @@ sharedVar= getVar();
 m.unlock()
 \end{cpp}
 
-\begin{myWarning}{Don’t call an unknown function while holding a lock}
-If the function getVar tries to get the same lock by calling m.lock(), you will get a deadlock because it will not be successful, and the call will block forever.
+\begin{myWarning}{不要在持有锁时调用未知函数}
+若函数getVar试图通过调用m.lock()来获取相同的锁，将会死锁。因为它不会成功，并且调用将永远阻塞。
 \end{myWarning}
 
-Locking two mutexes in the wrong order is another typical reason for a deadlock.
+以错误的顺序锁定两个互斥锁，是导致死锁的另一个典型原因。
 
 \filename{A deadlock}
 
@@ -177,23 +177,23 @@ std::thread t1([&]{ deadLock(c1, c2); });
 std::thread t2([&]{ deadLock(c2, c1); });
 \end{cpp}
 
-The short time window of one millisecond (std::this\_thread::sleep\_for(std::chrono::milliseconds(1))) is enough to produce with high probability a deadlock because each thread is waiting forever on the other mutex. The result is a standstill.
+一毫秒的短时间窗口(std::this\_thread::sleep\_for(std::chrono::milliseconds(1)))足以产生高概率的死锁，因为每个线程都在等待另一个互斥锁。
 
 \myGraphic{0.6}{content/chapter19/images/6.jpg}{}
 
-\begin{myTip}{Encapsulate a mutex in a lock}
-It’s very easy to forget to unlock a mutex or lock mutexes in a different order. To overcome most of the problems with a mutex, encapsulate it in a lock.
+\begin{myTip}{将互斥锁封装在锁中}
+很容易忘记解锁互斥锁或以不同的顺序锁定互斥锁。为了克服互斥锁的大多数问题，可以将互斥锁封装在锁中。
 \end{myTip}
 
-\mySamllsection{Locks}
+\mySamllsection{锁}
 
-You should encapsulate a mutex in a lock to release the mutex automatically. A lock is an implementation of the RAII idiom because the lock binds the lifetime of the mutex to its lifetime. C++11 has std::lock\_guard for the simple and std::unique\_lock for the advanced use case, respectively. Both need the header <mutex>. With C++14 C++ has a std::shared\_lock, which is in the combination with the mutex std::shared\_time\_mutex the base for reader-writer locks.
+应该将互斥锁封装在锁中以自动释放互斥锁。锁是RAII习惯用法的一种实现，因为锁将互斥锁的生命周期与它的生命周期绑定在一起。C++11分别为简单用例提供了std::lock\_guard，为高级用例提供了std::unique\_lock。两者都需要头文件<mutex>。C++14中，有一个std::shared\_lock，与互斥锁std::shared\_time\_mutex结合在一起使用，是实现读写锁的基础。
 
 \mySamllsection{std::lock\_guard}
 
-std::lock\_guard supports only the simple use case. Therefore it can only bind its mutex in the constructor and release it in the destructor. So the synchronization of the worker example is reduced to the call of the constructor.
+std::lock\_guard只支持简单的用例，所以只能在构造函数中绑定互斥锁，并在析构函数中释放互斥锁。因此，worker示例的同步可简化为构造函数的调用。
 
-\filename{Synchronisation with std::lock\_guard}
+\filename{使用std::lock\_guard进行同步}
 
 \begin{cpp}
 // lockGuard.cpp
@@ -216,12 +216,12 @@ struct Worker{
 
 \mySamllsection{std::unique\_lock}
 
-The usage of std::unique\_lock is more expensive than that of std::lock\_guard. On the contrary, a std::unique\_lock can be created with and without a mutex, explicitly lock or release its mutex, or delay its mutex’s lock.
+使用std::unique\_lock的开销比使用std::lock\_guard的开销大。相反，std::unique\_lock可以在有互斥锁和没有互斥锁的情况下创建，显式地锁定或释放它的互斥锁，或者延迟它的互斥锁。
 
-The following table shows the Member Functions of a std::unique\_lock lk.
+下表显示了std::unique\_lock类的成员函数。
 
 \begin{center}
-The interface of std::unique\_lock
+std::unique\_lock lk的接口
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -229,21 +229,21 @@ The interface of std::unique\_lock
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-\textbf{Member Function}                                                      & \textbf{Description}                                         \\ \hline
+\textbf{成员函数}                                                      & \textbf{描述}                                         \\ \hline
 \endfirsthead
 %
 \endhead
 %
-lk.lock()                                                                     & Locks the associated mutex.                                  \\ \hline
-std::lock(lk1, lk2, ...)                                                      & Locks atomically the arbitrary number of associated mutexes. \\ \hline
-\begin{tabular}[c]{@{}l@{}}lk.try\_lock() and\\ lk.try\_lock\_for(relTime) and\\ lk.try\_lock\_until(absTime)\end{tabular} & Tries to lock the associated mutex. \\ \hline
-lk.release()                                                                  & Release the mutex. The mutex remains locaked.                \\ \hline
-\begin{tabular}[c]{@{}l@{}}lk.swap(lk2) and\\ std::swap(lk, lk2)\end{tabular} & Swaps the locks.                                             \\ \hline
-lk.mutex()                                                                    & Returns a pointer to the associated mutex.                   \\ \hline
-lk.owns\_lock()                                                               & Checks if the lock has a mutex.                              \\ \hline
+lk.lock()                                                                     & 锁定关联的互斥锁。                                  \\ \hline
+std::lock(lk1, lk2, ...)                                                      & 自动锁定任意数量的关联互斥锁。 \\ \hline
+\begin{tabular}[c]{@{}l@{}}lk.try\_lock() and\\ lk.try\_lock\_for(relTime) and\\ lk.try\_lock\_until(absTime)\end{tabular} & 尝试锁定关联的互斥锁。 \\ \hline
+lk.release()                                                                  & 释放互斥锁。互斥锁保持锁定状态。                \\ \hline
+\begin{tabular}[c]{@{}l@{}}lk.swap(lk2) and\\ std::swap(lk, lk2)\end{tabular} & 交换锁。                                             \\ \hline
+lk.mutex()                                                                    & 返回一个指向关联互斥对象的指针。                  \\ \hline
+lk.owns\_lock()                                                               & 检查锁是否有互斥锁。                              \\ \hline
 \end{longtable}
 
-Deadlocks caused by acquiring locks in a different order can easily be solved by std::atomic.
+由于获取锁的顺序不同而导致的死锁，可以很通过std::atomic解决。
 
 \filename{std::unique\_lock}
 
@@ -275,13 +275,13 @@ thread t1([&]{ deadLockResolved(c1, c2); });
 thread t2([&]{ deadLockResolved(c2, c1); });
 \end{cpp}
 
-Because of the argument std::defer\_lock of the std::unique\_lock, the locking of a.mut and b.mut is deferred. The locking takes place atomically in the call std::lock(guard1, guard2).
+由于std::unique\_lock的参数std::defer\_lock，a.mut和b.mut则延迟锁定。锁定在调用std::lock(guard1, guard2)时自动发生。
 
 \myGraphic{0.6}{content/chapter19/images/7.jpg}{}
 
 \mySamllsection{std::shared\_lock}
 
-std::shared\_lock has the same interface as std::unique\_lock. Also, a std::shared\_lock supports the case where multiple threads share the same locked mutex. For this special use case, you must use a std::shared\_lock in combination with a std::shared\_timed\_mutex. However, if multiple threads use the same std::shared\_time\_mutex in a std::unique\_lock, only one thread can own it.
+std::shared\_lock与std::unique\_lock具有相同的接口。另外，std::shared\_lock支持多个线程共享同一个锁定互斥量的情况。对于这个特殊的用例，必须将std::shared\_lock与std::shared\_timed\_mutex结合使用。但若多个线程在一个std::unique\_lock中使用同一个std::shared\_time\_mutex，则只有一个线程可以拥有它。
 
 \begin{cpp}
 #include <mutex>
@@ -295,16 +295,16 @@ std::shared_lock<std::shared_time_mutex> readerLock(sharedMutex);
 std::shared_lock<std::shared_time_mutex> readerLock2(sharedMutex);
 \end{cpp}
 
-The example presents the typical reader-writer lock scenario. The writerLock of type std::unique\_lock<std::shared\_timed\_mutex> can only exclusively have the sharedMutex. Both of the reader locks readerLock and readerLock2 of type std::share\_lock<std::shared\_time\_mutex> can share the same mutex sharedMutex.
+该示例展示了典型的读写锁场景。类型std::unique\_lock<std::shared\_timed\_mutex>的writerLock只能独占sharedMutex。std::share\_lock<std::shared\_time\_mutex>类型的读锁readerLock和readerLock2可以共享同一个互斥锁sharedMutex。
 
-\mySamllsection{Thread-safe Initialization}
+\mySamllsection{线程安全的初始化}
 
-If you don’t modify the data, it’s sufficient to initialize them in a thread-safe way. C++ offers various ways to achieve this: using a constant expression, using static variables with block scope, or using the function std::call\_once combined with the flag std::once::flag.
+若不修改数据，则以线程安全的方式初始化就足够了。C++提供了多种方法来实现这一点:使用常量表达式，使用具有块作用域的静态变量，或者使用函数std::call\_once结合标志std::once::flag。
 
 
-\mySamllsection{Constant Expressions}
+\mySamllsection{常数表达式}
 
-A constant expression is initialized at compile time. Therefore they are per se thread-safe. By using the keyword constexpr before a variable, the variable becomes a constant expression. Instances of user-defined type can also be a constant expression and therefore be initialized in a thread-safe way if the Member Functions are declared as constant expressions.
+常量表达式在编译时初始化，它们本身是线程安全的。通过在变量前使用关键字constexpr，变量就变成了常量表达式。用户定义类型的实例也可以是常量表达式，若将成员函数声明为常量表达式，则可以以线程安全的方式初始化。
 
 \begin{cpp}
 struct MyDouble{
@@ -318,9 +318,9 @@ constexpr MyDouble myDouble(10.5);
 std::cout << myDouble.getValue(); // 10.5
 \end{cpp}
 
-\mySamllsection{Static Variables Inside a Block}
+\mySamllsection{块中的静态变量}
 
-If you define a static variable in a block, the C++11 runtime guarantees that it is initialized in a threadsafe way.
+若在块中定义静态变量，C++11运行时保证以线程安全的方式初始化它。
 
 \begin{cpp}
 void blockScope(){
@@ -328,11 +328,11 @@ void blockScope(){
 }
 \end{cpp}
 
-\mySamllsection{std::call\_once and std::once\_flag}
+\mySamllsection{std::call\_once 和 std::once\_flag}
 
-std::call\_once takes two arguments: the flag std::once\_flag and a callable. The C++ runtime guarantees with the help of the flag std::once\_flag that the callable is executed exactly once.
+std::call\_once接受两个参数:标志std::once\_flag和一个可调用对象。C++运行时借助标志std::once\_flag保证可调用对象只执行一次。
 
-\filename{Thread-safe initialisation}
+\filename{T线程安全的初始化}
 
 \begin{cpp}
 // callOnce.cpp
@@ -350,10 +350,10 @@ thread t1(do_once);
 thread t2(do_once);
 \end{cpp}
 
-Although both threads executed the function do\_once, only one of them is successful, and the lambda function []\{cout <{}< "Only once." <{}< endl;\} is executed exactly once.
+虽然两个线程都执行了函数do\_once，但只有一个线程执行成功，而Lambda函数[]\{cout <{}< " only once "。<{}< endl;\}只执行一次。
 
 \myGraphic{0.6}{content/chapter19/images/8.jpg}{}
 
-You can use the same std::once\_flag to register different callables, and only one of these callables is called.
+可以使用相同的std::once\_flag来注册不同的可调用对象，并且只调用其中一个可调用对象。
 
 

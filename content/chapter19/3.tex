@@ -37,7 +37,7 @@ thread t3([]{ cout << "lambda function"; }); // lambda function
 
 \mySamllsection{生命周期}
 
-The creator of a thread has to take care of the lifetime of its created thread. The executable unit of the created thread ends with the end of the callable. Either the creator is waiting until the created thread t is done (t.join()) or the creator detaches itself from the created thread: t.detach(). A thread t is joinable if no call t.join() or t.detach() was performed on it. A joinable thread throws in its destructor the exception std::terminate, and the program terminates.
+线程的创建者必须关心所创建线程的生命周期，创建的线程的可执行单元以可调用线程的结尾结束。要么创建者等待创建的线程t完成(t.j join())，要么创建者将自己从创建的线程中分离出来:t.d detach()。若没有调用t.join()或t.detach()，则线程t是可汇入的。可接合线程在其析构函数中抛出异常std::terminate，程序终止。
 
 \filename{线程的生命周期}
 
@@ -59,10 +59,10 @@ t2.join();
 t3.join();
 \end{cpp}
 
-A from its creator detached thread is typically called a daemon thread because it runs in the background.
+从其创建者分离的线程通常称为守护线程，因为它在后台运行。
 
 \begin{myWarning}{小心移动线程}
-Threads can be moved but not copied.
+线程可以移动，但不能复制。
 
 \begin{cpp}
 #include <thread>
@@ -75,12 +75,12 @@ std::thread t3([]{ cout << "lambda function"; });
 t2 = std::move(t3); // std::terminate
 \end{cpp}
 
-By performing t2 = std::move(t) thread t2 gets the callable of thread t. Assuming thread t2 already had a callable and is joinable, the C++ runtime would call std::terminate. This happens exactly in t2 = std::move(t3) because t2 neither executed t2.join() nor t2.detach() before.
+通过执行t2 = std::move(t)，线程t2获得线程t的可调用对象。假设线程t2已经有一个可调用对象并且是可连接的，C++运行时将调用std::terminate。这恰好发生在t2 = std::move(t3)中，因为t2之前既没有执行t2.join()，也没有执行t2.detach()。
 \end{myWarning}
 
 \mySamllsection{参数}
 
-A std::thread is a variadic template. This means that it can get an arbitrary number of arguments by copy or reference. Either the callable or the thread can get the arguments. The thread delegates them to the callable: tPerCopy2 and tPerReference2.
+std::thread是可变模板，可以通过复制或引用获得任意数量的参数。可调用对象或线程都可以获得参数，线程将它们委托给可调用对象:tPerCopy2和tPerReference2。
 
 \begin{cpp}
 #include <thread>
@@ -104,7 +104,7 @@ tPerReference.join();
 tPerReference2.join();
 \end{cpp}
 
-The first two threads get their argument s by copy, the second two by reference.
+前两个线程通过复制获得参数，后两个线程通过引用获得参数。
 
 \begin{myWarning}{默认情况下，线程应该通过复制获得参数}
 \filename{线程的参数}
@@ -139,15 +139,15 @@ t.detach();
 std::cout << valSleeper; // undefined behaviour
 \end{cpp}
 
-This program snippet has undefined behavior. First, the lifetime of std::cout is bound to the lifetime of the main thread, and the created thread gets its variable valSleeper by reference. The issue is that the created thread could live longer than its creator, therefore, std::cout and valSleeper lose their validity if the main thread is done. Second, valSleeper is a shared, mutable variable which is concurrently used by the main thread and the child thread. Consequently, this is a data race.
+这个程序段有未定义行为。首先，std::cout的生命周期绑定到主线程的生命周期，创建的线程通过引用获得它的变量valSleeper。问题是创建的线程可能比它的创建者活得更长，若主线程结束，std::cout和valSleeper将失去其有效性。其次，valSleeper是一个共享的可变变量，由主线程和子线程并发使用。因此，这是一场数据竞赛。
 \end{myWarning}
 
 \mySamllsection{操作}
 
-You can perform many operations on a thread t.
+可以在一个线程上执行许多操作。
 
 \begin{center}
-Operations with a std::thread
+std::thread的操作
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -160,20 +160,20 @@ Operations with a std::thread
 %
 \endhead
 %
-t.join()                                                                   & Waits until thread t has finished its executable unit.    \\ \hline
-t.detach()                                                                 & Executes the created thread t independent of the creator. \\ \hline
-t.joinable()                                                               & Checks if thread t supports the calls join or detach.     \\ \hline
-\begin{tabular}[c]{@{}l@{}}t.get\_id() and\\ std::this\_thread::get\_id()\end{tabular} & Returns the ideentity of the thread. \\ \hline
-std::thread::hardware\_concurrency()                                       & Indicates the number of threads that can run in parallel. \\ \hline
-std::this\_thread::sleep\_until(absTime)                                   & Puts the thread t to sleep until time absTime.            \\ \hline
-std::this\_thread::sleep\_for(relTime)                                     & Puts the thread t to sleep for the duration relTime.      \\ \hline
-std::this\_thread::yield()                                                 & Offers the system to run another thread.                  \\ \hline
-\begin{tabular}[c]{@{}l@{}}t.swap(t2) and\\ std::swap(t1, t2)\end{tabular} & Swaps the threads.                                        \\ \hline
+t.join()                                                                   & 直到线程t完成了可执行单元。    \\ \hline
+t.detach()                                                                 & 独立于创建者执行创建的线程。 \\ \hline
+t.joinable()                                                               & 检查线程t是否支持join或detach调用。     \\ \hline
+\begin{tabular}[c]{@{}l@{}}t.get\_id() and\\ std::this\_thread::get\_id()\end{tabular} & 返回线程的标识。 \\ \hline
+std::thread::hardware\_concurrency()                                       & 表示可以并行运行的线程数。 \\ \hline
+std::this\_thread::sleep\_until(absTime)                                   & 让线程进入睡眠状态，直到absTime。            \\ \hline
+std::this\_thread::sleep\_for(relTime)                                     & 使线程在relTime持续时间内休眠。      \\ \hline
+std::this\_thread::yield()                                                 & 让系统运行另一个线程。                  \\ \hline
+\begin{tabular}[c]{@{}l@{}}t.swap(t2) and\\ std::swap(t1, t2)\end{tabular} & 交换线程。                                        \\ \hline
 \end{longtable}
 
-You can only call t.join() or t.detach() once on a thread t. If you attempt to call these more than once, you get the exception std::system\_error. std::thread::hardware\_concurrency returns the number of cores or 0 if the runtime cannot determine the number. The sleep\_until and sleep\_for operations need a time point or a time duration as an argument.
+只能在线程t上调用一次t.join()或t.detach()。若多次调用，会得到异常std::system\_error。std::thread::hardware\_concurrency返回内核数，若运行时无法确定内核数，则返回0。sleep\_until和sleep\_for操作需要一个时间点或时间持续时间作为参数。
 
-Threads cannot be copied but can be moved. A swap operation performs a move when possible.
+线程不能复制，但可以移动。交换操作在可能的情况下执行移动操作。
 
 \filename{线程上的操作}
 
@@ -200,13 +200,13 @@ get_id(); // 140159896602432
 
 \mySamllsection{std::jthread}
 
-std::jthread stands for joining thread. In addition to std::thread from C++11, std::jthread can automatically join the started thread and signal an interrupt.
+std::jthread代表可汇入线程。除了C++11中的std::thread之外，std::jthread可以自动加入已启动的线程并发出中断信号。
 
 \mySamllsection{自动汇入}
 
-The non-intuitive behavior of std::thread is the following: when a std::thread is still joinable, std::terminate is called in its destructor.
+std::thread的非直观行为如下:当std::thread仍然可汇入，std::terminate在其析构函数中被调用。
 
-On the contrary, a std::jthread thr automatically joins in its destructor if thr is still joinable.
+相反，若std::jthread仍然可汇入，则自动连接到它的析构函数中。
 
 \filename{终止一个仍然可汇入的std::jthread}
 

@@ -1,9 +1,9 @@
-Condition variables enable threads to be synchronized via messages. They need the header <condition\_variable>. One thread acts as a sender, and the other as a receiver of the message. The receiver waits for the notification of the sender. Typical use cases for condition variables are producer-consumer workflows.
+条件变量允许通过消息同步线程，则需要头文件<condition\_variable>。一个线程充当消息的发送者，另一个线程充当消息的接收者。接收方等待发送方的通知。条件变量的典型用例是生产者-消费者工作流。
 
-A condition variable can be the sender and receiver of the message.
+条件变量可以是消息的发送方和接收方。
 
 \begin{center}
-The Member Functions of the condition variable cv
+条件变量cv的成员函数
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -11,22 +11,22 @@ The Member Functions of the condition variable cv
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-\textbf{Member Function} & \textbf{Description}          \\ \hline
+\textbf{成员函数} & \textbf{描述}          \\ \hline
 \endfirsthead
 %
 \endhead
 %
-cv.notify\_one()         & Notifies a waiting thread.    \\ \hline
-cv.notify\_all()         & Notifies all waiting threads. \\ \hline
-cv.wait(lock, ...)                 & Waits for the notification while holding a std::unique\_lock.                     \\ \hline
-cv.wait\_for(lock, relTime, ...)   & Waits for a time duration for the notification while holding a std::unique\_lock. \\ \hline
-cv.wait\_until(lock, absTime, ...) & Waits until a time for the notification while holding a std::unique\_lock.        \\ \hline
+cv.notify\_one()         & 通知一个等待线程。    \\ \hline
+cv.notify\_all()         & 通知所有等待的线程。 \\ \hline
+cv.wait(lock, ...)                 & 在持有std::unique\_lock的同时等待通知。                     \\ \hline
+cv.wait\_for(lock, relTime, ...)   & 在持有std::unique\_lock的同时，在给定时间段内等待等待通知。 \\ \hline
+cv.wait\_until(lock, absTime, ...) & 在持有std::unique\_lock的同时，在给定时间段内等待等待通知。        \\ \hline
 \end{longtable}
 
 
-The sender and receiver need a lock. In the case of the sender, a std::lock\_guard is sufficient because it only once calls lock and unlock. In the case of the receiver, a std::unique\_lock is necessary because it typically locks and unlocks its mutex a few times.
+发送方和接收方需要一个锁。在发送方的情况下，std::lock\_guard就足够了，因为它只调用一次lock和unlock。对于接收方来说，std::unique\_lock是必要的，因为它通常会锁定和解锁它的互斥锁几次。
 
-\filename{Condition variable}
+\filename{条件变量}
 
 \begin{cpp}
 // conditionVariable.cpp
@@ -63,14 +63,14 @@ std::thread t2(setDataReady);
 
 \myGraphic{0.6}{content/chapter19/images/10.jpg}{}
 
-Using a condition variable may sound easy but there a two critical issues.
+使用条件变量听起来很简单，但是有两个关键问题。
 
-\begin{myWarning}{Protection against spurious wakeup}
-To protect itself against spurious wakeup, the wait call of the condition variable should use an additional predicate. The predicate ensures that the notification is indeed from the sender. I use the lambda function []\{ return dataReady; \} as the predicate. dataReady is set to true by the sender.
+\begin{myWarning}{防止伪唤醒}
+为了保护自身免受伪唤醒，条件变量的wait调用应该使用相关的谓词。谓词确保通知确实来自发送方。我使用Lambda函数[]\{return dataReady;\}作为谓词。发送方将dataReady设置为true。
 \end{myWarning}
 
 
 
-\begin{myWarning}{Protection against lost wakeup}
-To protect itself against lost wakeup, the wait call of the condition variable should use an additional predicate. The predicate ensures that the notification of the sender is not lost. The notification is lost if the sender notifies the receiver before the receiver is waiting. Therefore the receiver waits forever. The receiver now checks at first its predicate: []\{ return dataReady; \}.
+\begin{myWarning}{防止未唤醒}
+为了保护自己未唤醒，条件变量的wait调用应该使用额外的谓词。谓词确保发送方的通知不会丢失。若发送方在接收方等待之前通知接收方，则通知丢失。接收者将永远等待。接收方现在首先检查它的谓词:[]\{return dataReady;\}。
 \end{myWarning}

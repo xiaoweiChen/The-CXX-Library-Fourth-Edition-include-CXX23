@@ -1,6 +1,6 @@
-The following program produces an infinite data stream. The coroutine getNext uses co\_yield to create a data stream that starts at start and gives on request the next value, incremented by step.
+下面的程序产生一个无限数据流。协程getNext使用co\_yield创建一个数据流，该数据流在开始时开始，并在请求时给出下一个值，按步递增。
 
-\filename{An infinite data stream}
+\filename{无限数据流}
 
 \begin{cpp}
 // infiniteDataStream.cpp
@@ -89,35 +89,35 @@ int main() {
 }
 \end{cpp}
 
-The main program creates a coroutine. The coroutine gen (7) returns the values from 0 to 10.
+主程序创建一个协程。协同程序gen(7)返回从0到10的值。
 
 \myGraphic{0.6}{content/chapter20/images/2.jpg}{An infinite data stream}
 
-The numbers in the program infiniteDataStream.cpp stand for the first iteration of the workflow.
+程序infiniteDataStream.cpp中的数字代表工作流的第一次迭代。
 
 \begin{enumerate}
 \item 
-creates the promise
+创建promise
 
 \item 
-calls promise.get\_return\_object() and keeps the result in a local variable
+调用promise.get\_return\_object()并将结果保存在一个局部变量中
  
 \item 
-creates the generator
+创建生成器
 
 \item 
-calls promise.initial\_suspend(). The generator is lazy and, therefore, always suspends.
+调用promise.initial\_suspend()，因为生成器是惰性的，因此总是挂起。
 
 \item 
-asks for the next value and returns if the generator is consumed
+请求下一个值，并在生成器使用时返回
 
 \item 
-triggered by the co\_yield call. The next value is afterward available.
+由co\_yield调用触发，下一个值随后可用。
 
 \item 
-gets the next value
+获取下一个值。
 \end{enumerate}
 
-In additional iterations, only steps 5 and 6 are performed.
+在其他迭代中，只执行步骤5和6。
 
 

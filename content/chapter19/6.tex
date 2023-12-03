@@ -1,7 +1,7 @@
 
-Using the keyword thread\_local, you have thread-local data, also known as thread-local storage. Each thread has its copy of the data. Thread-local data behave like static variables. They are created at their first usage, and their lifetime is bound to the lifetime of their thread.
+使用关键字thread\_local，就拥有了线程本地数据，也称为线程本地存储。每个线程都有自己的数据副本。线程本地数据的行为类似于静态变量。它们是在第一次使用时创建的，其生命周期与线程的生命周期绑定在一起。
 
-\filename{Thread local data}
+\filename{线程本地数据}
 
 \begin{cpp}
 	// threadLocal.cpp
@@ -23,9 +23,9 @@ Using the keyword thread\_local, you have thread-local data, also known as threa
 	std::thread t4(addThreadLocal, "t4");
 \end{cpp}
 
-Each thread has its copy of the thread\_local string. Therefore, each string s modifies its string independently, and each string has its unique address:
+每个线程都有一个thread\_local字符串的副本，每个字符串都独立地修改它的字符串，并且每个字符串都有它唯一的地址:
 
-\myGraphic{0.6}{content/chapter19/images/9.jpg}{}
+\myGraphic{0.4}{content/chapter19/images/9.jpg}{}
 
 
 

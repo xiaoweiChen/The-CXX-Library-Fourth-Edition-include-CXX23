@@ -1,15 +1,15 @@
-Semaphores are a synchronization mechanism that controls concurrent access to a shared resource. A counting semaphore is a special semaphore with a counter greater than zero. The counter is initialized in the constructor. Acquiring the semaphore decreases the counter, and releasing the semaphore increases the counter. If a thread tries to acquire the semaphore when the counter is zero, the thread will block until another thread increments the counter by releasing the semaphore.
+信号量是一种同步机制，用于控制对共享资源的并发访问。计数信号量是计数器大于零的特殊信号量。计数器在构造函数中初始化。获取信号量会减少计数器，释放信号量会增加计数器。如果一个线程试图在计数器为零时获取信号量，则该线程将阻塞，直到另一个线程通过释放信号量来增加计数器。
 
-C++20 supports a std::binary\_semaphore, which is an alias for a std::counting\_semaphore<1>. In this case, the least maximal value is 1.
+C++20支持std::binary\_semaphore，它是std::counting\_semaphore<1>的别名。在这种情况下，最小最大值为1。
 
 \begin{cpp}
 using binary_semaphore = std::counting_semaphore<1>;
 \end{cpp}
 
-In contrast to a std::mutex, a std::counting\_semaphore is not bound to a thread. This means that the acquire and release call can happen on different threads. The following table presents the interface of a std::counting\_semaphore.
+与std::mutex不同，std::counting\_semaphore不绑定到线程，所以获取和释放调用可以发生在不同的线程上。下表给出了std::counting\_semaphore的接口。
 
 \begin{center}
-Member Functions of a semaphore sem
+信号量sem的成员函数
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -17,22 +17,22 @@ Member Functions of a semaphore sem
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-\textbf{Member Function}         & \textbf{Description}                             \\ \hline
+\textbf{成员函数}         & \textbf{描述}                             \\ \hline
 \endfirsthead
 %
 \endhead
 %
-counting\_semaphore::max()       & Return the maximum value of the counter.         \\ \hline
-sem.release(upd=1)               & Atomically increases counter by upd.             \\ \hline
-sem.acquire() & Performs sem.try\_acquire and blocks until counter is greater than zero. \\ \hline
-sem.try\_acquire()               & Atomically decrements the counter.               \\ \hline
-sem.try\_acquire\_for(relTime)   & Performs sem.try\_acquire for the time duration. \\ \hline
-sem.try\_acquire\_intil(absTime) & Performs sem.try\_acquire until the time point.  \\ \hline
+counting\_semaphore::max()       & 返回计数器的最大值。         \\ \hline
+sem.release(upd=1)               & 自动使计数器增加upd。             \\ \hline
+sem.acquire() & 执行semt.try\_acquire()并阻塞，直到counter大于零。 \\ \hline
+sem.try\_acquire()               & 自动减少计数器。               \\ \hline
+sem.try\_acquire\_for(relTime)   & 在一段时间内执行sem.try\_acquir()。 \\ \hline
+sem.try\_acquire\_intil(absTime) & 执行semt.try\_acquire()直到时间点。  \\ \hline
 \end{longtable}
 
-The Member Function sem.try\_lock\_for(relTime) requires a relative time duration; the Member Function sem.try\_lock\_until(absTime) requires an absolute time point.
+成员函数semt .try\_lock\_for(relTime)需要一个相对时间段;成员函数semt .try\_lock\_until(absTime)需要一个绝对时间点。
 
-Semaphores are often the safer and faster alternative to condition variables:
+信号量通常是条件变量更安全、更快的替代方案:
 
 \filename{std::counting\_semaphoree}
 
@@ -70,7 +70,7 @@ t1.join();
 t2.join();
 \end{cpp}
 
-The std::counting\_semaphore prepareSignal (line 1) can have the values 0 and 1. In the concrete example, it’s initialized with 0. This means that the call prepareSignal.release() sets the value to 1 (line 2) and unblocks the call prepareSignal.acquire() (line 3).
+std::count\_semaphore prepareSignal(第一行)可以有值0和1。在具体示例中，初始化为0。所以，调用prepareSignal.release()将该值设置为1(第2行)，并解除调用prepareSignal.acquire()(第3行)的阻塞。
 
 \myGraphic{0.6}{content/chapter19/images/11.jpg}{}
 

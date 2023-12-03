@@ -1,6 +1,6 @@
-The additional functionality of the cooperatively joining thread is based on the std::stop\_token, the std::stop\_callback, and the std::stop\_source. The following program should give you a general idea.
+汇入线程的附加功能基于std::stop\_token、std::stop\_callback和std::stop\_source。下面的代码会给让你有一个大致的概念。
 
-\filename{Interrupt an non-interruptable and interruptable std::jthread}
+\filename{中断不可中断和可中断的std::jthread}
 
 \begin{cpp}
 // interruptJthread.cpp
@@ -42,28 +42,28 @@ interruptable.request_stop();
 ...
 \end{cpp}
 
-I start in the main program the two threads nonInterruptable and interruptable ((1) and (2)). In contrast to the thread nonInterruptable, the thread interruptable gets a std::stop\_token and uses it in (3) to check if it was interrupted: stoken.stop\_requested(). In case of an interrupt, the lambda function returns, and the thread ends. The call interruptable.request\_stop() (4) triggers the end of the thread. This does not hold for the previous call nonInterruptable.request\_stop(), which does not have an effect.
+主程序中启动了两个线程nonInterruptable和interruptable((1)和(2))。与线程nonInterruptable相反，线程interruptable获得一个std::stop\_token，并在(3)中使用它来检查它是否被中断:stoken\_stop\_requested()。中断的情况下，Lambda函数返回，线程结束。调用interruptable.request\_stop()(4)触发线程的结束。这并不适用于之前的调用nonInterruptable.request\_stop()，后者没有效果。
 
 \myGraphic{0.6}{content/chapter19/images/3.jpg}{}
 
 
-\mySamllsection{std::stop\_token, std::stop\_source, and std::stop\_callback}
+\mySamllsection{std::stop\_token, std::stop\_source 和 std::stop\_callback}
 
-A stop\_token, a std::stop\_callback, or a std::stop\_source enables it to asynchronously request execution to stop or ask if an execution gets a stop signal. The std::stop\_token can be passed to an operation and afterward be used to actively poll the token for a stop request or to register a callback via std::stop\_callback. The std::stop\_source sents the stop request. This signal affects all associated std::stop\_token. The three classes std::stop\_source, std::stop\_token, and std::stop\_callback share the ownership of an associated stop state. The calls request\_stop(), stop\_requested(), and stop\_possible() are atomic operations.
+stop\_token、std::stop\_callback或std::stop\_source使其能够异步请求执行停止或询问执行是否获得停止信号。std::stop\_token可以传递给操作，然后用于主动轮询令牌以获得停止请求或通过std::stop\_callback注册回调。std::stop\_source发送停止请求，此信号影响所有相关的std::stop\_token。std::stop\_source、std::stop\_token和std::stop\_callback这三个类共享一个相关停止状态的所有权。调用request\_stop()、stop\_requested()和stop\_possible()是原子操作。
 
-The components std::stop\_source and std::stop\_token provide the following attributes for stop handling.
+组件std::stop\_source和std::stop\_token为停止处理提供了以下属性。
 
-\filename{Constructors of std::stop\_source}
+\filename{std::stop\_source的构造函数}
 
 \begin{cpp}
 stop_source();
 explicit stop_source(std::nostopstate_t) noexcept;
 \end{cpp}
 
-The default-constructed std::stop\_source gets a stop-source. The constructor taking std::nostopstate\_t constructs an empty std::stop\_source without an associated stop-state.
+默认构造的std::stop\_source获得一个停止源。接受std::nostopstate\_t参数的构造函数构造了一个空的std::stop\_source，没有关联的停止状态。
 
 \begin{center}
-Member functions of std::stop\_source src
+std::stop\_source的成员函数
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -71,27 +71,27 @@ Member functions of std::stop\_source src
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-\textbf{Member function} & \textbf{Description}                                                          \\ \hline
+\textbf{成员函数} & \textbf{描述}                                                          \\ \hline
 \endfirsthead
 %
 \endhead
 %
 src.get\_token() &
-\begin{tabular}[c]{@{}l@{}}If stop\_possible(), returns a stop\_token for the associated stop-state.\\ Otherwise, it returns a default-constructed(empty) stop\_token.\end{tabular} \\ \hline
-src.stop\_possible()     & true if src can be requested to stop.                                         \\ \hline
-src.stop\_requested()    & true if stop\_possible() and request\_stop() was called by one of the owners. \\ \hline
+\begin{tabular}[c]{@{}l@{}}若stop\_possible()，则返回一个对应停止状态的stop\_token。\\ 否则，返回一个默认构造的(空)stop\_token。\end{tabular} \\ \hline
+src.stop\_possible()     & 若src可以请求停止，则为true。                                         \\ \hline
+src.stop\_requested()    & 若其中一个所有者调用stop\_possible()和request\_stop()，则为true。 \\ \hline
 src.request\_stop() &
-\begin{tabular}[c]{@{}l@{}}Calls a stop request if stop\_possible() and !stop\_requested().\\ Otherwise, the call has no effect.\end{tabular} \\ \hline
+\begin{tabular}[c]{@{}l@{}}若stop\_possible()和!stop\_requested()，调用一个停止请求。\\ 否则，调用无效。\end{tabular} \\ \hline
 \end{longtable}
 
 
-src.stop\_possible() means that src has an associated stop-state. src.stop\_requested() returns true when src has an associated stop-state and was requested to stop before. src.request\_stop() is successful and returns true if src has an associated stop-state and has received a stop request.
+src.stop\_possible()表示具有关联的停止状态。src.stop\_requested()在具有关联的停止状态,并且之前被请求停止时返回true。src.request\_stop()成功，若具有相关的停止状态并已接收到停止请求，则返回true。
 
-The call src.get\_token() returns the stop token stoken. Thanks to stoken, you can check if a stop request has been made or can be made for its associated stop source src. The stop token stoken observes the stop source src.
+调用src.get\_token()返回停止令牌。有了令牌，就可以检查是否已经发出停止请求，或者是否可以针对其关联的停止源src发出停止请求。停止令牌符号观察停止源src。
 
 
 \begin{center}
-Member functions of std::stop\_token stoken
+std::stop\_token stoken的成员函数
 \end{center}
 
 % Please add the following required packages to your document preamble:
@@ -99,20 +99,20 @@ Member functions of std::stop\_token stoken
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 \hline
-\textbf{Member function} & \textbf{Description}                                                                                                                   \\ \hline
+\textbf{成员函数} & \textbf{描述}                                                                                                                   \\ \hline
 \endfirsthead
 %
 \endhead
 %
-src.stop\_possible()     & Returns true if stoken has an associated stop-state.                                                                                   \\ \hline
-src.stop\_requested()    & \begin{tabular}[c]{@{}l@{}}true if request\_stop() was called on the accociated std::stop\_source src,\\ otherwise false.\end{tabular} \\ \hline
+src.stop\_possible()     & 若stoken有关联的停止状态，则返回true。                                                                                   \\ \hline
+src.stop\_requested()    & \begin{tabular}[c]{@{}l@{}}若在相应的std::stop\_source src上调用了request\_stop()，则返回true;\\ 否则，返回false.\end{tabular} \\ \hline
 \end{longtable}
 
-A default-constructed stop token has no associated stop state. stoken.stop\_possible also returns true if the stop request has already been made. stoken.stop\_requested() returns true when the stop token has an associated stop-state and has already received a stop request.
+默认构造的停止令牌没有关联的停止状态。若停止请求已经发出，stoken.stop\_possible()也返回true。stoken.stop\_requested()在停止令牌具有关联的停止状态，并且已经接收到停止请求时返回true。
 
-If the std::stop\_token should be temporarily disabled, you can replace it with a default constructed token. A default constructed token has no associated stop-state. The following code snippet shows how to disable and enable a thread’s capability to accept stop requests.
+若std::stop\_token应该暂时禁用，可以用默认构造的token替换它。默认构造的令牌没有关联的停止状态。下面的代码片段展示了如何禁用和启用线程接受停止请求的能力。
 
-\filename{Temporarily disable a stop token}
+\filename{暂时禁用停止令牌}
 
 \begin{cpp}
 std::jthread jthr([](std::stop_token stoken) {
@@ -125,7 +125,7 @@ std::jthread jthr([](std::stop_token stoken) {
 }
 \end{cpp}
 
-std::stop\_token interruptDisabled has no associated stop-state. This means the thread jthr can accept stop requests in all lines except lines (1) and (2).
+std::stop\_token interruptDisabled没有关联的停止状态，所以线程jthr可以接受除(1)和(2)行以外的所有行中的停止请求。
 
 
 

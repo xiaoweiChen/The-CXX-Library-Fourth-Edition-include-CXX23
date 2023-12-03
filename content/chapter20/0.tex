@@ -1,32 +1,32 @@
-\myGraphic{0.6}{content/chapter20/images/1.jpg}{Cippi waters the flowers}
+\myGraphic{0.6}{content/chapter20/images/1.jpg}{Cippi在浇花}
 
-We don’t get with C++20 concrete coroutines; we have with C++20 a framework for implementing coroutines. In C++23, we have the first concrete coroutine with std::generator in the ranges library. This chapter gives you only a rough idea of the challenging coroutine framework.
+C++20没有具体的协程，只有一个实现协同程序的框架。C++23中，在范围库中有了第一个使用std::generator的具体协程。本章只展示一个具有挑战性的协程框架的大致概念。
 
-Coroutines are functions that can suspend and resume their execution while keeping their state. To achieve this, a coroutine consists of three parts: the promise object, the coroutine handle, and the coroutine frame.
+协程是可以在保持状态的情况下暂停和恢复执行的函数。为了实现这一点，协程由三部分组成:promise对象、协程句柄和协程框架。
 
 \begin{itemize}
 \item 
-The promise object is manipulated from within the coroutine and returns its result via the promise object.
+promise对象在协程中被操作，并通过promise对象返回结果。
 
 \item 
-The coroutine handle is a non-owning handle to resume or destroy the coroutine frame from the outside.
+协程句柄是一个非拥有的句柄，用于从外部恢复或销毁协程帧。
 
 \item 
-The coroutine frame is an internal, typically heap-allocated state. It consists of the already mentioned promise object, the coroutine’s copied parameters, the representation of the suspensions point, local variables whose lifetime ends before the current suspension point, and local variables whose lifetime exceeds the current suspension point.
+协程帧是一个内部的、典型的堆分配状态，由前面提到的promise对象、协程的复制参数、挂起点的表示、生存期在当前挂起点之前结束的局部变量，以及生命周期超过当前挂起点的局部变量组成。
 \end{itemize}
 
-Two requirements are necessary to optimize the allocation of the coroutine: 
+优化协程的分配有两个必要条件:
 
-A function that uses the keywords co\_return instead of return, co\_yield, or co\_await becomes a coroutine implicitly.
+使用关键字co\_return而不是return、co\_yield或co\_await的函数隐式地成为协程。
 
-The new keywords extend the execution of C++ functions with two new concepts.
+新的关键字用两个新概念扩展了C++函数的执行。
 
 \noindent
-\\\textbf{co\_yield expression}
+\\\textbf{co\_yield 表达式}
 
-Allows it to write a generator function. The generator function returns a new value each time. A generator function is a data stream from which you can pick values. The data stream can be infinite.
+允许编写生成器函数。生成器函数每次都返回一个新值。生成器函数是一个数据流，可以从中选择值。数据流可以是无限的。
 
-\filename{A generator}
+\filename{生成器}
 
 \begin{cpp}
 Generator<int> getNext(int start = 0, int step = 1) noexcept {
@@ -39,11 +39,11 @@ Generator<int> getNext(int start = 0, int step = 1) noexcept {
 \end{cpp}
 
 \noindent
-\\\textbf{co\_await expression}
+\\\textbf{co\_await 表达式}
 
-Suspends and resumes the execution of the expression. If you use the co\_await expression in a function func, the call auto getResult = func() does not block if the function’s result is unavailable. Instead of resource-consuming blocking, you have resource-friendly waiting. The expression has to be a so-called awaitable expression and must support the following three functions await\_ready, await\_suspend, and await\_resume.
+挂起并恢复表达式的执行。若在函数func中使用co\_await表达式，则如果函数的结果不可用，则调用auto getResult = func()不会阻塞。而不是消耗资源的阻塞，是资源友好的等待。表达式必须是一个所谓的可等待表达式，并且必须支持以下三个函数await\_ready、await\_suspend和await\_resume。
 
-\filename{A coroutine}
+\filename{一个协程}
 
 \begin{cpp}
 Acceptor acceptor{443};
@@ -56,7 +56,7 @@ while (true){
 }
 \end{cpp}
 
-The awaitable expression expr in the co\_await expr has to implement the functions await\_ready, await\_suspend, and await\_resume.
+co\_await expr中的可等待表达式expr必须实现await\_ready、await\_suspend和await\_resume函数。
 
 
 
