@@ -1,4 +1,4 @@
-可以使用\href{http://en.cppreference.com/w/cpp/utility/tuple}{std::tuple}创建任意长度和类型的元组。类模板需要头文件<tuple>。std::tuple是std::pair的泛化形式。包含两个元素和对的元组可以相互转换。与std::pair一样，元组也有一个默认构造函数、一个复制构造函数和一个移动构造函数。
+使用\href{http://en.cppreference.com/w/cpp/utility/tuple}{std::tuple}可以创建任意长度和类型的元组。类模板需要头文件<tuple>。std::tuple是std::pair的泛化形式。包含两个元素和对的元组可以相互转换。与std::pair一样，元组也有一个默认构造函数、一个复制构造函数和一个移动构造函数。
 
 可以使用std::swap函数交换元组。std::get可以访问元组的第i个元素:std::get<i-1>(t)。通过std::get<type>(t)，可以直接引用类型type的元素。
 
@@ -6,7 +6,7 @@
 
 \mySamllsection{std::make\_tuple}
 
-辅助函数\href{http://en.cppreference.com/w/cpp/utility/tuple/make_tuple}{std::make\_tuple}提供了一种创建元组的方便方法。不必指定类型，编译器会自动推导出它们。
+辅助函数\href{http://en.cppreference.com/w/cpp/utility/tuple/make_tuple}{std::make\_tuple}提供了一种创建元组的方便方法。不必指定类型，编译器会自动推导出来。
 
 \filename{辅助函数std::make\_tuple}
 

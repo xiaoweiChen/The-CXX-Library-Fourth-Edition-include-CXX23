@@ -1,8 +1,8 @@
-新的C++17数据类型std::any、std::optional和std::variant都基于 \href{http://www.boost.org/}{Boost库}。
+新的C++17数据类型std::any、std::optional和std::variant都基于\href{http://www.boost.org/}{Boost库}。
 
 \mySamllsection{std::any}
 
-\href{http://en.cppreference.com/w/cpp/utility/any}{std::any} 为任何可复制构造类型的单个值的类型安全容器，该类型需要头文件<any>。有几种方法可以创建std::any容器，可以使用各种构造函数或工厂函数std::make\_any。any.emplace允许将一个值构造为任何值。any.reset能够销毁所包含的对象。若想知道容器any是否有值，请使用成员函数any.has\_value，也可以通过any.type获得容器对象的类型id。因为泛型函数std::any\_cast，可以访问所包含的对象。若指定了错误的类型，就会得到std::bad\_any\_cast异常。下面的代码片段显示了std::any的基本用法。
+\href{http://en.cppreference.com/w/cpp/utility/any}{std::any}为任何可复制构造类型的单个值的类型安全容器，该类型需要头文件<any>。有几种方法可以创建std::any容器，可以使用各种构造函数或工厂函数std::make\_any。any.emplace允许将一个值构造为任何值，any.reset能够销毁所包含的对象。若想知道容器std::any是否有值，请使用成员函数any.has\_value，也可以通过any.type获得容器对象的类型id。因为泛型函数std::any\_cast，可以访问所包含的对象。若指定了错误的类型，就会得到std::bad\_any\_cast异常。下面的代码片段显示了std::any的基本用法。
 
 \filename{std::any}
 
@@ -24,27 +24,23 @@ std::cout << anyVec[0].type().name(); // b
 std::cout << anyVec[1].type().name(); // i
 \end{cpp}
 
-代码段定义了一个std::vector<std::any>。要获得其元素，必须使用std::any\_cast。如前所述，若使用了错误的类型，就会得到std::bad\_any\_cast异常。
+这里定义了一个std::vector<std::any>。要获得其元素，必须使用std::any\_cast。若使用了错误的类型，就会得到std::bad\_any\_cast异常。
 
 \begin{myNotic}{typeid的字符串表示形式}
-	
 类型标识符的字符串表示形式是实现定义的。若anyVec[1]是int类型，则表达式anyVec[1].type().name()将使用\href{https://gcc.gnu.org/}{GCC C++编译器}返回i，使用\href{https://en.wikipedia.org/wiki/Microsoft_Visual_C%2B%2B}{Microsoft Visual C++编译器}返回int。
-
 \end{myNotic}
 
 std::any可以拥有任意类型的对象；std::optional可以有值，也可以没有值。
 
 \mySamllsection{std::optional}
 
-\href{http://en.cppreference.com/w/cpp/utility/optional}{std::optional} 对于可能有结果的数据库查询等计算来说非常合适，这个类型需要头文件<optional>。
+\href{http://en.cppreference.com/w/cpp/utility/optional}{std::optional}对于可能有结果的数据库查询等计算来说非常合适，这个类型需要头文件<optional>。
 
-\begin{myTip}{不要用“没有结果”}
-	
-C++17之前，通常使用一个惟一值(如空指针、空字符串或惟一整数)来表示结果的缺失。对于类型系统，必须使用常规值(例如空字符串)来定义不规则值。这些唯一的值或没有结果很容易出错，因为必须用类型系统来检查返回值。
-	
+\begin{myTip}{不要定义“无结果”}
+C++17之前，通常使用惟一值(如空指针、空字符串或惟一整数)来表示结果的缺失。对于类型系统，必须使用常规值(例如空字符串)来定义不规则值。这些唯一的值或没有结果很容易出错，因为必须用类型系统来检查返回值。
 \end{myTip}
 
-各种构造函数和方便的函数std::make\_optional允许定义一个可选对象opt，带或不带值。Opt.emplace将在原地构造包含的值，而opt.reset将销毁容器值。可以显式地询问std::optional容器是否有值，或者可以在逻辑表达式中检查它。Opt.value返回值，而Opt.value \_or返回值或默认值。若opt没有包含值，opt.value将抛出std::bad\_optional\_access异常。
+各种构造函数和方便的函数std::make\_optional允许定义一个std::optional对象opt，带或不带值。opt.emplace将在原地构造包含的值，而opt.reset将销毁容器值。可以显式地询问std::optional容器是否有值，或者可以在逻辑表达式中检查它。opt.value返回值，而opt.value\_or返回值或默认值。若opt没有包含值，opt.value将抛出std::bad\_optional\_access异常。
 
 下面是一个使用std::optional的简短示例。
 
@@ -82,7 +78,7 @@ if (!myEmptyInt){
 
 函数getFirst中使用std::optional。若第一个元素存在，getFirst返回该元素。若没有，将得到一个std::optional<int>对象。主函数有两个vector。两者都调用getFirst并返回一个std::optional对象。在myInt的情况下，对象有一个值;myEmptyInt的情况下，该对象没有值。程序显示myInt和myEmptyInt的值。myInt.value\_or(2017)返回值，但myEmptyInt.value\_or(2017)会返回默认值。
 
-C++23中，std::optional扩展为一元操作opt.and\_then、opt.transform和opt.or\_else。and\_then返回给定函数调用的结果(若存在)，或者返回一个空的std::optional。transform返回一个std::optional，其中包含转换后的值，或者一个空std::optional。此外，opt.or\_else如果包含值或给定函数的结果，则返回std::optional。
+C++23中，std::optional扩展为一元操作opt.and\_then、opt.transform和opt.or\_else。and\_then返回给定函数调用的结果(若存在)，或者返回一个空的std::optional。transform返回一个std::optional，其中包含转换后的值，或者一个空std::optional。此外，opt.or\_else若包含值或给定函数的结果，则返回std::optional。
 
 这些一元操作支持std::optional上的复合操作:
 
@@ -121,7 +117,7 @@ int main() {
 }
 \end{cpp}
 
-基于范围的for循环(第22行)遍历std::vector<std::optional<std::string>{}>。首先，getInt函数将每个元素转换为整数(第23行)，为其添加100(第24行)，将其转换回字符串(第25行)，最后显示字符串(第27行)。若初始转换为int失败，则返回字符串Error(第26行)并显示。
+基于范围的for循环(第22行)遍历std::vector<std::optional<std::string>{}>。getInt函数将每个元素转换为整数(第23行)，为其添加100(第24行)，将其转换回字符串(第25行)，最后显示字符串(第27行)。若初始转换为int失败，则返回字符串Error(第26行)并显示。
 
 \mySamllsection{std::variant}
 
@@ -204,7 +200,7 @@ for (auto& v: vecVariant){
 
 本例中的每个variant实例都可以保存char、long、float、int、double或long long类型。第一个访问器[](auto\&\& arg)\{std::cout <{}< arg <{}< " ";\}将输出各种变量。第二个访问器std::cout <{}< typeid(arg).name() <{}< " ";\}将显示其类型。
 
-现在我想总结这些变量的元素，在编译时需要正确的结果类型。来自类型特征库的std::common\_type将其提供。common\_type给出了所有char、long、float、int、double和long long类型都可以隐式转换的类型。res\{\}中的最后一个\{\}导致其初始化为0.0，Res是double类型。访问者[\&res](auto\&\& arg)\{arg *= 2;\}计算总和，下面一行显示相应结果。
+现在我想对这些变量的元素乘2，在编译时需要正确的结果类型。来自类型特征库的std::common\_type将其提供。common\_type给出了所有char、long、float、int、double和long long类型都可以隐式转换的类型。res\{\}中的最后一个\{\}导致其初始化为0.0，Res是double类型。访问者[\&res](auto\&\& arg)\{arg *= 2;\}计算总和，下面一行显示相应结果。
 
 
 

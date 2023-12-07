@@ -1,11 +1,11 @@
-引用包装器是类型为引用的\href{http://en.cppreference.com/w/cpp/concept/CopyConstructible}{复制构造函数}和\href{http://en.cppreference.com/w/cpp/concept/CopyAssignable}{复制赋值}包装器，它在头文件<functional>中定义。您有一个行为类似于引用但可以复制的对象。与经典引用相反，\href{http://en.cppreference.com/w/cpp/utility/functional/reference_wrapper}{std::reference\_wrapper}对象支持两个额外的用例:
+引用包装器是类型为引用的\href{http://en.cppreference.com/w/cpp/concept/CopyConstructible}{复制构造函数}和\href{http://en.cppreference.com/w/cpp/concept/CopyAssignable}{复制赋值}包装器，其在头文件<functional>中定义，其行为类似于引用，但可以复制的对象。与引用相反，\href{http://en.cppreference.com/w/cpp/utility/functional/reference_wrapper}{std::reference\_wrapper}对象支持两个额外的用例:
 
 \begin{itemize}
 \item 
 可以在标准模板库的容器中使用它们。std::vector<std::reference\_wrapper<int>{}> myIntRefVector
 
 \item 
-可以复制具有std::reference\_wrapper对象的类的实例。通常，这不适用于引用。
+可以复制具有std::reference\_wrapper对象的类的实例，但这不适用于引用。
 \end{itemize}
 
 get成员函数允许访问引用:myInt.get()，可以使用引用包装器来封装和调用可调用对象。
@@ -61,7 +61,7 @@ doubleMe(std::ref(i));
 std::cout << i << '\n'; // 2
 \end{cpp}
 
-可以使用std::string的常量引用和std::cref(s)封装的非常量std::string来调用invokeMe函数。当在辅助函数std::ref中包装变量i时，将使用引用调用函数模板doubleMe。因此，变量i被加倍。
+可以使用std::string的常量引用和std::cref(s)封装的非常量std::string来调用invokeMe函数。当在辅助函数std::ref中包装变量i时，将使用引用调用函数模板doubleMe，变量i加倍。
 
 
 

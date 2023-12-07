@@ -1,8 +1,7 @@
 \href{http://en.cppreference.com/w/cpp/header/type_traits}{类型特征库}能够在编译时检查、比较和修改类型，所以在运行时上没有开销。使用类型特征库有两个原因:优化和正确性。优化是因为类型特征库的自省功能，可使自动选择更快的代码成为可能。正确性，可以指定在编译时检查代码的要求。
 
 \begin{myTip}{类型特征库和static\_assert是一对强大的组合}
-	
-类型特征库和函数static\_assert是一对强大的组合。一方面，类型特征库的函数在编译时提供类型信息;另一方面，static\_assert函数在编译时检查给定的信息。这些检查在运行时造成开销。
+一方面，类型特征库的函数在编译时提供类型信息;另一方面，static\_assert函数在编译时检查给定的信息。这些检查在运行时的开销。
 
 \begin{cpp}
 #include <type_traits>
@@ -25,7 +24,7 @@ GCC编译器退出函数调用fac(10.1)。编译时的消息是，T是double类�
 
 \mySamllsection{主要类型类别}
 
-有14种不同的类型类别，是完全且不重叠的。所以每个类型只是一个类型类别的成员。若为类型检查类型类别，则请求独立于const或volatile限定符。
+有14种不同的类型类别，是完全且不重叠的，每个类型只是一个类型类别的成员。若为类型检查类型类别，则请求独立于const或volatile限定符。
 
 \begin{cpp}
 template <class T> struct is_void;
@@ -103,13 +102,13 @@ cout << std::is_rvalue_reference<int&&>::value; // true
 %
 \endhead
 %
-is\_arithmetic                     & is\_floating\_point or is\_integral            \\ \hline
-is\_fundamental                    & is\_arithmetic or is\_void                     \\ \hline
-is\_object          & is\_arithmetic or is\_enum or is\_pointer or is\_member\_pointer                      \\ \hline
-is\_reference                      & is\_lvalue\_reference or is\_rvalue\_reference \\ \hline
-is\_compound                       & complement of is\_fundamental                  \\ \hline
-is\_member\_pointer & is\_member\_object\_pointer or is\_member\_function\_pointer                          \\ \hline
-is\_scalar          & is\_arithmetic or is\_enum or is\_pointer or is\_member\_pointer or is\_null\_pointer \\ \hline
+is\_arithmetic                     & is\_floating\_point 或 is\_integral            \\ \hline
+is\_fundamental                    & is\_arithmetic 或 is\_void                     \\ \hline
+is\_object          & is\_arithmetic 或 is\_enum 或 is\_pointer 或 is\_member\_pointer                      \\ \hline
+is\_reference                      & is\_lvalue\_reference 或 is\_rvalue\_reference \\ \hline
+is\_compound                       &  is\_fundamental的补充                  \\ \hline
+is\_member\_pointer & is\_member\_object\_pointer 或 is\_member\_function\_pointer                          \\ \hline
+is\_scalar          & is\_arithmetic 或 is\_enum 或 is\_pointer 或 is\_member\_pointer 或 is\_null\_pointer \\ \hline
 \end{longtable}
 
 \mySamllsection{类型属性}
@@ -280,11 +279,11 @@ template <class... T> void_t;
 template <class... T> type_identity;
 \end{cpp}
 
-可以使用std::enable\_if有条件地隐藏函数重载或模板特化，以避免重载解析。条件std::condition在编译时为您提供了三元操作符，而std::common\_type提供了所有类型中的公共类型。std::common\_type、std::common\_reference、std::basic\_common\_reference、std::void\_t、std::type\_identity为\href{http://en.cppreference.com/w/cpp/language/parameter_pack}{可变参数模板}，所以类型参数的数量可是任意的。
+可以使用std::enable\_if有条件地隐藏函数重载或模板特化，以避免重载解析。条件std::condition在编译时提供了三元操作符，而std::common\_type提供了所有类型中的公共类型。std::common\_type、std::common\_reference、std::basic\_common\_reference、std::void\_t、std::type\_identity为\href{http://en.cppreference.com/w/cpp/language/parameter_pack}{可变参数模板}，所以类型参数的数量可以任意。
 
 \mySamllsection{操作特征}
 
-函数std:: connection、std::disjunction和std::negation支持类型特征函数的逻辑组合。它们是可变参数模板。
+函数std:: connection、std::disjunction和std::negation支持类型特征函数的逻辑组合，其是可变参数模板。
 
 \begin{myTip}{C++有::type和::value的简写}
 	
@@ -298,7 +297,7 @@ template <class... T> type_identity;
 
 函数std::is\_pointer\_interconvertible\_with\_class检查一个类型的对象是否与该类型的指定子对象进行了指针互转换，函数std::is\_corresponding\_member检查两个指定成员在两个指定类型的公共初始子序列中是否相互对应。
 
-\mySamllsection{Const求值上下文}
+\mySamllsection{const求值}
 
 std::is\_constant\_evaluate可以检测函数调用是否在编译时发生。
 

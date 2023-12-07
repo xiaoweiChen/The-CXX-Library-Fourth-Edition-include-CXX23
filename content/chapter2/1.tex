@@ -2,9 +2,9 @@
 
 \mySamllsection{std::min, std::max和std::minmax}
 
-在header <algorithm>中定义的函数\href{http://en.cppreference.com/w/cpp/algorithm/min}{std::min}、\href{http://en.cppreference.com/w/cpp/algorithm/max}{std::max}和\href{http://en.cppreference.com/w/cpp/algorithm/minmax}{std::minmax}作用于值和初始化器列表，并返回所请求的值作为结果。在std::minmax的情况下，了得到一个std::pair。这对的第一个元素是最小值;第二个是值的最大值。默认情况下使用less操作符(<)，但您可以应用比较操作符。这个函数需要两个参数并返回一个布尔值。返回true或false的函数称为谓词。
+头文件<algorithm>中定义的函数\href{http://en.cppreference.com/w/cpp/algorithm/min}{std::min}、\href{http://en.cppreference.com/w/cpp/algorithm/max}{std::max}和\href{http://en.cppreference.com/w/cpp/algorithm/minmax}{std::minmax}作用于值和初始化器列表，并返回所请求的值作为结果。在std::minmax的情况下，返回一个std::pair。这对的第一个元素是最小值;第二个是值的最大值。默认情况下使用less操作符(<)，但可以应用比较操作符。这个函数需要两个参数并返回一个布尔值，返回true或false的函数称为谓词。
 
-\mySamllsection{std::min, std::max和std::minmax}
+\filename{std::min, std::max和std::minmax}
 
 \begin{cpp}
 // minMax.cpp
@@ -64,8 +64,7 @@ minmax(initialiser list, comp) & 根据谓词comp返回初始化项列表的最�
 
 函数std::lerp(a, b, t)计算两个数字的线性插值，需要头文件<cmath>。返回值是a + t(b - a)。
 
-
-\mySamllsection{std::midpoint和std::lerp}
+\filename{std::midpoint和std::lerp}
 
 \begin{cpp}
 // midpointLerp.cpp
@@ -99,13 +98,13 @@ for (auto v: {0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0}) {
 std::cmp_greater( -1, 0u); // false
 \end{cpp}
 
-作为有符号整数的-1会提升为无符号类型，会导致一个令人意外的结果。
+作为有符号整数的-1会提升为无符号类型，会导致令人意外的结果。
 
 \end{myWarning}
 
 \mySamllsection{std::move}
 
-头文件<utility>中定义了函数\href{http://en.cppreference.com/w/cpp/utility/move}{std::move}，授权编译器移动资源。移动语义中，源对象的值移动到新对象中。之后，源处于定义良好但不确定的状态。大多数情况下，这是源的默认状态。通过使用std::move，编译器将源参数转换为右值引用:static\_cast<std::remove\_reference<decltype(arg)>::type\&\&>(arg)。若编译器不能应用移动语义，则会退回到复制语义:
+头文件<utility>中定义了函数\href{http://en.cppreference.com/w/cpp/utility/move}{std::move}，授权编译器移动资源。移动语义中，源对象的值移动到新对象中。之后，源处于定义良好但不确定的状态。通常，这是源的默认状态。通过使用std::move，编译器将源参数转换为右值引用:static\_cast<std::remove\_reference<decltype(arg)>::type\&\&>(arg)。若编译器不能应用移动语义，则会退回到复制语义:
 
 \begin{cpp}
 #include <utility>
@@ -120,13 +119,13 @@ myVec = std::move(myBigVec); // move semantics
 
 \begin{myTip}{移动比复制廉价}
 	
-移动语义有两个优点。首先，使用便宜的移动而不是昂贵的复制通常是一个好主意。因此不需要额外的内存分配和释放。其次，有些对象是不能复制的。例如，线程或锁。
+移动语义有两个优点。首先，使用便宜的移动而不是昂贵的复制通常是一个好主意，不需要额外的内存分配和释放。其次，有些对象是不能复制的。例如，线程或锁。
 
 \end{myTip}
 
 \mySamllsection{std::forward}
 
-头文件<utility>中定义的函数\href{http://en.cppreference.com/w/cpp/utility/forward}{std::forward}能够编写函数模板，这些函数模板可以相同地转发它们的参数。std::forward的典型用例是工厂函数或构造函数。工厂函数创建一个对象，因此应该不加修改地传递其参数。构造函数通常使用实参来初始化具有相同实参的基类。所以std::forward对于泛型库作者来说是一个完美的工具:
+头文件<utility>中定义的函数\href{http://en.cppreference.com/w/cpp/utility/forward}{std::forward}能够编写函数模板，这些函数模板可以相同地转发它们的参数。std::forward的典型用例是工厂函数或构造函数。工厂函数创建一个对象，因此应该不加修改地传递其参数。构造函数通常使用实参来初始化具有相同实参的基类，所以std::forward对于泛型库作者来说是一个完美的工具:
 
 \filename{完美转发}
 
@@ -161,9 +160,7 @@ IntVec intVec= createT<IntVec>(initialiser_list<int>({1, 2, 3}));
 函数模板createT必须以\href{https://isocpp.org/blog/2012/11/universal-references-in-c11-scott-meyers}{通用引用}: args\&\&…args的形式接受参数。通用引用或转发引用是类型演绎上下文中的右值引用。
 
 \begin{myTip}{std::forward支持与可变模板结合使用的完全泛型函数}
-	
 若将std::forward与可变模板一起使用，则可以定义完全泛型的函数模板。函数模板可以接受任意数量的参数，并且不加修改地对其进行转发。
-	
 \end{myTip}
 
 \mySamllsection{std::to\_underlying}

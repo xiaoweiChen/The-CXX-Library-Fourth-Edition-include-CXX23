@@ -1,6 +1,6 @@
 std::expected<T, E>提供了一种存储两个值中的任意一个的方法。std::expected的实例总是保存一个值:要么是类型T的期望值，要么是类型E的非期望值，使用该类型需要头文件<expected>。std::expected可以实现返回值或返回错误的函数，存储值直接在预期对象占用的存储空间中分配，从而不进行动态内存分配。
 
-std::expected有一个类似的接口，比如std::optional。与std::optional相反，std:: expected会返回错误消息。
+std::expected有一个类似的接口，比如std::optional。与std::optional相反，std::expected会返回错误消息。
 
 各种构造函数允许定义具有期望值的预期对象exp。exp.emplace将就地构造包含的值，可以显式地询问std::expected容器是否有值，或者以在逻辑表达式中进行检查。exp.value返回预期值，exp.value\_or返回预期值或默认值。若exp有一个意外值，调用exp.value将抛出std::bad\_expected\_access异常。
 
@@ -51,9 +51,9 @@ int main() {
 
 getInt函数将每个字符串转换为整数，并返回std::expected<int, std::string>。Int表示预期值，std::string表示意外值。两个基于范围的for循环(第22行和第34行)遍历std::vector<std::string>。第一个基于范围的for循环(第22行)中，显示预期值(第25行)或意外值(第28行)。第二个基于范围的for循环(第34行)中，显示预期值或默认值2023(第36行)。
 
-std::expected支持单进操作以方便函数组合:exp.and\_then、exp.transform、exp.or\_else和exp.transform\_error。exp.and\_then返回给定函数调用的结果(若存在)，或者返回一个空std::expected。exp.transform返回一个std::expected，其中包含转换后的值，或者一个空std::expected。此外，若exp.or\_else包含值或给定函数的结果，则返回std:: expected。
+std::expected支持单进操作以方便函数组合:exp.and\_then、exp.transform、exp.or\_else和exp.transform\_error。exp.and\_then返回给定函数调用的结果(若存在)，或者返回一个空std::expected。exp.transform返回一个std::expected，其中包含转换后的值，或者一个空std::expected。若exp.or\_else包含值或给定函数的结果，则返回std::expected。
 
-下面的程序基于前面的程序optionalMonadic.cpp。本质上，std::optional类型可用std:: expected替换。
+下面的程序基于前面的程序optionalMonadic.cpp，std::optional类型可用std::expected替换。
 
 \filename{对std::expected的一元操作}
 
@@ -81,7 +81,7 @@ for (auto s: strings) {
 }
 \end{cpp}
 
-基于范围的for循环(第23行)遍历std::vector<std::string>。首先，getInt函数将每个字符串转换为整数(第24行)，为其添加100(第25行)，将其转换回字符串(第26行)，最后显示字符串(第27行)。若初始转换为int失败，则返回string arg + ": Error"(第14行)并显示。
+基于范围的for循环(第23行)遍历std::vector<std::string>。getInt函数将每个字符串转换为整数(第24行)，为其添加100(第25行)，将其转换回字符串(第26行)，最后显示字符串(第27行)。若初始转换为int失败，则返回string arg + ": Error"(第14行)并显示。
 
 
 

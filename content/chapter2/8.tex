@@ -1,4 +1,6 @@
-\href{http://en.cppreference.com/w/cpp/header/chrono}{时间库}主要由时间点、时间段和时钟三个部分组成。此外，该库还提供了时间功能、日历支持、时区支持，以及输入和输出支持。
+\href{http://en.cppreference.com/w/cpp/header/chrono}{时间库}主要由时间点、时间段和时钟三个部分组成。该库还提供了时间功能、日历支持、时区支持，以及输入和输出支持。
+
+\hspace*{\fill}
 
 \noindent
 \textbf{时间点}
@@ -8,7 +10,7 @@
 \noindent
 \textbf{时间段}
 
-时间持续时间是两个时间点之间的差值，时钟滴答数定义了这个值。
+时间段时间是两个时间点之间的差值，时钟周期数定义了这个值。
 
 \noindent
 \textbf{时钟}
@@ -23,7 +25,7 @@
 \noindent
 \textbf{日历}
 
-Calendar表示各种日历日期，如年、月、工作日或一周的第n天。
+表示各种日历日期，如年、月、工作日或一周的第n天。
 
 \noindent
 \textbf{时区}
@@ -31,21 +33,19 @@ Calendar表示各种日历日期，如年、月、工作日或一周的第n天�
 表示特定于某个地理区域的时间。
 
 \begin{myNotic}{时间库是多线程的关键组件}
-	
 时间库是C++新多线程功能的关键组件，可以将当前线程通过std::this\_thread::sleep\_for(std::chrono::milliseconds(15)设置为15毫秒的睡眠状态，或者尝试获取2分钟的锁:lock。try\_lock\_until(now + std::chrono::minutes(2))。
-	
 \end{myNotic}
 
 
 \mySamllsection{时间点}
 
-时间段是由一段时间组成，定义为某个时间单位的时钟滴答数。时间点由时钟和持续时间组成。这个持续时间可以是正的，也可以是负的。
+时间段是由一段时间组成，定义为某个时间单位的时钟周期数。时间点由时钟和持续时间组成。这个持续时间可以是正的，也可以是负的。
 
 \begin{cpp}
 template <class Clock, class Duration= typename Clock::duration> class time_point;
 \end{cpp}
 
-时钟std::chrono::steady\_clock、std::chrono::high\_resolution\_clock和std::chrono::system没有定义epoch。但是在主流平台上，std::chrono::system的epoch通常定义为1.1.1970。可以计算自1970年1月1日以来的时间，其分辨率为纳秒、秒和分钟。
+时钟std::chrono::steady\_clock、std::chrono::high\_resolution\_clock和std::chrono::system没有定义历元。但是在主流平台上，std::chrono::system的epoch通常定义为1.1.1970。可以计算自1970年1月1日以来的时间，其分辨率为纳秒、秒和分钟。
 
 \filename{自纪元以来的时间}
 
@@ -95,14 +95,13 @@ std::cout << timeInSeconds << '\n'; // 0.0150688800
 
 \mySamllsection{时间段}
 
-时间段是两个时间点之间的差值，时间段以时钟滴答数来衡量。
+时间段是两个时间点之间的差值，时间段以时钟周期数来衡量。
 
 \begin{cpp}
 template <class Rep, class Period = ratio<1>> class duration;
 \end{cpp}
 
 若Rep是浮点数，则时间持续时间支持小数。最重要的时间段在chrono库中定义:
-
 
 \begin{cpp}
 typedef duration<signed int, nano> nanoseconds;
@@ -113,7 +112,7 @@ typedef duration<signed int, ratio< 60>> minutes;
 typedef duration<signed int, ratio<3600>> hours;
 \end{cpp}
 
-一个时间段可以有多长?C++标准保证预定义的时间长度可以存储+/- 292年。可以很容易地定义你的时间长度，就像一个德国学校的小时:typedef std::chrono::duration<double, std::ratio<2700>{}> MyLessonTick。以自然数表示的时间持续时间必须显式地转换为以浮点数表示的时间持续时间，该值将截断:
+时间段可以有多长?C++标准保证预定义的时间长度可以存储+/-292年。可以很容易地定义时间长度，就像一个德国学校的小时:typedef std::chrono::duration<double, std::ratio<2700>{}> MyLessonTick。以自然数表示的时间持续时间必须显式地转换为以浮点数表示的时间持续时间，该值将截断:
 
 \filename{时间段}
 
@@ -193,7 +192,9 @@ std::chrono::nanoseconds  & ns              & 5ns             \\ \hline
 
 \mySamllsection{时钟}
 
-时钟由起点和刻度组成，可以通过成员函数获得当前时间。
+时钟由时间起点和刻度组成，可以通过成员函数获得当前时间。
+
+\hspace*{\fill}
 
 \noindent
 \textbf{std::chrono::system\_clock }
@@ -209,6 +210,8 @@ std::chrono::nanoseconds  & ns              & 5ns             \\ \hline
 \textbf{std::chrono::high\_resolution\_clock }
 
 最精确的系统时间。
+
+\hspace*{\fill}
 
 std::chrono::system\_clock通常指1.1.1970，不能将std::steady\_clock向前或向后调整为与其他两个时钟相反。成员函数to\_time\_t和from\_time\_t可用于在std::chrono::system\_clock和std::time\_t对象之间进行转换。
 

@@ -1,9 +1,9 @@
 
-std::bind、std::bind\_front、std::bind\_back和std::functions这三个函数配合得非常好。std::bind、std::bind\_front或std::bind\_back能够动态地创建新的函数对象，而std::function接受这些临时函数对象并将它们绑定到一个变量。
+std::bind、std::bind\_front、std::bind\_back和std::functions这三个函数可以组合得非常好。std::bind、std::bind\_front或std::bind\_back能够动态地创建新的函数对象，而std::function接受这些临时函数对象并将它们绑定到一个变量。
 
 \begin{myTip}{std::bind, std::bind\_front, std::bind\_back和std::function常常是多余的}
 	
-std::bind和std::function，它们是\href{https://en.wikipedia.org/wiki/C%2B%2B_Technical_Report_1}{TR1}，std::bind\_front和std::bind\_back的一部分，在C++中大多是不必要的。首先，可以使用Lambda来代替std::bind、std::bind\_front、std::bind\_back;其次，可以经常使用auto来代替std::function进行自动类型推断。
+std::bind和std::function，是\href{https://en.wikipedia.org/wiki/C%2B%2B_Technical_Report_1}{TR1}，std::bind\_front和std::bind\_back的一部分，在C++中大多是不必要的。首先，可以使用Lambda来代替std::bind、std::bind\_front、std::bind\_back;其次，可以经常使用auto来代替std::function进行自动类型推断。
 	
 \end{myTip}
 
@@ -55,7 +55,7 @@ function<double(double)> myDiv4 = bind_back(divMe, 10); // 200
 
 \mySamllsection{std::bind\_front (C++20)}
 
-\href{https://en.cppreference.com/w/cpp/utility/functional/bind_front}{std::bind\_front} 从可调用对象创建可调用包装器。调用std::bind\_front(func, arg…)将所有参数arg绑定到func的前端，并返回一个可调用的包装器。
+\href{https://en.cppreference.com/w/cpp/utility/functional/bind_front}{std::bind\_front}从可调用对象创建可调用包装器。调用std::bind\_front(func, arg…)将所有参数arg绑定到func的前端，并返回一个可调用的包装器。
 
 
 \mySamllsection{std::bind\_back (C++23)}
@@ -64,7 +64,7 @@ function<double(double)> myDiv4 = bind_back(divMe, 10); // 200
 
 \mySamllsection{std::function}
 
-\href{http://en.cppreference.com/w/cpp/utility/functional/function}{std::function} 可以在变量中存储可调用对象，是一个多态函数包装器。可调用对象可以是Lambda函数、函数对象或函数。若必须显式指定可调用对象的类型，则std::function是必需的，不能用auto取代。
+\href{http://en.cppreference.com/w/cpp/utility/functional/function}{std::function}可以在变量中存储可调用对象，是一个多态函数包装器。可调用对象可以是Lambda函数、函数对象或函数。若必须显式指定可调用对象的类型，则std::function是必需的，不能用auto取代。
 
 \filename{使用std::function的调度表}
 
