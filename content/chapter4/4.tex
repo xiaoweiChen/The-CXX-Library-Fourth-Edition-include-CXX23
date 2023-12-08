@@ -12,7 +12,7 @@ std::list有以下几个特点:
 不支持随机访问。
 
 \item
-访问元素的速度很慢，因为在最坏的情况下，必须遍历整个列表。
+访问元素的速度很慢，最坏的情况下，必须遍历整个列表。
 
 \item
 若迭代器指向正确的位置，添加或删除元素很快。
@@ -37,7 +37,7 @@ std::list的特殊成员函数
 %
 \endhead
 %
-lis.merge(c)              & 将有序列表c合并到有序列表list中，使list保持有序。 \\ \hline
+lis.merge(c)              & 将有序列表c合并到有序列表list中，list保持有序。 \\ \hline
 lis.merge(c, op)     & 将有序列表c合并到有序列表list中，使list保持有序。其使用op作为排序标准。 \\ \hline
 lis.remove(val)           & 从列表中删除值为val的所有元素。                                \\ \hline
 lis.remove\_if(pre)       & 从列表中删除所有满足谓词pre的元素。                 \\ \hline
@@ -46,7 +46,7 @@ lis.unique()              & 移除相同值的相邻元素。                   
 lis.unique(pre)           & 移除满足谓词pre的相邻的元素。                     \\ \hline
 \end{longtable}
 
-下面是代码段中展示如何使用其成员函数。
+下面的代码段中展示如何使用其成员函数。
 
 \filename{std::list}
 

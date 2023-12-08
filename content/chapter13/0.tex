@@ -6,7 +6,7 @@
 
 
 \begin{myTip}{字符串类似于std::vector}
-字符串感觉像是包含字符的std::vector，支持一个相似的接口。所以，可使用标准模板库的算法来操作字符串。
+字符串感觉像是包含字符的std::vector，支持一个相似的接口，可使用标准模板库的算法来操作字符串。
 
 下面的代码段使用std::string命名，值为RainerGrimm。我使用STL算法std::find\_if来获取大写字母，然后将我的名字和姓氏提取到变量firstName和lastName中。表达式name.begin()+1表明，字符串支持随机访问迭代器:
 
@@ -28,7 +28,7 @@ if (strIt != name.end()){
 \end{cpp}
 \end{myTip}
 
-字符串是由其字符、字符特征和分配器参数化的类模板。字符特征和分配器都有默认值。
+字符串是由其字符、字符特征和分配器参数化的类模板，字符特征和分配器都有默认值。
 
 \begin{cpp}
 template <typename charT,
@@ -47,7 +47,7 @@ typedef basic_string<char32_t> u32string;
 \end{cpp}
 
 \begin{myTip}{std::string是字符串}
-若在C++中谈论字符串，有99\%的概率引用字符类型char的特化std::basic\_string。这也适用于本书。
+若在C++中谈论字符串，有99\%的概率引用字符类型char的特化std::basic\_string，这也适用于本书。
 \end{myTip}
 
 

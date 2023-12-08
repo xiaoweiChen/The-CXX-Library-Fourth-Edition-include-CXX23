@@ -90,7 +90,7 @@ std::cout << "5e10: " << std::fixed << StringTo<double>("5e10"); // 50000000000
 无论使用文件流作为输入或输出，还是使用字符类型char或wchar\_t，都有各种文件流类:
 
 \noindent
-\\\textbf{std::ifstream 和 std::wifstream.}
+\\\textbf{std::ifstream 和 std::wifstream}
 
 用于char和wchar\_t类型输入数据的文件流。
 
@@ -153,14 +153,6 @@ out << in.rdbuf();
 用C++和C打开一个文件
 \end{center}
 
-文件必须以模式“r”和“r+”存在。相反，文件是用“a”和“w+”创建的，该文件将被“w”覆盖。
-
-可以显式地管理文件流的生命周期。
-
-\begin{center}
-管理文件流的生命周期
-\end{center}
-
 % Please add the following required packages to your document preamble:
 % \usepackage{longtable}
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
@@ -176,6 +168,30 @@ std::ios::out                              & 写入文件            & "w"      
 std::ios::out|std::ios::app                & 追加到文件。       & "a"             \\ \hline
 std::ios::in|std::ios::out                 & 读取并写入文件。 & "r+"            \\ \hline
 std::ios::in|std::ios::out|std::ios::trunc &写入和读取文件。 & "w+"            \\ \hline
+\end{longtable}
+
+文件必须以模式“r”和“r+”存在。相反，文件是用“a”和“w+”创建的，该文件将被“w”覆盖。
+
+可以显式地管理文件流的生命周期。
+
+\begin{center}
+管理文件流的生命周期
+\end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{longtable}
+% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\begin{longtable}[c]{|l|l|}
+\hline
+\textbf{函数}            & \textbf{描述}                                  \\ \hline
+\endfirsthead
+%
+\endhead
+%
+infile.open(name)        & 打开文件name以供读取。                       \\ \hline
+infile.open(name, flags) & 打开带有flags的文件name以供读取。 \\ \hline
+infile.close()           & 关闭文件。                                 \\ \hline
+infile.is\_open()        & 检查文件是否已打开。                           \\ \hline
 \end{longtable}
 
 \mySamllsection{随机访问}
@@ -366,7 +382,7 @@ std::cin.clear();
 std::cout << std::cin.fail() << '\n'; // false
 \end{cpp}
 
-字符a的输入导致流std::cin处于std::ios::failbit状态。因此不能显示a和std::cin.fail()，首先，必须初始化流std::cin。
+字符a的输入导致流std::cin处于std::ios::failbit状态。因此不能显示a和std::cin.fail()，必须首先初始化流std::cin。
 
 
 

@@ -1,9 +1,8 @@
 C++23中的四个关联容器std::flat\_map、std::flat\_multimap、std::flat\_set和std::set\_multiset是对有序关联容器std::map、std::multimap、std::set和std::multiset的临时替换。更准确地说，std::flat\_map是std::map的临时替代，std::flat\_multimap是std::multimap的临时替代，依此类推。
 
-平序关联容器的键和值需要单独的序列容器。该序列容器必须支持随机访问迭代器。默认情况下，会使用std::vector，但对于std::array或std::deque也是有效的。
+平序关联容器的键和值需要单独的序列容器，该序列容器必须支持随机访问迭代器。默认情况下，会使用std::vector，但对于std::array或std::deque也是有效的。
 
 下面的代码段显示了std::flat\_map和std::flat\_set的声明。
-
 
 \begin{cpp}
 template<class Key, class T,

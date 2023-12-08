@@ -1,4 +1,4 @@
-\href{https://en.cppreference.com/w/cpp/ranges/iota_view}{std::views::iota} 是一个范围工厂，用于通过连续递增初始值来创建元素序列。这个序列可以是有限的，也可以是无限的。有了这个函数，就可以找到以1000000开头的前20个质数。
+\href{https://en.cppreference.com/w/cpp/ranges/iota_view}{std::views::iota}是一个范围工厂，用于通过连续递增初始值来创建元素序列。这个序列可以是有限的，也可以是无限的。有了这个函数，就可以找到以1000000开头的前20个质数。
 
 \filename{找出20个以1000000开头的质数}
 
@@ -56,7 +56,7 @@ for (int i: std::views::iota(1000000) | std::views::filter(odd)
 我使用std::iota作为无限数字工厂，从1000000开始，并精确地要求20个质数。
 \end{enumerate}
 
-\myGraphic{0.6}{content/chapter11/images/4.jpg}{}
+\myGraphic{0.8}{content/chapter11/images/4.jpg}{}
 
 
 

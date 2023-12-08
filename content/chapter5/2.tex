@@ -2,10 +2,9 @@
 
 \mySamllsection{概述}
 
-有序关联容器std::map和std::multimap将它们的键与一个值关联起来，两者都在头文件<map>中定义。std::set和std::multiset需要头文件<set>。
+有序关联容器std::map和std::multimap将键与一个值关联起来，两者都在头文件<map>中定义。std::set和std::multiset需要头文件<set>。
 
 四个有序容器都由它们的类型、分配器和比较函数参数化。根据类型的不同，容器具有分配器和比较函数的默认值。std::map和std::set的声明很好地说明了这一点。
-
 
 \begin{cpp}
 template < class key, class val, class Comp= less<key>,
@@ -17,8 +16,7 @@ template < class T, class Comp = less<T>,
 class set;
 \end{cpp}
 
-
-两个关联容器的声明表明std::map有一个关联值。键和值用于默认的分配器:allocator<pair<const key, val>{}>。再多一点想象力，就可以从分配器派生出更多东西。std::map具有std::pair<const key, val>类型的对子。关联值val对于排序条件不重要:less<key>，观察结果对于std::multimap和std::multiset也成立。
+两个关联容器的声明表明std::map有一个关联值。键和值用于默认的分配器:allocator<pair<const key, val>{}>，可以从分配器派生出更多东西。std::map具有std::pair<const key, val>类型的键值对。关联值val对于排序条件不重要:less<key>，观察结果对于std::multimap和std::multiset也成立。
 
 \mySamllsection{键和值}
 
@@ -44,7 +42,7 @@ class set;
 可复制和可移动。
 \end{itemize}
 
-键关联值构建一个对子p，首先与成员键p.first，值p.second。
+键关联值构建一个键值对p，首先与成员键p.first，值p.second。
 
 \begin{cpp}
 #include <map>
@@ -115,7 +113,7 @@ ordAssCont.upper\_bound(key) & 返回ordAssCont最后插入键迭代器的位置
 ordAssCont.equal\_range(key) & \begin{tabular}[c]{@{}l@{}}返回std::pair中的范围ordAssCont.lower\_bound(key)和 \\ ordAssCont.upper\_bound(key)。\end{tabular}          \\ \hline
 \end{longtable}
 
-\filename{在关联容器中进行搜索}
+\filename{关联容器中进行搜索}
 
 \begin{cpp}
 // associativeContainerSearch.cpp
@@ -143,7 +141,7 @@ std::cout << "(" << *pair.first << "," << *pair.second << ")"; // (3,5)
 
 \myGraphic{0.6}{content/chapter5/images/2.jpg}{}
 
-\href{http://en.cppreference.com/w/cpp/container/map}{std::map}是最常用的关联容器，它结合了通常足够的性能和非常方便的接口，可以通过索引操作符访问它的元素。若键不存在，std:map创建一个键/值对。对于该值，使用默认构造函数。
+\href{http://en.cppreference.com/w/cpp/container/map}{std::map}是最常用的关联容器，它结合了通常足够的性能和便捷的接口，可以通过索引操作符访问它的元素。若键不存在，std:map创建一个键/值对。对于该值，使用默认构造函数。
 
 \begin{myTip}{将std::map看作为std::vector的泛化}
 通常，std::map称为关联数组，因为std::map像序列容器一样支持索引操作符。区别在于，其索引不像std::vector那样局限于数字。std::map的索引几乎可以是任意类型。

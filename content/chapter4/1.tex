@@ -3,7 +3,7 @@
 
 std::array将C数组的内存和运行时特性与std::vector接口结合起来。
 
-\href{http://en.cppreference.com/w/cpp/container/array}{std::array} 是固定长度的均匀容器,需要头文件<array>。所以std::array知道它的大小。
+\href{http://en.cppreference.com/w/cpp/container/array}{std::array} 是固定长度的均匀容器，需要头文件<array>，std::array的大小固定。
 
 要初始化std::array，必须遵循一些特殊规则。\\
 
@@ -30,7 +30,7 @@ arr.at(n);
 std::get<n>(arr);
 \end{cpp}
 
-最常用的带尖括号的第一类格式不检查arr的边界。这与art.at(n)相反。你最终会得到一个std::range-error异常。最后一个类型显示了std::array与std::tuple的关系，它们都是固定长度的容器。
+最常用的带尖括号的第一类格式不检查arr的边界，这与art.at(n)相反。最终会得到一个std::range\_error异常。最后一个类型显示了std::array与std::tuple的关系，它们都是固定长度的容器。
 
 这里有一些关于std::array的算术运算。
 

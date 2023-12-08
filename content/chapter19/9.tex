@@ -1,8 +1,8 @@
-锁存器和栅栏是允许某些线程阻塞直到计数器变为零的协调类型。在C++20中，我们有两个版本的锁存器和栅栏:std::latch和std::barrier。
+锁存器和栅栏是允许某些线程阻塞直到计数器变为零的协调类型。在C++20中，有两个版本的锁存器和栅栏:std::latch和std::barrier。
 
 \mySamllsection{std::latch}
 
-现在，我来仔细看看std::latch的接口。
+现在，来仔细看看std::latch的接口。
 
 \begin{center}
 std::latch lat的成员函数
@@ -24,10 +24,9 @@ lat.wait()                   & 若counter == 0，立即返回。否则，阻塞�
 lat.arrive\_and\_wait(upd=1) & 相当于count\_down(upd);wait();。                                \\ \hline
 \end{longtable}
 
-
 upd的默认值为1。当upd大于计数器或为负值时，程序具有未定义行为。调用lat.try\_wait()不像它的名字所示的那样，会等待。
 
-下面的程序使用两个std::latch来构建一个boss-workers工作流。我使用synchronizedOut函数将输出同步到std::cout(第13行)。这种同步使遵循工作流变得更加容易。
+下面的程序使用两个std::latch来构建一个“老板与雇员们”的工作流。我使用synchronizedOut函数将输出同步到std::cout(第13行)。这种同步使遵循工作流变得更加容易。
 
 \filename{std::latch}
 
@@ -81,7 +80,7 @@ herbWork.join();
 scottWork.join();
 \end{cpp}
 
-工作流的概念很简单。两个工人herb和scott(第1行和第2行)必须完成他们的工作。当它们完成它们的工作(第3行)时，其倒数std::latch workDone。boss(主线程)在第(4)行被阻塞，直到计数器变为0。当计数器为0时，老板使用第二个std::闩锁goHome来通知它的工人回家。在这种情况下，初始计数器为1(第5行)。调用goHome.wait(0)阻塞，直到计数器变为0。
+工作流的概念很简单。两个雇员herb和scott(第1行和第2行)必须完成他们的工作。当它们完成它们的工作(第3行)时，其倒数std::latch workDone。boss(主线程)在第(4)行被阻塞，直到计数器变为0。当计数器为0时，老板使用第二个std::latch goHome来通知它的雇员回家。在这种情况下，初始计数器为1(第5行)。调用goHome.wait(0)阻塞，直到计数器变为0。
 
 \myGraphic{0.6}{content/chapter19/images/12.jpg}{}
 
@@ -95,7 +94,7 @@ std::latch和std::barrier有两个不同之处。首先，可以多次使用std:
 
 \begin{enumerate}
 \item 
-所有线程都被阻塞。
+所有线程都阻塞。
 
 \item 
 任意线程解除阻塞，并执行可调用对象。

@@ -32,9 +32,9 @@ file\_time\_type               & 表示文件时间。                          
 
 \mySamllsection{操纵文件的权限}
 
-文件的权限由类std::filesystem::perms表示，是一个\href{http://en.cppreference.com/w/cpp/concept/BitmaskType}{位掩码类型}，因此可以通过位操作来操作。访问权限基于\href{https://en.wikipedia.org/wiki/POSIX}{POSIX}。
+文件的权限由类std::filesystem::perms表示，是一个\href{http://en.cppreference.com/w/cpp/concept/BitmaskType}{位掩码类型}，因此可以通过位操作来操作，访问权限基于\href{https://en.wikipedia.org/wiki/POSIX}{POSIX}。
 
-来自\href{en.cppreference.com/w/cpp/filesystem/perms}{en.cppreference.com}的程序展示了如何读取和操作文件的所有者、组和其他(世界)位。
+来自\href{en.cppreference.com/w/cpp/filesystem/perms}{en.cppreference.com}的程序展示了如何读取和操作文件的所有者、组和其他位。
 
 \filename{文件权限}
 
@@ -75,7 +75,7 @@ std::cout << "Removing the write bits for all: ";
 printPerms(fs::status("rainer.txt").permissions());
 \end{cpp}
 
-由于调用fs::status("rainer.txt").permissions()，获得了文件rainer.txt的权限，并可以在函数printPerms(1)中显示它们。通过设置类型std::filesystem::add\_perms，可以向文件的所有者和组添加权限(2)。或者，可以设置常量std::filesystem::remove\_perms来删除权限(3)。
+通过fs::status("rainer.txt").permissions()，获得了文件rainer.txt的权限，并可以在函数printPerms(1)中显示它们。通过设置类型std::filesystem::add\_perms，可以向文件的所有者和组添加权限(2)。或者，可以设置常量std::filesystem::remove\_perms来删除权限(3)。
 
 \myGraphic{0.6}{content/chapter18/images/3.jpg}{}
 

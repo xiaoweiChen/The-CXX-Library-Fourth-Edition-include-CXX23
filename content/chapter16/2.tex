@@ -1,5 +1,5 @@
 
-流类std::istream和std::ostream通常用于数据的读写。使用std::istream类需要<istream>头文件;使用std::ostream类需要<ostream>头文件。你可以同时使用<iostream>头文件。std::istream分别是类basic\_istream和类basic\_ostream的字符类型char, std::ostream的类型定义:
+流类std::istream和std::ostream通常用于数据的读写。使用std::istream类需要<istream>头文件;使用std::ostream类需要<ostream>头文件，可以同时使用<iostream>头文件。std::istream分别是类basic\_istream和类basic\_ostream的字符类型char, std::ostream的类型定义:
 
 \begin{cpp}
 typedef basic_istream<char> istream;
@@ -303,7 +303,7 @@ std::lowercase       & 输出               & 对数值使用小写字符。    
 %
 std::oct             & 输出和输出     & 使用八进制格式的自然数。            \\ \hline
 std::dec             & 输出和输出     & 使用十进制格式的自然数(默认)。 \\ \hline
-std::hex             & input and output     & 使用十六进制格式的自然数。      \\ \hline
+std::hex             & 输出和输出     & 使用十六进制格式的自然数。      \\ \hline
 std::showbase        & 输出               & 显示数字基数。                       \\ \hline
 std::noshowbase      & 输出               & 不显示数字基数(默认)。       \\ \hline
 \end{longtable}

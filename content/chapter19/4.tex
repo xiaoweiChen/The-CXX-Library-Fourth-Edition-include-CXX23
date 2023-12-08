@@ -1,4 +1,4 @@
-汇入线程的附加功能基于std::stop\_token、std::stop\_callback和std::stop\_source。下面的代码会给让你有一个大致的概念。
+汇入线程的附加功能基于std::stop\_token、std::stop\_callback和std::stop\_source。下面的代码会给让你有一个大致的了解。
 
 \filename{中断不可中断和可中断的std::jthread}
 
@@ -42,14 +42,14 @@ interruptable.request_stop();
 ...
 \end{cpp}
 
-主程序中启动了两个线程nonInterruptable和interruptable((1)和(2))。与线程nonInterruptable相反，线程interruptable获得一个std::stop\_token，并在(3)中使用它来检查它是否被中断:stoken\_stop\_requested()。中断的情况下，Lambda函数返回，线程结束。调用interruptable.request\_stop()(4)触发线程的结束。这并不适用于之前的调用nonInterruptable.request\_stop()，后者没有效果。
+主程序中启动了两个线程nonInterruptable和interruptable((1)和(2))。与线程nonInterruptable相反，线程interruptable获得一个std::stop\_token，并在(3)中使用它来检查它是否中断:stoken\_stop\_requested()。中断的情况下，Lambda函数返回，线程结束。调用interruptable.request\_stop()(4)触发线程的结束。这并不适用于之前的调用nonInterruptable.request\_stop()，后者没有效果。
 
-\myGraphic{0.6}{content/chapter19/images/3.jpg}{}
+\myGraphic{0.4}{content/chapter19/images/3.jpg}{}
 
 
 \mySamllsection{std::stop\_token, std::stop\_source 和 std::stop\_callback}
 
-stop\_token、std::stop\_callback或std::stop\_source使其能够异步请求执行停止或询问执行是否获得停止信号。std::stop\_token可以传递给操作，然后用于主动轮询令牌以获得停止请求或通过std::stop\_callback注册回调。std::stop\_source发送停止请求，此信号影响所有相关的std::stop\_token。std::stop\_source、std::stop\_token和std::stop\_callback这三个类共享一个相关停止状态的所有权。调用request\_stop()、stop\_requested()和stop\_possible()是原子操作。
+stop\_token、std::stop\_callback或std::stop\_source使其能够异步请求执行停止或询问执行是否获得停止信号。std::stop\_token可以传递给操作，然后用于主动轮询令牌以获得停止请求或通过std::stop\_callback注册回调。std::stop\_source发送停止请求，此信号影响所有相关的std::stop\_token。std::stop\_source、std::stop\_token和std::stop\_callback这三个类共享一个相关停止状态的所有权。request\_stop()、stop\_requested()和stop\_possible()都是原子操作。
 
 组件std::stop\_source和std::stop\_token为停止处理提供了以下属性。
 
@@ -84,11 +84,9 @@ src.request\_stop() &
 \begin{tabular}[c]{@{}l@{}}若stop\_possible()和!stop\_requested()，调用一个停止请求。\\ 否则，调用无效。\end{tabular} \\ \hline
 \end{longtable}
 
+src.stop\_possible()表示具有关联的停止状态。src.stop\_requested()在具有关联的停止状态，并且在请求停止时返回true。src.request\_stop()成功，若具有相关的停止状态并已接收到停止请求，则返回true。
 
-src.stop\_possible()表示具有关联的停止状态。src.stop\_requested()在具有关联的停止状态,并且之前被请求停止时返回true。src.request\_stop()成功，若具有相关的停止状态并已接收到停止请求，则返回true。
-
-调用src.get\_token()返回停止令牌。有了令牌，就可以检查是否已经发出停止请求，或者是否可以针对其关联的停止源src发出停止请求。停止令牌符号观察停止源src。
-
+src.get\_token()返回停止令牌，可以检查是否已经发出停止请求，或者是否可以针对其关联的停止源src发出停止请求。停止令牌符号观察停止源src。
 
 \begin{center}
 std::stop\_token stoken的成员函数
@@ -110,7 +108,7 @@ src.stop\_requested()    & \begin{tabular}[c]{@{}l@{}}若在相应的std::stop\_
 
 默认构造的停止令牌没有关联的停止状态。若停止请求已经发出，stoken.stop\_possible()也返回true。stoken.stop\_requested()在停止令牌具有关联的停止状态，并且已经接收到停止请求时返回true。
 
-若std::stop\_token应该暂时禁用，可以用默认构造的token替换它。默认构造的令牌没有关联的停止状态。下面的代码片段展示了如何禁用和启用线程接受停止请求的能力。
+若std::stop\_token应该暂时禁用，可以用默认构造的token替换。默认构造的令牌没有关联的停止状态，下面的代码段展示了如何禁用和启用线程接受停止请求的能力。
 
 \filename{暂时禁用停止令牌}
 

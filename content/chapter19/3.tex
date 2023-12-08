@@ -139,7 +139,7 @@ t.detach();
 std::cout << valSleeper; // undefined behaviour
 \end{cpp}
 
-这个程序段有未定义行为。首先，std::cout的生命周期绑定到主线程的生命周期，创建的线程通过引用获得它的变量valSleeper。问题是创建的线程可能比它的创建者活得更长，若主线程结束，std::cout和valSleeper将失去其有效性。其次，valSleeper是一个共享的可变变量，由主线程和子线程并发使用。因此，这是一场数据竞赛。
+这个程序段有未定义行为。首先，std::cout的生命周期绑定到主线程的生命周期，创建的线程通过引用获得它的变量valSleeper。问题是创建的线程可能比它的创建者活得更长，若主线程结束，std::cout和valSleeper将失去其有效性。其次，valSleeper是一个共享变量，由主线程和子线程并发使用，这会是一场数据竞赛。
 \end{myWarning}
 
 \mySamllsection{操作}
@@ -204,11 +204,11 @@ std::jthread代表可汇入线程。除了C++11中的std::thread之外，std::jt
 
 \mySamllsection{自动汇入}
 
-std::thread的非直观行为如下:当std::thread仍然可汇入，std::terminate在其析构函数中被调用。
+std::thread的非直观行为如下:当std::thread仍然可汇入，std::terminate在其析构函数中调用。
 
-相反，若std::jthread仍然可汇入，则自动连接到它的析构函数中。
+相反，若std::jthread仍然可汇入，则自动连接到其析构函数中。
 
-\filename{终止一个仍然可汇入的std::jthread}
+\filename{终止仍然可汇入的std::jthread}
 
 \begin{cpp}
 // jthreadJoinable.cpp

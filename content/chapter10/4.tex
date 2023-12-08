@@ -5,7 +5,7 @@ UnFunc std::for_each(InpIt first, InpIt second, UnFunc func)
 void std::for_each(ExePol pol, FwdIt first, FwdIt second, UnFunc func)
 \end{cpp}
 
-在没有显式执行策略的情况下使用std::for\_each是一个特殊的算法，因为它返回其可调用的参数。若使用函数对象调用std::for\_each，则可以将函数调用的结果直接存储在函数对象中。
+没有显式执行策略的情况下使用std::for\_each是一个特殊的算法，可返回其可调用的参数。若使用函数对象调用std::for\_each，则可以将函数调用的结果直接存储在函数对象中。
 
 \begin{cpp}
 InpIt std::for_each_n(InpIt first, Size n, UnFunc func) FwdIt std::for_each_n(ExePol pol, FwdIt first, Size n, UnFunc func)

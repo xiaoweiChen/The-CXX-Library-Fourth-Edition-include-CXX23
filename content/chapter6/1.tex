@@ -23,7 +23,7 @@ class stack;
 
 \mySamllsection{栈}
 
-\myGraphic{0.6}{content/chapter6/images/2.jpg}{}
+\myGraphic{0.4}{content/chapter6/images/2.jpg}{}
 
 \href{http://en.cppreference.com/w/cpp/container/stack}{std::stack}遵循后进先出原则(后进先出)。栈sta需要头文件<stack>，它有三个特殊的成员函数。
 
@@ -58,11 +58,11 @@ std::cout << myStack.size() << '\n'; // 0
 
 \mySamllsection{队列}
 
-\myGraphic{0.8}{content/chapter6/images/3.jpg}{}
+\myGraphic{0.4}{content/chapter6/images/3.jpg}{}
 
 \href{http://en.cppreference.com/w/cpp/container/queue}{std::queue}遵循FIFO原则(先进先出)。队列que需要头文件<queue>，它有四个特殊的成员函数。
 
-使用queue.push(e)，可以在队列的末尾插入元素e，并使用queue.pop()从队列中删除第一个元素。queue.back()允许引用queue的最后一个组件queue.front()到queue中的第一个元素。std::queue与std::stack具有相似的特征。因此，可以比较std::queue实例并获得它们的大小。队列操作也具有恒定的复杂性。
+使用queue.push(e)，可以在队列的末尾插入元素e，并使用queue.pop()从队列中删除第一个元素。queue.back()允许引用queue的最后一个组件queue.front()到queue中的第一个元素。std::queue与std::stack具有相似的特征，可以比较std::queue实例并获得它们的大小。队列操作也具有恒定的复杂性。
 
 \filename{std::queue}
 
@@ -95,9 +95,9 @@ std::cout << myQueue.size() << '\n'; // 0
 
 \mySamllsection{优先级队列}
 
-\myGraphic{0.8}{content/chapter6/images/4.jpg}{}
+\myGraphic{0.4}{content/chapter6/images/4.jpg}{}
 
-\href{http://en.cppreference.com/w/cpp/container/priority_queue}{std::priority\_queue}是一个简化的std::queue。它需要头文件<queue>。
+\href{http://en.cppreference.com/w/cpp/container/priority_queue}{std::priority\_queue}是一个简化的std::queue，需要头文件<queue>。
 
 与std::queue的不同之处在于，它们的最大元素总是位于优先级队列的顶部。std::priority\_queue pri默认使用比较运算符是、td::less。与std::queue类似，pri.push(e)在优先级队列中插入一个新元素e。pop()删除pri的第一个元素，但其复杂度为对数。使用pri.top()，可以引用优先级队列中的第一个元素，它是最大的一个。priority\_queue知道其大小，但不支持对其实例使用比较运算符。
 

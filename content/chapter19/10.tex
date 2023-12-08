@@ -10,13 +10,13 @@
 
 线程与任务不同。
 
-必须使用共享变量来实现创建线程和被创建线程之间的通信。任务通过其数据通道进行通信，该数据通道受到隐式保护。因此，任务不能使用像互斥锁这样的保护机制。
+必须使用共享变量来实现创建线程和被创建线程之间的通信。任务通过其数据通道进行通信，该数据通道受到隐式保护，任务不能使用像互斥锁这样的保护机制。
 
 创建线程正在用join调用等待它的子线程。若没有结果则阻塞，可使用fut.get()获取结果。
 
 若在创建的线程中发生异常，则创建的线程、创建者和整个进程终止。相反，promise可以向future发送异常，future必须处理该异常。
 
-一个promise可以服务于一个或多个future。它可以发送值、异常或仅发送通知。
+一个promise可以服务于一个或多个future，可以发送值、异常或仅发送通知。
 
 可以使用任务作为条件变量的安全替代。
 
@@ -34,11 +34,11 @@ auto fut= std::async([]{ return 2000+11; });
 std::cout << fut.get() << '\n'; // 2011
 \end{cpp}
 
-子线程t和异步函数调用std::async计算2000和11的和。创建线程通过共享变量res从子线程t获取结果。调用std::async在发送方(promise)和接收方(future)之间创建数据通道。future使用fut.get()向数据通道请求计算结果，fut.get()会阻塞线程。
+子线程t和异步函数调用std::async计算2000和11的和，创建线程通过共享变量res从子线程t获取结果。调用std::async在发送方(promise)和接收方(future)之间创建数据通道。future使用fut.get()向数据通道请求计算结果，fut.get()会阻塞线程。
 
 \mySamllsection{std::async}
 
-Std::async的行为类似于异步函数调用。这个函数调用接受一个可调用对象及其参数。std::async是一个可变的模板，因此可以接受任意数量的参数。调用std::async返回一个future对象fut，通过fut.get()获取结果的句柄。还可以为std::async指定一个启动策略，可以使用启动策略显式地确定异步操作是应该在同一个线程(std::launch::deferred)中执行，还是应该在另一个线程(std::launch::async)中执行。
+std::async的行为类似于异步函数调用。这个函数调用接受一个可调用对象及其参数。std::async是一个可变的模板，可以接受任意数量的参数。调用std::async返回一个future对象fut，通过fut.get()获取结果的句柄。还可以为std::async指定一个启动策略，可以使用启动策略显式地确定异步操作是应该在同一个线程(std::launch::deferred)中执行，还是应该在另一个线程(std::launch::async)中执行。
 
 调用auto fut= std::async(std::launch::deferred，…)不会立即执行。调用fut.get()会惰性地启动promise。
 
@@ -164,7 +164,7 @@ auto sum= sum1.get() + sum2.get();
 cout << sum; // 50005000
 \end{cpp}
 
-promise(std::packaged\_task)移动到std::deque allTasks中。程序在while循环中遍历所有承诺。每个promise在其线程中运行，并在后台执行其添加(sumThread.detach())。结果是1到100000之间所有数字的和。
+promise(std::packaged\_task)移动到std::deque allTasks中，程序在while循环中遍历所有promise。每个promise在其线程中运行，并在后台执行其添加(sumThread.detach())。结果是1到100000之间所有数字的和。
 
 \mySamllsection{std::promise 和 std::future}
 
@@ -220,7 +220,7 @@ fut.wait\_until(absTime) & 等待结果的直到某个绝对时间点。        
 
 下面是promise和future的用法。
 
-\filename{Promise 和 future}
+\filename{promise 和 future}
 
 \begin{cpp}
 // promiseFuture.cpp

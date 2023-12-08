@@ -1,6 +1,6 @@
-\myGraphic{0.5}{content/chapter4/images/1.jpg}{Cippi建造堆栈}
+\myGraphic{0.4}{content/chapter4/images/1.jpg}{Cippi建造堆栈}
 
-\href{http://en.cppreference.com/w/cpp/container}{顺序容器}有很多共同之处，但每个容器都有其特定的域。深入讨论细节之前，先概述一下std名称空间的所有五个序列容器。
+\href{http://en.cppreference.com/w/cpp/container}{顺序容器}有很多共同之处，但每个容器都有其特定的域。深入讨论之前，先了解一下std命名空间的五个序列容器。
 
 \begin{center}
 顺序容器
@@ -43,14 +43,14 @@
 
 对于这个表，我还想补充几句。
 
-O(i)表示操作的复杂度(运行时)。O(1)表示容器上操作的运行时间恒定，并且与容器的大小无关。相反，O(n)意味着运行时线性依赖于容器元素的数量。对于std::vector意味着什么?元素的访问时间与std::vector的大小无关，但是插入或删除具有k倍以上元素的任意元素会慢k倍。
+O(i)表示操作的复杂度(运行时)。O(1)表示容器上操作的运行时间恒定，并且与容器的大小无关。相反，O(n)表示运行时线性依赖于容器元素的数量。对于std::vector意味着什么?元素的访问时间与std::vector的大小无关，但是插入或删除的耗时和位置相关。
 
-尽管对std::vector元素的随机访问与对std::deque元素的随机访问具有相同的复杂度O(1)，但并不意味着这两种操作都一样快。
+std::vector对元素的随机访问与std::deque对元素的随机访问具有相同的复杂度O(1)，但并不意味着这两种操作都一样快。
 
-对于双链表(std::list)或单链表(std::forward\_list)的插入或删除操作，只有在迭代器指向正确的元素时才能保证复杂度为0(1)。
+双链表(std::list)或单链表(std::forward\_list)的插入或删除操作，只有在迭代器指向正确的元素时才能保证复杂度为O(1)。
 
 \begin{myNotic}{std::string就像是std::vector<char>}
-当然，std::string不是标准模板库的容器。从行为的角度来看，类似于序列容器，尤其是std::vector<char>，所以我将把std::string视为std::vector<char>。
+当然，std::string不是标准模板库的容器。从行为的角度来看，类似于序列容器，尤其是std::vector<char>，所以我会把std::string视为std::vector<char>。
 \end{myNotic}
 
 

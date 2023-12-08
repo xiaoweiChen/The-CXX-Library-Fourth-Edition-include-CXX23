@@ -29,7 +29,7 @@ if (std::regex_match(official, smatch, regValues)){
 } // The official name of the new C++ standard is C++11.
 \end{cpp}
 
-函数std::regex\_replace(unofficial, regValues, standardText)中，从字符串非官方中提取与正则表达式regValues的第一和第二个捕获组匹配的文本。然后，将文本standardText中的占位符\$1和\$2替换为提取的值。smatch.format(standardTest)的策略是类似的，但有一个区别: 
+函数std::regex\_replace(unofficial, regValues, standardText)中，从字符串非官方中提取与正则表达式regValues的第一和第二个捕获组匹配的文本，将文本standardText中的占位符\$1和\$2替换为提取的值。smatch.format(standardTest)的策略是类似的，但有一个区别: 
 
 搜索结果smatch的创建与格式化字符串时的使用是分开的。
 

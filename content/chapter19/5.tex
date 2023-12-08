@@ -5,9 +5,9 @@
 \noindent
 \textbf{数据竞争}
 
-数据竞争是指至少有两个线程同时访问共享数据，并且至少有一个线程是写线程的状态。因此程序具有未定义行为。
+数据竞争是指至少有两个线程同时访问共享数据，并且至少有一个线程是写线程的状态，程序具有未定义行为。
 
-若有几个线程写入std::cout，可以很好地观察到线程的交错。在本例中，输出流std::cout是共享变量。
+若有几个线程写入std::cout，可以很好地观察到线程的交错。本例中，输出流std::cout是共享变量。
 
 \filename{不同步的写入std::cout}
 
@@ -37,14 +37,14 @@ thread scott= thread(Worker ("     Scott"));
 thread bjarne= thread(Worker("       Bjarne"));
 \end{cpp}
 
-\myGraphic{0.8}{content/chapter19/images/4.jpg}{}
+\myGraphic{0.5}{content/chapter19/images/4.jpg}{}
 
 std::cout的输出不协调。
 
 \begin{myTip}{流是线程安全的}
-C++11标准保证字符是自动写入的，因此不需要保护。只有当整个读操作不交错时，才需要保护流上线程的交错。这种保证适用于输入和输出流。
+C++11标准保证字符自动写入，不需要保护。只有当整个读操作不交错时，才需要保护流上线程的交错。这种保证适用于输入和输出流。
 
-C++20中，已经同步了像std::osyncstream和std::wosyncstream这样的输出流。保证对一个输出流的写入是同步的。输出写入内部缓冲区，并在超出作用域时刷新。同步输出流可以有一个名称，比如synced\_out，也可以没有名称。
+C++20中，已经同步了像std::osyncstream和std::wosyncstream这样的输出流，保证对一个输出流的写入是同步的。输出写入内部缓冲区，并在超出作用域时刷新。同步输出流可以有一个名称，比如synced\_out，也可以没有名称。
 
 \filename{同步输出流}
 
@@ -65,7 +65,7 @@ std::osyncstream(std::cout) << "Hello, " << "World!" << "\n";
 
 \mySamllsection{互斥锁}
 
-互斥(互斥量)保证一次只有一个线程可以访问临界区域。它们需要头文件<mutex>。互斥锁m 通过调用m.lock()来锁定临界区，并通过m.lock()来解锁。
+互斥(互斥量)保证一次只有一个线程可以访问临界区域，需要头文件<mutex>。互斥锁m通过调用m.lock()来锁定临界区，并通过m.lock()来解锁。
 
 \filename{使用std::mutex进行同步}
 
@@ -100,11 +100,11 @@ thread scott= thread(Worker ("    Scott"));
 thread bjarne= thread(Worker("      Bjarne"));
 \end{cpp}
 
-因为它使用相同的互斥锁mutexCout，所以每个线程在彼此之后协调写入std::cout。
+因为使用相同的互斥锁mutexCout，所以每个线程在彼此之后协调写入std::cout。
 
-\myGraphic{0.6}{content/chapter19/images/5.jpg}{}
+\myGraphic{0.3}{content/chapter19/images/5.jpg}{}
 
-C++有五种不同的互斥量。它们可以递归地锁定，暂时有或没有时间限制。
+C++有五种不同的互斥量。可以递归地锁定，暂时有或没有时间限制。
 
 \begin{center}
 C++的互斥量
@@ -128,7 +128,7 @@ m.try\_lock\_until &     &     & yes & yes & yes \\ \hline
 \end{longtable}
 
 
-std::shared\_time\_mutex使它能够实现读写锁。成员函数m.t try\_lock\_for(relTime)需要一个相对时间段;成员函数m.t try\_lock\_until(absTime)一个绝对时间点。
+std::shared\_time\_mutex使它能够实现读写锁。成员函数m.try\_lock\_for(relTime)需要一个相对时间段;成员函数m.try\_lock\_until(absTime)一个绝对时间点。
 
 
 \mySamllsection{死锁}
@@ -149,7 +149,7 @@ m.unlock()
 
 以错误的顺序锁定两个互斥锁，是导致死锁的另一个典型原因。
 
-\filename{A deadlock}
+\filename{死锁}
 
 \begin{cpp}
 // deadlock.cpp
@@ -187,11 +187,11 @@ std::thread t2([&]{ deadLock(c2, c1); });
 
 \mySamllsection{锁}
 
-应该将互斥锁封装在锁中以自动释放互斥锁。锁是RAII习惯用法的一种实现，因为锁将互斥锁的生命周期与它的生命周期绑定在一起。C++11分别为简单用例提供了std::lock\_guard，为高级用例提供了std::unique\_lock。两者都需要头文件<mutex>。C++14中，有一个std::shared\_lock，与互斥锁std::shared\_time\_mutex结合在一起使用，是实现读写锁的基础。
+应该将互斥锁封装在锁中以自动释放互斥锁。锁是RAII习惯用法的一种实现，因为锁将互斥锁的生命周期与它的生命周期绑定在一起。C++11分别为简单用例提供了std::lock\_guard，为高级用例提供了std::unique\_lock，都需要头文件<mutex>。C++14中，有一个std::shared\_lock，与互斥锁std::shared\_time\_mutex结合在一起使用，是实现读写锁的基础。
 
 \mySamllsection{std::lock\_guard}
 
-std::lock\_guard只支持简单的用例，所以只能在构造函数中绑定互斥锁，并在析构函数中释放互斥锁。因此，worker示例的同步可简化为构造函数的调用。
+std::lock\_guard只支持简单的用例，所以只能在构造函数中绑定互斥锁，并在析构函数中释放互斥锁，worker示例的同步可简化为构造函数的调用。
 
 \filename{使用std::lock\_guard进行同步}
 
@@ -216,7 +216,7 @@ struct Worker{
 
 \mySamllsection{std::unique\_lock}
 
-使用std::unique\_lock的开销比使用std::lock\_guard的开销大。相反，std::unique\_lock可以在有互斥锁和没有互斥锁的情况下创建，显式地锁定或释放它的互斥锁，或者延迟它的互斥锁。
+std::unique\_lock的开销比std::lock\_guard的开销大。相反，std::unique\_lock可以在有互斥锁和没有互斥锁的情况下创建，显式地锁定或释放它的互斥锁，或者延迟它的互斥锁。
 
 下表显示了std::unique\_lock类的成员函数。
 
@@ -281,7 +281,7 @@ thread t2([&]{ deadLockResolved(c2, c1); });
 
 \mySamllsection{std::shared\_lock}
 
-std::shared\_lock与std::unique\_lock具有相同的接口。另外，std::shared\_lock支持多个线程共享同一个锁定互斥量的情况。对于这个特殊的用例，必须将std::shared\_lock与std::shared\_timed\_mutex结合使用。但若多个线程在一个std::unique\_lock中使用同一个std::shared\_time\_mutex，则只有一个线程可以拥有它。
+std::shared\_lock与std::unique\_lock具有相同的接口，std::shared\_lock支持多个线程共享同一个锁定互斥量的情况。对于这个特殊的用例，必须将std::shared\_lock与std::shared\_timed\_mutex结合使用。但若多个线程在一个std::unique\_lock中使用同一个std::shared\_time\_mutex，则只有一个线程可以拥有它。
 
 \begin{cpp}
 #include <mutex>
@@ -295,16 +295,15 @@ std::shared_lock<std::shared_time_mutex> readerLock(sharedMutex);
 std::shared_lock<std::shared_time_mutex> readerLock2(sharedMutex);
 \end{cpp}
 
-该示例展示了典型的读写锁场景。类型std::unique\_lock<std::shared\_timed\_mutex>的writerLock只能独占sharedMutex。std::share\_lock<std::shared\_time\_mutex>类型的读锁readerLock和readerLock2可以共享同一个互斥锁sharedMutex。
+该示例展示了典型的读写锁场景，类型std::unique\_lock<std::shared\_timed\_mutex>的writerLock只能独占sharedMutex。std::share\_lock<std::shared\_time\_mutex>类型的读锁readerLock和readerLock2可以共享同一个互斥锁sharedMutex。
 
 \mySamllsection{线程安全的初始化}
 
 若不修改数据，则以线程安全的方式初始化就足够了。C++提供了多种方法来实现这一点:使用常量表达式，使用具有块作用域的静态变量，或者使用函数std::call\_once结合标志std::once::flag。
 
-
 \mySamllsection{常数表达式}
 
-常量表达式在编译时初始化，它们本身是线程安全的。通过在变量前使用关键字constexpr，变量就变成了常量表达式。用户定义类型的实例也可以是常量表达式，若将成员函数声明为常量表达式，则可以以线程安全的方式初始化。
+常量表达式在编译时初始化，其本身是线程安全的。通过在变量前使用关键字constexpr，变量就变成了常量表达式。用户定义类型的实例也可以是常量表达式，若将成员函数声明为常量表达式，则可以以线程安全的方式初始化。
 
 \begin{cpp}
 struct MyDouble{
@@ -332,7 +331,7 @@ void blockScope(){
 
 std::call\_once接受两个参数:标志std::once\_flag和一个可调用对象。C++运行时借助标志std::once\_flag保证可调用对象只执行一次。
 
-\filename{T线程安全的初始化}
+\filename{线程安全的初始化}
 
 \begin{cpp}
 // callOnce.cpp

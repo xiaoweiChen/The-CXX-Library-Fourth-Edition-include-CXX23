@@ -2,7 +2,7 @@ C++有一组原子数据类型。首先是std::atomic\_flag，其次是类模板
 
 \mySamllsection{std::atomic\_flag}
 
-std::atomic\_flag是一个原子布尔值，有一个清晰和固定的状态。简单起见，我将clear状态称为false，将set状态称为true。clear成员函数允许将其值设置为false。使用test\_and\_set成员函数，可以将值设置回true，并返回前一个值。没有成员函数可以查询当前值，不过这在C++20中有所改变。C++20中，std::atomic\_flag有一个测试成员函数，可以通过成员函数notify\_one、notify\_all和wait进行线程同步。
+std::atomic\_flag是一个原子布尔值，有一个清晰和固定的状态。这里将clear状态称为false，将set状态称为true。clear成员函数允许将其值设置为false。使用test\_and\_set成员函数，可以将值设置回true，并返回前一个值。没有成员函数可以查询当前值，不过这在C++20中有所改变。C++20中，std::atomic\_flag有一个测试成员函数，可以通过成员函数notify\_one、notify\_all和wait进行线程同步。
 
 \begin{center}
 std::atomic\_flag atomicFlag的所有操作
@@ -26,7 +26,7 @@ atomicFlag.clear()        & 清除原子标志。                               
 atomicFlag.wait(b)(C++20) & 阻塞线程，直到收到通知并且原子值发生变化。 \\ \hline
 \end{longtable}
 
-调用atomicFlag.test()返回atomicFlag的值而不改变它，也可以使用std::atomic\_flag进行线程同步:atomicFlag.wait()、atomicFlag.notify\_one()和atomicFlag.notify\_all()。成员函数notify\_one或notify\_all通知一个或所有等待的原子标志。atomicFlag.wait(boo)需要一个布尔值b，atomicFlag.wait(b)会阻塞直到收到通知。它检查atomicFlag的值是否等于b，若不等于b则解除阻塞。
+atomicFlag.test()返回atomicFlag的值而不改变它，也可以使用std::atomic\_flag进行线程同步:atomicFlag.wait()、atomicFlag.notify\_one()和atomicFlag.notify\_all()。成员函数notify\_one或notify\_all通知一个或所有等待的原子标志。atomicFlag.wait(boo)需要一个布尔值b，atomicFlag.wait(b)会阻塞直到收到通知。检查atomicFlag的值是否等于b，若不等于b则解除阻塞。
 
 必须使用ATOMIC\_FLAG\_INIT:std::atomic\_flag标志(ATOMIC\_FLAG\_INIT)显式初始化std::atomic\_flag。C++20中，默认构造的std::atomic\_flag处于false状态。
 
@@ -34,7 +34,7 @@ std::atomic\_flag有一个突出的属性，它是唯一有保证的\href{https:
 
 \mySamllsection{std::atomic}
 
-类模板std::atomic有多种特化可用。它们需要头文件<atomic>。std::atomic<bool>和std::atomic<user-defined type>使用主模板。指针std::atomic<T*>提供部分特化，C++20中智能指针std::atomic<smart T*>提供整型指针std::atomic<整型指针>的完全特化，C++20中浮点类型std::atomic<floating-point针>的全特化。也可以使用std::atomic定义原子数据类型。
+类模板std::atomic有多种特化可用，需要头文件<atomic>。std::atomic<bool>和std::atomic<user-defined type>使用主模板。指针std::atomic<T*>提供偏特化，C++20中智能指针std::atomic<smart T*>提供整型指针std::atomic<整型指针>的全特化，C++20中浮点类型std::atomic<floating-point针>的全特化，也可以使用std::atomic定义原子数据类型。
 
 \mySamllsection{原子变量的基本接口}
 
@@ -91,7 +91,7 @@ compare\_exchange\_strong具有如下语法: bool compare\_exchange\_strong(T\& 
 
 \begin{itemize}
 \item 
-用户定义类型的复制赋值操作符对于其所有基类和非静态成员必须是微不足道的。不能定义复制赋值操作符，但可以使用\href{http://en.cppreference.com/w/cpp/keyword/default}{default}从编译器请求它。
+用户定义类型的复制赋值操作符对于其所有基类和非静态成员必须是简单数据类型。不能定义复制赋值操作符，但可以使用\href{http://en.cppreference.com/w/cpp/keyword/default}{default}从编译器请求它。
 
 \item 
 用户定义类型不能有虚成员函数或虚基类
@@ -104,7 +104,7 @@ compare\_exchange\_strong具有如下语法: bool compare\_exchange\_strong(T\& 
 
 \mySamllsection{原子智能指针std::atomic<smart T*> (C++20)}
 
-std::shared\_ptr由一个控制块和资源组成。控制块是线程安全的，但对资源的访问不是。所以修改引用计数器是一个原子操作，可以保证资源会精确地删除一次，这些都是std::shared\_ptr提供的保证。使用偏特化模板std::atomic<std::shared\_ptr<T>{}>和std::atomic<std::weak\_ptr<T>{}>可以额外保证底层对象的访问是线程安全的。在2022年，原子智能指针上的所有操作都非无锁的。
+std::shared\_ptr由一个控制块和资源组成。控制块是线程安全的，但对资源的访问不是。所以修改引用计数器是一个原子操作，可以保证资源会精确地删除一次，这些都是std::shared\_ptr提供的保证。使用偏特化模板std::atomic<std::shared\_ptr<T>{}>和std::atomic<std::weak\_ptr<T>{}>可以额外保证底层对象的访问是线程安全的。在2022年，原子智能指针上的所有操作都有锁。
 
 \mySamllsection{std::atomic<floating-point type> (C++20)}
 
@@ -166,7 +166,7 @@ assert(p.load() == &intArray[1]);
 
 \mySamllsection{std::atomic<integral type>}
 
-对于每个整型都有std::atomic的完整特化std::atomic<integral type>。std::atomic< integer type>支持std::atomic<T*>或std::atomic<float -point type>支持的所有操作。此外，std::atomic<integral type>支持与、或和异或的位逻辑操作符。
+对于每个整型都有std::atomic的全特化std::atomic<integral type>。std::atomic< integer type>支持std::atomic<T*>或std::atomic<float -point type>支持的所有操作。此外，std::atomic<integral type>支持与、或和异或的位逻辑操作符。
 
 \begin{center}
 原子变量上的所有操作
@@ -189,7 +189,7 @@ assert(p.load() == &intArray[1]);
 
 复合位赋值操作和取操作之间有细微的区别。复合按位赋值操作返回新值，fetch返回旧值。
 
-更深入的观察可以提供更多的见解:没有原子乘法、原子除法或原子移位操作可用。这不是一个重要的限制，因为很少需要这些操作，并且可以很容易地实现。下面是一个原子fetch\_mult函数的示例。
+更深入的观察可以提供更多的见解:没有原子乘法、原子除法或原子移位操作可用。这不是一个重要的限制，很少需要这些操作，并且可以很容易地实现。下面是一个原子fetch\_mult函数的示例。
 
 \filename{使用compare\_exchange\_strong的原子乘法}
 
@@ -222,7 +222,7 @@ int main(){
 
 \mySamllsection{std::atomic\_ref}
 
-此外，类模板std::atomic\_ref将原子操作应用于被引用的对象，原子对象的并发读写是线程安全的。被引用对象的生存期必须超过atomic\_ref的生存期。std::atomic\_ref支持相同的类型和操作，就像std::atomic支持其底层类型一样。
+此外，类模板std::atomic\_ref将原子操作应用于引用对象，原子对象的并发读写是线程安全的。引用对象的生存期必须超过atomic\_ref的生存期。std::atomic\_ref支持相同的类型和操作，就像std::atomic支持其底层类型一样。
 
 \begin{cpp}
 struct Counters {

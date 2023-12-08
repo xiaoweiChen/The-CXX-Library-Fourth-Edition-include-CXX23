@@ -77,9 +77,9 @@ um.clear();
 std::cout << um.size() << '\n'; // 0
 \end{cpp}
 
-这两个程序执行之间有一个微妙的区别:std::map的键是有序的，而std::unordered\_map的键是无序的。问题是:为什么在C++中有这样类似的容器?我已经在表格中指出，对于C++来说，答案通常是:性能。对无序关联容器的键的访问时间是常量，因此与容器的大小无关。若容器足够大，性能差异是显著的。
+这两个程序执行之间有一个微妙的区别:std::map的键有序，而std::unordered\_map的键无序。问题是:为什么在C++中有这样类似的容器?我已经在表格中指出，对于C++来说，答案是:性能。对无序关联容器的键的访问时间是常量，因此与容器的大小无关。若容器足够大，性能差异则会越显著。
 
-\mySamllsection{Contains}
+\mySamllsection{contains}
 
 成员函数associativeContainer.contains(ele)检查associativeContainer是否有元素ele。
 
@@ -114,7 +114,7 @@ std::cout << "containsElement5(myUnordMap): "
 
 \mySamllsection{插入和删除}
 
-关联容器中元素的插入(插入和放置)和删除(擦除)操作类似于std::vector的规则。对于一个键只能有一次的关联容器，若键已经在容器中，则插入失败。此外，有序关联容器支持一个特殊的函数ordAssCont.erase(key)，会删除所有具有键的对子，并返回其数量。
+关联容器中元素的插入(插入和放置)和删除(擦除)操作类似于std::vector的规则。对于一个键只能有一次的关联容器，若键已经在容器中，则插入失败。此外，有序关联容器支持一个特殊的函数ordAssCont.erase(key)，会删除所有具有键的数值对，并返回其数量。
 
 \filename{插入和删除}
 

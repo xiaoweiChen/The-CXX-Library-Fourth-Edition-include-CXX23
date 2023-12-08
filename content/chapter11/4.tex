@@ -6,7 +6,7 @@ auto res = std::accumulate(std::begin(myVec), std::end(myVec), 0);
 std::cout << res << '\n'; // 45
 \end{cpp}
 
-范围库允许它直接在std::unordered\_map的键(1)或值(3)上创建视图。
+范围库允许直接在std::unordered\_map的键(1)或值(3)上创建视图。
 
 \filename{范围直接作用于容器}
 
@@ -33,7 +33,7 @@ for (const auto& value : std::views::values(freqWord)){ // (4)
 }
 \end{cpp}
 
-当然，键和值可以直接显示((2)和(4))。输出是相同的。
+当然，键和值可以直接显示((2)和(4))，输出是相同的。
 
 \myGraphic{0.5}{content/chapter11/images/2.jpg}{}
 

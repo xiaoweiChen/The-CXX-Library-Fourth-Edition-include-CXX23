@@ -258,7 +258,7 @@ if (pair2.first == str1.end()){
 
 \mySamllsection{在范围中搜索范围}
 
-std::search从开头搜索另一个范围，std::find\_end从结尾搜索sStd::search\_n搜索范围内连续的n个元素。
+std::search从开头搜索另一个范围，std::find\_end从结尾搜索std::search\_n搜索范围内连续的n个元素。
 
 所有算法都采用前向迭代器，可以用二进制谓词参数化，若搜索不成功，则返回第一个范围的结束迭代器。
 
@@ -303,7 +303,7 @@ FwdIt search_n(ExePol pol, FwdIt first,
 
 \begin{myWarning}{特殊算法search\_n}
 	
-算法FwdIt search\_n(FwdIt first, FwdIt last, Size count, const T\& value, BiPre pre)非常特殊。二进制谓词BiPre将范围的值用作第一个参数，将value用作第二个参数。
+算法FwdIt search\_n(FwdIt first, FwdIt last, Size count, const T\& value, BiPre pre)非常特殊。二元谓词BiPre将范围的值用作第一个参数，将value用作第二个参数。
 \end{myWarning}
 
 \filename{std::find, std::find\_end 和 std::search\_n}

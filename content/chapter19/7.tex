@@ -24,7 +24,7 @@ cv.wait\_until(lock, absTime, ...) & 在持有std::unique\_lock的同时，在�
 \end{longtable}
 
 
-发送方和接收方需要一个锁。在发送方的情况下，std::lock\_guard就足够了，因为它只调用一次lock和unlock。对于接收方来说，std::unique\_lock是必要的，因为它通常会锁定和解锁它的互斥锁几次。
+发送方和接收方需要一个锁。在发送方的情况下，std::lock\_guard就足够了，只调用一次lock和unlock。对于接收方来说，std::unique\_lock是必要的，通常会锁定和解锁它的互斥锁几次。
 
 \filename{条件变量}
 
@@ -65,12 +65,10 @@ std::thread t2(setDataReady);
 
 使用条件变量听起来很简单，但是有两个关键问题。
 
-\begin{myWarning}{防止伪唤醒}
+\begin{myWarning}{避免伪唤醒}
 为了保护自身免受伪唤醒，条件变量的wait调用应该使用相关的谓词。谓词确保通知确实来自发送方。我使用Lambda函数[]\{return dataReady;\}作为谓词。发送方将dataReady设置为true。
 \end{myWarning}
 
-
-
-\begin{myWarning}{防止未唤醒}
+\begin{myWarning}{避免未唤醒}
 为了保护自己未唤醒，条件变量的wait调用应该使用额外的谓词。谓词确保发送方的通知不会丢失。若发送方在接收方等待之前通知接收方，则通知丢失。接收者将永远等待。接收方现在首先检查它的谓词:[]\{return dataReady;\}。
 \end{myWarning}

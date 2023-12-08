@@ -31,7 +31,7 @@ cout << douSet.max_size() << endl; // 461168601842738790
 \end{cpp}
 
 
-\begin{myTip}{使用cont.empty()代替cont.size()}
+\begin{myTip}{用cont.empty()代替cont.size()}
 对于容器cont，使用成员函数cont.empty()而非(cont.size() == 0)来确定容器是否为空。首先，cont.empty()通常比(const.size() == 0)更快;第二，std::forward\_list没有成员函数size()。	
 \end{myTip}
 

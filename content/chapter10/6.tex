@@ -165,7 +165,7 @@ FwdIt2 remove_copy_if(ExePol pol, FwdIt first, FwdIt last,
 
 \begin{myWarning}{应用擦除-删除习语}
 	
-移除变量不会从范围中移除元素，值会返回范围的新逻辑结束位置。所以，必须使用擦除-删除习惯用法来调整容器的大小。
+移除变量不会从范围中移除元素，值会返回范围的新逻辑结束位置，必须使用擦除-删除习惯用法来调整容器的大小。
 
 \filename{删除元素和范围}
 
@@ -223,7 +223,7 @@ OutIt generate_n(OutIt first, Size n, Generator gen)
 FwdIt generate_n(ExePol pol, FwdIt first, Size n, Generator gen)
 \end{cpp}
 
-算法期望值val或Generator gen作为参数，Gen必须是一个不接受参数并返回新值的函数。std::fill\_n和std::generate\_n算法的返回值是一个输出迭代器，指向最后创建的元素。
+算法期望值val或Generator gen作为参数，gen必须是一个不接受参数并返回新值的函数。std::fill\_n和std::generate\_n算法的返回值是一个输出迭代器，指向最后创建的元素。
 
 \filename{填充和创建范围}
 
@@ -250,7 +250,7 @@ for (auto v: vec) std::cout << v << " ";
 
 \mySamllsection{移动范围}
 
-std::move可向前移动范围;std::move\_backward可向后移动范围。
+std::move可向前移动范围，std::move\_backward可向后移动范围。
 
 向前移动范围:
 
@@ -353,7 +353,7 @@ FwdIt3 transform(ExePol pol, FwdIt1 first1, FwdIt1 last1,
 				 FwdIt2 first2, FwdIt3 result, BiFun fun)
 \end{cpp}
 
-两个版本的不同之处在于，第一个版本将可调用单元应用于范围的每个元素;第二个版本并行地将可调用对象应用于两个范围对。返回的迭代器指向最后一个转换元素之后的一个位置。
+两个版本的不同之处在于，第一个版本将可调用单元应用于范围的每个元素，第二个版本并行地将可调用对象应用于两个范围对。返回的迭代器指向最后一个转换元素之后的一个位置。
 
 \filename{变换算法}
 
@@ -413,7 +413,7 @@ std::cout << str; // 543216789
 
 \mySamllsection{旋转范围}
 
-std::rotate和std::rotate\_copy旋转它们的元素。
+std::rotate和std::rotate\_copy旋转其元素。
 
 以这样的方式旋转元素，middle成为新的第一个元素:
 
@@ -466,7 +466,7 @@ FwdIt shift_right(FwdIt first, FwdIt last, Num n)
 FwdIt shift_right(ExePol pol, FwdIt first, FwdIt last, Num n)
 \end{cpp}
 
-当n == 0 || n >= last - first时，对std::shift\_left和std::shift\_right的操作无效。因为，区域的元素移动了。
+当n == 0 || n >= last - first时，对std::shift\_left和std::shift\_right的操作无效，区域的元素移动了。
 
 \filename{移动范围中的元素}
 
@@ -564,7 +564,7 @@ OutIt unique_copy(InpIt first, InpIt last, OutIt result)
 FwdIt2 unique_copy(ExePol pol, FwdIt first, FwdIt last, FwdIt2 result)
 \end{cpp}
 
-删除相邻的重复项，满足二进制谓词，并将结果复制到result:
+删除相邻的重复项，满足二元谓词，并将结果复制到result:
 
 \begin{cpp}
 OutIt unique_copy(InpIt first, InpIt last, OutIt result, BiPred pre)

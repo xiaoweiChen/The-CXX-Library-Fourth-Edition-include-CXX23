@@ -1,7 +1,7 @@
 
 \myGraphic{0.8}{content/chapter4/images/3.jpg}{}
 
-\href{http://en.cppreference.com/w/cpp/container/vector}{std::vector}是同构容器，其长度在运行时自动调整。std::vector需要头文件<vector>。vector在内存中连续存储元素，因此std::vector支持指针算术。
+\href{http://en.cppreference.com/w/cpp/container/vector}{std::vector}是同构容器，其长度在运行时自动调整，std::vector需要头文件<vector>。vector在内存中连续存储元素，因此std::vector支持指针算术。
 
 \begin{cpp}
 for (int i= 0; i < vec.size(); ++i){
@@ -22,7 +22,7 @@ std::vector<int> vec{10};
 
 \mySamllsection{大小与容量}
 
-std::vector的元素数量通常小于已为其预留空间的元素数量，std::vector的大小可以增加，而不需要分配昂贵的新内存。
+std::vector的元素数量通常小于已为其预留空间的元素数量，std::vector的大小可以增加，而不需要分配新内存。
 
 有一些操作可以智能地使用内存。
 
@@ -48,7 +48,7 @@ vec.shrink\_to\_fit()     & 将vec的容量减小到其大小。                
 \end{longtable}
 
 
-vec.shrink\_to\_fit()没有固定行为，所以运行时可以忽略它。但在主流的平台上，总可观察到期望的行为。
+vec.shrink\_to\_fit()没有固定行为，所以运行时可以忽略它。但在主流的平台上，可观察到期望的行为。
 
 我们来使用一下这些成员函数。
 
@@ -77,7 +77,7 @@ std::vector<int> intVec4{5, 2011};
 std::cout << intVec4.size() << '\n'; // 2
 \end{cpp}
 
-std::vector vec有几个成员函数来访问它的元素。使用vec.front()，可将获得第一个元素;使用vec.back()，可将获得vec的最后一个元素。要读取或写入vec的(n+1)个元素，可以使用索引操作符vec[n]或成员函数vec.at(n)。第二个检查vec的边界，因此最终得到一个std::out\_of\_range异常。
+std::vector vec有几个成员函数来访问它的元素。使用vec.front()，可获得第一个元素;使用vec.back()，可获得vec的最后一个元素。要读取或写入vec的(n+1)个元素，可以使用索引操作符vec[n]或成员函数vec.at(n)。第二个检查vec的边界，因此最终得到一个std::out\_of\_range异常。
 
 除了索引操作符，std::vector还提供了额外的成员函数来赋值、插入、创建或删除元素。
 

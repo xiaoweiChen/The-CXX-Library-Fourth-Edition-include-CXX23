@@ -1,4 +1,4 @@
-首先，不要叫他们\href{https://en.wikipedia.org/wiki/Functor}{函子}。这是范畴论中定义很好的术语。
+首先，不要叫他们\href{https://en.wikipedia.org/wiki/Functor}{函子}，这是范畴论中定义很好的术语。
 
 \href{http://en.cppreference.com/w/cpp/utility/functional}{函数对象}是行为类似函数的对象。由于函数对象是对象，它们可以有属性，因为调用操作符实现了，所以也可以有状态。
 
@@ -16,12 +16,12 @@ for (auto v: myVec) std::cout << v << " "; // 1 4 9 16 25 36 49 64 81 100
 
 \begin{myTip}{实例化函数对象以供使用}
 	
-在算法:std::for\_each(myVec.begin()， myVec.end()， Square)中只使用函数对象的名称(Square)而不使用函数对象的实例(Square())是一个常见的错误。当然，这是一个错误。必须使用实例:std::for\_each(myVec.begin()， myVec.end()， Square())
+在算法:std::for\_each(myVec.begin()， myVec.end()， Square)中只使用函数对象的名称(Square)，而不使用函数对象的实例(Square())是一个常见的错误。当然，这是一个错误。必须使用实例:std::for\_each(myVec.begin(), myVec.end(), Square())
 \end{myTip}
 
 \mySamllsection{预定义函数对象}
 
-C++提供了一系列预定义的函数对象，需要头文件<functional>。这些预定义的函数对象有助于更改容器的默认行为。例如，有序关联容器的键在默认情况下使用预定义的函数对象std::less进行排序，但你可能想用std::greater来代替:
+C++提供了一系列预定义的函数对象，需要头文件<functional>。这些预定义的函数对象有助于更改容器的默认行为。例如，有序关联容器的键在默认情况下使用预定义的函数对象std::less进行排序，也可以用std::greater代替:
 
 \begin{cpp}
 std::map<int, std::string> myDefaultMap; // std::less<int>
@@ -47,7 +47,7 @@ std::map<int, std::string, std::greater<int> mySpecialMap>; // std::greater<int>
 %
 否定 &
 std::negate\textless{}T\textgreater{}() \\ \hline
-Arithmetic &
+算术 &
 \begin{tabular}[c]{@{}l@{}}std::plus\textless{}T\textgreater{}(), std::minus\textless{}T\textgreater{}()\\ std::multiplies\textless{}T\textgreater{}(), std::divides\textless{}T\textgreater{}()\\ std::modulus\textless{}T\textgreater{}()\end{tabular} \\ \hline
 比较 &
 \begin{tabular}[c]{@{}l@{}}std::equal\_to\textless{}T\textgreater{}(), std::not\_equal\_to\textless{}T\textgreater{}()\\ std::less\textless{}T\textgreater{}(), std::greater\textless{}T\textgreater{}()\\ std::less\_equal\textless{}T\textgreater{}(), std::greater\_equal\textless{}T\textgreater{}()\end{tabular} \\ \hline

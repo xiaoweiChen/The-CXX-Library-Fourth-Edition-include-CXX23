@@ -78,9 +78,9 @@ std::cout << "Local time on client "
 		  << std::asctime(std::localtime(&cftime2)) << '\n';
 \end{cpp}
 
-第(1)行给出了新创建文件的写时间，可以使用(2)中的fTime将其转换为一个实时挂钟sTime。这个sTime在下面一行初始化std::chrono::system\_clock。cftime的类型为std::filesystem::file\_time\_type，在本例中，它是std::chrono::system\_clock的别名;可以在(3)中初始化std::localtime，并以文本形式表示日历时间。若使用std::gmtime(4)而不是std::localtime，则不会有任何变化。这让我很困惑，因为协调世界时(UTC)与德国当地时间相差2小时。这是由于服务器的在线编译器在en.cppreference.com，服务器将UTC时间与本地时间设置为相同时间。
+第(1)行给出了新创建文件的写时间，可以使用(2)中的fTime将其转换为一个实时挂钟sTime。这个sTime在下面一行初始化std::chrono::system\_clock，cftime的类型为std::filesystem::file\_time\_type，在本例中是std::chrono::system\_clock的别名;可以在(3)中初始化std::localtime，并以文本形式表示日历时间。若使用std::gmtime(4)而不是std::localtime，则不会有任何变化。这让我很困惑，因为协调世界时(UTC)与德国当地时间相差2小时。这是由于服务器的在线编译器在en.cppreference.com，服务器将UTC时间与本地时间设置为相同时间。
 
-下面是程序的输出。我将文件的写入时间移到未来2小时(5)，并从文件系统(6)中读取它。这将调整时间，因此它与德国的当地时间相对应。
+下面是程序的输出。我将文件的写入时间移到未来2小时(5)，并从文件系统(6)中读取它。这将调整时间，因此其与德国的当地时间相对应。
 
 \myGraphic{0.6}{content/chapter18/images/4.jpg}{}
 

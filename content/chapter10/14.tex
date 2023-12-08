@@ -1,4 +1,4 @@
-数值算法std::accumulate、std:: nearby \_difference、std::partial\_sum、std::inner\_product和std::iota，以及另外六个C++17算法std::exclusive\_scan、std::inclusive\_scan、std::transform\_exclusive\_scan、std::transform\_inclusive\_scan、std::reduce和std::transform\_reduce是特殊的，都在头文件<numeric>中定义。其广泛适用，可用可调用对象调用。
+数值算法std::accumulate、std::nearby\_difference、std::partial\_sum、std::inner\_product和std::iota，以及另外六个C++17算法std::exclusive\_scan、std::inclusive\_scan、std::transform\_exclusive\_scan、std::transform\_inclusive\_scan、std::reduce和std::transform\_reduce是特殊的，都在头文件<numeric>中定义。其广泛适用，可用可调用对象调用。
 
 累加范围的元素。Init是起始值:
 
@@ -68,7 +68,7 @@ result += *(first+1);
 ...
 \end{cpp}
 
-具有挑战性的算法变化inner\_product(InpIt, InpIt, OutIt, T, BiFun fun1, BiFun fun2)具有两个二进制可调用对象，使用以下策略:第二个可调用对象fun2应用于每一对范围，以生成临时目标范围tmp，第一个可调用对象应用于目标范围tmp的每个元素，以累积它们，从而生成最终结果。
+具有挑战性的算法变化inner\_product(InpIt, InpIt, OutIt, T, BiFun fun1, BiFun fun2)具有两个二进制可调用对象，使用以下策略:第二个可调用对象fun2应用于每一对范围，以生成临时目标范围tmp，第一个可调用对象应用于目标范围tmp的每个元素，进行累积，从而生成最终结果。
 
 \filename{数值算法}
 
@@ -102,7 +102,7 @@ for (auto v: myLongVec) std::cout << v << " ";
 
 \mySamllsection{新并行算法与C++17}
 
-通常用于并行执行的六种新算法称为\href{https://en.wikipedia.org/wiki/Prefix_sum}{前追求和}。若给定的二元可调用对象不可关联和交换，则算法的行为未定义。
+通常用于并行执行的六种新算法称为\href{https://en.wikipedia.org/wiki/Prefix_sum}{前缀求和}。若给定的二元可调用对象不可关联和交换，则算法的行为未定义。
 
 reduce: 减少范围内的元素。init是初始值。
 
@@ -162,7 +162,7 @@ T transform_reduce(ExePol pol, FwdIt first, FwdIt last,
 
 \begin{myTip}{C++17中的MapReduce}
 
-\href{https://www.haskell.org/}{Haskell}函数映射在C++中称为std::transform。当用std::transform\_reduce名称中的map替换transform时，将获得std::map\_reduce。\href{https://en.wikipedia.org/wiki/MapReduce}{MapReduce}是一个著名的并行框架，它首先将每个值映射到一个新值，然后在第二阶段将所有值归约到结果。
+\href{https://www.haskell.org/}{Haskell}函数映射在C++中称为std::transform。当用std::transform\_reduce名称中的map替换transform时，将获得std::map\_reduce。\href{https://en.wikipedia.org/wiki/MapReduce}{MapReduce}是一个著名的并行框架，首先将每个值映射到一个新值，然后在第二阶段将所有值归约到结果。
 
 该算法直接适用于C++17。在映射阶段，每个单词会映射到它的长度，然后在归约阶段，所有单词的长度会缩减为它们的和。结果是所有单词的长度之和。
 

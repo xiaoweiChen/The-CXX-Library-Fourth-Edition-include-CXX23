@@ -1,17 +1,16 @@
 
 \myGraphic{0.8}{content/chapter4/images/6.jpg}{}
 
-\href{http://en.cppreference.com/w/cpp/container/forward_list}{std::forward\_list}是一个单链表，它需要头文件<forward\_list>。std::forward\_list没有太多的接口，并针对最小的内存需求进行了优化。
+\href{http://en.cppreference.com/w/cpp/container/forward_list}{std::forward\_list}是一个单链表，需要头文件<forward\_list>。std::forward\_list没有太多的接口，并针对最小的内存需求进行了优化。
 
 std::forward\_list与std::list有很多共同之处:
-
 
 \begin{itemize}
 \item 
 不支持随机访问。
 
 \item 
-访问任意元素的速度很慢，因为在最坏的情况下，必须向前遍历整个列表。
+访问任意元素的速度很慢，最坏的情况下，必须向前遍历整个列表。
 
 \item 
 若迭代器指向正确的位置，添加或删除元素很快。
@@ -23,10 +22,10 @@ std::forward\_list与std::list有很多共同之处:
 操作总是引用std::forward\_list的开头或当前元素之后的位置。
 \end{itemize}
 
-可以向前迭代std::forward\_list的特性具有重要的影响。因此，迭代器不能自减，因此不支持在迭代器上进行It--之类的操作。出于同样的原因，std::forward\_list没有向后迭代器，并且是唯一不知道其大小的序列容器。
+可以向前迭代std::forward\_list的特性具有重要的影响，迭代器不能自减，因此不支持在迭代器上进行自减自加之类的操作。出于同样的原因，std::forward\_list没有向后迭代器，并且是唯一不知道其大小的序列容器。
 
 \begin{myTip}{std::forward\_list有一个异常域}
-std::forward\_list是单链表的替代品。若元素的插入、提取或移动只影响相邻的元素，则它针对最小的内存管理和性能进行了优化。这是典型的排序算法。
+std::forward\_list是单链表的替代。若元素的插入、提取或移动只影响相邻的元素，则会针对最小的内存管理和性能进行优化。这是典型的排序算法。
 \end{myTip}
 
 \begin{center}
@@ -55,7 +54,7 @@ forw.unique()                     & 移除具有相同值的相邻元素。     
 forw.unique(pre)                  & 移除满足谓词pre的相邻元素。                                       \\ \hline
 \end{longtable}
 
-让我们来使用一下std::forward\_list的成员函数。
+来使用一下std::forward\_list的成员函数。
 
 \filename{std::forward\_list}
 

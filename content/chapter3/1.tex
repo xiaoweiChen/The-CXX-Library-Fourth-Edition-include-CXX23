@@ -1,6 +1,6 @@
-每个容器提供不同的构造函数。要删除所有容器元素cont，可以使用cont.clear()。创建容器、删除容器、添加或删除元素都没有区别。每次容器自行都负责内存的管理。
+每个容器都会提供不同的构造函数。要删除容器cont中所有的元素，可以使用cont.clear()。创建容器、删除容器、添加或删除元素都一样，每次容器都会自行负责内存的管理。
 
-下表显示了容器的构造函数和析构函数。下面的表中，std:vector通常代表其余的部分。
+下表显示了容器的构造函数和析构函数。下面的表中，使用std:vector作为代表。
 
 \begin{center}
 创建和删除容器
@@ -17,7 +17,7 @@
 \endhead
 %
 默认构造         & std::vector\textless{}int\textgreater vec1                  \\ \hline
-范围构造                      & std::vector\textless{}int\textgreater vec2(vec1.begin(), vec1.end()) \\ \hline
+范围构造         & std::vector\textless{}int\textgreater vec2(vec1.begin(), vec1.end()) \\ \hline
 复制构造            & std::vector\textless{}int\textgreater vec3(vec2)            \\ \hline
 复制构造            & std::vector\textless{}int\textgreater vec3=vec2             \\ \hline
 移动构造            & std::vector\textless{}int\textgreater vec4(std::move(vec3)) \\ \hline
@@ -28,10 +28,9 @@
 删除所有元素 & vec5.clear()                                                \\ \hline
 \end{longtable}
 
-必须在编译时指定std::array的大小，并使用\href{https://en.cppreference.com/w/cpp/language/aggregate_initialization}{聚合初始化}进行初始化。array没有用于删除其元素的成员函数。
+必须在编译时指定std::array的大小，并使用\href{https://en.cppreference.com/w/cpp/language/aggregate_initialization}{聚合初始化}进行初始化，std::array没有用于删除其元素的成员函数。
 
 下面的例子中，我对不同的容器使用了不同的构造函数。
-
 
 \filename{不同的构造函数}
 

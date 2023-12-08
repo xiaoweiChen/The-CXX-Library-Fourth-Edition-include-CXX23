@@ -1,6 +1,6 @@
 std::mdspan是一个连续对象序列的非拥有多维视图。通常，这种多维视图称为多维数组。对象的连续序列可以是C数组、带大小的指针、std::array、std::vector或std::string。
 
-维度的数量和每个维度的大小决定了多维数组的形状。维度的数量称为秩，每个维度的大小扩展。std::mdspan的大小,是所有不为0的维度的乘积，所以可以使用多维索引操作符[]访问std::mdspan的元素。
+维度的数量和每个维度的大小决定了多维数组的形状。维度的数量称为秩，每个维度的大小扩展。std::mdspan的大小，是所有不为0的维度的乘积，所以可以使用多维索引操作符[]访问std::mdspan的元素。
 
 std::mdspan的每个维度可以有一个静态区段或一个动态区段。静态范围意味着其长度在编译时指定;动态区段意味着其长度是在运行时指定的。
 
@@ -104,9 +104,9 @@ for (std::size_t i = 0; i < m2.extent(0); ++i) {
 }
 \end{cpp}
 
-staticDynamicExtent.cpp基于前面的程序mdspan.cpp，并产生相同的输出。不同之处在于，std::mdspan m(1)具有静态区段。为了完整起见，std::mdspan m2(2)具有动态范围。因此，m的形状是用模板参数指定的，而m2的形状是用函数参数指定的。
+staticDynamicExtent.cpp基于前面的程序mdspan.cpp，并产生相同的输出。不同之处在于，std::mdspan m(1)具有静态区段。为了完整，std::mdspan m2(2)具有动态范围，m的形状是用模板参数指定的，而m2的形状是用函数参数指定的。
 
-std::mdspan允许您指定访问底层内存的布局策略。默认情况下，使用std::layout\_right(C, C++或\href{https://en.wikipedia.org/wiki/Python_(programming_language)}{Python}风格)，但也可以指定std::layout\_eft (\href{https://en.wikipedia.org/wiki/Fortran}{Fortran}或\href{https://en.wikipedia.org/wiki/MATLAB}{MATLAB}风格)。下面的图举例说明了访问std::mdspan的元素的顺序。
+std::mdspan允许指定访问底层内存的布局策略。默认情况下，使用std::layout\_right(C, C++或\href{https://en.wikipedia.org/wiki/Python_(programming_language)}{Python}风格)，也可以指定std::layout\_eft (\href{https://en.wikipedia.org/wiki/Fortran}{Fortran}或\href{https://en.wikipedia.org/wiki/MATLAB}{MATLAB}风格)。下面的图举例说明了访问std::mdspan的元素的顺序。
 
 \myGraphic{0.6}{content/chapter7/images/5.jpg}{std::layout\_right 和 std::layout\_left}
 
@@ -151,7 +151,7 @@ for (std::size_t i = 0; i < m2.extent(0); ++i) {
 
 std::mdspan m使用std::layout\_right(1)，另一个std::mdspan std::layout\_left(1)。通过类模板参数推导，std::mdspan(1)的构造函数调用不需要显式的模板参数，相当于以下表达式:std::mdspan m2\{myVec.data(), 4, 2\}。
 
-程序的输出显示了两种不同的布局策略。
+程序的输出，展示了两种不同的布局策略。
 
 \myGraphic{0.3}{content/chapter7/images/6.jpg}{std::mdspan和std::layout\_left}
 

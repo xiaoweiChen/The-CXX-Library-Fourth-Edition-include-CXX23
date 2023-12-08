@@ -1,4 +1,4 @@
-std::span表示引用连续对象序列的对象。std::span(有时也称为视图)从来不是所有者。这个连续的对象序列可以是普通的C数组、带大小的指针、std::array、std::vector或std::string，还可以访问其子序列。
+std::span表示引用连续对象序列的对象，std::span(有时也称为视图)从来不是所有者。这个连续的对象序列可以是普通的C数组、带大小的指针、std::array、std::vector或std::string，还可以访问其子序列。
 
 \begin{myTip}{std::span不会衰变}
 	
@@ -27,7 +27,7 @@ copy<int>(arr1, arr2); // (2)
 与C数组(1)相比，通过std::span(2)接受C数组的函数不需要显式的长度参数。
 \end{myTip}
 
-std::span可以具有静态区段或动态区段。带有动态extent的std::span的典型实现包含指向其第一个元素和长度的指针。默认情况下，std::span有一个动态范围:
+std::span可以具有静态区段或动态区段，带有动态extent的std::span的实现包含指向其第一个元素和长度的指针。默认情况下，std::span有一个动态范围:
 
 \filename{std::span的定义}
 
@@ -66,7 +66,6 @@ sp.empty()        & 如果序列为空则返回true。              \\ \hline
 返回由count元素组成的子span。 \\ \hline
 \end{longtable}
 
-
 \filename{std::span接受不同的参数}
 
 \begin{cpp}
@@ -97,7 +96,7 @@ std::span可以用C-array、std::vector(1)或std::array(2)初始化。
 \myGraphic{0.6}{content/chapter7/images/2.jpg}{自动减少std::span的大小}
 
 \begin{myTip}{std::string\_view优于std::span}
-std::string是一个连续的字符序列，可以用std::string初始化std::span。不过，应该选择std::string\_view，而不是std::span，因为std::string\_view表示字符序列的视图，而不是std::span那样的对象序列。std::string\_view的接口类似于字符串，但是std::span的接口是通用的。
+std::string是一个连续的字符序列，可以用std::string初始化std::span。不过，应该选择std::string\_view，而不是std::span，std::string\_view表示字符序列的视图，而不是std::span那样的对象序列。std::string\_view的接口类似于字符串，但是std::span的接口是通用的。
 \end{myTip}
 
 可以修改整个span或仅修改子span。当修改一个span时，同时也修改了其引用的对象。
@@ -122,7 +121,7 @@ printMe(vec);
 printMe(span1);
 \end{cpp}
 
-我在前面的示例quadSpan.cpp中定义了printMe函数。span1引用std::vector vec(1)。相反，span2只引用底层vec元素，不包括第一个和最后一个元素(2)。因此，将每个元素映射到它的平方只指向这些元素(3)。
+我在前面的示例quadSpan.cpp中定义了printMe函数。span1引用std::vector vec(1)。相反，span2只引用底层vec元素，不包括第一个和最后一个元素(2)，将每个元素映射到它的平方只指向这些元素(3)。
 
 \myGraphic{0.6}{content/chapter7/images/3.jpg}{修改std::span引用的对象}
 

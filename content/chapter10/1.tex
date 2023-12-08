@@ -13,7 +13,6 @@
 像auto num= std::count(InpIt first, InpIt last, const T\& val)这样的算法返回与val相等的元素数量。num类型为iterator\_traits<InpIt>::difference\_type，可以保证num足以保存结果。由于auto的自动返回类型推导，编译器将提供正确的类型。
 
 \begin{myTip}{若容器使用了额外的范围，则其必须是有效的}
-
 算法std::copy\_if使用迭代器到目标范围的开始。此目标范围必须有效。
 \end{myTip}
 

@@ -1,4 +1,4 @@
-信号量是一种同步机制，用于控制对共享资源的并发访问。计数信号量是计数器大于零的特殊信号量。计数器在构造函数中初始化。获取信号量会减少计数器，释放信号量会增加计数器。如果一个线程试图在计数器为零时获取信号量，则该线程将阻塞，直到另一个线程通过释放信号量来增加计数器。
+信号量是一种同步机制，用于控制对共享资源的并发访问。计数信号量是计数器大于零的特殊信号量，计数器在构造函数中初始化。获取信号量会减少计数器，释放信号量会增加计数器。若一个线程试图在计数器为零时获取信号量，则该线程将阻塞，直到另一个线程通过释放信号量来增加计数器。
 
 C++20支持std::binary\_semaphore，它是std::counting\_semaphore<1>的别名。在这种情况下，最小最大值为1。
 
@@ -30,7 +30,7 @@ sem.try\_acquire\_for(relTime)   & 在一段时间内执行sem.try\_acquir()。 
 sem.try\_acquire\_intil(absTime) & 执行semt.try\_acquire()直到时间点。  \\ \hline
 \end{longtable}
 
-成员函数semt .try\_lock\_for(relTime)需要一个相对时间段;成员函数semt .try\_lock\_until(absTime)需要一个绝对时间点。
+成员函数sem.try\_lock\_for(relTime)需要一个相对时间段;成员函数sem.try\_lock\_until(absTime)需要一个绝对时间点。
 
 信号量通常是条件变量更安全、更快的替代方案:
 
@@ -70,7 +70,7 @@ t1.join();
 t2.join();
 \end{cpp}
 
-std::count\_semaphore prepareSignal(第一行)可以有值0和1。在具体示例中，初始化为0。所以，调用prepareSignal.release()将该值设置为1(第2行)，并解除调用prepareSignal.acquire()(第3行)的阻塞。
+std::count\_semaphore prepareSignal(第一行)可以有值0和1。在示例中，初始化为0。所以，prepareSignal.release()将该值设置为1(第2行)，并解除调用prepareSignal.acquire()(第3行)的阻塞。
 
 \myGraphic{0.6}{content/chapter19/images/11.jpg}{}
 
