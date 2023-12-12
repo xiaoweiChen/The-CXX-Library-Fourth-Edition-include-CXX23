@@ -4,7 +4,7 @@
 
  <a href=""><img src="cover.jpg" height="256px" align="right"></a>
 
-* 作者：Nicolai M. Josuttis
+* 作者：Rainer Grimm
 * 译者：陈晓伟
 * 版本：2022-10-30
 
